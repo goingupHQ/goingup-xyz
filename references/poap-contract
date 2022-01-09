@@ -1,0 +1,344 @@
+#
+#  Panoramix v4 Oct 2019
+#  Decompiled source of 0xa1eB40c284C5B44419425c4202Fa8DabFF31006b
+#
+#  Let's make the world open source
+#
+
+def storage:
+  stor0 is mapping of uint8 at storage 0
+  ownerOf is mapping of addr at storage 1
+  approved is mapping of addr at storage 2
+  balanceOf is mapping of uint256 at storage 3
+  stor4 is mapping of uint8 at storage 4
+  tokenOfOwnerByIndex is array of uint256 at storage 5
+  stor6 is mapping of uint256 at storage 6
+  tokenByIndex is array of uint256 at storage 7
+  stor8 is mapping of uint256 at storage 8
+  name is array of uint256 at storage 9
+  symbol is array of uint256 at storage 10
+  tokenURI is mapping of bool at storage 11
+  stor12 is mapping of uint8 at storage 12
+  stor99 is mapping of uint8 at storage 99
+
+def supportsInterface(bytes4 _interfaceId) payable:
+  require calldata.size - 4 >= 32
+  return bool(stor0[Mask(32, 224, _interfaceId)])
+
+def name() payable:
+  return name[0 len name.length]
+
+def getApproved(uint256 _tokenId) payable:
+  require calldata.size - 4 >= 32
+  require ownerOf[_tokenId]
+  return approved[_tokenId]
+
+def totalSupply() payable:
+  return tokenByIndex.length
+
+def tokenOfOwnerByIndex(address _owner, uint256 _index) payable:
+  require calldata.size - 4 >= 64
+  require _owner
+  require _index < balanceOf[addr(_owner)]
+  require _index < tokenOfOwnerByIndex[addr(_owner)]
+  return tokenOfOwnerByIndex[addr(_owner)][_index]
+
+def tokenByIndex(uint256 _index) payable:
+  require calldata.size - 4 >= 32
+  require _index < tokenByIndex.length
+  return tokenByIndex[_index]
+
+def ownerOf(uint256 _tokenId) payable:
+  require calldata.size - 4 >= 32
+  require ownerOf[_tokenId]
+  return ownerOf[_tokenId]
+
+def balanceOf(address _owner) payable:
+  require calldata.size - 4 >= 32
+  require _owner
+  return balanceOf[addr(_owner)]
+
+def symbol() payable:
+  return symbol[0 len symbol.length]
+
+def isMinter(address _account) payable:
+  require calldata.size - 4 >= 32
+  require _account
+  return bool(stor12[addr(_account)])
+
+def tokenURI(uint256 _tokenId) payable:
+  return uint256(tokenURI[_tokenId][0 len tokenURI[_tokenId].length])
+
+def isApprovedForAll(address _owner, address _operator) payable:
+  require calldata.size - 4 >= 64
+  return bool(stor4[addr(_owner)][addr(_operator)])
+
+#
+#  Regular functions
+#
+
+def _fallback() payable: # default function
+  revert
+
+def renounceMinter() payable:
+  require caller
+  require stor12[caller]
+  stor12[caller] = 0
+  log MinterRemoved(address account=caller)
+
+def addMinter(address _minter) payable:
+  require calldata.size - 4 >= 32
+  require caller
+  require stor12[caller]
+  require _minter
+  require not stor12[addr(_minter)]
+  stor12[addr(_minter)] = 1
+  log MinterAdded(address account=_minter)
+
+def setApprovalForAll(address _to, bool _approved) payable:
+  require calldata.size - 4 >= 64
+  require _to != caller
+  stor4[caller][addr(_to)] = uint8(_approved)
+  log ApprovalForAll(
+        address owner=_approved,
+        address operator=caller,
+        bool approved=_to)
+
+def approve(address _spender, uint256 _value) payable:
+  require calldata.size - 4 >= 64
+  require ownerOf[_value]
+  require _spender != ownerOf[_value]
+  if ownerOf[_value] != caller:
+      require stor4[stor1[_value]][caller]
+  approved[_value] = _spender
+  log Approval(
+        address owner=ownerOf[_value],
+        address spender=_spender,
+        uint256 value=_value)
+
+def transferFrom(address _from, address _to, uint256 _value) payable:
+  require calldata.size - 4 >= 96
+  require ownerOf[_value]
+  require ownerOf[_value]
+  if ownerOf[_value] != caller:
+      if approved[_value] != caller:
+          require stor4[stor1[_value]][caller]
+  require ownerOf[_value] == _from
+  require _to
+  if approved[_value]:
+      approved[_value] = 0
+  require 1 <= balanceOf[addr(_from)]
+  balanceOf[addr(_from)]--
+  balanceOf[addr(_to)]++
+  ownerOf[_value] = _to
+  log Transfer(
+        address from=_from,
+        address to=_to,
+        uint256 value=_value)
+  require 1 <= tokenOfOwnerByIndex[addr(_from)]
+  if stor6[_value] != tokenOfOwnerByIndex[addr(_from)] - 1:
+      require tokenOfOwnerByIndex[addr(_from)] - 1 < tokenOfOwnerByIndex[addr(_from)]
+      require stor6[_value] < tokenOfOwnerByIndex[addr(_from)]
+      tokenOfOwnerByIndex[addr(_from)][stor6[_value]] = tokenOfOwnerByIndex[addr(_from)][tokenOfOwnerByIndex[addr(_from)]]
+      stor6[stor5[addr(_from)][stor5[addr(_from)]]] = stor6[_value]
+  tokenOfOwnerByIndex[addr(_from)]--
+  if tokenOfOwnerByIndex[addr(_from)] > tokenOfOwnerByIndex[addr(_from)] - 1:
+      idx = tokenOfOwnerByIndex[addr(_from)] - 1
+      while tokenOfOwnerByIndex[addr(_from)] > idx:
+          tokenOfOwnerByIndex[addr(_from)][idx] = 0
+          idx = idx + 1
+          continue
+  stor6[_value] = tokenOfOwnerByIndex[addr(_to)]
+  tokenOfOwnerByIndex[addr(_to)]++
+  tokenOfOwnerByIndex[addr(_to)][tokenOfOwnerByIndex[addr(_to)]] = _value
+
+def safeTransferFrom(address _from, address _to, uint256 _tokenId) payable:
+  require calldata.size - 4 >= 96
+  require ownerOf[_tokenId]
+  require ownerOf[_tokenId]
+  if ownerOf[_tokenId] != caller:
+      if approved[_tokenId] != caller:
+          require stor4[stor1[_tokenId]][caller]
+  require ownerOf[_tokenId] == _from
+  require _to
+  if approved[_tokenId]:
+      approved[_tokenId] = 0
+  require 1 <= balanceOf[addr(_from)]
+  balanceOf[addr(_from)]--
+  balanceOf[addr(_to)]++
+  ownerOf[_tokenId] = _to
+  log Transfer(
+        address from=_from,
+        address to=_to,
+        uint256 value=_tokenId)
+  require 1 <= tokenOfOwnerByIndex[addr(_from)]
+  if stor6[_tokenId] != tokenOfOwnerByIndex[addr(_from)] - 1:
+      require tokenOfOwnerByIndex[addr(_from)] - 1 < tokenOfOwnerByIndex[addr(_from)]
+      require stor6[_tokenId] < tokenOfOwnerByIndex[addr(_from)]
+      tokenOfOwnerByIndex[addr(_from)][stor6[_tokenId]] = tokenOfOwnerByIndex[addr(_from)][tokenOfOwnerByIndex[addr(_from)]]
+      stor6[stor5[addr(_from)][stor5[addr(_from)]]] = stor6[_tokenId]
+  tokenOfOwnerByIndex[addr(_from)]--
+  if tokenOfOwnerByIndex[addr(_from)] > tokenOfOwnerByIndex[addr(_from)] - 1:
+      idx = tokenOfOwnerByIndex[addr(_from)] - 1
+      while tokenOfOwnerByIndex[addr(_from)] > idx:
+          tokenOfOwnerByIndex[addr(_from)][idx] = 0
+          idx = idx + 1
+          continue
+  stor6[_tokenId] = tokenOfOwnerByIndex[addr(_to)]
+  tokenOfOwnerByIndex[addr(_to)]++
+  tokenOfOwnerByIndex[addr(_to)][tokenOfOwnerByIndex[addr(_to)]] = _tokenId
+  if ext_code.size(_to) > 0:
+      require ext_code.size(_to)
+      call _to.onERC721Received(address operator, address from, uint256 tokenId, bytes data) with:
+           gas gas_remaining wei
+          args 0, uint32(caller), addr(_from), _tokenId, 128, 0
+      if not ext_call.success:
+          revert with ext_call.return_data[0 len return_data.size]
+      require return_data.size >= 32
+      require Mask(32, 224, ext_call.return_data == 0x150b7a0200000000000000000000000000000000000000000000000000000000
+
+def unknown45c17782(addr _param1, array _param2) payable:
+  require calldata.size - 4 >= 64
+  require _param2 <= 4294967296
+  require _param2 + 36 <= calldata.size
+  require _param2.length <= 4294967296 and _param2 + _param2.length + 36 <= calldata.size
+  mem[128 len _param2.length] = _param2[all]
+  mem[_param2.length + 128] = 0
+  require caller
+  require stor12[caller]
+  require tokenByIndex.length + 1 >= tokenByIndex.length
+  mem[ceil32(_param2.length) + 128 len floor32(_param2.length)] = call.data[_param2 + 36 len floor32(_param2.length)]
+  mem[ceil32(_param2.length) + floor32(_param2.length) + -(_param2.length % 32) + 160 len _param2.length % 32] = mem[floor32(_param2.length) + -(_param2.length % 32) + 160 len _param2.length % 32]
+  mem[_param2.length + ceil32(_param2.length) + 128] = sha3(addr(_param1), 13)
+  if stor[mem[_param2.length + 160 len ceil32(_param2.length)]][Mask(8 * -ceil32(_param2.length) + _param2.length + 32, 0, 0)]:
+      revert with 0,
+                  32,
+                  41,
+                  0xfe4163636f6e756e7420616c726561647920686173206120746f6b656e20666f722074686174207572,
+                  mem[ceil32(_param2.length) + 237 len 23]
+  require _param1
+  require not ownerOf[stor7.length + 1]
+  ownerOf[stor7.length + 1] = _param1
+  balanceOf[addr(_param1)]++
+  log Transfer(
+        address from=0,
+        address to=_param1,
+        uint256 value=tokenByIndex.length + 1)
+  stor6[stor7.length + 1] = tokenOfOwnerByIndex[addr(_param1)]
+  tokenOfOwnerByIndex[addr(_param1)]++
+  tokenOfOwnerByIndex[addr(_param1)][tokenOfOwnerByIndex[addr(_param1)]] = tokenByIndex.length + 1
+  stor8[stor7.length + 1] = tokenByIndex.length
+  tokenByIndex.length++
+  tokenByIndex[tokenByIndex.length] = tokenByIndex.length + 1
+  require ownerOf[stor7.length + 1]
+  uint256(tokenURI[stor7.length + 1][]) = Array(len=_param2.length, data=_param2[all])
+  mem[ceil32(_param2.length) + 128 len floor32(_param2.length)] = call.data[_param2 + 36 len floor32(_param2.length)]
+  mem[ceil32(_param2.length) + floor32(_param2.length) + -(_param2.length % 32) + 160 len _param2.length % 32] = mem[floor32(_param2.length) + -(_param2.length % 32) + 160 len _param2.length % 32]
+  mem[_param2.length + ceil32(_param2.length) + 128] = sha3(addr(_param1), 13)
+  stor[mem[_param2.length + 160 len ceil32(_param2.length)]][Mask(8 * -ceil32(_param2.length) + _param2.length + 32, 0, 0)] = 1
+  mem[ceil32(_param2.length) + 128] = 1
+  return Mask(8 * -ceil32(_param2.length) + _param2.length + 32, 0, 0),
+         mem[_param2.length + 160 len -_param2.length + ceil32(_param2.length)]
+
+def safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes _data) payable:
+  require calldata.size - 4 >= 128
+  require _data <= 4294967296
+  require _data + 36 <= calldata.size
+  require _data.length <= 4294967296 and _data + _data.length + 36 <= calldata.size
+  require ownerOf[_tokenId]
+  require ownerOf[_tokenId]
+  if ownerOf[_tokenId] != caller:
+      if approved[_tokenId] != caller:
+          require stor4[stor1[_tokenId]][caller]
+  require ownerOf[_tokenId] == _from
+  require _to
+  if approved[_tokenId]:
+      approved[_tokenId] = 0
+  require 1 <= balanceOf[addr(_from)]
+  balanceOf[addr(_from)]--
+  balanceOf[addr(_to)]++
+  ownerOf[_tokenId] = _to
+  log Transfer(
+        address from=_from,
+        address to=_to,
+        uint256 value=_tokenId)
+  require 1 <= tokenOfOwnerByIndex[addr(_from)]
+  if stor6[_tokenId] != tokenOfOwnerByIndex[addr(_from)] - 1:
+      require tokenOfOwnerByIndex[addr(_from)] - 1 < tokenOfOwnerByIndex[addr(_from)]
+      require stor6[_tokenId] < tokenOfOwnerByIndex[addr(_from)]
+      tokenOfOwnerByIndex[addr(_from)][stor6[_tokenId]] = tokenOfOwnerByIndex[addr(_from)][tokenOfOwnerByIndex[addr(_from)]]
+      stor6[stor5[addr(_from)][stor5[addr(_from)]]] = stor6[_tokenId]
+  tokenOfOwnerByIndex[addr(_from)]--
+  if tokenOfOwnerByIndex[addr(_from)] > tokenOfOwnerByIndex[addr(_from)] - 1:
+      idx = tokenOfOwnerByIndex[addr(_from)] - 1
+      while tokenOfOwnerByIndex[addr(_from)] > idx:
+          tokenOfOwnerByIndex[addr(_from)][idx] = 0
+          idx = idx + 1
+          continue
+  stor6[_tokenId] = tokenOfOwnerByIndex[addr(_to)]
+  tokenOfOwnerByIndex[addr(_to)]++
+  tokenOfOwnerByIndex[addr(_to)][tokenOfOwnerByIndex[addr(_to)]] = _tokenId
+  if ext_code.size(_to) > 0:
+      require ext_code.size(_to)
+      call _to with:
+           gas gas_remaining wei
+          args caller, addr(_from), _tokenId, Array(len=_data.length, data=_data[all])
+      if not ext_call.success:
+          revert with ext_call.return_data[0 len return_data.size]
+      require return_data.size >= 32
+      require Mask(32, 224, ext_call.return_data == 0x150b7a0200000000000000000000000000000000000000000000000000000000
+
+def burn(uint256 _value) payable:
+  require calldata.size - 4 >= 32
+  require ownerOf[_value]
+  require ownerOf[_value]
+  if ownerOf[_value] != caller:
+      if approved[_value] != caller:
+          require stor4[stor1[_value]][caller]
+  require ownerOf[_value]
+  require ownerOf[_value] == ownerOf[_value]
+  if approved[_value]:
+      approved[_value] = 0
+  require 1 <= balanceOf[stor1[_value]]
+  balanceOf[stor1[_value]]--
+  ownerOf[_value] = 0
+  log Transfer(
+        address from=ownerOf[_value],
+        address to=0,
+        uint256 value=_value)
+  require 1 <= tokenOfOwnerByIndex[stor1[_value]]
+  if stor6[_value] != tokenOfOwnerByIndex[stor1[_value]] - 1:
+      require tokenOfOwnerByIndex[stor1[_value]] - 1 < tokenOfOwnerByIndex[stor1[_value]]
+      require stor6[_value] < tokenOfOwnerByIndex[stor1[_value]]
+      tokenOfOwnerByIndex[stor1[_value]][stor6[_value]] = tokenOfOwnerByIndex[stor1[_value]][tokenOfOwnerByIndex[stor1[_value]]]
+      stor6[stor5[stor1[_value]][stor5[stor1[_value]]]] = stor6[_value]
+  tokenOfOwnerByIndex[stor1[_value]]--
+  if tokenOfOwnerByIndex[stor1[_value]] > tokenOfOwnerByIndex[stor1[_value]] - 1:
+      idx = tokenOfOwnerByIndex[stor1[_value]] - 1
+      while tokenOfOwnerByIndex[stor1[_value]] > idx:
+          tokenOfOwnerByIndex[stor1[_value]][idx] = 0
+          idx = idx + 1
+          continue
+  stor6[_value] = 0
+  require 1 <= tokenByIndex.length
+  require tokenByIndex.length - 1 < tokenByIndex.length
+  require stor8[_value] < tokenByIndex.length
+  tokenByIndex[stor8[_value]] = tokenByIndex[tokenByIndex.length]
+  stor8[stor7[stor7.length]] = stor8[_value]
+  tokenByIndex.length--
+  if tokenByIndex.length > tokenByIndex.length - 1:
+      idx = tokenByIndex.length - 1
+      while tokenByIndex.length > idx:
+          tokenByIndex[idx] = 0
+          idx = idx + 1
+          continue
+  stor8[_value] = 0
+  if Mask(255, 1, (256 * not bool(tokenURI[_value])) - 1 and uint256(tokenURI[_value])):
+      uint256(tokenURI[_value]) = 0
+      if 31 < tokenURI[_value].length:
+          idx = 0
+          while tokenURI[_value].length + 31 / 32 > idx:
+              uint256(tokenURI[_value][idx]) = 0
+              idx = idx + 1
+              continue
+
