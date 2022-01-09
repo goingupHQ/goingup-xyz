@@ -1,0 +1,2 @@
+POAP API Endpoint
+https://api.poap.xyz/actions/scan/0x3f7bed3d5745c2550f64aa97A4529406e555bCE6
