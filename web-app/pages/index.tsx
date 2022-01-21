@@ -1,78 +1,21 @@
-import { Box, Card, Container, Button, styled } from '@mui/material';
-import type { ReactElement } from 'react';
-import BaseLayout from 'src/layouts/BaseLayout';
-
-import Link from 'src/components/Link';
 import Head from 'next/head';
-import { useTranslation } from 'react-i18next';
-import Logo from 'src/components/LogoSign';
-import Hero from 'src/content/Overview/Hero';
-import Highlights from 'src/content/Overview/Highlights';
-import LanguageSwitcher from 'src/layouts/BoxedSidebarLayout/Header/Buttons/LanguageSwitcher';
-import Footer from 'src/components/Footer';
 
-const HeaderWrapper = styled(Card)(
-  ({ theme }) => `
-  width: 100%;
-  display: flex;
-  align-items: center;
-  height: ${theme.spacing(10)};
-  margin-bottom: ${theme.spacing(10)};
-`
-);
+import TopNavigationLayout from 'src/layouts/TopNavigationLayout';
+// import { Authenticated } from 'src/components/Authenticated';
 
-const OverviewWrapper = styled(Box)(
-  ({ theme }) => `
-    overflow: auto;
-    background: ${theme.palette.common.white};
-    flex: 1;
-    overflow-x: hidden;
-`
-);
+import DashboardCryptoContent from 'src/content/DashboardPages/crypto';
 
-function Overview() {
-  const { t }: { t: any } = useTranslation();
-
-  return (
-    <OverviewWrapper>
-      <Head>
-        <title>Tokyo Black NextJS Typescript Admin Dashboard</title>
-      </Head>
-      <HeaderWrapper>
-        <Container maxWidth="lg">
-          <Box display="flex" alignItems="center">
-            <Logo />
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-              flex={1}
-            >
-              <Box />
-              <Box>
-                <LanguageSwitcher />
-                <Button
-                  component={Link}
-                  href="/dashboards/reports"
-                  variant="contained"
-                  sx={{ ml: 2 }}
-                >
-                  {t('Live Preview')}
-                </Button>
-              </Box>
-            </Box>
-          </Box>
-        </Container>
-      </HeaderWrapper>
-      <Hero />
-      <Highlights />
-      <Footer />
-    </OverviewWrapper>
-  );
+function MainApp() {
+    return (
+        <>
+            <Head>
+                <title>Going Up</title>
+            </Head>
+            <DashboardCryptoContent />
+        </>
+    );
 }
 
-export default Overview;
+MainApp.getLayout = (page) => <TopNavigationLayout>{page}</TopNavigationLayout>;
 
-Overview.getLayout = function getLayout(page: ReactElement) {
-  return <BaseLayout>{page}</BaseLayout>;
-};
+export default MainApp;
