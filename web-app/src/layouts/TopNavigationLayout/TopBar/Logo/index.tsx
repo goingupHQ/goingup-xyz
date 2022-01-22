@@ -2,7 +2,7 @@ import { Box, Tooltip, styled } from '@mui/material';
 import Link from 'src/components/Link';
 
 const LogoWrapper = styled(Link)(
-  ({ theme }) => `
+    ({ theme }) => `
         color: ${theme.colors.alpha.trueWhite[100]};
         padding: 0;
         display: flex;
@@ -12,7 +12,7 @@ const LogoWrapper = styled(Link)(
 );
 
 const LogoSignWrapper = styled(Box)(
-  ({ theme }) => `
+    ({ theme }) => `
         width: 52px;
         height: 38px;
         transform: scale(.8);
@@ -25,7 +25,7 @@ const LogoSignWrapper = styled(Box)(
 );
 
 const LogoSign = styled(Box)(
-  ({ theme }) => `
+    ({ theme }) => `
         background: ${theme.colors.alpha.trueWhite[70]};
         width: 18px;
         height: 18px;
@@ -35,7 +35,7 @@ const LogoSign = styled(Box)(
         top: 3px;
         left: 17px;
 
-        &:after, 
+        &:after,
         &:before {
             content: "";
             display: block;
@@ -62,7 +62,7 @@ const LogoSign = styled(Box)(
 );
 
 const LogoSignInner = styled(Box)(
-  ({ theme }) => `
+    ({ theme }) => `
         width: 16px;
         height: 16px;
         position: absolute;
@@ -75,21 +75,13 @@ const LogoSignInner = styled(Box)(
 );
 
 function Logo() {
-  return (
-    <LogoWrapper href="/">
-      <Tooltip
-        arrow
-        placement="right"
-        title="Tokyo Black NextJS Typescript Admin Dashboard"
-      >
-        <LogoSignWrapper>
-          <LogoSign>
-            <LogoSignInner />
-          </LogoSign>
-        </LogoSignWrapper>
-      </Tooltip>
-    </LogoWrapper>
-  );
+    return (
+        <LogoWrapper href="/">
+            <Tooltip arrow placement="right" title="goingup.xyz">
+                <img src="/static/images/logo/goingup.svg" style={{ height: '3rem' }} />
+            </Tooltip>
+        </LogoWrapper>
+    );
 }
 
 export default Logo;
