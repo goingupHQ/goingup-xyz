@@ -15,7 +15,7 @@ import Scrollbar from 'src/components/Scrollbar';
 import { SidebarContext } from 'src/contexts/SidebarContext';
 import SidebarMenu from 'src/layouts/AccentHeaderLayout/Sidebar/SidebarMenu';
 import SidebarTopSection from 'src/layouts/AccentHeaderLayout/Sidebar/SidebarTopSection';
-import ThemeSettings from 'src/components/ThemeSettings';
+// import ThemeSettings from 'src/components/ThemeSettings';
 import Logo from 'src/components/LogoSign';
 
 interface TopNavigationLayoutProps {
@@ -59,7 +59,7 @@ const CardWrapper = styled(Card)(
         min-height: 100vh;
         backdrop-filter: blur(5px);
         border-radius: ${theme.general.borderRadiusXl};
-        background: ${alpha(theme.colors.alpha.white[100], 0.9)};
+        background: ${alpha(theme.colors.primary.main, 0.6)};
 `
 );
 
