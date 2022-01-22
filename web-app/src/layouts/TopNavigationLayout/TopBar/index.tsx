@@ -130,14 +130,14 @@ function TopBar() {
                 >
                     <Box display="flex">
                         <Logo />
-                        <Box
+                        {/* <Box
                             component="span"
                             sx={{
                                 display: { xs: 'none', md: 'inline-flex' }
                             }}
                         >
                             <Search />
-                        </Box>
+                        </Box> */}
                     </Box>
                     <Box display="flex">
                         <Box
