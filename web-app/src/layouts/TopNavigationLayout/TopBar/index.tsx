@@ -101,13 +101,13 @@ function TopBar() {
             <TopBarImage
                 sx={{
                     opacity: 0.7,
-                    background: `${theme.colors.gradients.black1}`
+                    background: `${theme.colors.secondary.main}`
                 }}
             />
             <TopBarImage
                 sx={{
                     opacity: 0.5,
-                    background: `${theme.colors.gradients.gold1}`
+                    background: `${theme.colors.secondary.main}`
                 }}
             />
             <TopBarImage
