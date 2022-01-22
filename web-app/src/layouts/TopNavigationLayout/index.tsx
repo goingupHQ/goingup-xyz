@@ -128,7 +128,7 @@ const TopNavigationLayout: FC<TopNavigationLayoutProps> = ({ children }) => {
                             </Scrollbar>
                         </SidebarWrapper>
                     </Drawer>
-                    <ThemeSettings />
+                    {/* <ThemeSettings /> */}
                 </MainContent>
             </MainWrapper>
         </>
