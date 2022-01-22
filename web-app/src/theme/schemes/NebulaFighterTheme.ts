@@ -35,6 +35,7 @@ const colors = {
     black1: 'linear-gradient(100.66deg, #434343 6.56%, #000000 93.57%)',
     black2: 'linear-gradient(60deg, #29323c 0%, #485563 100%)',
     gold1: 'linear-gradient(to bottom, #f4ce00, #c9ae1f)',
+    blueviolet1: 'linear-gradient(to bottom, #6e40f3, #c9ae1f)',
   },
   shadows: {
     success:
