@@ -107,14 +107,14 @@ function TopBar() {
             <TopBarImage
                 sx={{
                     opacity: 0.5,
-                    background: `${theme.colors.gradients.blue5}`
+                    background: `${theme.colors.gradients.gold1}`
                 }}
             />
             <TopBarImage
                 sx={{
                     opacity: 0.15,
                     backgroundImage:
-                        'url("/static/images/placeholders/covers/1.jpg")'
+                        'url("/static/images/placeholders/covers/3.jpg")'
                 }}
             />
             <Container
