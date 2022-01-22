@@ -1,16 +1,16 @@
 import { useContext } from 'react';
 
 import {
-  Box,
-  Card,
-  Tooltip,
-  IconButton,
-  Container,
-  darken,
-  Divider,
-  alpha,
-  styled,
-  useTheme
+    Box,
+    Card,
+    Tooltip,
+    IconButton,
+    Container,
+    darken,
+    Divider,
+    alpha,
+    styled,
+    useTheme
 } from '@mui/material';
 import { SidebarContext } from 'src/contexts/SidebarContext';
 import NavigationMenu from './NavigationMenu';
@@ -23,7 +23,7 @@ import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import Logo from './Logo';
 
 const TopBarWrapper = styled(Card)(
-  ({ theme }) => `
+    ({ theme }) => `
     color: ${theme.header.textColor};
     background: ${alpha(darken(theme.colors.primary.dark, 0.2), 0.95)};
     backdrop-filter: blur(5px);
@@ -44,7 +44,7 @@ const TopBarWrapper = styled(Card)(
 );
 
 const TopBarImage = styled(Box)(
-  () => `
+    () => `
     background-size: cover;
     position: absolute;
     left: 0;
@@ -56,13 +56,13 @@ const TopBarImage = styled(Box)(
 );
 
 const DividerWrapper = styled(Divider)(
-  ({ theme }) => `
+    ({ theme }) => `
     background: ${theme.colors.alpha.trueWhite[10]};
 `
 );
 
 const IconButtonPrimary = styled(IconButton)(
-  ({ theme }) => `
+    ({ theme }) => `
     display: flex;
     width: 48px;
     margin-left: ${theme.spacing(2)};
@@ -93,93 +93,105 @@ const IconButtonPrimary = styled(IconButton)(
 );
 
 function TopBar() {
-  const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
-  const theme = useTheme();
+    const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
+    const theme = useTheme();
 
-  return (
-    <TopBarWrapper>
-      <TopBarImage
-        sx={{
-          opacity: 0.7,
-          background: `${theme.colors.gradients.black1}`
-        }}
-      />
-      <TopBarImage
-        sx={{
-          opacity: 0.5,
-          background: `${theme.colors.gradients.blue5}`
-        }}
-      />
-      <TopBarImage
-        sx={{
-          opacity: 0.15,
-          backgroundImage: 'url("/static/images/placeholders/covers/1.jpg")'
-        }}
-      />
-      <Container
-        sx={{
-          zIndex: 6
-        }}
-        maxWidth="xl"
-      >
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box display="flex">
-            <Logo />
-            <Box
-              component="span"
-              sx={{
-                display: { xs: 'none', md: 'inline-flex' }
-              }}
+    return (
+        <TopBarWrapper>
+            <TopBarImage
+                sx={{
+                    opacity: 0.7,
+                    background: `${theme.colors.gradients.black1}`
+                }}
+            />
+            <TopBarImage
+                sx={{
+                    opacity: 0.5,
+                    background: `${theme.colors.gradients.blue5}`
+                }}
+            />
+            <TopBarImage
+                sx={{
+                    opacity: 0.15,
+                    backgroundImage:
+                        'url("/static/images/placeholders/covers/1.jpg")'
+                }}
+            />
+            <Container
+                sx={{
+                    zIndex: 6
+                }}
+                maxWidth="xl"
             >
-              <Search />
-            </Box>
-          </Box>
-          <Box display="flex">
-            <Box
-              component="span"
-              sx={{
-                display: { xs: 'none', sm: 'inline-flex' }
-              }}
-            >
-              <LanguageSwitcher />
-              <Box mx={1}>
-                <Notifications />
-              </Box>
-            </Box>
-            <Userbox />
-            <Box
-              component="span"
-              sx={{
-                display: { md: 'none', xs: 'inline-flex' }
-              }}
-            >
-              <Tooltip arrow title="Toggle Menu">
-                <IconButtonPrimary color="primary" onClick={toggleSidebar}>
-                  {!sidebarToggle ? <MenuTwoToneIcon /> : <CloseTwoToneIcon />}
-                </IconButtonPrimary>
-              </Tooltip>
-            </Box>
-          </Box>
-        </Box>
-        <DividerWrapper
-          sx={{
-            display: { xs: 'none', md: 'flex' },
-            my: 4
-          }}
-        />
-        <Box
-          display="flex"
-          alignItems="center"
-          sx={{
-            width: '100%',
-            display: { xs: 'none', md: 'inline-block' }
-          }}
-        >
-          <NavigationMenu />
-        </Box>
-      </Container>
-    </TopBarWrapper>
-  );
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                >
+                    <Box display="flex">
+                        <Logo />
+                        <Box
+                            component="span"
+                            sx={{
+                                display: { xs: 'none', md: 'inline-flex' }
+                            }}
+                        >
+                            <Search />
+                        </Box>
+                    </Box>
+                    <Box display="flex">
+                        <Box
+                            component="span"
+                            sx={{
+                                display: { xs: 'none', sm: 'inline-flex' }
+                            }}
+                        >
+                            <LanguageSwitcher />
+                            <Box mx={1}>
+                                <Notifications />
+                            </Box>
+                        </Box>
+                        <Userbox />
+                        <Box
+                            component="span"
+                            sx={{
+                                display: { md: 'none', xs: 'inline-flex' }
+                            }}
+                        >
+                            <Tooltip arrow title="Toggle Menu">
+                                <IconButtonPrimary
+                                    color="primary"
+                                    onClick={toggleSidebar}
+                                >
+                                    {!sidebarToggle ? (
+                                        <MenuTwoToneIcon />
+                                    ) : (
+                                        <CloseTwoToneIcon />
+                                    )}
+                                </IconButtonPrimary>
+                            </Tooltip>
+                        </Box>
+                    </Box>
+                </Box>
+                <DividerWrapper
+                    sx={{
+                        display: { xs: 'none', md: 'flex' },
+                        my: 4
+                    }}
+                />
+                <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                        width: '100%',
+                        display: { xs: 'none', md: 'inline-block' }
+                    }}
+                >
+                    <NavigationMenu />
+                </Box>
+            </Container>
+        </TopBarWrapper>
+    );
 }
 
 export default TopBar;
