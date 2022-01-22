@@ -29,6 +29,8 @@ declare module '@mui/material/styles' {
         green2: string;
         black1: string;
         black2: string;
+        gold1: string;
+        blueviolet1; string;
       };
       shadows: {
         success: string;

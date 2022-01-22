@@ -33,7 +33,8 @@ const colors = {
     green1: 'linear-gradient(135deg, #FFF720 0%, #3CD500 100%)',
     green2: 'linear-gradient(to bottom, #00b09b, #96c93d)',
     black1: 'linear-gradient(100.66deg, #434343 6.56%, #000000 93.57%)',
-    black2: 'linear-gradient(60deg, #29323c 0%, #485563 100%)'
+    black2: 'linear-gradient(60deg, #29323c 0%, #485563 100%)',
+    gold1: 'linear-gradient(to bottom, #f4ce00, #c9ae1f)',
   },
   shadows: {
     success:
@@ -134,24 +135,7 @@ const colors = {
 export const NebulaFighterTheme = createTheme({
   // direction: i18n.dir(),
   colors: {
-    gradients: {
-      blue1: colors.gradients.blue1,
-      blue2: colors.gradients.blue2,
-      blue3: colors.gradients.blue3,
-      blue4: colors.gradients.blue4,
-      blue5: colors.gradients.blue5,
-      orange1: colors.gradients.orange1,
-      orange2: colors.gradients.orange2,
-      orange3: colors.gradients.orange3,
-      purple1: colors.gradients.purple1,
-      purple3: colors.gradients.purple3,
-      pink1: colors.gradients.pink1,
-      pink2: colors.gradients.pink2,
-      green1: colors.gradients.green1,
-      green2: colors.gradients.green2,
-      black1: colors.gradients.black1,
-      black2: colors.gradients.black2
-    },
+    gradients: colors.gradients,
     shadows: {
       success: colors.shadows.success,
       error: colors.shadows.error,
