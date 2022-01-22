@@ -1,12 +1,12 @@
 import { FC, ReactNode, useContext } from 'react';
 import {
-  Box,
-  Drawer,
-  alpha,
-  Card,
-  Container,
-  styled,
-  useTheme
+    Box,
+    Drawer,
+    alpha,
+    Card,
+    Container,
+    styled,
+    useTheme
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -19,11 +19,11 @@ import ThemeSettings from 'src/components/ThemeSettings';
 import Logo from 'src/components/LogoSign';
 
 interface TopNavigationLayoutProps {
-  children?: ReactNode;
+    children?: ReactNode;
 }
 
 const MainWrapper = styled(Box)(
-  ({ theme }) => `
+    ({ theme }) => `
   padding: ${theme.spacing(0, 0, 4)};
 
   .MuiDrawer-fm .MuiPaper-root {
@@ -47,7 +47,7 @@ const MainWrapper = styled(Box)(
 );
 
 const MainContent = styled(Container)(
-  ({ theme }) => `
+    ({ theme }) => `
         margin-top: ${theme.spacing(-45)};
         position: relative;
         z-index: 55;
@@ -55,7 +55,7 @@ const MainContent = styled(Container)(
 );
 
 const CardWrapper = styled(Card)(
-  ({ theme }) => `
+    ({ theme }) => `
         min-height: 100vh;
         backdrop-filter: blur(5px);
         border-radius: ${theme.general.borderRadiusXl};
@@ -64,7 +64,7 @@ const CardWrapper = styled(Card)(
 );
 
 const SidebarWrapper = styled(Box)(
-  ({ theme }) => `
+    ({ theme }) => `
         width: ${theme.sidebar.width};
         min-width: ${theme.sidebar.width};
         color: ${theme.sidebar.textColor};
@@ -81,62 +81,62 @@ const SidebarWrapper = styled(Box)(
 );
 
 const TopSection = styled(Box)(
-  ({ theme }) => `
+    ({ theme }) => `
         margin: ${theme.spacing(2, 2)};
 `
 );
 
 const TopNavigationLayout: FC<TopNavigationLayoutProps> = ({ children }) => {
-  const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
-  const closeSidebar = () => toggleSidebar();
-  const theme = useTheme();
+    const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
+    const closeSidebar = () => toggleSidebar();
+    const theme = useTheme();
 
-  return (
-    <>
-      <MainWrapper>
-        <TopBar />
-        <MainContent maxWidth="xl">
-          <Box mx={8}>
-            <CardWrapper>{children}</CardWrapper>
-          </Box>
-          <Drawer
-            sx={{
-              display: { lg: 'none', xs: 'inline-block' }
-            }}
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={sidebarToggle}
-            onClose={closeSidebar}
-            variant="temporary"
-            elevation={9}
-          >
-            <SidebarWrapper>
-              <Scrollbar>
-                <TopSection>
-                  <Box
-                    sx={{
-                      width: 52,
-                      ml: 1,
-                      mt: 1,
-                      mb: 3
-                    }}
-                  >
-                    <Logo />
-                  </Box>
-                  <SidebarTopSection />
-                </TopSection>
-                <SidebarMenu />
-              </Scrollbar>
-            </SidebarWrapper>
-          </Drawer>
-          <ThemeSettings />
-        </MainContent>
-      </MainWrapper>
-    </>
-  );
+    return (
+        <>
+            <MainWrapper>
+                <TopBar />
+                <MainContent maxWidth="xl">
+                    <Box mx={8}>
+                        <CardWrapper>{children}</CardWrapper>
+                    </Box>
+                    <Drawer
+                        sx={{
+                            display: { lg: 'none', xs: 'inline-block' }
+                        }}
+                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                        open={sidebarToggle}
+                        onClose={closeSidebar}
+                        variant="temporary"
+                        elevation={9}
+                    >
+                        <SidebarWrapper>
+                            <Scrollbar>
+                                <TopSection>
+                                    <Box
+                                        sx={{
+                                            width: 52,
+                                            ml: 1,
+                                            mt: 1,
+                                            mb: 3
+                                        }}
+                                    >
+                                        <Logo />
+                                    </Box>
+                                    <SidebarTopSection />
+                                </TopSection>
+                                <SidebarMenu />
+                            </Scrollbar>
+                        </SidebarWrapper>
+                    </Drawer>
+                    <ThemeSettings />
+                </MainContent>
+            </MainWrapper>
+        </>
+    );
 };
 
 TopNavigationLayout.propTypes = {
-  children: PropTypes.node
+    children: PropTypes.node
 };
 
 export default TopNavigationLayout;
