@@ -195,7 +195,7 @@ function Userbox() {
                     horizontal: 'center'
                 }}
             >
-                <MenuUserBox
+                {/* <MenuUserBox
                     sx={{
                         minWidth: 210
                     }}
@@ -217,7 +217,7 @@ function Userbox() {
                     sx={{
                         mb: 0
                     }}
-                />
+                /> */}
                 <List
                     sx={{
                         p: 1
@@ -254,13 +254,13 @@ function Userbox() {
                 </List>
                 <Divider />
                 <Box m={1}>
-                    <Button color="primary" fullWidth onClick={handleLogout}>
+                    <Button color="primary" fullWidth>
                         <LockOpenTwoToneIcon
                             sx={{
                                 mr: 1
                             }}
                         />
-                        {t('Sign out')}
+                        {t('Disconnect this wallet')}
                     </Button>
                 </Box>
             </Popover>
