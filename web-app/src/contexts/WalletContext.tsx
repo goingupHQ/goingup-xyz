@@ -39,9 +39,9 @@ export function WalletProvider({ children }: Props) {
         const instance = await web3Modal.connect();
         const provider = new ethers.providers.Web3Provider(instance);
 
-        setAddress(instance.selectedAddress);
+        setAddress(ethers.utils.getAddress(instance.selectedAddress));
         setNetwork(instance.networkVersion);
-        setEthersProvider(provider); console.log(instance)
+        setEthersProvider(provider);
     };
 
     return (
