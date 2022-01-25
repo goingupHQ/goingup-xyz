@@ -12,6 +12,7 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 import createEmotionCache from 'src/createEmotionCache';
 import { appWithTranslation } from 'next-i18next';
 import { SidebarProvider } from 'src/contexts/SidebarContext';
+import { WalletProvider } from 'src/contexts/WalletContext';
 import 'src/utils/chart';
 import { Provider as ReduxProvider } from 'react-redux';
 import { store } from 'src/store';
@@ -25,62 +26,70 @@ import { AuthConsumer, AuthProvider } from 'src/contexts/JWTAuthContext';
 const clientSideEmotionCache = createEmotionCache();
 
 type NextPageWithLayout = NextPage & {
-  getLayout?: (page: ReactElement) => ReactNode;
+    getLayout?: (page: ReactElement) => ReactNode;
 };
 
 interface MyAppProps extends AppProps {
-  emotionCache?: EmotionCache;
-  Component: NextPageWithLayout;
+    emotionCache?: EmotionCache;
+    Component: NextPageWithLayout;
 }
 
 function MyApp(props: MyAppProps) {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const getLayout = Component.getLayout ?? ((page) => page);
-  useScrollTop();
+    const {
+        Component,
+        emotionCache = clientSideEmotionCache,
+        pageProps
+    } = props;
+    const getLayout = Component.getLayout ?? ((page) => page);
+    useScrollTop();
 
-  Router.events.on('routeChangeStart', nProgress.start);
-  Router.events.on('routeChangeError', nProgress.done);
-  Router.events.on('routeChangeComplete', nProgress.done);
+    Router.events.on('routeChangeStart', nProgress.start);
+    Router.events.on('routeChangeError', nProgress.done);
+    Router.events.on('routeChangeComplete', nProgress.done);
 
-  return (
-    <CacheProvider value={emotionCache}>
-      <Head>
-        <title>Going Up</title>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-      </Head>
-      <ReduxProvider store={store}>
-        <SidebarProvider>
-          <ThemeProvider>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <AuthProvider>
-                <SnackbarProvider
-                  maxSnack={6}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                  }}
-                >
-                  <CssBaseline />
-                  <AuthConsumer>
-                    {(auth) =>
-                      !auth.isInitialized ? (
-                        <Loader />
-                      ) : (
-                        getLayout(<Component {...pageProps} />)
-                      )
-                    }
-                  </AuthConsumer>
-                </SnackbarProvider>
-              </AuthProvider>
-            </LocalizationProvider>
-          </ThemeProvider>
-        </SidebarProvider>
-      </ReduxProvider>
-    </CacheProvider>
-  );
+    return (
+        <CacheProvider value={emotionCache}>
+            <Head>
+                <title>Going Up</title>
+                <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                />
+            </Head>
+            <ReduxProvider store={store}>
+                <SidebarProvider>
+                    <ThemeProvider>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <WalletProvider>
+                                <AuthProvider>
+                                    <SnackbarProvider
+                                        maxSnack={6}
+                                        anchorOrigin={{
+                                            vertical: 'bottom',
+                                            horizontal: 'right'
+                                        }}
+                                    >
+                                        <CssBaseline />
+                                        <AuthConsumer>
+                                            {(auth) =>
+                                                !auth.isInitialized ? (
+                                                    <Loader />
+                                                ) : (
+                                                    getLayout(
+                                                        <Component {...pageProps} />
+                                                    )
+                                                )
+                                            }
+                                        </AuthConsumer>
+                                    </SnackbarProvider>
+                                </AuthProvider>
+                            </WalletProvider>
+                        </LocalizationProvider>
+                    </ThemeProvider>
+                </SidebarProvider>
+            </ReduxProvider>
+        </CacheProvider>
+    );
 }
 
 export default appWithTranslation(MyApp);
