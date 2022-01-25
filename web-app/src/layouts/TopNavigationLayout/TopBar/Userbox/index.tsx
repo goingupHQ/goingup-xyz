@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect } from 'react';
-import { WalletProvider } from 'src/contexts/WalletContext';
+import { useRef, useState, useEffect, useContext } from 'react';
+import { WalletContext } from 'src/contexts/WalletContext';
 import { useAuth } from 'src/hooks/useAuth';
 import { useRouter } from 'next/router';
 
@@ -101,13 +101,12 @@ const UserBoxLabelMain = styled(Typography)(
 );
 
 function Userbox() {
-    // const walletProvider = useRef(null);
-    // useEffect(() => {
-    //     console.log(walletProvider.current)
-    // }, []);
     const { t }: { t: any } = useTranslation();
     const { logout } = useAuth();
     const router = useRouter();
+
+    const wallet = useContext(WalletContext);
+    console.log(wallet);
 
     const user = {
         // avatar: '/static/images/avatars/1.jpg',
@@ -119,7 +118,11 @@ function Userbox() {
     const [isOpen, setOpen] = useState<boolean>(false);
 
     const handleOpen = (): void => {
-        setOpen(true);
+        if (wallet.address === null) {
+            wallet.connect();
+        } else {
+            setOpen(true);
+        }
     };
 
     const handleClose = (): void => {
@@ -137,14 +140,14 @@ function Userbox() {
     };
 
     return (
-        <WalletProvider>
+        <>
             <UserBoxButton
                 fullWidth
                 color="secondary"
                 ref={ref}
                 onClick={handleOpen}
             >
-                <Avatar variant="rounded" alt={user.name} src={user.avatar} />
+                <Avatar variant="rounded" alt={user.name} />
                 <Box
                     display="flex"
                     flex={1}
@@ -159,11 +162,15 @@ function Userbox() {
                     >
                         <UserBoxText>
                             <UserBoxLabelMain variant="body1">
-                                {user.name}
+                                {wallet.address === null &&
+                                    `Connect Wallet`
+                                }
+
+                                {wallet.address !== null && wallet.address}
                             </UserBoxLabelMain>
-                            <UserBoxDescriptionMain variant="body2">
+                            {/* <UserBoxDescriptionMain variant="body2">
                                 {user.jobtitle}
-                            </UserBoxDescriptionMain>
+                            </UserBoxDescriptionMain> */}
                         </UserBoxText>
                     </Box>
                     <UnfoldMoreTwoToneIcon
@@ -197,7 +204,7 @@ function Userbox() {
                     <Avatar
                         variant="rounded"
                         alt={user.name}
-                        src={user.avatar}
+                        // src={user.avatar}
                     />
                     <UserBoxText>
                         <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
@@ -257,7 +264,7 @@ function Userbox() {
                     </Button>
                 </Box>
             </Popover>
-        </WalletProvider>
+        </>
     );
 }
 
