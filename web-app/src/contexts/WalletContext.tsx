@@ -1,11 +1,11 @@
-import { FC, ReactNode, useState, useReducer, createContext } from 'react';
-import PropTypes from 'prop-types';
+import { ReactNode, useState, createContext, useEffect, Dispatch } from 'react';
+import { ethers } from 'ethers';
+import Web3Modal from 'web3modal';
 
 type WalletContext = {
     address: string;
-    setAddress: any;
     network: string;
-    setNetwork: any;
+    ethersProvider: ethers.providers.Web3Provider;
     connect: () => Promise<any>;
 };
 
@@ -17,16 +17,40 @@ type Props = {
 };
 
 export function WalletProvider({ children }: Props) {
+    useEffect(() => {
+
+    }, [])
+
     const [address, setAddress] = useState(null);
     const [network, setNetwork] = useState(null);
+    const [ethersProvider, setEthersProvider] = useState(null);
 
     const connect = async () => {
-        console.log('connect to wallet');
+        const providerOptions = {
+            /* See Provider Options Section */
+        };
+
+        const web3Modal = new Web3Modal({
+            // network: 'mainnet',
+            // cacheProvider: true,
+            providerOptions
+        });
+
+        const instance = await web3Modal.connect();
+        const provider = new ethers.providers.Web3Provider(instance);
+
+        setAddress(instance.selectedAddress);
+        setNetwork(instance.networkVersion);
+        setEthersProvider(provider); console.log(instance)
     };
 
     return (
         <WalletContext.Provider
-            value={{ address, setAddress, network, setNetwork, connect }}
+            value={{
+                address,
+                network,
+                ethersProvider,
+                connect }}
         >
             {children}
         </WalletContext.Provider>
