@@ -1,73 +1,34 @@
-import { FC, ReactNode, useEffect, useReducer, createContext } from 'react';
+import { FC, ReactNode, useState, useReducer, createContext } from 'react';
 import PropTypes from 'prop-types';
 
-interface WalletState {
+type WalletContext = {
     address: string;
+    setAddress: any;
     network: string;
-}
+    setNetwork: any;
+    connect: () => Promise<any>;
+};
 
-interface WalletProviderProps {
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const WalletContext = createContext<WalletContext>({} as WalletContext);
+
+type Props = {
     children: ReactNode;
-  }
+};
 
-interface WalletContextValue extends WalletState {
-    getWalletState: () => Promise<any>;
-    // signInWithEmailAndPassword: (email: string, password: string) => Promise<any>;
-    // signInWithGoogle: () => Promise<any>;
-    // logout: () => Promise<void>;
-}
+export function WalletProvider({ children }: Props) {
+    const [address, setAddress] = useState(null);
+    const [network, setNetwork] = useState(null);
 
-type WalletChangedAction = {
-    type: 'WALLET_CHANGED';
-    payload: {
-        address: string;
-        network: string;
+    const connect = async () => {
+        console.log('connect to wallet');
     };
-};
-
-const reducer = (state: WalletState, action: Action): WalletState => {
-    if (action.type === 'WALLET_CHANGED') {
-        const { address, network } = action.payload;
-
-        return {
-            ...state,
-            address,
-            network
-        };
-    }
-
-    return state;
-};
-
-const initialWalletState: WalletState = {
-    address: null,
-    network: null
-};
-
-type Action = WalletChangedAction;
-
-export const WalletContext = createContext<WalletContextValue>({
-    ...initialWalletState,
-    getWalletState: () => Promise.resolve()
-    // signInWithEmailAndPassword: () => Promise.resolve(),
-    // signInWithGoogle: () => Promise.resolve(),
-    // logout: () => Promise.resolve()
-});
-
-export const WalletProvider: FC<WalletProviderProps> = (props) => {
-    const { children } = props;
-    const [state, dispatch] = useReducer(reducer, initialWalletState);
-
-    const getWalletState = () => Promise.resolve(state);
 
     return (
         <WalletContext.Provider
-            value={{
-                ...state,
-                getWalletState
-            }}
+            value={{ address, setAddress, network, setNetwork, connect }}
         >
             {children}
         </WalletContext.Provider>
-    )
-};
+    );
+}
