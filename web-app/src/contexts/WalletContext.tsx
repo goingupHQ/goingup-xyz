@@ -8,6 +8,7 @@ type WalletContext = {
     ethersProvider: ethers.providers.Web3Provider;
     connect: () => Promise<any>;
     disconnect: () => Promise<any>;
+    networks: any;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -17,8 +18,31 @@ type Props = {
     children: ReactNode;
 };
 
-let web3Modal;
+const networks = {
+    1: {
+        name: 'Ethereum Mainnet'
+    },
+    3: {
+        name: 'Ropsten Testnet'
+    },
+    4: {
+        name: 'Rinkeby Testnet'
+    },
+    5: {
+        name: 'Goerli Testnet'
+    },
+    42: {
+        name: 'Kovan Testnet'
+    },
+    137: {
+        name: 'Polygon Mainnet'
+    },
+    80001: {
+        name: 'Polygon Mumbai Testnet'
+    }
+}
 
+let web3Modal;
 export function WalletProvider({ children }: Props) {
     useEffect(() => {
 
@@ -42,6 +66,15 @@ export function WalletProvider({ children }: Props) {
         const instance = await web3Modal.connect();
         const provider = new ethers.providers.Web3Provider(instance);
 
+        instance.on('accountsChanged', accounts => {
+            setAddress(ethers.utils.getAddress(accounts[0]));
+        });
+
+        instance.on('chainChanged', chainId => {
+            const networkId = parseInt(chainId, 16);
+            setNetwork(networkId);
+        });
+
         setAddress(ethers.utils.getAddress(instance.selectedAddress));
         setNetwork(instance.networkVersion);
         setEthersProvider(provider);
@@ -61,6 +94,7 @@ export function WalletProvider({ children }: Props) {
                 address,
                 network,
                 ethersProvider,
+                networks,
                 connect,
                 disconnect
             }}

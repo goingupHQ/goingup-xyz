@@ -178,9 +178,11 @@ function Userbox() {
 
                                 {wallet.address !== null && wallet.address}
                             </UserBoxLabelMain>
-                            {/* <UserBoxDescriptionMain variant="body2">
-                                {user.jobtitle}
-                            </UserBoxDescriptionMain> */}
+                            {wallet.network &&
+                                <UserBoxDescriptionMain variant="body2">
+                                    {wallet.networks[wallet.network]?.name} [{wallet.network}]
+                                </UserBoxDescriptionMain>
+                            }
                         </UserBoxText>
                     </Box>
                     <UnfoldMoreTwoToneIcon
