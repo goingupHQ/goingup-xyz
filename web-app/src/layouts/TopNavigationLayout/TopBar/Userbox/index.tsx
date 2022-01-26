@@ -264,7 +264,7 @@ function Userbox() {
                 </List>
                 <Divider />
                 <Box m={1}>
-                    <Button color="primary" fullWidth>
+                    <Button color="primary" fullWidth onClick={() => { wallet.disconnect(); handleClose(); }}>
                         <LockOpenTwoToneIcon
                             sx={{
                                 mr: 1
