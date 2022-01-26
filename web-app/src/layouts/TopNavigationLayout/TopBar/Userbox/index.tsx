@@ -22,6 +22,7 @@ import UnfoldMoreTwoToneIcon from '@mui/icons-material/UnfoldMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
+import Identicon from '@/components/common/Identicon';
 
 const UserBoxButton = styled(Button)(
     ({ theme }) => `
@@ -147,7 +148,16 @@ function Userbox() {
                 ref={ref}
                 onClick={handleOpen}
             >
-                <Avatar variant="rounded" alt={user.name} />
+                {wallet.address === null &&
+                    <Avatar variant="rounded" />
+                }
+
+                {wallet.address !== null &&
+                    <div style={{ paddingTop: '6px' }}>
+                        <Identicon address={wallet.address} size={32} />
+                    </div>
+                }
+
                 <Box
                     display="flex"
                     flex={1}
