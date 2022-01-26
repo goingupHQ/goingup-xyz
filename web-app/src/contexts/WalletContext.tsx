@@ -7,6 +7,7 @@ type WalletContext = {
     network: string;
     ethersProvider: ethers.providers.Web3Provider;
     connect: () => Promise<any>;
+    disconnect: () => Promise<any>;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -15,6 +16,8 @@ export const WalletContext = createContext<WalletContext>({} as WalletContext);
 type Props = {
     children: ReactNode;
 };
+
+let web3Modal;
 
 export function WalletProvider({ children }: Props) {
     useEffect(() => {
@@ -30,7 +33,7 @@ export function WalletProvider({ children }: Props) {
             /* See Provider Options Section */
         };
 
-        const web3Modal = new Web3Modal({
+        web3Modal = new Web3Modal({
             // network: 'mainnet',
             // cacheProvider: true,
             providerOptions
@@ -44,13 +47,23 @@ export function WalletProvider({ children }: Props) {
         setEthersProvider(provider);
     };
 
+    const disconnect = async () => {
+        web3Modal.clearCachedProvider();
+
+        setAddress(null);
+        setNetwork(null);
+        setEthersProvider(null);
+    }
+
     return (
         <WalletContext.Provider
             value={{
                 address,
                 network,
                 ethersProvider,
-                connect }}
+                connect,
+                disconnect
+            }}
         >
             {children}
         </WalletContext.Provider>
