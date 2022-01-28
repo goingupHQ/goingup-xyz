@@ -13,9 +13,10 @@ import {
     Step,
     Stepper,
     StepLabel,
-    useTheme,
+    TextField,
     styled
 } from '@mui/material';
+import PersonalInfo from './personal-info';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -30,7 +31,8 @@ function CreateAccount() {
     const [skipped, setSkipped] = useState(new Set<number>());
 
     const isStepOptional = (step: number) => {
-        return step === 1;
+        // return step === 1;
+        return false;
     };
 
     const isStepSkipped = (step: number) => {
@@ -164,9 +166,14 @@ function CreateAccount() {
                                 </React.Fragment>
                             ) : (
                                 <React.Fragment>
-                                    <Typography sx={{ mt: 2, mb: 1 }}>
+                                    {/* <Typography sx={{ mt: 2, mb: 1 }}>
                                         Step {activeStep + 1}
-                                    </Typography>
+                                    </Typography> */}
+
+                                    {activeStep === 0 &&
+                                    <PersonalInfo />
+                                    }
+
                                     <Box
                                         sx={{
                                             display: 'flex',
