@@ -1,10 +1,14 @@
+import { useContext } from 'react';
 import { Box, TextField, Select, InputLabel, FormControl, MenuItem } from '@mui/material';
+import { AppContext } from '@/contexts/AppContext';
 
 const fieldStyle = {
     m: 1
 }
 
 function PersonalInfo() {
+    const appContext = useContext(AppContext);
+    const { availability } = appContext;
     return (
         <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
             <TextField label="First Name" variant="outlined" required sx={fieldStyle} />
@@ -43,8 +47,9 @@ function PersonalInfo() {
                     label="Availability"
                     // onChange={handleChange}
                 >
-                    <MenuItem value="Unvailable">Unavailable</MenuItem>
-                    <MenuItem value="Available">Available</MenuItem>
+                    {availability.map(a => {return (
+                        <MenuItem value={a.id}>{a.text}</MenuItem>
+                    )})}
                 </Select>
             </FormControl>
         </Box>
