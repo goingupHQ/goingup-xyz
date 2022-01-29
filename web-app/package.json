@@ -1,11 +1,11 @@
 {
-  "name": "tokyo-black-nextjs-admin-dashboard",
+  "name": "goingup-web-app",
   "version": "3.0.0",
-  "title": "Tokyo Black NextJS Typescript Admin Dashboard",
-  "description": "Production-ready updated admin dashboard powered by React and MUI (Material-UI) built on NextJS features hundreds of components and examples that will help you build faster and better apps.",
+  "title": "GoingUP.xyz",
+  "description": "Web3 Collaboration Social Network",
   "author": {
-    "name": "BloomUI.com",
-    "url": "https://bloomui.com"
+    "name": "Mark Ibanez",
+    "email": "mark@goingup.xyz"
   },
   "private": true,
   "dependencies": {
