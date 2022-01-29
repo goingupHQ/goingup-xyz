@@ -22,6 +22,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import useScrollTop from 'src/hooks/useScrollTop';
 import { SnackbarProvider } from 'notistack';
 import { AuthConsumer, AuthProvider } from 'src/contexts/JWTAuthContext';
+import { AppProvider } from '@/contexts/AppContext';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -60,30 +61,33 @@ function MyApp(props: MyAppProps) {
                 <SidebarProvider>
                     <ThemeProvider>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <WalletProvider>
-                                <AuthProvider>
-                                    <SnackbarProvider
-                                        maxSnack={6}
-                                        anchorOrigin={{
-                                            vertical: 'bottom',
-                                            horizontal: 'right'
-                                        }}
-                                    >
-                                        <CssBaseline />
-                                        <AuthConsumer>
-                                            {(auth) =>
-                                                !auth.isInitialized ? (
-                                                    <Loader />
-                                                ) : (
-                                                    getLayout(
-                                                        <Component {...pageProps} />
+                            <AppProvider>
+                                <WalletProvider>
+                                    <AuthProvider>
+                                        <SnackbarProvider
+                                            maxSnack={6}
+                                            anchorOrigin={{
+                                                vertical: 'bottom',
+                                                horizontal: 'right'
+                                            }}
+                                        >
+                                            <CssBaseline />
+                                            <AuthConsumer>
+                                                {(auth) =>
+                                                    !auth.isInitialized ? (
+                                                        <Loader />
+                                                    ) : (
+                                                        getLayout(
+                                                            <Component {...pageProps} />
+                                                        )
                                                     )
-                                                )
-                                            }
-                                        </AuthConsumer>
-                                    </SnackbarProvider>
-                                </AuthProvider>
-                            </WalletProvider>
+                                                }
+                                            </AuthConsumer>
+                                        </SnackbarProvider>
+                                    </AuthProvider>
+                                </WalletProvider>
+                            </AppProvider>
+
                         </LocalizationProvider>
                     </ThemeProvider>
                 </SidebarProvider>
