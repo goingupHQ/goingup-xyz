@@ -26,11 +26,11 @@ function ProjectGoals() {
             </FormControl>
 
             <FormControl sx={fieldStyle} required>
-                <InputLabel id="occupation-select-label">Occupation</InputLabel>
+                <InputLabel id="ideal-collaborator-label">Your ideal collaborator is</InputLabel>
                 <Select
-                    labelId="occupation-select-label"
+                    labelId="ideal-collaborator-label"
                     // value={age}
-                    label="Occupation"
+                    label="Your ideal collaborator is"
                     // onChange={handleChange}
                 >
                     {occupations.map(o => {return (
