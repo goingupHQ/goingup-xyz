@@ -17,6 +17,7 @@ import {
     styled
 } from '@mui/material';
 import PersonalInfo from './personal-info';
+import ProjectGoals from './project-goals';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -170,9 +171,8 @@ function CreateAccount() {
                                         Step {activeStep + 1}
                                     </Typography> */}
 
-                                    {activeStep === 0 &&
-                                    <PersonalInfo />
-                                    }
+                                    {activeStep === 0 && <PersonalInfo />}
+                                    {activeStep === 1 && <ProjectGoals />}
 
                                     <Box
                                         sx={{
