@@ -25,7 +25,7 @@ function PersonalInfo() {
                     // onChange={handleChange}
                 >
                     {occupations.map(o => {return (
-                        <MenuItem value={o.id}>{o.text}</MenuItem>
+                        <MenuItem key={o.id} value={o.id}>{o.text}</MenuItem>
                     )})}
                 </Select>
             </FormControl>
@@ -39,7 +39,7 @@ function PersonalInfo() {
                     // onChange={handleChange}
                 >
                     {availability.map(a => {return (
-                        <MenuItem value={a.id}>{a.text}</MenuItem>
+                        <MenuItem key={a.id} value={a.id}>{a.text}</MenuItem>
                     )})}
                 </Select>
             </FormControl>

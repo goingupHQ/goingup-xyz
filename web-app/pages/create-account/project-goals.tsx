@@ -20,7 +20,7 @@ function ProjectGoals() {
                     // onChange={handleChange}
                 >
                     {userGoals.map(ug => {return (
-                        <MenuItem value={ug.id}>{ug.text}</MenuItem>
+                        <MenuItem key={ug.id} value={ug.id}>{ug.text}</MenuItem>
                     )})}
                 </Select>
             </FormControl>
@@ -34,7 +34,7 @@ function ProjectGoals() {
                     // onChange={handleChange}
                 >
                     {occupations.map(o => {return (
-                        <MenuItem value={o.id}>{o.text}</MenuItem>
+                        <MenuItem key={o.id} value={o.id}>{o.text}</MenuItem>
                     )})}
                 </Select>
             </FormControl>
