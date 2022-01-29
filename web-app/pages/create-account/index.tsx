@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import PersonalInfo from './personal-info';
 import ProjectGoals from './project-goals';
+import InviteFriends from './invite-friends';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -173,6 +174,7 @@ function CreateAccount() {
 
                                     {activeStep === 0 && <PersonalInfo />}
                                     {activeStep === 1 && <ProjectGoals />}
+                                    {activeStep === 2 && <InviteFriends />}
 
                                     <Box
                                         sx={{
