@@ -76,7 +76,7 @@ function CreateAccount() {
     return (
         <>
             <Head>
-                <title>Banking Dashboard</title>
+                <title>Create an account with GoingUP</title>
             </Head>
             <Grid
                 sx={{ px: 4 }}
