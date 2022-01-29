@@ -23,6 +23,7 @@ export default function CreateAccountForm() {
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set<number>());
 
+    // @ts-ignore
     const isStepOptional = (step: number) => {
         // return step === 1;
         return false;
