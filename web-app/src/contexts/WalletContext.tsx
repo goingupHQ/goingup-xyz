@@ -1,5 +1,6 @@
 import { ReactNode, useState, createContext, useEffect, Dispatch } from 'react';
 import { ethers } from 'ethers';
+import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 
 type WalletContext = {
@@ -44,6 +45,8 @@ const networks = {
 
 let web3Modal;
 export function WalletProvider({ children }: Props) {
+    const router = useRouter();
+    console.log(router);
     useEffect(() => {
 
     }, [])
@@ -78,6 +81,8 @@ export function WalletProvider({ children }: Props) {
         setAddress(ethers.utils.getAddress(instance.selectedAddress));
         setNetwork(instance.networkVersion);
         setEthersProvider(provider);
+
+        if (router.pathname !== '/create-account') router.push('/create-account');
     };
 
     const disconnect = async () => {
