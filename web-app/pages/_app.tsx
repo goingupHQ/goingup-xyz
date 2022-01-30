@@ -60,35 +60,32 @@ function MyApp(props: MyAppProps) {
             <ReduxProvider store={store}>
                 <SidebarProvider>
                     <ThemeProvider>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <SnackbarProvider
+                            maxSnack={6}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right'
+                            }}
+                        >
                             <AppProvider>
                                 <WalletProvider>
                                     <AuthProvider>
-                                        <SnackbarProvider
-                                            maxSnack={6}
-                                            anchorOrigin={{
-                                                vertical: 'bottom',
-                                                horizontal: 'right'
-                                            }}
-                                        >
-                                            <CssBaseline />
-                                            <AuthConsumer>
-                                                {(auth) =>
-                                                    !auth.isInitialized ? (
-                                                        <Loader />
-                                                    ) : (
-                                                        getLayout(
-                                                            <Component {...pageProps} />
-                                                        )
+                                        <CssBaseline />
+                                        <AuthConsumer>
+                                            {(auth) =>
+                                                !auth.isInitialized ? (
+                                                    <Loader />
+                                                ) : (
+                                                    getLayout(
+                                                        <Component {...pageProps} />
                                                     )
-                                                }
-                                            </AuthConsumer>
-                                        </SnackbarProvider>
+                                                )
+                                            }
+                                        </AuthConsumer>
                                     </AuthProvider>
                                 </WalletProvider>
                             </AppProvider>
-
-                        </LocalizationProvider>
+                        </SnackbarProvider>
                     </ThemeProvider>
                 </SidebarProvider>
             </ReduxProvider>
