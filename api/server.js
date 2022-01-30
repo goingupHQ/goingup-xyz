@@ -7,7 +7,7 @@ const app = express();
 
 if (process.env.ENVIRONMENT === 'production') {
     app.use(cors({
-        origin: ['https://goingup-api.herokuapp.com/']
+        origin: ['https://goingup-xyz.vercel.app/']
     }));
 }
 
