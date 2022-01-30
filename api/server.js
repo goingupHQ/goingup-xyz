@@ -28,5 +28,5 @@ app.get('/get-signer-address', (req, res) => {
 });
 
 app.listen(process.env.PORT, () => {
-    console.log(`GoingUP API listening on port ${process.env.PORT}`);
+    console.log(`GoingUP API listening on port ${process.env.PORT} on ${process.env.ENVIRONMENT}`);
 });
