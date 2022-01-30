@@ -1,8 +1,21 @@
 import {} from 'dotenv/config';
 import express from 'express';
+import cors from 'cors';
 import { ethers } from 'ethers';
 
 const app = express();
+
+if (process.env.ENVIRONMENT === 'production') {
+    app.use(cors({
+        origin: ['https://goingup-api.herokuapp.com/']
+    }));
+}
+
+if (process.env.ENVIRONMENT === 'dev') {
+    app.use(cors({
+        origin: '*'
+    }));
+}
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
