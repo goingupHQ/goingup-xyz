@@ -7,7 +7,7 @@ const app = express();
 
 if (process.env.ENVIRONMENT === 'production') {
     app.use(cors({
-        origin: ['https://goingup-xyz.vercel.app']
+        origin: ['goingup-xyz.vercel.app']
     }));
 }
 
