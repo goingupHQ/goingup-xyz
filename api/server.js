@@ -6,7 +6,7 @@ import { ethers } from 'ethers';
 const app = express();
 
 if (process.env.ENVIRONMENT === 'production') {
-    const ALLOWED_ORIGINS = ['goingup-xyz.vercel.app']
+    const ALLOWED_ORIGINS = ['https://goingup-xyz.vercel.app']
     app.use((req, res, next) => {
         let origin = req.headers.origin;
         let allowed = (ALLOWED_ORIGINS.indexOf(origin) >= 0) ? origin : ALLOWED_ORIGINS[0];
