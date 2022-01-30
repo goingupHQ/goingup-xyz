@@ -1,10 +1,12 @@
 import { ReactNode, useState, createContext, useEffect, Dispatch } from 'react';
 import { Availability, Occupation, UserGoal } from './AppTypes';
+import api, { WebAPI } from './WebAPI';
 
 type AppContext = {
     availability: Array<Availability>;
     occupations: Array<Occupation>;
     userGoals: Array<UserGoal>;
+    api: WebAPI;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -48,7 +50,8 @@ export function AppProvider({ children }: Props) {
             value={{
                 availability,
                 occupations,
-                userGoals
+                userGoals,
+                api
             }}
         >
             {children}
