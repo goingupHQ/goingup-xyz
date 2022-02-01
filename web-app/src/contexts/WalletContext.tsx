@@ -82,16 +82,16 @@ export function WalletProvider({ children }: Props) {
 
         const provider = new ethers.providers.Web3Provider(instance);
         const signer = provider.getSigner();
-        const message = 'goingup.xyz';
-        const signature = await signer.signMessage(message);
-        console.log('signed message', signature);
+        // const message = 'goingup.xyz';
+        // const signature = await signer.signMessage(message);
+        // console.log('signed message', signature);
 
-        const recoveredAddress = await app.api.getSignerAddress(message, signature);
-        const expectedAddress = await signer.getAddress();
-        if (expectedAddress !== recoveredAddress) {
-            enqueueSnackbar('The signed message you sent failed verification', { variant: 'error' });
-            return;
-        }
+        // const recoveredAddress = await app.api.getSignerAddress(message, signature);
+        // const expectedAddress = await signer.getAddress();
+        // if (expectedAddress !== recoveredAddress) {
+        //     enqueueSnackbar('The signed message you sent failed verification', { variant: 'error' });
+        //     return;
+        // }
 
         setAddress(ethers.utils.getAddress(instance.selectedAddress));
         setNetwork(instance.networkVersion);
