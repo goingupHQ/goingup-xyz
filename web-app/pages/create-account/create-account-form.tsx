@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     Box,
     Button,
@@ -23,6 +23,24 @@ export default function CreateAccountForm() {
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set<number>());
 
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [discord, setDiscord] = useState('');
+    const [occupation, setOccupation] = useState<any>(0);
+    const [availabilityState, setAvailabilityState] = useState<any>(0);
+
+    const state = {
+        firstName, setFirstName,
+        lastName, setLastName,
+        email, setEmail,
+        discord, setDiscord,
+        occupation, setOccupation,
+        availabilityState, setAvailabilityState
+    }
+
+    const personalInfoRef = useRef(null);
+
     // @ts-ignore
     const isStepOptional = (step: number) => {
         // return step === 1;
@@ -40,8 +58,12 @@ export default function CreateAccountForm() {
             newSkipped.delete(activeStep);
         }
 
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
+        if (activeStep === 0) {
+            console.log(state);
+        }
+
+        // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        // setSkipped(newSkipped);
     };
 
     const handleBack = () => {
@@ -112,7 +134,7 @@ export default function CreateAccountForm() {
                                         Step {activeStep + 1}
                                     </Typography> */}
 
-                    {activeStep === 0 && <PersonalInfo />}
+                    {activeStep === 0 && <PersonalInfo state={state} />}
                     {activeStep === 1 && <ProjectGoals />}
                     {activeStep === 2 && <InviteFriends />}
 
