@@ -24,6 +24,8 @@ import { SnackbarProvider } from 'notistack';
 import { AuthConsumer, AuthProvider } from 'src/contexts/JWTAuthContext';
 import { AppProvider } from '@/contexts/AppContext';
 
+import './_app.css';
+
 const clientSideEmotionCache = createEmotionCache();
 
 type NextPageWithLayout = NextPage & {

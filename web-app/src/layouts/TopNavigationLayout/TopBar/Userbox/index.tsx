@@ -106,14 +106,7 @@ function Userbox() {
     const { logout } = useAuth();
     const router = useRouter();
 
-    const wallet = useContext(WalletContext);
-    console.log(wallet);
-
-    const user = {
-        // avatar: '/static/images/avatars/1.jpg',
-        name: 'Rachael Simons',
-        jobtitle: 'Lead Developer'
-    };
+    const wallet = useContext(WalletContext); console.log(wallet.walletTypes[wallet.walletType])
 
     const ref = useRef<any>(null);
     const [isOpen, setOpen] = useState<boolean>(false);
@@ -178,9 +171,9 @@ function Userbox() {
 
                                 {wallet.address !== null && wallet.address}
                             </UserBoxLabelMain>
-                            {wallet.network &&
+                            {wallet.address &&
                                 <UserBoxDescriptionMain variant="body2">
-                                    {wallet.networks[wallet.network]?.name} [{wallet.network}]
+                                    {wallet.walletTypes[wallet.walletType]?.display} {wallet.networks[wallet.network]?.name} {wallet.network ? `[${wallet.network}]` : ``}
                                 </UserBoxDescriptionMain>
                             }
                         </UserBoxText>
