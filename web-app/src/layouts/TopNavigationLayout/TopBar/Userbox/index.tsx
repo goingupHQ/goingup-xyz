@@ -160,10 +160,17 @@ function Userbox() {
                     <Box
                         component="span"
                         sx={{
-                            display: { xs: 'none', md: 'inline-block' }
+                            display: { xs: 'inline-block', md: 'inline-block' },
+                            width: { xs: '120px', md: 'auto'}
                         }}
                     >
-                        <UserBoxText>
+                        <UserBoxText
+                            sx={{
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap',
+                                textOverflow: 'ellipsis'
+                            }}
+                        >
                             <UserBoxLabelMain variant="body1">
                                 {wallet.address === null &&
                                     `Connect Wallet`
@@ -172,7 +179,9 @@ function Userbox() {
                                 {wallet.address !== null && wallet.address}
                             </UserBoxLabelMain>
                             {wallet.address &&
-                                <UserBoxDescriptionMain variant="body2">
+                                <UserBoxDescriptionMain
+                                    variant="body2"
+                                >
                                     {wallet.walletTypes[wallet.walletType]?.display} {wallet.networks[wallet.network]?.name} {wallet.network ? `[${wallet.network}]` : ``}
                                 </UserBoxDescriptionMain>
                             }

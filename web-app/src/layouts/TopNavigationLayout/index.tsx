@@ -95,9 +95,19 @@ const TopNavigationLayout: FC<TopNavigationLayoutProps> = ({ children }) => {
         <>
             <MainWrapper>
                 <TopBar />
-                <MainContent maxWidth="xl">
-                    <Box mx={8}>
-                        <CardWrapper>{children}</CardWrapper>
+                <MainContent maxWidth="xl"
+                    sx={{
+                        padding: { xs: 1, sm: 1, md: 3, lg: 6, xl: 9 }
+                    }}
+                >
+                    <Box
+                        sx={{
+                            marginX: { xs: 0, sm: 0, md: 3, lg: 6, xl: 9 }
+                        }}
+                    >
+                        <CardWrapper>
+                            {children}
+                        </CardWrapper>
                     </Box>
                     <Drawer
                         sx={{

@@ -30,7 +30,7 @@ function CreateAccount() {
                 <title>Create an account with GoingUP</title>
             </Head>
             <Grid
-                sx={{ px: 4 }}
+                sx={{ px: { xs: 2, md: 4} }}
                 container
                 direction="row"
                 justifyContent="center"
@@ -44,7 +44,7 @@ function CreateAccount() {
                                 height: '100%',
                                 display: 'flex',
                                 flexDirection: 'column',
-                                marginTop: '4rem'
+                                marginTop: { xs: '2rem', md:'3rem'}
                             }}
                         >
                             <CardHeader

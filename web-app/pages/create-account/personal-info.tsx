@@ -5,7 +5,9 @@ import {
     Select,
     InputLabel,
     FormControl,
-    MenuItem
+    MenuItem,
+    useTheme,
+    useMediaQuery
 } from '@mui/material';
 import { AppContext } from '@/contexts/AppContext';
 
@@ -27,7 +29,7 @@ function PersonalInfo(props) {
     } = props.state;
 
     return (
-        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)'} }}>
             <TextField
                 label="First Name"
                 variant="outlined"

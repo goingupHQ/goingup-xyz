@@ -12,6 +12,8 @@ import {
     Stepper,
     StepLabel,
     TextField,
+    useTheme,
+    useMediaQuery,
     styled
 } from '@mui/material';
 import PersonalInfo from './personal-info';
@@ -19,6 +21,7 @@ import ProjectGoals from './project-goals';
 import InviteFriends from './invite-friends';
 
 export default function CreateAccountForm() {
+    const theme = useTheme();
     const steps = ['Personal Information', 'Project Goals', 'Invite Friends'];
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set<number>());
@@ -62,8 +65,8 @@ export default function CreateAccountForm() {
             console.log(state);
         }
 
-        // setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        // setSkipped(newSkipped);
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped(newSkipped);
     };
 
     const handleBack = () => {
@@ -91,7 +94,9 @@ export default function CreateAccountForm() {
 
     return (
         <>
-            <Stepper activeStep={activeStep}>
+            <Stepper
+                activeStep={activeStep} orientation={useMediaQuery(theme.breakpoints.down('sm')) ? 'vertical' : 'horizontal'}
+            >
                 {steps.map((label, index) => {
                     const stepProps: { completed?: boolean } = {};
                     const labelProps: {

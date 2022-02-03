@@ -10,7 +10,7 @@ function ProjectGoals() {
     const appContext = useContext(AppContext);
     const { userGoals, occupations } = appContext;
     return (
-        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)' } }}>
             <FormControl sx={fieldStyle} required>
                 <InputLabel id="project-goals-label">What are your goals?</InputLabel>
                 <Select

@@ -1,4 +1,4 @@
-import { Tooltip, styled } from '@mui/material';
+import { Tooltip, styled, useTheme, useMediaQuery } from '@mui/material';
 import Link from 'src/components/Link';
 
 const LogoWrapper = styled(Link)(
@@ -12,10 +12,19 @@ const LogoWrapper = styled(Link)(
 );
 
 function Logo() {
+    const theme = useTheme();
     return (
         <LogoWrapper href="/">
             <Tooltip arrow placement="right" title="goingup.xyz">
-                <img src="/static/images/logo/goingup.svg" style={{ height: '3rem' }} />
+                <>
+                    {useMediaQuery(theme.breakpoints.down('sm')) &&
+                    <img src="/static/images/logo/goingup-arrow.svg" style={{ height: '2.2rem' }} />
+                    }
+
+                    {useMediaQuery(theme.breakpoints.up('md')) &&
+                    <img src="/static/images/logo/goingup.svg" style={{ height: '3rem' }} />
+                    }
+                </>
             </Tooltip>
         </LogoWrapper>
     );
