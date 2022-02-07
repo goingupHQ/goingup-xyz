@@ -179,7 +179,7 @@ function TopBar() {
                         my: 4
                     }}
                 />
-                {/* <Box
+                <Box
                     display="flex"
                     alignItems="center"
                     sx={{
@@ -188,7 +188,7 @@ function TopBar() {
                     }}
                 >
                     <NavigationMenu />
-                </Box> */}
+                </Box>
             </Container>
         </TopBarWrapper>
     );
