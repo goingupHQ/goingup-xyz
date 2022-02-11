@@ -6,6 +6,11 @@ import {
     Step,
     Stepper,
     StepLabel,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     useTheme,
     useMediaQuery,
     styled
@@ -22,25 +27,52 @@ export default function CreateAccountForm() {
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set<number>());
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [discord, setDiscord] = useState('');
-    const [occupation, setOccupation] = useState<any>(0);
-    const [availabilityState, setAvailabilityState] = useState<any>(0);
-    const [primaryGoal, setPrimaryGoal] = useState<any>(0);
-    const [idealCollab, setIdealCollab] = useState<any>(0);
+    const [occupation, setOccupation] = useState<any>(null);
+    const [availabilityState, setAvailabilityState] = useState<any>(null);
+    const [primaryGoal, setPrimaryGoal] = useState<any>(null);
+    const [idealCollab, setIdealCollab] = useState<any>(null);
+    const [email2, setEmail2] = useState<any>('');
+    const [email1, setEmail1] = useState<any>('');
+    const [email3, setEmail3] = useState<any>('');
+    const [email4, setEmail4] = useState<any>('');
+
 
     const state = {
-        firstName, setFirstName,
-        lastName, setLastName,
-        email, setEmail,
-        discord, setDiscord,
-        occupation, setOccupation,
-        availabilityState, setAvailabilityState,
-        primaryGoal, setPrimaryGoal,
-        idealCollab, setIdealCollab
-    }
+        firstName,
+        setFirstName,
+        lastName,
+        setLastName,
+        email,
+        setEmail,
+        discord,
+        setDiscord,
+        occupation,
+        setOccupation,
+        availabilityState,
+        setAvailabilityState,
+        primaryGoal,
+        setPrimaryGoal,
+        idealCollab,
+        setIdealCollab,
+        email1,
+        setEmail1,
+        email2,
+        setEmail2,
+        email3,
+        setEmail3,
+        email4,
+        setEmail4
+    };
 
     const personalInfoRef = useRef(null);
 
@@ -62,40 +94,57 @@ export default function CreateAccountForm() {
         }
 
         let hasError = false;
+console.log(state);
         if (activeStep === 0) {
             if (!firstName) {
-                enqueueSnackbar('We need your first name', {variant: 'error'});
+                enqueueSnackbar('We need your first name', {
+                    variant: 'error'
+                });
                 hasError = true;
             }
+
             if (!lastName) {
-                enqueueSnackbar('We need your last name', {variant: 'error'});
+                enqueueSnackbar('We need your last name', { variant: 'error' });
+                hasError = true;
+            }
+
+            if (!occupation) {
+                enqueueSnackbar('Please choose an occupation', { variant: 'error' });
+                hasError = true;
+            }
+
+            if (!availabilityState) {
+                enqueueSnackbar('Please choose an availability', { variant: 'error' });
+                hasError = true;
+            }
+        }
+
+        if (activeStep === 1) {
+            if (!primaryGoal) {
+                enqueueSnackbar('Please choose your primary goal', {
+                    variant: 'error'
+                });
+                hasError = true;
+            }
+
+            if (!idealCollab) {
+                enqueueSnackbar('Please choose your ideal collaborator', { variant: 'error' });
                 hasError = true;
             }
         }
 
         if (!hasError) {
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            setSkipped(newSkipped);
+            if (activeStep === steps.length - 1) {
+                setOpen(true);
+            } else {
+                setActiveStep((prevActiveStep) => prevActiveStep + 1);
+                setSkipped(newSkipped);
+            }
         }
     };
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
-
-    const handleSkip = () => {
-        if (!isStepOptional(activeStep)) {
-            // You probably want to guard against something like this,
-            // it should never occur unless someone's actively trying to break something.
-            throw new Error("You can't skip a step that isn't optional.");
-        }
-
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped((prevSkipped) => {
-            const newSkipped = new Set(prevSkipped.values());
-            newSkipped.add(activeStep);
-            return newSkipped;
-        });
     };
 
     const handleReset = () => {
@@ -105,7 +154,12 @@ export default function CreateAccountForm() {
     return (
         <>
             <Stepper
-                activeStep={activeStep} orientation={useMediaQuery(theme.breakpoints.down('sm')) ? 'vertical' : 'horizontal'}
+                activeStep={activeStep}
+                orientation={
+                    useMediaQuery(theme.breakpoints.down('sm'))
+                        ? 'vertical'
+                        : 'horizontal'
+                }
             >
                 {steps.map((label, index) => {
                     const stepProps: { completed?: boolean } = {};
@@ -169,15 +223,6 @@ export default function CreateAccountForm() {
                             Back
                         </Button>
                         <Box sx={{ flex: '1 1 auto' }} />
-                        {isStepOptional(activeStep) && (
-                            <Button
-                                color="inherit"
-                                onClick={handleSkip}
-                                sx={{ mr: 1 }}
-                            >
-                                Skip
-                            </Button>
-                        )}
                         <Button onClick={handleNext}>
                             {activeStep === steps.length - 1
                                 ? 'Finish'
@@ -186,6 +231,26 @@ export default function CreateAccountForm() {
                     </Box>
                 </React.Fragment>
             )}
+
+            <Dialog
+                open={open}
+                onClose={handleClose}
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Account Creation"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        We are about to create your GoingUP account. Are you sure the details you provided are correct?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant='text' onClick={handleClose}>No</Button>
+                    <Button variant='contained' onClick={handleClose} autoFocus>
+                        Yes, create my GoingUP account
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }

@@ -49,7 +49,6 @@ function PersonalInfo(props) {
             <TextField
                 label="Email Address"
                 variant="outlined"
-                required
                 sx={fieldStyle}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

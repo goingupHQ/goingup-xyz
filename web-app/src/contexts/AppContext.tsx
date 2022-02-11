@@ -17,31 +17,31 @@ type Props = {
 };
 
 const availability: Array<Availability> = [
-    { id: 0, text: 'Actively looking for new projects' },
-    { id: 1, text: 'Open for proposals' },
-    { id: 2, text: 'Not looking for new projects' },
+    { id: 1, text: 'Actively looking for new projects' },
+    { id: 2, text: 'Open for proposals' },
+    { id: 3, text: 'Not looking for new projects' },
 ]
 
 const occupations: Array<Occupation> = [
-    { id: 0, text: 'Artist' },
-    { id: 1, text: 'Developer' },
-    { id: 2, text: 'Athlete' },
-    { id: 3, text: 'Marketing & Community' },
-    { id: 4, text: 'Investor' },
-    { id: 5, text: 'Accountant' },
-    { id: 6, text: 'Engineer' },
-    { id: 7, text: 'Actor' },
-    { id: 8, text: 'Video Producer' },
-    { id: 9, text: 'Writer' },
+    { id: 1, text: 'Artist' },
+    { id: 2, text: 'Developer' },
+    { id: 3, text: 'Athlete' },
+    { id: 4, text: 'Marketing & Community' },
+    { id: 5, text: 'Investor' },
+    { id: 6, text: 'Accountant' },
+    { id: 7, text: 'Engineer' },
+    { id: 8, text: 'Actor' },
+    { id: 9, text: 'Video Producer' },
+    { id: 10, text: 'Writer' },
     { id: 999, text: 'Other' },
 ]
 
 const userGoals: Array<UserGoal> = [
-    { id: 0, text: 'Launch an NFT project' },
-    { id: 1, text: 'Collaborate in a creative project' },
-    { id: 2, text: 'Find a job in a web3 company' },
-    { id: 3, text: 'Work for a DAO' },
-    { id: 4, text: 'Contribute to a community' },
+    { id: 1, text: 'Launch an NFT project' },
+    { id: 2, text: 'Collaborate in a creative project' },
+    { id: 3, text: 'Find a job in a web3 company' },
+    { id: 4, text: 'Work for a DAO' },
+    { id: 5, text: 'Contribute to a community' },
 ]
 
 export function AppProvider({ children }: Props) {
