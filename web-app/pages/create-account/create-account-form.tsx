@@ -2,26 +2,22 @@ import React, { useState, useRef } from 'react';
 import {
     Box,
     Button,
-    Grid,
-    Card,
-    CardHeader,
-    CardContent,
     Typography,
-    Avatar,
     Step,
     Stepper,
     StepLabel,
-    TextField,
     useTheme,
     useMediaQuery,
     styled
 } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import PersonalInfo from './personal-info';
 import ProjectGoals from './project-goals';
 import InviteFriends from './invite-friends';
 
 export default function CreateAccountForm() {
     const theme = useTheme();
+    const { enqueueSnackbar } = useSnackbar();
     const steps = ['Personal Information', 'Project Goals', 'Invite Friends'];
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set<number>());
@@ -32,6 +28,8 @@ export default function CreateAccountForm() {
     const [discord, setDiscord] = useState('');
     const [occupation, setOccupation] = useState<any>(0);
     const [availabilityState, setAvailabilityState] = useState<any>(0);
+    const [primaryGoal, setPrimaryGoal] = useState<any>(0);
+    const [idealCollab, setIdealCollab] = useState<any>(0);
 
     const state = {
         firstName, setFirstName,
@@ -39,7 +37,9 @@ export default function CreateAccountForm() {
         email, setEmail,
         discord, setDiscord,
         occupation, setOccupation,
-        availabilityState, setAvailabilityState
+        availabilityState, setAvailabilityState,
+        primaryGoal, setPrimaryGoal,
+        idealCollab, setIdealCollab
     }
 
     const personalInfoRef = useRef(null);
@@ -61,12 +61,22 @@ export default function CreateAccountForm() {
             newSkipped.delete(activeStep);
         }
 
+        let hasError = false;
         if (activeStep === 0) {
-            console.log(state);
+            if (!firstName) {
+                enqueueSnackbar('We need your first name', {variant: 'error'});
+                hasError = true;
+            }
+            if (!lastName) {
+                enqueueSnackbar('We need your last name', {variant: 'error'});
+                hasError = true;
+            }
         }
 
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
+        if (!hasError) {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setSkipped(newSkipped);
+        }
     };
 
     const handleBack = () => {
@@ -140,8 +150,8 @@ export default function CreateAccountForm() {
                                     </Typography> */}
 
                     {activeStep === 0 && <PersonalInfo state={state} />}
-                    {activeStep === 1 && <ProjectGoals />}
-                    {activeStep === 2 && <InviteFriends />}
+                    {activeStep === 1 && <ProjectGoals state={state} />}
+                    {activeStep === 2 && <InviteFriends state={state} />}
 
                     <Box
                         sx={{
