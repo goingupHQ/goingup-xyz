@@ -6,18 +6,24 @@ const fieldStyle = {
     m: 1
 }
 
-function ProjectGoals() {
+function ProjectGoals(props) {
     const appContext = useContext(AppContext);
     const { userGoals, occupations } = appContext;
+
+    const {
+        primaryGoal, setPrimaryGoal,
+        idealCollab, setIdealCollab
+    } = props.state;
+
     return (
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)' } }}>
             <FormControl sx={fieldStyle} required>
-                <InputLabel id="project-goals-label">What are your goals?</InputLabel>
+                <InputLabel id="project-goals-label">What is your primary goal?</InputLabel>
                 <Select
                     labelId="project-goals-label"
-                    // value={age}
-                    label="What are your goals?"
-                    // onChange={handleChange}
+                    value={primaryGoal}
+                    label="What is your primary goal?"
+                    onChange={e => { setPrimaryGoal(e.target.value) }}
                 >
                     {userGoals.map(ug => {return (
                         <MenuItem key={ug.id} value={ug.id}>{ug.text}</MenuItem>
@@ -29,9 +35,9 @@ function ProjectGoals() {
                 <InputLabel id="ideal-collaborator-label">Your ideal collaborator is</InputLabel>
                 <Select
                     labelId="ideal-collaborator-label"
-                    // value={age}
+                    value={idealCollab}
                     label="Your ideal collaborator is"
-                    // onChange={handleChange}
+                    onChange={e => { setIdealCollab(e.target.value) }}
                 >
                     {occupations.map(o => {return (
                         <MenuItem key={o.id} value={o.id}>{o.text}</MenuItem>
