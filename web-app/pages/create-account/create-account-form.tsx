@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import {
     Box,
     Button,
@@ -16,11 +16,14 @@ import {
     styled
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import { WalletContext } from 'src/contexts/WalletContext';
 import PersonalInfo from './personal-info';
 import ProjectGoals from './project-goals';
 import InviteFriends from './invite-friends';
+import { LoadingButton } from '@mui/lab';
 
 export default function CreateAccountForm() {
+    const wallet = useContext(WalletContext);
     const theme = useTheme();
     const { enqueueSnackbar } = useSnackbar();
     const steps = ['Personal Information', 'Project Goals', 'Invite Friends'];
@@ -45,7 +48,7 @@ export default function CreateAccountForm() {
     const [email1, setEmail1] = useState<any>('');
     const [email3, setEmail3] = useState<any>('');
     const [email4, setEmail4] = useState<any>('');
-
+    const [creating, setCreating] = useState<boolean>(false);
 
     const state = {
         firstName,
@@ -94,7 +97,7 @@ export default function CreateAccountForm() {
         }
 
         let hasError = false;
-console.log(state);
+
         if (activeStep === 0) {
             if (!firstName) {
                 enqueueSnackbar('We need your first name', {
@@ -150,6 +153,38 @@ console.log(state);
     const handleReset = () => {
         setActiveStep(0);
     };
+
+    const createAccount = async (e) => {
+        e.preventDefault();
+        setCreating(true);
+
+        try {
+            const { address, ethersSigner } = wallet;
+            const message = 'create-account';
+            const signature = await ethersSigner.signMessage(message);
+
+            const response = await fetch('api/create-account/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    address,
+                    signature,
+                    account: {
+                        firstName, lastName, email, discord, occupation, availabilityState, primaryGoal, idealCollab
+                    }
+                })
+            })
+
+            const result = await response.text();
+            enqueueSnackbar('Your account was successfully created', { variant: 'success' });
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setCreating(false);
+        }
+    }
 
     return (
         <>
@@ -246,9 +281,9 @@ console.log(state);
                 </DialogContent>
                 <DialogActions>
                     <Button variant='text' onClick={handleClose}>No</Button>
-                    <Button variant='contained' onClick={handleClose} autoFocus>
+                    <LoadingButton variant='contained' onClick={createAccount} loading={creating} loadingIndicator='Creating...'>
                         Yes, create my GoingUP account
-                    </Button>
+                    </LoadingButton>
                 </DialogActions>
             </Dialog>
         </>
