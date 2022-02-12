@@ -11,7 +11,7 @@ function ProjectGoals(props) {
     const { userGoals, occupations } = appContext;
 
     const {
-        primaryGoal, setPrimaryGoal,
+        projectGoals, setProjectGoals,
         idealCollab, setIdealCollab
     } = props.state;
 
@@ -21,9 +21,9 @@ function ProjectGoals(props) {
                 <InputLabel id="project-goals-label">What is your primary goal?</InputLabel>
                 <Select
                     labelId="project-goals-label"
-                    value={primaryGoal}
+                    value={projectGoals}
                     label="What is your primary goal?"
-                    onChange={e => { setPrimaryGoal(e.target.value) }}
+                    onChange={e => { setProjectGoals(e.target.value) }}
                 >
                     {userGoals.map(ug => {return (
                         <MenuItem key={ug.id} value={ug.id}>{ug.text}</MenuItem>

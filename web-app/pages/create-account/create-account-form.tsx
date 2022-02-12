@@ -41,9 +41,9 @@ export default function CreateAccountForm() {
     const [email, setEmail] = useState('');
     const [discord, setDiscord] = useState('');
     const [occupation, setOccupation] = useState<any>(null);
-    const [availabilityState, setAvailabilityState] = useState<any>(null);
-    const [primaryGoal, setPrimaryGoal] = useState<any>(null);
-    const [idealCollab, setIdealCollab] = useState<any>(null);
+    const [availabilityState, setAvailabilityState] = useState<number[]>([]);
+    const [projectGoals, setProjectGoals] = useState<number[]>([]);
+    const [idealCollab, setIdealCollab] = useState<number[]>([]);
     const [email2, setEmail2] = useState<any>('');
     const [email1, setEmail1] = useState<any>('');
     const [email3, setEmail3] = useState<any>('');
@@ -63,8 +63,8 @@ export default function CreateAccountForm() {
         setOccupation,
         availabilityState,
         setAvailabilityState,
-        primaryGoal,
-        setPrimaryGoal,
+        projectGoals,
+        setProjectGoals,
         idealCollab,
         setIdealCollab,
         email1,
