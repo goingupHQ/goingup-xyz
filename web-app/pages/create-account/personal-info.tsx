@@ -49,7 +49,6 @@ function PersonalInfo(props) {
             <TextField
                 label="Email Address"
                 variant="outlined"
-                required
                 sx={fieldStyle}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -87,8 +86,16 @@ function PersonalInfo(props) {
                 <Select
                     labelId="availability-select-label"
                     label="Availability"
+                    multiple
                     value={availabilityState}
-                    onChange={e => setAvailabilityState(e.target.value)}
+                    onChange={event => {
+                        const {
+                            target: { value },
+                        } = event;
+
+                        setAvailabilityState(typeof value === 'string' ? value.split(',') : value);
+                    }}
+                    renderValue={(selected) => selected.map(i => availability.find(a => a.id === i).text).join(', ')}
                 >
                     {availability.map((a) => {
                         return (

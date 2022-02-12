@@ -1,46 +1,81 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import {
     Box,
     Button,
-    Grid,
-    Card,
-    CardHeader,
-    CardContent,
     Typography,
-    Avatar,
     Step,
     Stepper,
     StepLabel,
-    TextField,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     useTheme,
     useMediaQuery,
     styled
 } from '@mui/material';
+import { useSnackbar } from 'notistack';
+import { WalletContext } from 'src/contexts/WalletContext';
 import PersonalInfo from './personal-info';
 import ProjectGoals from './project-goals';
 import InviteFriends from './invite-friends';
+import { LoadingButton } from '@mui/lab';
 
 export default function CreateAccountForm() {
+    const wallet = useContext(WalletContext);
     const theme = useTheme();
+    const { enqueueSnackbar } = useSnackbar();
     const steps = ['Personal Information', 'Project Goals', 'Invite Friends'];
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set<number>());
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [discord, setDiscord] = useState('');
-    const [occupation, setOccupation] = useState<any>(0);
-    const [availabilityState, setAvailabilityState] = useState<any>(0);
+    const [occupation, setOccupation] = useState<any>(null);
+    const [availabilityState, setAvailabilityState] = useState<number[]>([]);
+    const [projectGoals, setProjectGoals] = useState<number[]>([]);
+    const [idealCollab, setIdealCollab] = useState<number[]>([]);
+    const [email2, setEmail2] = useState<any>('');
+    const [email1, setEmail1] = useState<any>('');
+    const [email3, setEmail3] = useState<any>('');
+    const [email4, setEmail4] = useState<any>('');
+    const [creating, setCreating] = useState<boolean>(false);
 
     const state = {
-        firstName, setFirstName,
-        lastName, setLastName,
-        email, setEmail,
-        discord, setDiscord,
-        occupation, setOccupation,
-        availabilityState, setAvailabilityState
-    }
+        firstName,
+        setFirstName,
+        lastName,
+        setLastName,
+        email,
+        setEmail,
+        discord,
+        setDiscord,
+        occupation,
+        setOccupation,
+        availabilityState,
+        setAvailabilityState,
+        projectGoals,
+        setProjectGoals,
+        idealCollab,
+        setIdealCollab,
+        email1,
+        setEmail1,
+        email2,
+        setEmail2,
+        email3,
+        setEmail3,
+        email4,
+        setEmail4
+    };
 
     const personalInfoRef = useRef(null);
 
@@ -61,41 +96,105 @@ export default function CreateAccountForm() {
             newSkipped.delete(activeStep);
         }
 
+        let hasError = false;
+
         if (activeStep === 0) {
-            console.log(state);
+            if (!firstName) {
+                enqueueSnackbar('We need your first name', {
+                    variant: 'error'
+                });
+                hasError = true;
+            }
+
+            if (!lastName) {
+                enqueueSnackbar('We need your last name', { variant: 'error' });
+                hasError = true;
+            }
+
+            if (!occupation) {
+                enqueueSnackbar('Please choose an occupation', { variant: 'error' });
+                hasError = true;
+            }
+
+            if (!availabilityState) {
+                enqueueSnackbar('Please choose an availability', { variant: 'error' });
+                hasError = true;
+            }
         }
 
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
+        if (activeStep === 1) {
+            if (!primaryGoal) {
+                enqueueSnackbar('Please choose your primary goal', {
+                    variant: 'error'
+                });
+                hasError = true;
+            }
+
+            if (!idealCollab) {
+                enqueueSnackbar('Please choose your ideal collaborator', { variant: 'error' });
+                hasError = true;
+            }
+        }
+
+        if (!hasError) {
+            if (activeStep === steps.length - 1) {
+                setOpen(true);
+            } else {
+                setActiveStep((prevActiveStep) => prevActiveStep + 1);
+                setSkipped(newSkipped);
+            }
+        }
     };
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleSkip = () => {
-        if (!isStepOptional(activeStep)) {
-            // You probably want to guard against something like this,
-            // it should never occur unless someone's actively trying to break something.
-            throw new Error("You can't skip a step that isn't optional.");
-        }
-
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped((prevSkipped) => {
-            const newSkipped = new Set(prevSkipped.values());
-            newSkipped.add(activeStep);
-            return newSkipped;
-        });
-    };
-
     const handleReset = () => {
         setActiveStep(0);
     };
 
+    const createAccount = async (e) => {
+        e.preventDefault();
+        setCreating(true);
+
+        try {
+            const { address, ethersSigner } = wallet;
+            const message = 'create-account';
+            const signature = await ethersSigner.signMessage(message);
+
+            const response = await fetch('api/create-account/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    address,
+                    signature,
+                    account: {
+                        firstName, lastName, email, discord, occupation, availabilityState, primaryGoal, idealCollab
+                    }
+                })
+            })
+
+            const result = await response.text();
+            enqueueSnackbar('Your account was successfully created', { variant: 'success' });
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setCreating(false);
+        }
+    }
+
     return (
         <>
             <Stepper
-                activeStep={activeStep} orientation={useMediaQuery(theme.breakpoints.down('sm')) ? 'vertical' : 'horizontal'}
+                activeStep={activeStep}
+                orientation={
+                    useMediaQuery(theme.breakpoints.down('sm'))
+                        ? 'vertical'
+                        : 'horizontal'
+                }
             >
                 {steps.map((label, index) => {
                     const stepProps: { completed?: boolean } = {};
@@ -140,8 +239,8 @@ export default function CreateAccountForm() {
                                     </Typography> */}
 
                     {activeStep === 0 && <PersonalInfo state={state} />}
-                    {activeStep === 1 && <ProjectGoals />}
-                    {activeStep === 2 && <InviteFriends />}
+                    {activeStep === 1 && <ProjectGoals state={state} />}
+                    {activeStep === 2 && <InviteFriends state={state} />}
 
                     <Box
                         sx={{
@@ -159,15 +258,6 @@ export default function CreateAccountForm() {
                             Back
                         </Button>
                         <Box sx={{ flex: '1 1 auto' }} />
-                        {isStepOptional(activeStep) && (
-                            <Button
-                                color="inherit"
-                                onClick={handleSkip}
-                                sx={{ mr: 1 }}
-                            >
-                                Skip
-                            </Button>
-                        )}
                         <Button onClick={handleNext}>
                             {activeStep === steps.length - 1
                                 ? 'Finish'
@@ -176,6 +266,26 @@ export default function CreateAccountForm() {
                     </Box>
                 </React.Fragment>
             )}
+
+            <Dialog
+                open={open}
+                onClose={handleClose}
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Account Creation"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        We are about to create your GoingUP account. Are you sure the details you provided are correct?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant='text' onClick={handleClose}>No</Button>
+                    <LoadingButton variant='contained' onClick={createAccount} loading={creating} loadingIndicator='Creating...'>
+                        Yes, create my GoingUP account
+                    </LoadingButton>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }
