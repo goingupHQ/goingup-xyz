@@ -164,8 +164,15 @@ export default function CreateAccountForm() {
                 })
             })
 
-            const result = await response.text();
-            enqueueSnackbar('Your account was successfully created', { variant: 'success' });
+            console.log(response.status);
+
+            if (response.status === 200) {
+                enqueueSnackbar('Your account was successfully created', { variant: 'success' });
+            } else {
+                enqueueSnackbar('There was a problem creating your account', { variant: 'error' });
+            }
+
+            setOpen(false);
         } catch (err) {
             console.log(err);
         } finally {
