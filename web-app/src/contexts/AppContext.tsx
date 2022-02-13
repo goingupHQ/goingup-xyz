@@ -17,9 +17,26 @@ type Props = {
 };
 
 const availability: Array<Availability> = [
-    { id: 1, text: 'Actively looking for new projects' },
-    { id: 2, text: 'Open for proposals' },
-    { id: 3, text: 'Not looking for new projects' },
+    { id: 1, text: 'Philanthropy' },
+    { id: 2, text: 'Investing' },
+    { id: 3, text: 'Volunteering' },
+    { id: 4, text: 'Live Streaming' },
+    { id: 5, text: 'Writing' },
+    { id: 6, text: 'Advising' },
+    { id: 7, text: 'Volunteering' },
+    { id: 8, text: 'Full-time Roles' },
+    { id: 9, text: 'Part-time Roles' },
+    { id: 10, text: 'Open Source Contributions' },
+    { id: 11, text: 'Activism' },
+    { id: 12, text: 'Raising Funds' },
+    { id: 13, text: 'Artist Management' },
+    { id: 14, text: 'Content Creation' },
+    { id: 15, text: 'Hiring' },
+    { id: 16, text: 'Volunteering' },
+    { id: 17, text: 'NFT Projects' },
+    { id: 18, text: 'Joining DAOs' },
+    { id: 19, text: 'Co-founding Companies' },
+    { id: 20, text: 'Mentoring' }
 ]
 
 const occupations: Array<Occupation> = [
