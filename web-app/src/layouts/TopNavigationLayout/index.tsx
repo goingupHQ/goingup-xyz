@@ -15,8 +15,8 @@ import Scrollbar from 'src/components/Scrollbar';
 import { SidebarContext } from 'src/contexts/SidebarContext';
 import SidebarMenu from 'src/layouts/AccentHeaderLayout/Sidebar/SidebarMenu';
 import SidebarTopSection from 'src/layouts/AccentHeaderLayout/Sidebar/SidebarTopSection';
-// import ThemeSettings from 'src/components/ThemeSettings';
 import Logo from 'src/components/LogoSign';
+import { WalletContext } from '@/contexts/WalletContext';
 
 interface TopNavigationLayoutProps {
     children?: ReactNode;
@@ -88,6 +88,8 @@ const TopSection = styled(Box)(
 
 const TopNavigationLayout: FC<TopNavigationLayoutProps> = ({ children }) => {
     const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
+    const walletContext = useContext(WalletContext);
+    if (!walletContext.address && localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) walletContext.connect();
     const closeSidebar = () => toggleSidebar();
     const theme = useTheme();
 

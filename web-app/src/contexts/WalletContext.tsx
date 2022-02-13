@@ -78,7 +78,7 @@ export function WalletProvider({ children }: Props) {
 
         web3Modal = new Web3Modal({
             // network: 'mainnet',
-            // cacheProvider: true,
+            cacheProvider: true,
             providerOptions
         });
     }, []);
@@ -90,7 +90,7 @@ export function WalletProvider({ children }: Props) {
     const [walletType, setWalletType] = useState(null);
 
     const connect = async () => {
-        const instance = await web3Modal.connect(); console.log(instance);
+        const instance = await web3Modal.connect();
         instance.on('accountsChanged', (accounts) => {
             setAddress(ethers.utils.getAddress(accounts[0]));
         });
@@ -103,16 +103,6 @@ export function WalletProvider({ children }: Props) {
         const provider = new ethers.providers.Web3Provider(instance);
         const signer = provider.getSigner();
 
-        // const message = 'goingup.xyz';
-        // const signature = await signer.signMessage(message);
-        // console.log('signed message', signature);
-        // const recoveredAddress = await app.api.getSignerAddress(message, signature);
-        // const expectedAddress = await signer.getAddress();
-        // if (expectedAddress !== recoveredAddress) {
-        //     enqueueSnackbar('The signed message you sent failed verification', { variant: 'error' });
-        //     return;
-        // }
-
         let walletType = null;
         // @ts-ignore
         if (instance.isMetaMask) walletType = 'metamask';
@@ -123,22 +113,35 @@ export function WalletProvider({ children }: Props) {
         switch (walletType) {
             case 'metamask':
                 // @ts-ignore
-                userAddress = instance.selectedAddress; break;
+                userAddress = ethers.utils.getAddress(instance.selectedAddress); break;
             case 'walletconnect':
                 // @ts-ignore
-                userAddress = instance.accounts[0]; break;
+                userAddress = ethers.utils.getAddress(instance.accounts[0]); break;
         }
 
-        setAddress(ethers.utils.getAddress(userAddress));
+        setAddress(userAddress);
         setNetwork(instance.networkVersion);
         setWalletType(walletType);
         setEthersProvider(provider);
         setEthersSigner(signer);
 
         enqueueSnackbar('Wallet connected', { variant: 'success' });
+        const response = await fetch(`/api/has-account?address=${userAddress}`);
+        if (response.status === 200) {
+            const result = await response.json();
+            console.log(result);
 
-        if (router.pathname !== '/create-account')
-            router.push('/create-account');
+            if (result.hasAccount && router.pathname?.toLowerCase() === '/create-account') {
+                router.push(`/profile/${userAddress}`);
+            }
+
+            if (!result.hasAccount) router.push('/create-account');
+        } else {
+            throw(`${response.status}: ${(await response).text()}`)
+        }
+
+        // if (router.pathname !== '/create-account')
+        //     router.push('/create-account');
     };
 
     const disconnect = async () => {
