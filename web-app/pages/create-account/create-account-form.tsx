@@ -36,12 +36,9 @@ export default function CreateAccountForm() {
         setOpen(false);
     };
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [discord, setDiscord] = useState('');
+    const [name, setName] = useState('');
     const [occupation, setOccupation] = useState<any>(null);
-    const [availabilityState, setAvailabilityState] = useState<number[]>([]);
+    const [openTo, setOpenTo] = useState<number[]>([]);
     const [projectGoals, setProjectGoals] = useState<number[]>([]);
     const [idealCollab, setIdealCollab] = useState<number[]>([]);
     const [email2, setEmail2] = useState<any>('');
@@ -51,18 +48,12 @@ export default function CreateAccountForm() {
     const [creating, setCreating] = useState<boolean>(false);
 
     const state = {
-        firstName,
-        setFirstName,
-        lastName,
-        setLastName,
-        email,
-        setEmail,
-        discord,
-        setDiscord,
+        name,
+        setName,
         occupation,
         setOccupation,
-        availabilityState,
-        setAvailabilityState,
+        openTo,
+        setOpenTo,
         projectGoals,
         setProjectGoals,
         idealCollab,
@@ -99,15 +90,10 @@ export default function CreateAccountForm() {
         let hasError = false;
 
         if (activeStep === 0) {
-            if (!firstName) {
-                enqueueSnackbar('We need your first name', {
+            if (!name) {
+                enqueueSnackbar('We need your name', {
                     variant: 'error'
                 });
-                hasError = true;
-            }
-
-            if (!lastName) {
-                enqueueSnackbar('We need your last name', { variant: 'error' });
                 hasError = true;
             }
 
@@ -116,14 +102,14 @@ export default function CreateAccountForm() {
                 hasError = true;
             }
 
-            if (!availabilityState) {
+            if (!openTo.length) {
                 enqueueSnackbar('Please choose an availability', { variant: 'error' });
                 hasError = true;
             }
         }
 
         if (activeStep === 1) {
-            if (!primaryGoal) {
+            if (!projectGoals.length) {
                 enqueueSnackbar('Please choose your primary goal', {
                     variant: 'error'
                 });
@@ -162,6 +148,7 @@ export default function CreateAccountForm() {
             const { address, ethersSigner } = wallet;
             const message = 'create-account';
             const signature = await ethersSigner.signMessage(message);
+            console.log(name, occupation, openTo, projectGoals, idealCollab);
 
             const response = await fetch('api/create-account/', {
                 method: 'POST',
@@ -172,7 +159,7 @@ export default function CreateAccountForm() {
                     address,
                     signature,
                     account: {
-                        firstName, lastName, email, discord, occupation, availabilityState, primaryGoal, idealCollab
+                        name, occupation, openTo, projectGoals, idealCollab
                     }
                 })
             })

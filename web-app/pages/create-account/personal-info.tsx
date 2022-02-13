@@ -7,7 +7,9 @@ import {
     FormControl,
     MenuItem,
     useTheme,
-    useMediaQuery
+    useMediaQuery,
+    Checkbox,
+    ListItemText
 } from '@mui/material';
 import { AppContext } from '@/contexts/AppContext';
 
@@ -20,45 +22,21 @@ function PersonalInfo(props) {
     const { availability, occupations } = appContext;
 
     const {
-        firstName, setFirstName,
-        lastName, setLastName,
-        email, setEmail,
-        discord, setDiscord,
+        name, setName,
         occupation, setOccupation,
-        availabilityState, setAvailabilityState
+        openTo, setOpenTo
     } = props.state;
 
     return (
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)'} }}>
             <TextField
-                label="First Name"
+                label="Your Name"
+                placeholder="You can give a nickname, prefered name or alias"
                 variant="outlined"
                 required
                 sx={fieldStyle}
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-            />
-            <TextField
-                label="Last Name"
-                variant="outlined"
-                required
-                sx={fieldStyle}
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-            />
-            <TextField
-                label="Email Address"
-                variant="outlined"
-                sx={fieldStyle}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-                label="Discord"
-                variant="outlined"
-                sx={fieldStyle}
-                value={discord}
-                onChange={(e) => setDiscord(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
             />
 
             <FormControl sx={fieldStyle} required>
@@ -81,26 +59,27 @@ function PersonalInfo(props) {
 
             <FormControl sx={fieldStyle} required>
                 <InputLabel id="availability-select-label">
-                    Availability
+                    Open To
                 </InputLabel>
                 <Select
                     labelId="availability-select-label"
-                    label="Availability"
+                    label="Open To"
                     multiple
-                    value={availabilityState}
+                    value={openTo}
                     onChange={event => {
                         const {
                             target: { value },
                         } = event;
 
-                        setAvailabilityState(typeof value === 'string' ? value.split(',') : value);
+                        setOpenTo(typeof value === 'string' ? value.split(',') : value);
                     }}
                     renderValue={(selected) => selected.map(i => availability.find(a => a.id === i).text).join(', ')}
                 >
                     {availability.map((a) => {
                         return (
                             <MenuItem key={a.id} value={a.id}>
-                                {a.text}
+                                <Checkbox checked={openTo.indexOf(a.id) > -1} />
+                                <ListItemText primary={a.text} />
                             </MenuItem>
                         );
                     })}
