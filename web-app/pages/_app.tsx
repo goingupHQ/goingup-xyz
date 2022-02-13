@@ -1,5 +1,4 @@
 import type { ReactElement, ReactNode } from 'react';
-
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -12,7 +11,7 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 import createEmotionCache from 'src/createEmotionCache';
 import { appWithTranslation } from 'next-i18next';
 import { SidebarProvider } from 'src/contexts/SidebarContext';
-import { WalletProvider } from 'src/contexts/WalletContext';
+import { WalletProvider, WalletContext } from 'src/contexts/WalletContext';
 import 'src/utils/chart';
 import { Provider as ReduxProvider } from 'react-redux';
 import { store } from 'src/store';
@@ -59,38 +58,36 @@ function MyApp(props: MyAppProps) {
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
             </Head>
-            <ReduxProvider store={store}>
-                <SidebarProvider>
-                    <ThemeProvider>
-                        <SnackbarProvider
-                            maxSnack={6}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'right'
-                            }}
-                        >
-                            <AppProvider>
-                                <WalletProvider>
-                                    <AuthProvider>
-                                        <CssBaseline />
-                                        <AuthConsumer>
-                                            {(auth) =>
-                                                !auth.isInitialized ? (
-                                                    <Loader />
-                                                ) : (
-                                                    getLayout(
-                                                        <Component {...pageProps} />
-                                                    )
+            <SidebarProvider>
+                <ThemeProvider>
+                    <SnackbarProvider
+                        maxSnack={6}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right'
+                        }}
+                    >
+                        <AppProvider>
+                            <WalletProvider>
+                                <AuthProvider>
+                                    <CssBaseline />
+                                    <AuthConsumer>
+                                        {(auth) =>
+                                            !auth.isInitialized ? (
+                                                <Loader />
+                                            ) : (
+                                                getLayout(
+                                                    <Component {...pageProps} />
                                                 )
-                                            }
-                                        </AuthConsumer>
-                                    </AuthProvider>
-                                </WalletProvider>
-                            </AppProvider>
-                        </SnackbarProvider>
-                    </ThemeProvider>
-                </SidebarProvider>
-            </ReduxProvider>
+                                            )
+                                        }
+                                    </AuthConsumer>
+                                </AuthProvider>
+                            </WalletProvider>
+                        </AppProvider>
+                    </SnackbarProvider>
+                </ThemeProvider>
+            </SidebarProvider>
         </CacheProvider>
     );
 }
