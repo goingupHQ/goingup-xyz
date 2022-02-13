@@ -13,7 +13,6 @@ import {
     Fade
 } from '@mui/material';
 import CreateAccountForm from './create-account-form';
-import { error } from 'console';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
