@@ -27,6 +27,7 @@ const uploadPhoto = async (e) => {
     const formData = new FormData();
 
     Object.entries({ ...fields, file }).forEach(([key, value]) => {
+        // @ts-ignore
         formData.append(key, value);
     });
 
