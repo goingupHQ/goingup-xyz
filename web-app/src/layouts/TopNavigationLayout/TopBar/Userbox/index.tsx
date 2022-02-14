@@ -106,7 +106,7 @@ function Userbox() {
     const { logout } = useAuth();
     const router = useRouter();
 
-    const wallet = useContext(WalletContext); console.log(wallet.walletTypes[wallet.walletType])
+    const wallet = useContext(WalletContext);
 
     const ref = useRef<any>(null);
     const [isOpen, setOpen] = useState<boolean>(false);
@@ -241,6 +241,7 @@ function Userbox() {
                     <ListItem
                         onClick={() => {
                             handleClose();
+                            router.push(`/profile/${wallet.address}`)
                         }}
                         button
                     >
