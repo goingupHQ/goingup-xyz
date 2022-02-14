@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import Head from 'next/head';
+import possessive from '@wardrakus/possessive';
 import { WalletContext } from 'src/contexts/WalletContext';
 import TopNavigationLayout from 'src/layouts/TopNavigationLayout';
 import {
@@ -21,7 +22,8 @@ const CardContentWrapper = styled(CardContent)(
 
 const uploadPhoto = async (e) => {
     const file = e.target.files[0];
-    const filename = encodeURIComponent(file.name);
+    // const filename = encodeURIComponent(file.name);
+    const filename = 'crappy-file-2';
     const res = await fetch(`/api/upload-to-gcp?file=${filename}`);
     const { url, fields } = await res.json();
     const formData = new FormData();
@@ -36,20 +38,38 @@ const uploadPhoto = async (e) => {
         body: formData
     });
 
+    console.log(upload);
+
     if (upload.ok) {
-        console.log('Uploaded successfully!');
+        console.log(`Uploaded successfully to ${upload.url}${file.name}`);
     } else {
         console.error('Upload failed.');
     }
 };
 
-function CreateAccount() {
+export async function getServerSideProps(context) {
+    const { address } = context.params;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/get-account?address=${address}`);
+
+    if (response.status === 404) return { notFound: true };
+
+    const account = await response.json();
+
+    return {
+        props: {
+            account
+        }
+    };
+}
+
+function CreateAccount(props) {
     const wallet = useContext(WalletContext);
 
+    const { account } = props; console.log(account)
     return (
         <>
             <Head>
-                <title>Create an account with GoingUP</title>
+                <title>{possessive(account.name)} GoingUP Profile</title>
             </Head>
             <Grid
                 sx={{ px: { xs: 2, md: 4 } }}
@@ -78,14 +98,11 @@ function CreateAccount() {
                                 title={
                                     <>
                                         <Typography variant="h1">
-                                            Profile
+                                            {possessive(account.name)} Profile
                                         </Typography>
-                                        {wallet.address !== null && (
-                                            <Typography variant="subtitle1">
-                                                Fill in the fields below to sign
-                                                up for an account
-                                            </Typography>
-                                        )}
+                                        <Typography variant="subtitle1">
+                                            {account.address}
+                                        </Typography>
 
                                         {wallet.address == null && (
                                             <Typography variant="subtitle1">
