@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import Head from 'next/head';
 import possessive from '@wardrakus/possessive';
 import { WalletContext } from 'src/contexts/WalletContext';
+import { AppContext } from '@/contexts/AppContext';
 import TopNavigationLayout from 'src/layouts/TopNavigationLayout';
 import {
     Grid,
@@ -11,7 +12,9 @@ import {
     Typography,
     styled,
     Button,
-    Fade
+    Fade,
+    Stack,
+    Chip
 } from '@mui/material';
 
 const CardContentWrapper = styled(CardContent)(
@@ -49,7 +52,9 @@ const uploadPhoto = async (e) => {
 
 export async function getServerSideProps(context) {
     const { address } = context.params;
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/get-account?address=${address}`);
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-account?address=${address}`
+    );
 
     if (response.status === 404) return { notFound: true };
 
@@ -64,8 +69,10 @@ export async function getServerSideProps(context) {
 
 function CreateAccount(props) {
     const wallet = useContext(WalletContext);
+    const app = useContext(AppContext); console.log(app);
 
-    const { account } = props; console.log(account)
+    const { account } = props;
+    console.log(account);
     return (
         <>
             <Head>
@@ -118,12 +125,49 @@ function CreateAccount(props) {
                                     pt: 0
                                 }}
                             >
-                                <p>Upload a .png or .jpg image (max 1MB).</p>
+                                {/* <p>Upload a .png or .jpg image (max 1MB).</p>
                                 <input
                                     onChange={uploadPhoto}
                                     type="file"
                                     accept="image/png, image/jpeg"
-                                />
+                                /> */}
+                                <Stack direction="row" spacing={1} alignItems="center" sx={{ marginBottom: '8px' }}>
+                                    <Typography variant="body1">Occupation</Typography>
+                                    <Chip
+                                        label={app.occupations.find(o => o.id == account.occupation)?.text}
+                                        variant="outlined"
+                                    />
+                                </Stack>
+                                <Stack direction="row" spacing={1} alignItems="center" sx={{ marginBottom: '8px' }}>
+                                    <Typography variant="body1">Open To</Typography>
+                                    {account.openTo.map(item => (
+                                        <Chip
+                                            label={app.availability.find(a => a.id == item)?.text}
+                                            // label={item}
+                                            variant="outlined"
+                                        />
+                                    ))}
+                                </Stack>
+                                <Stack direction="row" spacing={1} alignItems="center" sx={{ marginBottom: '8px' }}>
+                                    <Typography variant="body1">Project Goals</Typography>
+                                    {account.projectGoals.map(item => (
+                                        <Chip
+                                            label={app.userGoals.find(a => a.id == item)?.text}
+                                            // label={item}
+                                            variant="outlined"
+                                        />
+                                    ))}
+                                </Stack>
+                                <Stack direction="row" spacing={1} alignItems="center" sx={{ marginBottom: '8px' }}>
+                                    <Typography variant="body1">Ideal Collaborators</Typography>
+                                    {account.idealCollab.map(item => (
+                                        <Chip
+                                            label={app.occupations.find(o => o.id == item)?.text}
+                                            // label={item}
+                                            variant="outlined"
+                                        />
+                                    ))}
+                                </Stack>
                             </CardContentWrapper>
                         </Card>
                     </Fade>
