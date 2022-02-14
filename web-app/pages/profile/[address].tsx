@@ -142,8 +142,8 @@ function CreateAccount(props) {
                                     <Typography variant="body1">Open To</Typography>
                                     {account.openTo.map(item => (
                                         <Chip
+                                            key={item}
                                             label={app.availability.find(a => a.id == item)?.text}
-                                            // label={item}
                                             variant="outlined"
                                         />
                                     ))}
@@ -152,8 +152,8 @@ function CreateAccount(props) {
                                     <Typography variant="body1">Project Goals</Typography>
                                     {account.projectGoals.map(item => (
                                         <Chip
+                                            key={item}
                                             label={app.userGoals.find(a => a.id == item)?.text}
-                                            // label={item}
                                             variant="outlined"
                                         />
                                     ))}
@@ -162,8 +162,8 @@ function CreateAccount(props) {
                                     <Typography variant="body1">Ideal Collaborators</Typography>
                                     {account.idealCollab.map(item => (
                                         <Chip
+                                            key={item}
                                             label={app.occupations.find(o => o.id == item)?.text}
-                                            // label={item}
                                             variant="outlined"
                                         />
                                     ))}
