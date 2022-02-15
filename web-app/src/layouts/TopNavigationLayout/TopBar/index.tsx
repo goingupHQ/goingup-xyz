@@ -110,13 +110,13 @@ function TopBar() {
                     background: `${theme.colors.secondary.main}`
                 }}
             />
-            <TopBarImage
+            {/* <TopBarImage
                 sx={{
                     opacity: 0.15,
                     backgroundImage:
                         'url("/static/images/placeholders/covers/3.jpg")'
                 }}
-            />
+            /> */}
             <Container
                 sx={{
                     zIndex: 6
