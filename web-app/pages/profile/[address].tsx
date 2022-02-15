@@ -110,12 +110,6 @@ function CreateAccount(props) {
                                         <Typography variant="subtitle1">
                                             {account.address}
                                         </Typography>
-
-                                        {wallet.address == null && (
-                                            <Typography variant="subtitle1">
-                                                Connect your wallet first
-                                            </Typography>
-                                        )}
                                     </>
                                 }
                             />
@@ -131,15 +125,15 @@ function CreateAccount(props) {
                                     type="file"
                                     accept="image/png, image/jpeg"
                                 /> */}
-                                <Stack direction="row" spacing={1} alignItems="center" sx={{ marginBottom: '8px' }}>
-                                    <Typography variant="body1">Occupation</Typography>
+                                <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} alignItems="center" sx={{ marginBottom: { xs: '24px', md: '8px' } }}>
+                                    <Typography variant="h4">Occupation</Typography>
                                     <Chip
                                         label={app.occupations.find(o => o.id == account.occupation)?.text}
                                         variant="outlined"
                                     />
                                 </Stack>
-                                <Stack direction="row" spacing={1} alignItems="center" sx={{ marginBottom: '8px' }}>
-                                    <Typography variant="body1">Open To</Typography>
+                                <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} alignItems="center" sx={{ marginBottom: { xs: '24px', md: '8px' } }}>
+                                    <Typography variant="h4">Open To</Typography>
                                     {account.openTo.map(item => (
                                         <Chip
                                             key={item}
@@ -148,8 +142,8 @@ function CreateAccount(props) {
                                         />
                                     ))}
                                 </Stack>
-                                <Stack direction="row" spacing={1} alignItems="center" sx={{ marginBottom: '8px' }}>
-                                    <Typography variant="body1">Project Goals</Typography>
+                                <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} alignItems="center" sx={{ marginBottom: { xs: '24px', md: '8px' } }}>
+                                    <Typography variant="h4">Project Goals</Typography>
                                     {account.projectGoals.map(item => (
                                         <Chip
                                             key={item}
@@ -158,8 +152,8 @@ function CreateAccount(props) {
                                         />
                                     ))}
                                 </Stack>
-                                <Stack direction="row" spacing={1} alignItems="center" sx={{ marginBottom: '8px' }}>
-                                    <Typography variant="body1">Ideal Collaborators</Typography>
+                                <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} alignItems="center" sx={{ marginBottom: { xs: '24px', md: '8px' } }}>
+                                    <Typography variant="h4">Ideal Collaborators</Typography>
                                     {account.idealCollab.map(item => (
                                         <Chip
                                             key={item}
