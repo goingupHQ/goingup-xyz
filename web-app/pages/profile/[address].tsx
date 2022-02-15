@@ -20,7 +20,8 @@ import {
     CardActions,
     Avatar,
     IconButton,
-    Input
+    Input,
+    CircularProgress
 } from '@mui/material';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { LoadingButton } from '@mui/lab';
@@ -65,9 +66,11 @@ function CreateAccount(props) {
     const myAccount = wallet.address === account.address;
 
     const uploadCoverInputRef = useRef<any>(null);
+    const uploadProfileInputRef = useRef<any>(null);
 
     const uploadPhoto = async (e, photoType) => {
-        setUploadingCover(true);
+        if (photoType === 'cover-photo') setUploadingCover(true);
+        if (photoType === 'profile-photo') setUploadingProfile(true);
 
         try {
             const file = e.target.files[0];
@@ -112,16 +115,26 @@ function CreateAccount(props) {
 
                 if (response.status === 200) {
                     router.replace(router.asPath);
-                    enqueueSnackbar('Cover photo uploaded', { variant: 'success' });
+                    const msg = photoType === 'cover-photo' ? 'Cover photo uploaded' : 'Profile photo uploaded';
+                    enqueueSnackbar(msg, { variant: 'success' });
                 }
             } else {
                 throw('Upload failed.');
             }
         } catch (err) {
+            const msg = `Could not upload your ${photoType === 'cover-photo' ? 'cover' : 'profile'} photo`;
             enqueueSnackbar('Could not upload your cover photo', { variant: 'error' });
             console.log(err);
         } finally {
-            setUploadingCover(false);
+            if (photoType === 'cover-photo') {
+                setUploadingCover(false);
+                uploadCoverInputRef.current.value = '';
+            }
+
+            if (photoType === 'profile-photo') {
+                setUploadingProfile(false);
+                uploadProfileInputRef.current.value = '';
+            }
         }
     };
 
@@ -227,24 +240,35 @@ function CreateAccount(props) {
                                             Change cover photo
                                         </LoadingButton>
 
+                                        <input
+                                            ref={uploadProfileInputRef}
+                                            accept="image/*"
+                                            id="contained-button-file"
+                                            type="file"
+                                            style={{ display: 'none' }}
+                                            onChange={e => { uploadPhoto(e, 'profile-photo') }}
+                                        />
                                         <IconButton
+                                            disabled={uploadingProfile}
                                             color="primary"
                                             sx={{
                                                 position: 'absolute',
                                                 left: 150,
                                                 top: 200
                                             }}
+                                            onClick={() => {
+                                                uploadProfileInputRef.current.click();
+                                            }}
                                         >
+                                            {uploadingProfile &&
+                                            <CircularProgress size="20px" />
+                                            }
+                                            {!uploadingProfile &&
                                             <FileUploadIcon />
+                                            }
                                         </IconButton>
                                     </>
                                 )}
-                                {/* <p>Upload a .png or .jpg image (max 1MB).</p>
-                                <input
-                                    onChange={uploadPhoto}
-                                    type="file"
-                                    accept="image/png, image/jpeg"
-                                /> */}
                                 <Stack
                                     direction={{ xs: 'column', md: 'row' }}
                                     spacing={1}
