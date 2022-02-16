@@ -1,4 +1,6 @@
 import { AppContext } from '@/contexts/AppContext';
+import { WalletContext } from '@/contexts/WalletContext';
+import { LoadingButton } from '@mui/lab';
 import {
     Box,
     Button,
@@ -15,6 +17,8 @@ import {
     Select,
     TextField
 } from '@mui/material';
+import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { forwardRef, useContext, useImperativeHandle, useState } from 'react';
 
 const EditProfile = (props, ref) => {
@@ -26,8 +30,14 @@ const EditProfile = (props, ref) => {
     const [projectGoals, setProjectGoals] = useState(account.projectGoals);
     const [idealCollab, setIdealCollab] = useState(account.idealCollab);
 
+    const [saving, setSaving] = useState(false);
+
+    const wallet = useContext(WalletContext);
     const appContext = useContext(AppContext);
     const { availability, occupations, userGoals } = appContext;
+    const router = useRouter();
+
+    const { enqueueSnackbar } = useSnackbar();
 
     useImperativeHandle(ref, () => ({
         showModal() {
@@ -42,6 +52,43 @@ const EditProfile = (props, ref) => {
     const fieldStyle = {
         m: 1
     };
+
+    const saveChanges = async ()  => {
+        setSaving(true)
+
+        try {
+            const { address, ethersSigner } = wallet;
+            const message = 'update-account';
+            const signature = await ethersSigner.signMessage(message);
+
+            const response = await fetch('/api/update-account/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    address,
+                    signature,
+                    account: {
+                        name, occupation, openTo, projectGoals, idealCollab
+                    }
+                })
+            });
+
+            if (response.status === 200) {
+                enqueueSnackbar('Profile changes saved', { variant: 'success' });
+                router.replace(router.asPath);
+                setOpen(false);
+            } else {
+                enqueueSnackbar('Failed to save profile changes', { variant: 'error' });
+            }
+        } catch (err) {
+            enqueueSnackbar('Failed to save profile changes', { variant: 'error' });
+            console.log(err);
+        } finally {
+            setSaving(false);
+        }
+    }
 
     return (
         <div>
@@ -230,8 +277,22 @@ const EditProfile = (props, ref) => {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Save Changes</Button>
+                    <Button
+                        color="secondary"
+                        variant="contained"
+                        onClick={handleClose}
+                    >
+                        Cancel
+                    </Button>
+                    <LoadingButton
+                        loading={saving}
+                        loadingIndicator="Saving..."
+                        color="primary"
+                        variant="contained"
+                        onClick={saveChanges}
+                    >
+                        Save Changes
+                    </LoadingButton>
                 </DialogActions>
             </Dialog>
         </div>
