@@ -33,7 +33,7 @@ const CardContentWrapper = styled(CardContent)(
   `
 );
 
-function TopSection(props) {
+const TopSection = (props) => {
     const [uploadingCover, setUploadingCover] = useState<boolean>(false);
     const [uploadingProfile, setUploadingProfile] = useState<boolean>(false);
 
@@ -42,7 +42,7 @@ function TopSection(props) {
     const { enqueueSnackbar } = useSnackbar();
     const router = useRouter();
 
-    const { account } = props; console.log(props);
+    const { account } = props;
     const myAccount = wallet.address === account.address;
 
     const uploadCoverInputRef = useRef<any>(null);
@@ -121,231 +121,222 @@ function TopSection(props) {
 
     return (
         <>
-            <Grid
-                sx={{ px: { xs: 2, md: 4 } }}
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="stretch"
-                spacing={3}
-            >
-                <Grid item xs={12}>
-                    <Fade in={true} timeout={1000}>
-                        <Card
+            <Grid item xs={12}>
+                <Fade in={true} timeout={1000}>
+                    <Card
+                        sx={{
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            marginTop: { xs: '2rem', md: '3rem' }
+                        }}
+                    >
+                        <CardHeader
                             sx={{
-                                height: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                marginTop: { xs: '2rem', md: '3rem' }
+                                px: 3,
+                                pt: 3,
+                                alignItems: 'flex-start'
+                            }}
+                            title={
+                                <>
+                                    <Typography variant="h1">
+                                        {possessive(account.name)} Profile
+                                    </Typography>
+                                    <Typography variant="subtitle1">
+                                        {account.address}
+                                    </Typography>
+                                </>
+                            }
+                        />
+                        <CardContentWrapper
+                            sx={{
+                                px: 3,
+                                pt: 0
                             }}
                         >
-                            <CardHeader
+                            <Card
                                 sx={{
-                                    px: 3,
-                                    pt: 3,
-                                    alignItems: 'flex-start'
-                                }}
-                                title={
-                                    <>
-                                        <Typography variant="h1">
-                                            {possessive(account.name)} Profile
-                                        </Typography>
-                                        <Typography variant="subtitle1">
-                                            {account.address}
-                                        </Typography>
-                                    </>
-                                }
-                            />
-                            <CardContentWrapper
-                                sx={{
-                                    px: 3,
-                                    pt: 0
+                                    width: '100%',
+                                    height: '280px',
+                                    marginBottom: 12,
+                                    position: 'relative'
                                 }}
                             >
-                                <Card
-                                    sx={{
-                                        width: '100%',
-                                        height: '280px',
-                                        marginBottom: 12,
-                                        position: 'relative'
-                                    }}
-                                >
-                                    <CardMedia
-                                        component="img"
-                                        height="100%"
-                                        image={
-                                            account.coverPhoto ||
-                                            '/static/images/placeholders/covers/7.jpg'
-                                        }
+                                <CardMedia
+                                    component="img"
+                                    height="100%"
+                                    image={
+                                        account.coverPhoto ||
+                                        '/static/images/placeholders/covers/7.jpg'
+                                    }
+                                />
+                            </Card>
+                            <Avatar
+                                src={account.profilePhoto}
+                                sx={{
+                                    width: 128,
+                                    height: 128,
+                                    position: 'absolute',
+                                    top: 200,
+                                    left: 60
+                                }}
+                                variant="rounded"
+                            ></Avatar>
+                            {myAccount && (
+                                <>
+                                    <input
+                                        ref={uploadCoverInputRef}
+                                        accept="image/*"
+                                        id="contained-button-file"
+                                        type="file"
+                                        style={{ display: 'none' }}
+                                        onChange={e => { uploadPhoto(e, 'cover-photo') }}
                                     />
-                                </Card>
-                                <Avatar
-                                    src={account.profilePhoto}
-                                    sx={{
-                                        width: 128,
-                                        height: 128,
-                                        position: 'absolute',
-                                        top: 200,
-                                        left: 60
-                                    }}
-                                    variant="rounded"
-                                ></Avatar>
-                                {myAccount && (
-                                    <>
-                                        <input
-                                            ref={uploadCoverInputRef}
-                                            accept="image/*"
-                                            id="contained-button-file"
-                                            type="file"
-                                            style={{ display: 'none' }}
-                                            onChange={e => { uploadPhoto(e, 'cover-photo') }}
-                                        />
-                                        <LoadingButton
-                                            color="primary"
-                                            variant="outlined"
-                                            size="small"
-                                            loading={uploadingCover}
-                                            loadingIndicator="Uploading..."
-                                            sx={{
-                                                position: 'absolute',
-                                                right: 36,
-                                                top: 10
-                                            }}
-                                            onClick={() => {
-                                                uploadCoverInputRef.current.click();
-                                            }}
-                                        >
-                                            Change cover photo
-                                        </LoadingButton>
+                                    <LoadingButton
+                                        color="primary"
+                                        variant="outlined"
+                                        size="small"
+                                        loading={uploadingCover}
+                                        loadingIndicator="Uploading..."
+                                        sx={{
+                                            position: 'absolute',
+                                            right: 36,
+                                            top: 10
+                                        }}
+                                        onClick={() => {
+                                            uploadCoverInputRef.current.click();
+                                        }}
+                                    >
+                                        Change cover photo
+                                    </LoadingButton>
 
-                                        <input
-                                            ref={uploadProfileInputRef}
-                                            accept="image/*"
-                                            id="contained-button-file"
-                                            type="file"
-                                            style={{ display: 'none' }}
-                                            onChange={e => { uploadPhoto(e, 'profile-photo') }}
-                                        />
-                                        <IconButton
-                                            disabled={uploadingProfile}
-                                            color="primary"
-                                            sx={{
-                                                position: 'absolute',
-                                                left: 150,
-                                                top: 200
-                                            }}
-                                            onClick={() => {
-                                                uploadProfileInputRef.current.click();
-                                            }}
-                                        >
-                                            {uploadingProfile &&
-                                            <CircularProgress size="20px" />
-                                            }
-                                            {!uploadingProfile &&
-                                            <FileUploadIcon />
-                                            }
-                                        </IconButton>
-                                        <Box display="flex" sx={{ marginBottom: 2 }} justifyContent={{ xs: 'center', md:'initial' }}>
-                                            <Button color="primary" variant="contained" onClick={() => { editProfileRef.current.showModal() }}>
-                                                Edit My GoingUP Profile
-                                            </Button>
-                                        </Box>
-                                    </>
-                                )}
-                                <Stack
-                                    direction={{ xs: 'column', md: 'row' }}
-                                    spacing={1}
-                                    alignItems="center"
-                                    sx={{
-                                        marginBottom: { xs: '24px', md: '8px' }
-                                    }}
-                                >
-                                    <Typography variant="h4">
-                                        Occupation
-                                    </Typography>
+                                    <input
+                                        ref={uploadProfileInputRef}
+                                        accept="image/*"
+                                        id="contained-button-file"
+                                        type="file"
+                                        style={{ display: 'none' }}
+                                        onChange={e => { uploadPhoto(e, 'profile-photo') }}
+                                    />
+                                    <IconButton
+                                        disabled={uploadingProfile}
+                                        color="primary"
+                                        sx={{
+                                            position: 'absolute',
+                                            left: 150,
+                                            top: 200
+                                        }}
+                                        onClick={() => {
+                                            uploadProfileInputRef.current.click();
+                                        }}
+                                    >
+                                        {uploadingProfile &&
+                                        <CircularProgress size="20px" />
+                                        }
+                                        {!uploadingProfile &&
+                                        <FileUploadIcon />
+                                        }
+                                    </IconButton>
+                                    <Box display="flex" sx={{ marginBottom: 2 }} justifyContent={{ xs: 'center', md:'initial' }}>
+                                        <Button color="primary" variant="contained" onClick={() => { editProfileRef.current.showModal() }}>
+                                            Edit My GoingUP Profile
+                                        </Button>
+                                    </Box>
+                                </>
+                            )}
+                            <Stack
+                                direction={{ xs: 'column', md: 'row' }}
+                                spacing={1}
+                                alignItems="center"
+                                sx={{
+                                    marginBottom: { xs: '24px', md: '8px' }
+                                }}
+                            >
+                                <Typography variant="h4">
+                                    Occupation
+                                </Typography>
+                                <Chip
+                                    label={
+                                        app.occupations.find(
+                                            (o) =>
+                                                o.id == account.occupation
+                                        )?.text
+                                    }
+                                    variant="outlined"
+                                />
+                            </Stack>
+                            <Stack
+                                direction={{ xs: 'column', md: 'row' }}
+                                spacing={1}
+                                alignItems="center"
+                                sx={{
+                                    marginBottom: { xs: '24px', md: '8px' }
+                                }}
+                            >
+                                <Typography variant="h4">
+                                    Open To
+                                </Typography>
+                                {account.openTo.map((item) => (
                                     <Chip
+                                        key={item}
                                         label={
-                                            app.occupations.find(
-                                                (o) =>
-                                                    o.id == account.occupation
+                                            app.availability.find(
+                                                (a) => a.id == item
                                             )?.text
                                         }
                                         variant="outlined"
                                     />
-                                </Stack>
-                                <Stack
-                                    direction={{ xs: 'column', md: 'row' }}
-                                    spacing={1}
-                                    alignItems="center"
-                                    sx={{
-                                        marginBottom: { xs: '24px', md: '8px' }
-                                    }}
-                                >
-                                    <Typography variant="h4">
-                                        Open To
-                                    </Typography>
-                                    {account.openTo.map((item) => (
-                                        <Chip
-                                            key={item}
-                                            label={
-                                                app.availability.find(
-                                                    (a) => a.id == item
-                                                )?.text
-                                            }
-                                            variant="outlined"
-                                        />
-                                    ))}
-                                </Stack>
-                                <Stack
-                                    direction={{ xs: 'column', md: 'row' }}
-                                    spacing={1}
-                                    alignItems="center"
-                                    sx={{
-                                        marginBottom: { xs: '24px', md: '8px' }
-                                    }}
-                                >
-                                    <Typography variant="h4">
-                                        Project Goals
-                                    </Typography>
-                                    {account.projectGoals.map((item) => (
-                                        <Chip
-                                            key={item}
-                                            label={
-                                                app.userGoals.find(
-                                                    (a) => a.id == item
-                                                )?.text
-                                            }
-                                            variant="outlined"
-                                        />
-                                    ))}
-                                </Stack>
-                                <Stack
-                                    direction={{ xs: 'column', md: 'row' }}
-                                    spacing={1}
-                                    alignItems="center"
-                                    sx={{
-                                        marginBottom: { xs: '24px', md: '8px' }
-                                    }}
-                                >
-                                    <Typography variant="h4">
-                                        Ideal Collaborators
-                                    </Typography>
-                                    {account.idealCollab.map((item) => (
-                                        <Chip
-                                            key={item}
-                                            label={
-                                                app.occupations.find(
-                                                    (o) => o.id == item
-                                                )?.text
-                                            }
-                                            variant="outlined"
-                                        />
-                                    ))}
-                                </Stack>
-                            </CardContentWrapper>
-                        </Card>
-                    </Fade>
-                </Grid>
+                                ))}
+                            </Stack>
+                            <Stack
+                                direction={{ xs: 'column', md: 'row' }}
+                                spacing={1}
+                                alignItems="center"
+                                sx={{
+                                    marginBottom: { xs: '24px', md: '8px' }
+                                }}
+                            >
+                                <Typography variant="h4">
+                                    Project Goals
+                                </Typography>
+                                {account.projectGoals.map((item) => (
+                                    <Chip
+                                        key={item}
+                                        label={
+                                            app.userGoals.find(
+                                                (a) => a.id == item
+                                            )?.text
+                                        }
+                                        variant="outlined"
+                                    />
+                                ))}
+                            </Stack>
+                            <Stack
+                                direction={{ xs: 'column', md: 'row' }}
+                                spacing={1}
+                                alignItems="center"
+                                sx={{
+                                    marginBottom: { xs: '24px', md: '8px' }
+                                }}
+                            >
+                                <Typography variant="h4">
+                                    Ideal Collaborators
+                                </Typography>
+                                {account.idealCollab.map((item) => (
+                                    <Chip
+                                        key={item}
+                                        label={
+                                            app.occupations.find(
+                                                (o) => o.id == item
+                                            )?.text
+                                        }
+                                        variant="outlined"
+                                    />
+                                ))}
+                            </Stack>
+                        </CardContentWrapper>
+                    </Card>
+                </Fade>
             </Grid>
 
             <EditProfile ref={editProfileRef} account={account} />

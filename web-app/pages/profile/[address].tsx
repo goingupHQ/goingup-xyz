@@ -28,6 +28,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { useRouter } from 'next/router';
+import ContactsAndIntegrations from './contacts-and-integrations';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -59,7 +60,19 @@ function CreateAccount(props) {
             <Head>
                 <title>{possessive(account.name)} GoingUP Profile</title>
             </Head>
-            <TopSection account={account} />
+
+            <Grid
+                sx={{ px: { xs: 2, md: 4 }, marginBottom: 10 }}
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="stretch"
+                spacing={3}
+            >
+                <TopSection account={account} />
+                <ContactsAndIntegrations account={account} />
+            </Grid>
+
         </>
     );
 }
