@@ -39,7 +39,7 @@ const CardContentWrapper = styled(CardContent)(
 
 export async function getServerSideProps(context) {
     const { address } = context.params;
-    const account = await getAccount(address);
+    const account = await getAccount(address); // stop using api in getServerSideProps
     delete account._id;
 
     if (!account) return { notFound: true };
