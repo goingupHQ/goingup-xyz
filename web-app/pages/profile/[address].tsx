@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import possessive from '@wardrakus/possessive';
 import { v4 as uuid } from 'uuid';
@@ -37,39 +37,44 @@ const CardContentWrapper = styled(CardContent)(
   `
 );
 
-export async function getServerSideProps(context) {
-    const { address } = context.params;
-    const account = await getAccount(address); // stop using api in getServerSideProps
-    delete account._id;
+function ProfilePage() {
+    const [account, setAccount] = useState<any>(null)
+    const router = useRouter();
+    const { address } = router.query;
+    console.log(router.query)
 
-    if (!account) return { notFound: true };
-
-    return {
-        props: {
-            account
+    useEffect(() => {
+        if (address) {
+            const response = fetch(
+                `/api/get-account?address=${address}`
+            ).then(async response => {
+                setAccount(await response.json());
+            });
         }
-    };
-}
 
-function ProfilePage(props) {
-    const { account } = props;
+    }, [address])
+
     return (
         <>
-            <Head>
-                <title>{possessive(account.name)} GoingUP Profile</title>
-            </Head>
+            {account &&
+            <>
+                <Head>
+                    <title>{possessive(account?.name)} GoingUP Profile</title>
+                </Head>
 
-            <Grid
-                sx={{ px: { xs: 2, md: 4 }, marginBottom: 10 }}
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="stretch"
-                spacing={3}
-            >
-                <TopSection account={account} />
-                <ContactsAndIntegrations account={account} />
-            </Grid>
+                <Grid
+                    sx={{ px: { xs: 2, md: 4 }, marginBottom: 10 }}
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="stretch"
+                    spacing={3}
+                >
+                    <TopSection account={account} />
+                    <ContactsAndIntegrations account={account} />
+                </Grid>
+            </>
+            }
         </>
     );
 }
