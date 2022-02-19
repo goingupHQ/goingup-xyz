@@ -29,6 +29,7 @@ import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { useRouter } from 'next/router';
 import ContactsAndIntegrations from './contacts-and-integrations';
+import { getAccount } from 'pages/api/get-account';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -38,13 +39,10 @@ const CardContentWrapper = styled(CardContent)(
 
 export async function getServerSideProps(context) {
     const { address } = context.params;
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-account?address=${address}`
-    );
+    const account = await getAccount(address);
+    delete account._id;
 
-    if (response.status === 404) return { notFound: true };
-
-    const account = await response.json();
+    if (!account) return { notFound: true };
 
     return {
         props: {
@@ -53,7 +51,7 @@ export async function getServerSideProps(context) {
     };
 }
 
-function CreateAccount(props) {
+function ProfilePage(props) {
     const { account } = props;
     return (
         <>
@@ -72,13 +70,12 @@ function CreateAccount(props) {
                 <TopSection account={account} />
                 <ContactsAndIntegrations account={account} />
             </Grid>
-
         </>
     );
 }
 
-CreateAccount.getLayout = (page) => (
+ProfilePage.getLayout = (page) => (
     <TopNavigationLayout>{page}</TopNavigationLayout>
 );
 
-export default CreateAccount;
+export default ProfilePage;

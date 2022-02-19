@@ -1,13 +1,18 @@
 import { ethers } from 'ethers';
 import { dbClient } from './_get-db-client';
 
-export default async function handler(req, res) {
-    const { address } = req.query;
+export const getAccount = async (address) => {
     await dbClient.connect();
     const db = dbClient.db('main');
     const accounts = db.collection('accounts');
 
     const account = await accounts.findOne({ address });
+    return account;
+}
+
+export default async function handler(req, res) {
+    const { address } = req.query;
+    const account = await getAccount(address);
 
     if (!account) {
         res.status(404).send('not-found');

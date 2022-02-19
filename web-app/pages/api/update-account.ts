@@ -14,7 +14,7 @@ export default async function handler(req, res) {
         await dbClient.connect();
         const db = dbClient.db('main');
         const accounts = db.collection('accounts');
-        const account = body.account; console.log(body);
+        const account = body.account;
         await accounts.updateOne({ address: body.address }, { $set: account });
         res.status(200).send('account-updated');
     } else {
