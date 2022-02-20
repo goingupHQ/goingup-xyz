@@ -148,7 +148,6 @@ export default function CreateAccountForm() {
             const { address, ethersSigner } = wallet;
             const message = 'create-account';
             const signature = await ethersSigner.signMessage(message);
-            console.log(name, occupation, openTo, projectGoals, idealCollab);
 
             const response = await fetch('api/create-account/', {
                 method: 'POST',

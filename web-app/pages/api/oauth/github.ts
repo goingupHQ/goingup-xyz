@@ -6,7 +6,6 @@ export default async function handler(req, res) {
 
     const db = await getDb();
     const authRequest = await db.collection('oauth-requests').findOne({ uuid: parsed.auth, address: parsed.address });
-    console.log(state,authRequest);
 
     if (authRequest) {
         const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;

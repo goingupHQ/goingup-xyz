@@ -51,15 +51,17 @@ const ContactsAndIntegrations = (props) => {
     }
 
     const githubChipClicked = async () => {
-        const { address } =  wallet;
-
-        if (account.linkedin) {
+        if (account.github) {
             window.open(`https://github.com/${account.githubUser.login}`, '_blank');
             return;
         }
 
+        const { address, ethersSigner } =  wallet;
+        const message = 'connect-github';
+        const signature = await ethersSigner.signMessage(message);
+
         const auth = uuid();
-        const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=github`);
+        const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=github&message=${message}&signature=${signature}`);
 
         if (myAccount && savedResponse.status === 200) {
             const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
@@ -72,23 +74,25 @@ const ContactsAndIntegrations = (props) => {
     }
 
     const linkedinChipClicked = async () => {
-        const { address } =  wallet;
-
         if (account.linkedin) {
             window.open(`https://github.com/${account.githubUser.login}`, '_blank');
             return;
         }
 
+        const { address, ethersSigner } =  wallet;
+        const message = 'connect-linkedin';
+        const signature = await ethersSigner.signMessage(message);
         const auth = uuid();
-        const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=linkedin`);
+        const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=linkedin&message=${message}&signature=${signature}`);
 
         if (myAccount && savedResponse.status === 200) {
             const clientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
             const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/linkedin`;
             const state = encodeURIComponent(JSON.stringify({ address, auth }));
-            window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&allow_signup=true`;
+            const scope = encodeURIComponent('r_liteprofile r_emailaddress');
+            window.location.href = `https://www.linkedin.com/oauth/v2/authorization?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
         } else {
-            enqueueSnackbar('Something went wrong connecting your GitHub account', { variant: 'error' });
+            enqueueSnackbar('Something went wrong connecting your LinkedIn account', { variant: 'error' });
         }
     }
 
