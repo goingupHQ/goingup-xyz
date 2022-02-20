@@ -1,6 +1,8 @@
 import { AppContext } from '@/contexts/AppContext';
 import { WalletContext } from '@/contexts/WalletContext';
-import { Twitter } from '@mui/icons-material';
+import { Twitter, GitHub, LinkedIn } from '@mui/icons-material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import {
     Grid,
     Fade,
@@ -13,9 +15,9 @@ import {
     Chip
 } from '@mui/material';
 import possessive from '@wardrakus/possessive';
-import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useContext, useRef } from 'react';
+import { v4 as uuid } from 'uuid';
 import VerifyTwitter from './verify-twitter'
 
 const CardContentWrapper = styled(CardContent)(
@@ -31,13 +33,12 @@ const ContactsAndIntegrations = (props) => {
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
     const { enqueueSnackbar } = useSnackbar();
-    const router = useRouter();
 
     const myAccount = wallet.address === account.address;
 
     const twitterChipClicked = () => {
         if (account.twitter) {
-            // open twitter profile in new tab
+            window.open(`https://twitter.com/${account.twitter}`, '_blank');
         } else {
             if (myAccount) {
                 const tweet = `Verifying myself for #GoingUP\n${account.address}`;
@@ -47,6 +48,51 @@ const ContactsAndIntegrations = (props) => {
                 verifyTwitterRef.current.showModal();
             }
         }
+    }
+
+    const githubChipClicked = async () => {
+        const { address } =  wallet;
+
+        if (account.linkedin) {
+            window.open(`https://github.com/${account.githubUser.login}`, '_blank');
+            return;
+        }
+
+        const auth = uuid();
+        const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=github`);
+
+        if (myAccount && savedResponse.status === 200) {
+            const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
+            const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/github`;
+            const state = encodeURIComponent(JSON.stringify({ address, auth }));
+            window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&allow_signup=true`;
+        } else {
+            enqueueSnackbar('Something went wrong connecting your GitHub account', { variant: 'error' });
+        }
+    }
+
+    const linkedinChipClicked = async () => {
+        const { address } =  wallet;
+
+        if (account.linkedin) {
+            window.open(`https://github.com/${account.githubUser.login}`, '_blank');
+            return;
+        }
+
+        const auth = uuid();
+        const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=linkedin`);
+
+        if (myAccount && savedResponse.status === 200) {
+            const clientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
+            const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/linkedin`;
+            const state = encodeURIComponent(JSON.stringify({ address, auth }));
+            window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&allow_signup=true`;
+        } else {
+            enqueueSnackbar('Something went wrong connecting your GitHub account', { variant: 'error' });
+        }
+    }
+
+    const discordChipClicked = () => {
     }
 
     return (
@@ -98,7 +144,67 @@ const ContactsAndIntegrations = (props) => {
                                         (myAccount ? 'Connect your Twitter account' : 'not connected')
                                     }
                                     variant="outlined"
-                                    onClick={twitterChipClicked}
+                                    onClick={myAccount ? twitterChipClicked : null}
+                                />
+                            </Stack>
+
+                            <Stack
+                                direction={{ xs: 'column', md: 'row' }}
+                                spacing={1}
+                                alignItems="center"
+                                sx={{
+                                    marginBottom: { xs: '24px', md: '8px' }
+                                }}
+                            >
+                                <Typography variant="h4">Github</Typography>
+                                <Chip
+                                    icon={(<GitHub fontSize="small" />)}
+                                    label={
+                                        account.github ||
+                                        (myAccount ? 'Connect your GitHub account' : 'not connected')
+                                    }
+                                    variant="outlined"
+                                    onClick={myAccount ? githubChipClicked : null}
+                                />
+                            </Stack>
+
+                            <Stack
+                                direction={{ xs: 'column', md: 'row' }}
+                                spacing={1}
+                                alignItems="center"
+                                sx={{
+                                    marginBottom: { xs: '24px', md: '8px' }
+                                }}
+                            >
+                                <Typography variant="h4">LinkedIn</Typography>
+                                <Chip
+                                    icon={(<LinkedIn fontSize="small" />)}
+                                    label={
+                                        account.linkedIn ||
+                                        (myAccount ? 'Connect your LinkedIn account' : 'not connected')
+                                    }
+                                    variant="outlined"
+                                    onClick={myAccount ? linkedinChipClicked : null}
+                                />
+                            </Stack>
+
+                            <Stack
+                                direction={{ xs: 'column', md: 'row' }}
+                                spacing={1}
+                                alignItems="center"
+                                sx={{
+                                    marginBottom: { xs: '24px', md: '8px' }
+                                }}
+                            >
+                                <Typography variant="h4">Discord</Typography>
+                                <Chip
+                                    icon={(<FontAwesomeIcon icon={faDiscord} />)}
+                                    label={
+                                        account.discord ||
+                                        (myAccount ? 'Connect your Discord account' : 'not connected')
+                                    }
+                                    variant="outlined"
+                                    onClick={myAccount ? discordChipClicked : null}
                                 />
                             </Stack>
                         </CardContentWrapper>
