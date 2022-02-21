@@ -81,43 +81,48 @@ const ContactsAndIntegrations = (props) => {
             return;
         }
 
-        const { address, ethersSigner } =  wallet;
-        const message = 'connect-linkedin';
-        const signature = await ethersSigner.signMessage(message);
-        const auth = uuid();
-        const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=linkedin&message=${message}&signature=${signature}`);
+        if (myAccount) {
+            const { address, ethersSigner } =  wallet;
+            const message = 'connect-linkedin';
+            const signature = await ethersSigner.signMessage(message);
+            const auth = uuid();
+            const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=linkedin&message=${message}&signature=${signature}`);
 
-        if (myAccount && savedResponse.status === 200) {
-            const clientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
-            const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/linkedin`;
-            const state = encodeURIComponent(JSON.stringify({ address, auth }));
-            const scope = encodeURIComponent('r_liteprofile r_emailaddress');
-            window.location.href = `https://www.linkedin.com/oauth/v2/authorization?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
-        } else {
-            enqueueSnackbar('Something went wrong connecting your LinkedIn account', { variant: 'error' });
+            if (savedResponse.status === 200) {
+                const clientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
+                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/linkedin`;
+                const state = encodeURIComponent(JSON.stringify({ address, auth }));
+                const scope = encodeURIComponent('r_liteprofile r_emailaddress');
+                window.location.href = `https://www.linkedin.com/oauth/v2/authorization?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
+            } else {
+                enqueueSnackbar('Something went wrong connecting your LinkedIn account', { variant: 'error' });
+            }
         }
     }
 
-    const discordChipClicked = () => {
+    const discordChipClicked = async () => {
         if (account.discord) {
             // window.open(`https://github.com/${account.githubUser.login}`, '_blank');
             return;
         }
 
-        const { address, ethersSigner } =  wallet;
-        const message = 'connect-github';
-        const signature = await ethersSigner.signMessage(message);
+        if (myAccount) {
+            const { address, ethersSigner } =  wallet;
+            const message = 'connect-discord';
+            const signature = await ethersSigner.signMessage(message);
 
-        const auth = uuid();
-        const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=github&message=${message}&signature=${signature}`);
+            const auth = uuid();
+            const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=discord&message=${message}&signature=${signature}`);
 
-        if (myAccount && savedResponse.status === 200) {
-            const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
-            const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/github`;
-            const state = encodeURIComponent(JSON.stringify({ address, auth }));
-            window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&allow_signup=true`;
-        } else {
-            enqueueSnackbar('Something went wrong connecting your GitHub account', { variant: 'error' });
+            if (savedResponse.status === 200) {
+                const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID;
+                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/discord`;
+                const state = encodeURIComponent(JSON.stringify({ address, auth }));
+                const scope = encodeURIComponent('email identify');
+                window.location.href = `https://discord.com/api/oauth2/authorize?response_type=code&client_id=${clientId}&scope=${scope}&state=${state}&redirect_uri=${redirectUri}&prompt=consent`;
+            } else {
+                enqueueSnackbar('Something went wrong connecting your GitHub account', { variant: 'error' });
+            }
         }
     }
 
