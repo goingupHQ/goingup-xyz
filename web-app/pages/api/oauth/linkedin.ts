@@ -6,7 +6,6 @@ export default async function handler(req, res) {
 
     const db = await getDb();
     const authRequest = await db.collection('oauth-requests').findOne({ uuid: parsed.auth, address: parsed.address });
-    console.log(state,authRequest);
 
     if (authRequest) {
         const clientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
@@ -20,28 +19,28 @@ export default async function handler(req, res) {
         });
 
         const result = await tokenResponse.json();
+        console.log(result);
 
         if (result.access_token) {
             const userUrl = `https://api.linkedin.com/v2/me`;
             const userResponse = await fetch(userUrl, {
                 headers: {
-                    'Authorization': `token ${result.access_token}`
+                    'Authorization': `Bearer ${result.access_token}`
                 }
             });
 
             const user = await userResponse.json();
-            res.send(user);
 
-            // await db.collection('accounts').updateOne({
-            //     address: parsed.address
-            // }, {
-            //     $set: {
-            //         github: user.name,
-            //         githubUser: user
-            //     }
-            // })
+            await db.collection('accounts').updateOne({
+                address: parsed.address
+            }, {
+                $set: {
+                    linkedIn: `${user.localizedFirstName} ${user.localizedLastName}`,
+                    linkedInUser: user
+                }
+            })
 
-            // res.redirect(302, `/profile/${parsed.address}`);
+            res.redirect(302, `/profile/${parsed.address}`);
         } else {
             res.status(400).send('auth-code-invalid');
         }

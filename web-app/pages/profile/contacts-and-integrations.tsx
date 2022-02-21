@@ -56,26 +56,28 @@ const ContactsAndIntegrations = (props) => {
             return;
         }
 
-        const { address, ethersSigner } =  wallet;
-        const message = 'connect-github';
-        const signature = await ethersSigner.signMessage(message);
+        if (myAccount) {
+            const { address, ethersSigner } =  wallet;
+            const message = 'connect-github';
+            const signature = await ethersSigner.signMessage(message);
 
-        const auth = uuid();
-        const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=github&message=${message}&signature=${signature}`);
+            const auth = uuid();
+            const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=github&message=${message}&signature=${signature}`);
 
-        if (myAccount && savedResponse.status === 200) {
-            const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
-            const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/github`;
-            const state = encodeURIComponent(JSON.stringify({ address, auth }));
-            window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&allow_signup=true`;
-        } else {
-            enqueueSnackbar('Something went wrong connecting your GitHub account', { variant: 'error' });
+            if (savedResponse.status === 200) {
+                const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
+                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/github`;
+                const state = encodeURIComponent(JSON.stringify({ address, auth }));
+                window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&allow_signup=true`;
+            } else {
+                enqueueSnackbar('Something went wrong connecting your GitHub account', { variant: 'error' });
+            }
         }
     }
 
     const linkedinChipClicked = async () => {
-        if (account.linkedin) {
-            window.open(`https://github.com/${account.githubUser.login}`, '_blank');
+        if (account.linkedIn) {
+            // window.open(`https://github.com/${account.githubUser.login}`, '_blank');
             return;
         }
 
@@ -97,6 +99,26 @@ const ContactsAndIntegrations = (props) => {
     }
 
     const discordChipClicked = () => {
+        if (account.discord) {
+            // window.open(`https://github.com/${account.githubUser.login}`, '_blank');
+            return;
+        }
+
+        const { address, ethersSigner } =  wallet;
+        const message = 'connect-github';
+        const signature = await ethersSigner.signMessage(message);
+
+        const auth = uuid();
+        const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=github&message=${message}&signature=${signature}`);
+
+        if (myAccount && savedResponse.status === 200) {
+            const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
+            const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/github`;
+            const state = encodeURIComponent(JSON.stringify({ address, auth }));
+            window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&allow_signup=true`;
+        } else {
+            enqueueSnackbar('Something went wrong connecting your GitHub account', { variant: 'error' });
+        }
     }
 
     return (
