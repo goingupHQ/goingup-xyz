@@ -102,7 +102,7 @@ const ContactsAndIntegrations = (props) => {
 
     const discordChipClicked = async () => {
         if (account.discord) {
-            // window.open(`https://github.com/${account.githubUser.login}`, '_blank');
+            // window.open(`https://discord.com/users/${account.discordUser.id}`, '_blank');
             return;
         }
 
@@ -175,7 +175,7 @@ const ContactsAndIntegrations = (props) => {
                                         (myAccount ? 'Connect your Twitter account' : 'not connected')
                                     }
                                     variant="outlined"
-                                    onClick={myAccount ? twitterChipClicked : null}
+                                    onClick={twitterChipClicked}
                                 />
                             </Stack>
 
@@ -195,7 +195,7 @@ const ContactsAndIntegrations = (props) => {
                                         (myAccount ? 'Connect your GitHub account' : 'not connected')
                                     }
                                     variant="outlined"
-                                    onClick={myAccount ? githubChipClicked : null}
+                                    onClick={githubChipClicked}
                                 />
                             </Stack>
 
@@ -215,7 +215,7 @@ const ContactsAndIntegrations = (props) => {
                                         (myAccount ? 'Connect your LinkedIn account' : 'not connected')
                                     }
                                     variant="outlined"
-                                    onClick={myAccount ? linkedinChipClicked : null}
+                                    onClick={linkedinChipClicked}
                                 />
                             </Stack>
 
@@ -235,7 +235,7 @@ const ContactsAndIntegrations = (props) => {
                                         (myAccount ? 'Connect your Discord account' : 'not connected')
                                     }
                                     variant="outlined"
-                                    onClick={myAccount ? discordChipClicked : null}
+                                    onClick={discordChipClicked}
                                 />
                             </Stack>
                         </CardContentWrapper>
