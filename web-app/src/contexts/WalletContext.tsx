@@ -135,7 +135,7 @@ export function WalletProvider({ children }: Props) {
                 router.push(`/profile/${userAddress}`);
             }
 
-            if (!result.hasAccount) router.push('/create-account');
+            // if (!result.hasAccount) router.push('/create-account');
         } else {
             throw(`${response.status}: ${(await response).text()}`)
         }
