@@ -1,6 +1,6 @@
-import React, { useContext, useRef, useState } from 'react';
-import { WalletContext } from '@/src/contexts/WalletContext';
-import { AppContext } from '@/src/contexts/AppContext';
+import React, { useContext, useEffect, useState } from 'react';
+import { WalletContext } from '../../src/contexts/WalletContext';
+import { AppContext } from '../../src/contexts/AppContext';
 import {
     Grid,
     Card,
@@ -18,11 +18,7 @@ import {
     CircularProgress,
     Box
 } from '@mui/material';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { LoadingButton } from '@mui/lab';
-import { useSnackbar } from 'notistack';
 import { useRouter } from 'next/router';
-import EditProfile from './edit-profile';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -31,19 +27,34 @@ const CardContentWrapper = styled(CardContent)(
 );
 
 const Poaps = (props) => {
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [poaps, setPoaps] = useState<any>([]);
+
+    const { address } = props.account;
+
+    useEffect(() => {
+        setLoading(true);
+        const url = `https://frontend.poap.tech/actions/scan/${account.address}`
+        fetch(url)
+            .then(async response => {
+                const result = await response.json();
+                console.log('poaps', result);
+                setPoaps(result);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                setLoading(false);
+            })
+    }, [])
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
-    const { enqueueSnackbar } = useSnackbar();
     const router = useRouter();
 
     const { account } = props;
     const myAccount = wallet.address === account.address;
-
-    const uploadCoverInputRef = useRef<any>(null);
-    const uploadProfileInputRef = useRef<any>(null);
-    const editProfileRef = useRef<any>(null);
 
     return (
         <>
@@ -77,13 +88,23 @@ const Poaps = (props) => {
                                 pt: 0
                             }}
                         >
+                            {loading &&
+                                <Typography variant="h3">
+                                    <CircularProgress size="2rem" />
+                                </Typography>
+                            }
 
+                            <Grid container spacing={4}>
+                            {poaps.map(p => { return (
+                                <Grid item xs={4} sm={4} md={3} lg={2} key={p.event.id}>
+                                    <img src={p.event.image_url} height={100} width={100} />
+                                </Grid>
+                            )})}
+                            </Grid>
                         </CardContentWrapper>
                     </Card>
                 </Fade>
             </Grid>
-
-            <EditProfile ref={editProfileRef} account={account} />
         </>
     )
 }
