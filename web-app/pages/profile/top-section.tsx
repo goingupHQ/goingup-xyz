@@ -260,7 +260,7 @@ const TopSection = (props) => {
                                         app.occupations.find(
                                             (o) =>
                                                 o.id == account.occupation
-                                        )?.text
+                                        )?.text || 'None'
                                     }
                                     variant="outlined"
                                 />
@@ -276,17 +276,21 @@ const TopSection = (props) => {
                                 <Typography variant="h4">
                                     Open To
                                 </Typography>
-                                {account.openTo.map((item) => (
-                                    <Chip
-                                        key={item}
-                                        label={
-                                            app.availability.find(
-                                                (a) => a.id == item
-                                            )?.text
-                                        }
-                                        variant="outlined"
-                                    />
-                                ))}
+                                {account.openTo &&
+                                <>
+                                    {account.openTo.map((item) => (
+                                        <Chip
+                                            key={item}
+                                            label={
+                                                app.availability.find(
+                                                    (a) => a.id == item
+                                                )?.text
+                                            }
+                                            variant="outlined"
+                                        />
+                                    ))}
+                                </>
+                                }
                             </Stack>
                             <Stack
                                 direction={{ xs: 'column', md: 'row' }}
@@ -299,17 +303,21 @@ const TopSection = (props) => {
                                 <Typography variant="h4">
                                     Project Goals
                                 </Typography>
-                                {account.projectGoals.map((item) => (
-                                    <Chip
-                                        key={item}
-                                        label={
-                                            app.userGoals.find(
-                                                (a) => a.id == item
-                                            )?.text
-                                        }
-                                        variant="outlined"
-                                    />
-                                ))}
+                                {account.projectGoals &&
+                                <>
+                                    {account.projectGoals.map((item) => (
+                                        <Chip
+                                            key={item}
+                                            label={
+                                                app.userGoals.find(
+                                                    (a) => a.id == item
+                                                )?.text
+                                            }
+                                            variant="outlined"
+                                        />
+                                    ))}
+                                </>
+                                }
                             </Stack>
                             <Stack
                                 direction={{ xs: 'column', md: 'row' }}
@@ -322,17 +330,21 @@ const TopSection = (props) => {
                                 <Typography variant="h4">
                                     Ideal Collaborators
                                 </Typography>
-                                {account.idealCollab.map((item) => (
-                                    <Chip
-                                        key={item}
-                                        label={
-                                            app.occupations.find(
-                                                (o) => o.id == item
-                                            )?.text
-                                        }
-                                        variant="outlined"
-                                    />
-                                ))}
+                                {account.idealCollab &&
+                                <>
+                                    {account.idealCollab.map((item) => (
+                                        <Chip
+                                            key={item}
+                                            label={
+                                                app.occupations.find(
+                                                    (o) => o.id == item
+                                                )?.text
+                                            }
+                                            variant="outlined"
+                                        />
+                                    ))}
+                                </>
+                                }
                             </Stack>
                         </CardContentWrapper>
                     </Card>

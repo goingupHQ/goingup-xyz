@@ -30,6 +30,7 @@ import { useSnackbar } from 'notistack';
 import { useRouter } from 'next/router';
 import ContactsAndIntegrations from './contacts-and-integrations';
 import { getAccount } from 'pages/api/get-account';
+import Poaps from './poaps';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -72,6 +73,7 @@ function ProfilePage() {
                 >
                     <TopSection account={account} />
                     <ContactsAndIntegrations account={account} />
+                    <Poaps account={account} />
                 </Grid>
             </>
             }

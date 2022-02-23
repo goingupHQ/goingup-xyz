@@ -170,7 +170,7 @@ const EditProfile = (props, ref) => {
                                         <MenuItem key={a.id} value={a.id}>
                                             <Checkbox
                                                 checked={
-                                                    openTo.indexOf(a.id) > -1
+                                                    openTo?.indexOf(a.id) > -1
                                                 }
                                             />
                                             <ListItemText primary={a.text} />
@@ -216,7 +216,7 @@ const EditProfile = (props, ref) => {
                                         <MenuItem key={ug.id} value={ug.id}>
                                             <Checkbox
                                                 checked={
-                                                    projectGoals.indexOf(
+                                                    projectGoals?.indexOf(
                                                         ug.id
                                                     ) > -1
                                                 }
@@ -264,7 +264,7 @@ const EditProfile = (props, ref) => {
                                         <MenuItem key={o.id} value={o.id}>
                                             <Checkbox
                                                 checked={
-                                                    idealCollab.indexOf(o.id) >
+                                                    idealCollab?.indexOf(o.id) >
                                                     -1
                                                 }
                                             />
