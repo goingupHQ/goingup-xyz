@@ -1,6 +1,6 @@
 import { AppContext } from '@/contexts/AppContext';
 import { WalletContext } from '@/contexts/WalletContext';
-import { Twitter, GitHub, LinkedIn } from '@mui/icons-material';
+import { Twitter, GitHub, LinkedIn, Email } from '@mui/icons-material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import {
@@ -19,6 +19,7 @@ import { useSnackbar } from 'notistack';
 import { useContext, useRef } from 'react';
 import { v4 as uuid } from 'uuid';
 import VerifyTwitter from './verify-twitter'
+import VerifyEmail from './verify-email';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -29,12 +30,23 @@ const CardContentWrapper = styled(CardContent)(
 const ContactsAndIntegrations = (props) => {
     const { account } = props;
     const verifyTwitterRef = useRef<any>(null);
+    const verifyEmailRef = useRef<any>(null);
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
     const { enqueueSnackbar } = useSnackbar();
 
     const myAccount = wallet.address === account.address;
+
+    const emailChipClicked = async () => {
+        if (account.email) {
+
+        } else {
+            if (myAccount) {
+                verifyEmailRef.current.showModal();
+            }
+        }
+    }
 
     const twitterChipClicked = () => {
         if (account.twitter) {
@@ -102,7 +114,7 @@ const ContactsAndIntegrations = (props) => {
 
     const discordChipClicked = async () => {
         if (account.discord) {
-            // window.open(`https://discord.com/users/${account.discordUser.id}`, '_blank');
+            window.open(`https://discord.com/users/${account.discordUser.id}`, '_blank');
             return;
         }
 
@@ -159,6 +171,26 @@ const ContactsAndIntegrations = (props) => {
                                 pt: 0
                             }}
                         >
+                            <Stack
+                                direction={{ xs: 'column', md: 'row' }}
+                                spacing={1}
+                                alignItems="center"
+                                sx={{
+                                    marginBottom: { xs: '24px', md: '8px' }
+                                }}
+                            >
+                                <Typography variant="h4">Email</Typography>
+                                <Chip
+                                    icon={(<Email fontSize="small" />)}
+                                    label={
+                                        (account.email ? `@${account.email}` : null) ||
+                                        (myAccount ? 'Connect your Email' : 'not connected')
+                                    }
+                                    variant="outlined"
+                                    onClick={emailChipClicked}
+                                />
+                            </Stack>
+
                             <Stack
                                 direction={{ xs: 'column', md: 'row' }}
                                 spacing={1}
@@ -243,6 +275,7 @@ const ContactsAndIntegrations = (props) => {
                 </Fade>
             </Grid>
             <VerifyTwitter ref={verifyTwitterRef} />
+            <VerifyEmail ref={verifyEmailRef} />
         </>
     );
 };
