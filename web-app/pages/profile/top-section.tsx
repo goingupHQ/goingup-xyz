@@ -26,6 +26,7 @@ import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { useRouter } from 'next/router';
 import EditProfile from './edit-profile';
+import ContactsAndIntegrations from './contacts-and-integrations';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -346,6 +347,7 @@ const TopSection = (props) => {
                                 </>
                                 }
                             </Stack>
+                            <ContactsAndIntegrations account={account} />
                         </CardContentWrapper>
                     </Card>
                 </Fade>

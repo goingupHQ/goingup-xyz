@@ -1,9 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import possessive from '@wardrakus/possessive';
-import { v4 as uuid } from 'uuid';
-import { WalletContext } from 'src/contexts/WalletContext';
-import { AppContext } from '@/contexts/AppContext';
 import TopNavigationLayout from 'src/layouts/TopNavigationLayout';
 import TopSection from './top-section';
 import {
@@ -72,7 +69,6 @@ function ProfilePage() {
                     spacing={3}
                 >
                     <TopSection account={account} />
-                    <ContactsAndIntegrations account={account} />
                     <Poaps account={account} />
                 </Grid>
             </>
