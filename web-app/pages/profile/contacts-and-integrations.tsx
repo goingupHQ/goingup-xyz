@@ -14,7 +14,6 @@ import {
     Stack,
     Chip
 } from '@mui/material';
-import possessive from '@wardrakus/possessive';
 import { useSnackbar } from 'notistack';
 import { useContext, useRef } from 'react';
 import { v4 as uuid } from 'uuid';
@@ -197,6 +196,8 @@ const ContactsAndIntegrations = (props) => {
                     onClick={discordChipClicked}
                 />
             </Stack>
+            <VerifyTwitter ref={verifyTwitterRef} account={account} />
+            <VerifyEmail ref={verifyEmailRef} account={account} />
         </>
     );
 };

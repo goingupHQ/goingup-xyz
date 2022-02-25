@@ -24,7 +24,6 @@ import {
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
-import { useRouter } from 'next/router';
 import EditProfile from './edit-profile';
 import ContactsAndIntegrations from './contacts-and-integrations';
 
@@ -41,7 +40,6 @@ const TopSection = (props) => {
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
     const { enqueueSnackbar } = useSnackbar();
-    const router = useRouter();
 
     const { account } = props;
     const myAccount = wallet.address === account.address;
@@ -96,7 +94,7 @@ const TopSection = (props) => {
                 })
 
                 if (response.status === 200) {
-                    router.replace(router.asPath);
+                    props.refresh();
                     const msg = photoType === 'cover-photo' ? 'Cover photo uploaded' : 'Profile photo uploaded';
                     enqueueSnackbar(msg, { variant: 'success' });
                 }
@@ -353,7 +351,7 @@ const TopSection = (props) => {
                 </Fade>
             </Grid>
 
-            <EditProfile ref={editProfileRef} account={account} />
+            <EditProfile ref={editProfileRef} account={account} refresh={props.refresh} />
         </>
     )
 }
