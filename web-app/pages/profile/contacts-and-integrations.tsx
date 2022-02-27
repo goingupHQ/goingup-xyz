@@ -27,7 +27,7 @@ const CardContentWrapper = styled(CardContent)(
 );
 
 const ContactsAndIntegrations = (props) => {
-    const { account } = props;
+    const { account, refresh } = props;
     const verifyTwitterRef = useRef<any>(null);
     const verifyEmailRef = useRef<any>(null);
 
@@ -39,7 +39,7 @@ const ContactsAndIntegrations = (props) => {
 
     const emailChipClicked = async () => {
         if (account.email) {
-
+            window.location.href = `mailto:${account.email}`;
         } else {
             if (myAccount) {
                 verifyEmailRef.current.showModal();
@@ -153,7 +153,7 @@ const ContactsAndIntegrations = (props) => {
                 <Chip
                     icon={(<Email fontSize="small" />)}
                     label={
-                        (account.email ? `@${account.email}` : null) ||
+                        account.email ||
                         (myAccount ? 'Connect your Email' : 'not connected')
                     }
                     variant="outlined"
@@ -197,7 +197,7 @@ const ContactsAndIntegrations = (props) => {
                 />
             </Stack>
             <VerifyTwitter ref={verifyTwitterRef} account={account} />
-            <VerifyEmail ref={verifyEmailRef} account={account} />
+            <VerifyEmail ref={verifyEmailRef} account={account} refresh={refresh} />
         </>
     );
 };

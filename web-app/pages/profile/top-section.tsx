@@ -345,7 +345,7 @@ const TopSection = (props) => {
                                 </>
                                 }
                             </Stack>
-                            <ContactsAndIntegrations account={account} />
+                            <ContactsAndIntegrations account={account} refresh={props.refresh} />
                         </CardContentWrapper>
                     </Card>
                 </Fade>
