@@ -14,7 +14,6 @@ import {
     Stack,
     Chip
 } from '@mui/material';
-import possessive from '@wardrakus/possessive';
 import { useSnackbar } from 'notistack';
 import { useContext, useRef } from 'react';
 import { v4 as uuid } from 'uuid';
@@ -28,7 +27,7 @@ const CardContentWrapper = styled(CardContent)(
 );
 
 const ContactsAndIntegrations = (props) => {
-    const { account } = props;
+    const { account, refresh } = props;
     const verifyTwitterRef = useRef<any>(null);
     const verifyEmailRef = useRef<any>(null);
 
@@ -40,7 +39,7 @@ const ContactsAndIntegrations = (props) => {
 
     const emailChipClicked = async () => {
         if (account.email) {
-
+            window.location.href = `mailto:${account.email}`;
         } else {
             if (myAccount) {
                 verifyEmailRef.current.showModal();
@@ -140,142 +139,65 @@ const ContactsAndIntegrations = (props) => {
 
     return (
         <>
-            <Grid item xs={12}>
-                <Fade in={true} timeout={1000}>
-                    <Card
-                        sx={{
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            marginTop: { xs: '2rem', md: '3rem' }
-                        }}
-                    >
-                        <CardHeader
-                            sx={{
-                                px: 3,
-                                pt: 3,
-                                alignItems: 'flex-start'
-                            }}
-                            title={
-                                <>
-                                    <Typography variant="h1">
-                                        {possessive(account.name)} Contacts and
-                                        Integrations
-                                    </Typography>
-                                </>
-                            }
-                        />
-                        <CardContentWrapper
-                            sx={{
-                                px: 3,
-                                pt: 0
-                            }}
-                        >
-                            <Stack
-                                direction={{ xs: 'column', md: 'row' }}
-                                spacing={1}
-                                alignItems="center"
-                                sx={{
-                                    marginBottom: { xs: '24px', md: '8px' }
-                                }}
-                            >
-                                <Typography variant="h4">Email</Typography>
-                                <Chip
-                                    icon={(<Email fontSize="small" />)}
-                                    label={
-                                        (account.email ? `@${account.email}` : null) ||
-                                        (myAccount ? 'Connect your Email' : 'not connected')
-                                    }
-                                    variant="outlined"
-                                    onClick={emailChipClicked}
-                                />
-                            </Stack>
-
-                            <Stack
-                                direction={{ xs: 'column', md: 'row' }}
-                                spacing={1}
-                                alignItems="center"
-                                sx={{
-                                    marginBottom: { xs: '24px', md: '8px' }
-                                }}
-                            >
-                                <Typography variant="h4">Twitter</Typography>
-                                <Chip
-                                    icon={(<Twitter fontSize="small" />)}
-                                    label={
-                                        (account.twitter ? `@${account.twitter}` : null) ||
-                                        (myAccount ? 'Connect your Twitter account' : 'not connected')
-                                    }
-                                    variant="outlined"
-                                    onClick={twitterChipClicked}
-                                />
-                            </Stack>
-
-                            <Stack
-                                direction={{ xs: 'column', md: 'row' }}
-                                spacing={1}
-                                alignItems="center"
-                                sx={{
-                                    marginBottom: { xs: '24px', md: '8px' }
-                                }}
-                            >
-                                <Typography variant="h4">Github</Typography>
-                                <Chip
-                                    icon={(<GitHub fontSize="small" />)}
-                                    label={
-                                        account.github ||
-                                        (myAccount ? 'Connect your GitHub account' : 'not connected')
-                                    }
-                                    variant="outlined"
-                                    onClick={githubChipClicked}
-                                />
-                            </Stack>
-
-                            <Stack
-                                direction={{ xs: 'column', md: 'row' }}
-                                spacing={1}
-                                alignItems="center"
-                                sx={{
-                                    marginBottom: { xs: '24px', md: '8px' }
-                                }}
-                            >
-                                <Typography variant="h4">LinkedIn</Typography>
-                                <Chip
-                                    icon={(<LinkedIn fontSize="small" />)}
-                                    label={
-                                        account.linkedIn ||
-                                        (myAccount ? 'Connect your LinkedIn account' : 'not connected')
-                                    }
-                                    variant="outlined"
-                                    onClick={linkedinChipClicked}
-                                />
-                            </Stack>
-
-                            <Stack
-                                direction={{ xs: 'column', md: 'row' }}
-                                spacing={1}
-                                alignItems="center"
-                                sx={{
-                                    marginBottom: { xs: '24px', md: '8px' }
-                                }}
-                            >
-                                <Typography variant="h4">Discord</Typography>
-                                <Chip
-                                    icon={(<FontAwesomeIcon icon={faDiscord} />)}
-                                    label={
-                                        account.discord ||
-                                        (myAccount ? 'Connect your Discord account' : 'not connected')
-                                    }
-                                    variant="outlined"
-                                    onClick={discordChipClicked}
-                                />
-                            </Stack>
-                        </CardContentWrapper>
-                    </Card>
-                </Fade>
-            </Grid>
-            <VerifyTwitter ref={verifyTwitterRef} />
-            <VerifyEmail ref={verifyEmailRef} />
+            <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                spacing={1}
+                alignItems="center"
+                // sx={{
+                //     marginBottom: { xs: '24px', md: '8px' }
+                // }}
+            >
+                <Typography variant="h4">
+                    Contacts &amp; Profiles
+                </Typography>
+                <Chip
+                    icon={(<Email fontSize="small" />)}
+                    label={
+                        account.email ||
+                        (myAccount ? 'Connect your Email' : 'not connected')
+                    }
+                    variant="outlined"
+                    onClick={emailChipClicked}
+                />
+                <Chip
+                    icon={(<Twitter fontSize="small" />)}
+                    label={
+                        (account.twitter ? `@${account.twitter}` : null) ||
+                        (myAccount ? 'Connect your Twitter account' : 'not connected')
+                    }
+                    variant="outlined"
+                    onClick={twitterChipClicked}
+                />
+                <Chip
+                    icon={(<GitHub fontSize="small" />)}
+                    label={
+                        account.github ||
+                        (myAccount ? 'Connect your GitHub account' : 'not connected')
+                    }
+                    variant="outlined"
+                    onClick={githubChipClicked}
+                />
+                <Chip
+                    icon={(<LinkedIn fontSize="small" />)}
+                    label={
+                        account.linkedIn ||
+                        (myAccount ? 'Connect your LinkedIn account' : 'not connected')
+                    }
+                    variant="outlined"
+                    onClick={linkedinChipClicked}
+                />
+                <Chip
+                    icon={(<FontAwesomeIcon icon={faDiscord} />)}
+                    label={
+                        account.discord ||
+                        (myAccount ? 'Connect your Discord account' : 'not connected')
+                    }
+                    variant="outlined"
+                    onClick={discordChipClicked}
+                />
+            </Stack>
+            <VerifyTwitter ref={verifyTwitterRef} account={account} />
+            <VerifyEmail ref={verifyEmailRef} account={account} refresh={refresh} />
         </>
     );
 };

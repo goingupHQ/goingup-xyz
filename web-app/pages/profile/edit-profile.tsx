@@ -17,7 +17,6 @@ import {
     Select,
     TextField
 } from '@mui/material';
-import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { forwardRef, useContext, useImperativeHandle, useState } from 'react';
 
@@ -35,7 +34,6 @@ const EditProfile = (props, ref) => {
     const wallet = useContext(WalletContext);
     const appContext = useContext(AppContext);
     const { availability, occupations, userGoals } = appContext;
-    const router = useRouter();
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -77,9 +75,9 @@ const EditProfile = (props, ref) => {
 
             if (response.status === 200) {
                 enqueueSnackbar('Profile changes saved', { variant: 'success' });
-                router.replace(router.asPath);
+                props.refresh();
                 setOpen(false);
-            } else {
+            } else if (response.status >= 400) {
                 enqueueSnackbar('Failed to save profile changes', { variant: 'error' });
             }
         } catch (err) {

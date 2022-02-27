@@ -1,35 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import possessive from '@wardrakus/possessive';
-import { v4 as uuid } from 'uuid';
-import { WalletContext } from 'src/contexts/WalletContext';
-import { AppContext } from '@/contexts/AppContext';
 import TopNavigationLayout from 'src/layouts/TopNavigationLayout';
 import TopSection from './top-section';
 import {
     Grid,
-    Card,
-    CardHeader,
     CardContent,
-    Typography,
     styled,
-    Button,
-    Fade,
-    Stack,
-    Chip,
-    CardMedia,
-    CardActions,
-    Avatar,
-    IconButton,
-    Input,
-    CircularProgress
 } from '@mui/material';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { LoadingButton } from '@mui/lab';
-import { useSnackbar } from 'notistack';
 import { useRouter } from 'next/router';
-import ContactsAndIntegrations from './contacts-and-integrations';
-import { getAccount } from 'pages/api/get-account';
 import Poaps from './poaps';
 
 const CardContentWrapper = styled(CardContent)(
@@ -44,15 +23,15 @@ function ProfilePage() {
     const { address } = router.query;
     console.log(router.query)
 
-    useEffect(() => {
+    const getAccount = async () => {
         if (address) {
-            const response = fetch(
-                `/api/get-account?address=${address}`
-            ).then(async response => {
-                setAccount(await response.json());
-            });
+            const response = await fetch(`/api/get-account?address=${address}`);
+            setAccount(await response.json());
         }
+    }
 
+    useEffect(() => {
+        getAccount();
     }, [address])
 
     return (
@@ -71,9 +50,8 @@ function ProfilePage() {
                     alignItems="stretch"
                     spacing={3}
                 >
-                    <TopSection account={account} />
-                    <ContactsAndIntegrations account={account} />
-                    <Poaps account={account} />
+                    <TopSection account={account} refresh={getAccount} />
+                    <Poaps account={account} refresh={getAccount} />
                 </Grid>
             </>
             }
