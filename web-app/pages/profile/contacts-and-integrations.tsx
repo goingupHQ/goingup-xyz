@@ -77,7 +77,7 @@ const ContactsAndIntegrations = (props) => {
 
             if (savedResponse.status === 200) {
                 const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
-                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/github`;
+                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/github`; console.log(redirectUri);
                 const state = encodeURIComponent(JSON.stringify({ address, auth }));
                 window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&allow_signup=true`;
             } else {
@@ -101,7 +101,7 @@ const ContactsAndIntegrations = (props) => {
 
             if (savedResponse.status === 200) {
                 const clientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
-                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/linkedin`;
+                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/linkedin`; console.log(redirectUri);
                 const state = encodeURIComponent(JSON.stringify({ address, auth }));
                 const scope = encodeURIComponent('r_liteprofile r_emailaddress');
                 window.location.href = `https://www.linkedin.com/oauth/v2/authorization?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
@@ -127,7 +127,7 @@ const ContactsAndIntegrations = (props) => {
 
             if (savedResponse.status === 200) {
                 const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID;
-                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/discord`;
+                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/discord`; console.log(redirectUri);
                 const state = encodeURIComponent(JSON.stringify({ address, auth }));
                 const scope = encodeURIComponent('email identify');
                 window.location.href = `https://discord.com/api/oauth2/authorize?response_type=code&client_id=${clientId}&scope=${scope}&state=${state}&redirect_uri=${redirectUri}&prompt=consent`;
