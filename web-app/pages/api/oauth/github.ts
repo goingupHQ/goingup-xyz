@@ -29,7 +29,7 @@ export default async function handler(req, res) {
                 }
             });
 
-            const user = await userResponse.json();
+            const user = await userResponse.json(); console.log('github user', user);
 
             await db.collection('accounts').updateOne({
                 address: parsed.address
