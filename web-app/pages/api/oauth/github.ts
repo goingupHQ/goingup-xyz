@@ -35,7 +35,7 @@ export default async function handler(req, res) {
                 address: parsed.address
             }, {
                 $set: {
-                    github: user.name,
+                    github: user.login,
                     githubUser: user
                 }
             })
