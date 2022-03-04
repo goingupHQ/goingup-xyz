@@ -7,7 +7,7 @@ import menuItems, { MenuItem } from './items';
 import { useTranslation } from 'react-i18next';
 
 const MenuWrapper = styled(Box)(
-  ({ theme }) => `
+    ({ theme }) => `
     .MuiList-root {
       margin-bottom: ${theme.spacing(1.5)};
       padding: 0;
@@ -29,7 +29,7 @@ const MenuWrapper = styled(Box)(
 );
 
 const SubMenuWrapper = styled(Box)(
-  ({ theme }) => `
+    ({ theme }) => `
     .MuiList-root {
 
       .MuiListItem-root {
@@ -49,7 +49,7 @@ const SubMenuWrapper = styled(Box)(
             color: ${theme.palette.primary.contrastText};
           }
         }
-    
+
         .MuiButton-root {
           display: flex;
           color: ${theme.sidebar.menuItemColor};
@@ -61,7 +61,7 @@ const SubMenuWrapper = styled(Box)(
           border-top-left-radius: 0;
           border-bottom-right-radius: 50px;
           border-top-right-radius: 50px;
-    
+
           .MuiButton-startIcon,
           .MuiButton-endIcon {
             transition: ${theme.transitions.create(['color'])};
@@ -77,7 +77,7 @@ const SubMenuWrapper = styled(Box)(
             margin-right: ${theme.spacing(1)};
             color: ${theme.sidebar.menuItemIconColor};
           }
-          
+
           .MuiButton-endIcon {
             margin-left: auto;
             opacity: .8;
@@ -142,100 +142,103 @@ const SubMenuWrapper = styled(Box)(
 );
 
 const renderSidebarMenuItems = ({
-  items,
-  path
+    items,
+    path
 }: {
-  items: MenuItem[];
-  path: string;
+    items: MenuItem[];
+    path: string;
 }): JSX.Element => (
-  <SubMenuWrapper>
-    <List component="div">
-      {items.reduce((ev, item) => reduceChildRoutes({ ev, item, path }), [])}
-    </List>
-  </SubMenuWrapper>
+    <SubMenuWrapper>
+        <List component="div">
+            {items.reduce(
+                (ev, item) => reduceChildRoutes({ ev, item, path }),
+                []
+            )}
+        </List>
+    </SubMenuWrapper>
 );
 
 const reduceChildRoutes = ({
-  ev,
-  path,
-  item
+    ev,
+    path,
+    item
 }: {
-  ev: JSX.Element[];
-  path: string;
-  item: MenuItem;
+    ev: JSX.Element[];
+    path: string;
+    item: MenuItem;
 }): Array<JSX.Element> => {
-  const key = item.name;
-  const partialMatch = path.includes(item.link);
-  const exactMatch = path === item.link;
+    const key = item.name;
+    const partialMatch = path.includes(item.link);
+    const exactMatch = path === item.link;
 
-  if (item.items) {
-    ev.push(
-      <SidebarMenuItem
-        key={key}
-        active={partialMatch}
-        open={partialMatch}
-        name={item.name}
-        icon={item.icon}
-        link={item.link}
-        badge={item.badge}
-        badgeTooltip={item.badgeTooltip}
-      >
-        {renderSidebarMenuItems({
-          path,
-          items: item.items
-        })}
-      </SidebarMenuItem>
-    );
-  } else {
-    ev.push(
-      <SidebarMenuItem
-        key={key}
-        active={exactMatch}
-        name={item.name}
-        link={item.link}
-        badge={item.badge}
-        badgeTooltip={item.badgeTooltip}
-        icon={item.icon}
-      />
-    );
-  }
+    if (item.items) {
+        ev.push(
+            <SidebarMenuItem
+                key={key}
+                active={partialMatch}
+                open={partialMatch}
+                name={item.name}
+                icon={item.icon}
+                link={item.link}
+                badge={item.badge}
+                badgeTooltip={item.badgeTooltip}
+            >
+                {renderSidebarMenuItems({
+                    path,
+                    items: item.items
+                })}
+            </SidebarMenuItem>
+        );
+    } else {
+        ev.push(
+            <SidebarMenuItem
+                key={key}
+                active={exactMatch}
+                name={item.name}
+                link={item.link}
+                badge={item.badge}
+                badgeTooltip={item.badgeTooltip}
+                icon={item.icon}
+            />
+        );
+    }
 
-  return ev;
+    return ev;
 };
 
 function SidebarMenu() {
-  const { t }: { t: any } = useTranslation();
-  const router = useRouter();
+    const { t }: { t: any } = useTranslation();
+    const router = useRouter();
 
-  const handlePathChange = () => {
-    if (!router.isReady) {
-      return;
-    }
-  };
+    const handlePathChange = () => {
+        if (!router.isReady) {
+            return;
+        }
+    };
 
-  useEffect(handlePathChange, [router.isReady, router.asPath]);
+    useEffect(handlePathChange, [router.isReady, router.asPath]);
 
-  return (
-    <>
-      {menuItems.map((section) => (
-        <MenuWrapper key={section.heading}>
-          <List
-            component="div"
-            subheader={
-              <ListSubheader component="div" disableSticky>
-                {t(section.heading)}
-              </ListSubheader>
-            }
-          >
-            {renderSidebarMenuItems({
-              items: section.items,
-              path: router.asPath
-            })}
-          </List>
-        </MenuWrapper>
-      ))}
-    </>
-  );
+    return (
+        <>
+            {menuItems.map((section) => (
+                <MenuWrapper key={section.heading}>
+                    <List
+                        component="div"
+                        subheader={
+                            <ListSubheader component="div" disableSticky>
+                                {t(section.heading)}
+                            </ListSubheader>
+                        }
+                    >
+                        {renderSidebarMenuItems({
+                            items: section.items,
+                            path: router.asPath
+                        })}
+                    </List>
+                </MenuWrapper>
+            ))}
+        </>
+    );
 }
 
 export default SidebarMenu;

@@ -21,7 +21,7 @@ function Logo() {
                     <img src="/static/images/logo/goingup-arrow.svg" style={{ height: '2.2rem' }} />
                     }
 
-                    {useMediaQuery(theme.breakpoints.up('md')) &&
+                    {useMediaQuery(theme.breakpoints.up('sm')) &&
                     <img src="/static/images/logo/goingup.svg" style={{ height: '3rem' }} />
                     }
                 </>

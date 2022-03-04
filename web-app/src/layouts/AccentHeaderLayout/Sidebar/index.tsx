@@ -50,9 +50,6 @@ function Sidebar() {
         }}
       >
         <Scrollbar>
-          <TopSection>
-            <SidebarTopSection />
-          </TopSection>
           <SidebarMenu />
         </Scrollbar>
       </SidebarWrapper>
@@ -68,7 +65,7 @@ function Sidebar() {
       >
         <SidebarWrapper>
           <Scrollbar>
-            <TopSection>
+            {/* <TopSection>
               <Box
                 sx={{
                   width: 52,
@@ -80,7 +77,7 @@ function Sidebar() {
                 <Logo />
               </Box>
               <SidebarTopSection />
-            </TopSection>
+            </TopSection> */}
             <SidebarMenu />
           </Scrollbar>
         </SidebarWrapper>
