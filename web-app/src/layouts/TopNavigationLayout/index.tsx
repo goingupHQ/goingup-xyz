@@ -99,7 +99,7 @@ const TopNavigationLayout: FC<TopNavigationLayoutProps> = ({ children }) => {
                 <TopBar />
                 <MainContent maxWidth="xl"
                     sx={{
-                        padding: { xs: 1, sm: 1, md: 3, lg: 6, xl: 9 }
+                        paddingX: { xs: 1, sm: 1, md: 3, lg: 6, xl: 9 }
                     }}
                 >
                     <Box
