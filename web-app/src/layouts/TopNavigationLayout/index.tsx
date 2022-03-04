@@ -123,7 +123,7 @@ const TopNavigationLayout: FC<TopNavigationLayoutProps> = ({ children }) => {
                     >
                         <SidebarWrapper>
                             <Scrollbar>
-                                <TopSection>
+                                {/* <TopSection>
                                     <Box
                                         sx={{
                                             width: 52,
@@ -135,7 +135,7 @@ const TopNavigationLayout: FC<TopNavigationLayoutProps> = ({ children }) => {
                                         <Logo />
                                     </Box>
                                     <SidebarTopSection />
-                                </TopSection>
+                                </TopSection> */}
                                 <SidebarMenu />
                             </Scrollbar>
                         </SidebarWrapper>
