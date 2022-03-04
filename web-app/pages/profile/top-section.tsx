@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import possessive from '@wardrakus/possessive';
 import { v4 as uuid } from 'uuid';
 import { WalletContext } from 'src/contexts/WalletContext';
@@ -36,6 +36,8 @@ const CardContentWrapper = styled(CardContent)(
 const TopSection = (props) => {
     const [uploadingCover, setUploadingCover] = useState<boolean>(false);
     const [uploadingProfile, setUploadingProfile] = useState<boolean>(false);
+    const [following, setFollowing] = useState<boolean>(false);
+    const [checkingRel, setCheckingRel] = useState<boolean>(true);
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
@@ -118,6 +120,55 @@ const TopSection = (props) => {
         }
     };
 
+    useEffect(() => {
+        if (wallet.address) {
+            setCheckingRel(true);
+            fetch(`/api/get-rel?address=${wallet.address}&target=${account.address}`)
+                .then(async response => {
+                    const result = await response.json();
+                    setFollowing(result.following);
+                })
+                .finally(() => setCheckingRel(false));
+        }
+    }, [wallet.address, account.address]);
+
+    const follow = async () => {
+        if (!wallet.address) {
+            enqueueSnackbar(`Connect your wallet to follow ${account.name}`, { variant: 'info' });
+            return;
+        }
+
+        const { address, ethersSigner } = wallet;
+        const message = 'follow';
+        const signature = await ethersSigner.signMessage(message);
+
+        const response =
+            await fetch(`/api/follow?address=${address}&follows=${account.address}&signature=${signature}`);
+
+        if (response.status === 200) {
+            enqueueSnackbar(`You are now following ${account.name}`, {variant: 'success'});
+            setFollowing(true);
+        } else {
+            enqueueSnackbar(`Could not follow ${account.name}`, {variant: 'error'});
+        }
+    }
+
+    const unfollow = async () => {
+        const { address, ethersSigner } = wallet;
+        const message = 'unfollow';
+        const signature = await ethersSigner.signMessage(message);
+
+        const response =
+            await fetch(`/api/unfollow?address=${address}&follows=${account.address}&signature=${signature}`);
+
+        if (response.status === 200) {
+            enqueueSnackbar(`You have unfollowed ${account.name}`, {variant: 'success'});
+            setFollowing(false);
+        } else {
+            enqueueSnackbar(`Could not unfollow ${account.name}`, {variant: 'error'});
+        }
+    }
+
     return (
         <>
             <Grid item xs={12}>
@@ -182,67 +233,102 @@ const TopSection = (props) => {
                                 variant="rounded"
                             ></Avatar>
                             {myAccount && (
-                                <>
-                                    <input
-                                        ref={uploadCoverInputRef}
-                                        accept="image/*"
-                                        id="contained-button-file"
-                                        type="file"
-                                        style={{ display: 'none' }}
-                                        onChange={e => { uploadPhoto(e, 'cover-photo') }}
-                                    />
-                                    <LoadingButton
-                                        color="primary"
-                                        variant="outlined"
-                                        size="small"
-                                        loading={uploadingCover}
-                                        loadingIndicator="Uploading..."
-                                        sx={{
-                                            position: 'absolute',
-                                            right: 36,
-                                            top: 10
-                                        }}
-                                        onClick={() => {
-                                            uploadCoverInputRef.current.click();
-                                        }}
-                                    >
-                                        Change cover photo
-                                    </LoadingButton>
+                            <>
+                                <input
+                                    ref={uploadCoverInputRef}
+                                    accept="image/*"
+                                    id="contained-button-file"
+                                    type="file"
+                                    style={{ display: 'none' }}
+                                    onChange={e => { uploadPhoto(e, 'cover-photo') }}
+                                />
+                                <LoadingButton
+                                    color="primary"
+                                    variant="outlined"
+                                    size="small"
+                                    loading={uploadingCover}
+                                    loadingIndicator="Uploading..."
+                                    sx={{
+                                        position: 'absolute',
+                                        right: 36,
+                                        top: 10
+                                    }}
+                                    onClick={() => {
+                                        uploadCoverInputRef.current.click();
+                                    }}
+                                >
+                                    Change cover photo
+                                </LoadingButton>
 
-                                    <input
-                                        ref={uploadProfileInputRef}
-                                        accept="image/*"
-                                        id="contained-button-file"
-                                        type="file"
-                                        style={{ display: 'none' }}
-                                        onChange={e => { uploadPhoto(e, 'profile-photo') }}
-                                    />
-                                    <IconButton
-                                        disabled={uploadingProfile}
-                                        color="primary"
-                                        sx={{
-                                            position: 'absolute',
-                                            left: 150,
-                                            top: 200
-                                        }}
-                                        onClick={() => {
-                                            uploadProfileInputRef.current.click();
-                                        }}
-                                    >
-                                        {uploadingProfile &&
-                                        <CircularProgress size="20px" />
-                                        }
-                                        {!uploadingProfile &&
-                                        <FileUploadIcon />
-                                        }
-                                    </IconButton>
+                                <input
+                                    ref={uploadProfileInputRef}
+                                    accept="image/*"
+                                    id="contained-button-file"
+                                    type="file"
+                                    style={{ display: 'none' }}
+                                    onChange={e => { uploadPhoto(e, 'profile-photo') }}
+                                />
+                                <IconButton
+                                    disabled={uploadingProfile}
+                                    color="primary"
+                                    sx={{
+                                        position: 'absolute',
+                                        left: 150,
+                                        top: 200
+                                    }}
+                                    onClick={() => {
+                                        uploadProfileInputRef.current.click();
+                                    }}
+                                >
+                                    {uploadingProfile &&
+                                    <CircularProgress size="20px" />
+                                    }
+                                    {!uploadingProfile &&
+                                    <FileUploadIcon />
+                                    }
+                                </IconButton>
+                                <Box display="flex" sx={{ marginBottom: 2 }} justifyContent={{ xs: 'center', md:'initial' }}>
+                                    <Button color="primary" variant="contained" onClick={() => { editProfileRef.current.showModal() }}>
+                                        Edit My GoingUP Profile
+                                    </Button>
+                                </Box>
+                            </>
+                            )}
+
+                            {!myAccount &&
+                            <>
+                                {checkingRel &&
+                                <CircularProgress />
+                                }
+
+                                {!checkingRel &&
+                                <>
                                     <Box display="flex" sx={{ marginBottom: 2 }} justifyContent={{ xs: 'center', md:'initial' }}>
-                                        <Button color="primary" variant="contained" onClick={() => { editProfileRef.current.showModal() }}>
-                                            Edit My GoingUP Profile
+                                        {!following &&
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={follow}
+                                        >
+                                            Follow
                                         </Button>
+                                        }
+
+                                        {following &&
+                                        <Button
+                                            variant="outlined"
+                                            color="secondary"
+                                            onClick={unfollow}
+                                        >
+                                            Unfollow
+                                        </Button>
+                                        }
                                     </Box>
                                 </>
-                            )}
+                                }
+                            </>
+                            }
+
                             <Stack
                                 direction={{ xs: 'column', md: 'row' }}
                                 spacing={1}
@@ -345,7 +431,7 @@ const TopSection = (props) => {
                                 </>
                                 }
                             </Stack>
-                            <ContactsAndIntegrations account={account} />
+                            <ContactsAndIntegrations account={account} refresh={props.refresh} />
                         </CardContentWrapper>
                     </Card>
                 </Fade>

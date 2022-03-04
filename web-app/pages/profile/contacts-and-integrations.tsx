@@ -27,7 +27,7 @@ const CardContentWrapper = styled(CardContent)(
 );
 
 const ContactsAndIntegrations = (props) => {
-    const { account } = props;
+    const { account, refresh } = props;
     const verifyTwitterRef = useRef<any>(null);
     const verifyEmailRef = useRef<any>(null);
 
@@ -39,7 +39,7 @@ const ContactsAndIntegrations = (props) => {
 
     const emailChipClicked = async () => {
         if (account.email) {
-
+            window.location.href = `mailto:${account.email}`;
         } else {
             if (myAccount) {
                 verifyEmailRef.current.showModal();
@@ -77,7 +77,7 @@ const ContactsAndIntegrations = (props) => {
 
             if (savedResponse.status === 200) {
                 const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
-                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/github`;
+                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/github`; console.log(redirectUri);
                 const state = encodeURIComponent(JSON.stringify({ address, auth }));
                 window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&allow_signup=true`;
             } else {
@@ -101,7 +101,7 @@ const ContactsAndIntegrations = (props) => {
 
             if (savedResponse.status === 200) {
                 const clientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
-                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/linkedin`;
+                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/linkedin`; console.log(redirectUri);
                 const state = encodeURIComponent(JSON.stringify({ address, auth }));
                 const scope = encodeURIComponent('r_liteprofile r_emailaddress');
                 window.location.href = `https://www.linkedin.com/oauth/v2/authorization?client_id=${clientId}&state=${state}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
@@ -127,7 +127,7 @@ const ContactsAndIntegrations = (props) => {
 
             if (savedResponse.status === 200) {
                 const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID;
-                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/discord`;
+                const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/oauth/discord`; console.log(redirectUri);
                 const state = encodeURIComponent(JSON.stringify({ address, auth }));
                 const scope = encodeURIComponent('email identify');
                 window.location.href = `https://discord.com/api/oauth2/authorize?response_type=code&client_id=${clientId}&scope=${scope}&state=${state}&redirect_uri=${redirectUri}&prompt=consent`;
@@ -153,7 +153,7 @@ const ContactsAndIntegrations = (props) => {
                 <Chip
                     icon={(<Email fontSize="small" />)}
                     label={
-                        (account.email ? `@${account.email}` : null) ||
+                        account.email ||
                         (myAccount ? 'Connect your Email' : 'not connected')
                     }
                     variant="outlined"
@@ -197,7 +197,7 @@ const ContactsAndIntegrations = (props) => {
                 />
             </Stack>
             <VerifyTwitter ref={verifyTwitterRef} account={account} />
-            <VerifyEmail ref={verifyEmailRef} account={account} />
+            <VerifyEmail ref={verifyEmailRef} account={account} refresh={refresh} />
         </>
     );
 };

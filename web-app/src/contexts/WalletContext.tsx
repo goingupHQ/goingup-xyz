@@ -2,13 +2,11 @@ import {
     ReactNode,
     useState,
     createContext,
-    useEffect,
-    useContext
+    useEffect
 } from 'react';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
-import { AppContext } from './AppContext';
 import { useSnackbar } from 'notistack';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
@@ -63,7 +61,6 @@ const networks = {
 let web3Modal;
 export function WalletProvider({ children }: Props) {
     const router = useRouter();
-    const app = useContext(AppContext);
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
