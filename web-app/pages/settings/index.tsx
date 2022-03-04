@@ -25,7 +25,7 @@ function CreateAccount() {
     return (
         <>
             <Head>
-                <title>Dashboard</title>
+                <title>Settings</title>
             </Head>
             <Grid
                 sx={{ px: { xs: 2, md: 4} }}
@@ -54,7 +54,7 @@ function CreateAccount() {
                                 title={
                                     <>
                                         <Typography variant="h1">
-                                            Dashboard
+                                            Settings
                                         </Typography>
                                     </>
                                 }
