@@ -66,6 +66,7 @@ function MyApp(props: MyAppProps) {
                             vertical: 'bottom',
                             horizontal: 'right'
                         }}
+                        preventDuplicate
                     >
                         <AppProvider>
                             <WalletProvider>
