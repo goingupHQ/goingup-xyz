@@ -12,12 +12,7 @@ import {
     Button,
     Fade
 } from '@mui/material';
-
-const CardContentWrapper = styled(CardContent)(
-    () => `
-        position: relative;
-  `
-);
+import PotentialCollaborators from './potential-collaborators';
 
 function CreateAccount() {
     const wallet = useContext(WalletContext);
@@ -28,47 +23,22 @@ function CreateAccount() {
                 <title>Dashboard</title>
             </Head>
             <Grid
-                sx={{ px: { xs: 2, md: 4} }}
+                sx={{ px: { xs: 2, md: 4 } }}
                 container
                 direction="row"
                 justifyContent="center"
                 alignItems="stretch"
                 spacing={3}
             >
-                <Grid item xs={12}>
-                    <Fade in={true} timeout={1000}>
-                        <Card
-                            sx={{
-                                height: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                marginTop: { xs: '2rem', md:'3rem'}
-                            }}
-                        >
-                            <CardHeader
-                                sx={{
-                                    px: 3,
-                                    pt: 3,
-                                    alignItems: 'flex-start'
-                                }}
-                                title={
-                                    <>
-                                        <Typography variant="h1">
-                                            Dashboard
-                                        </Typography>
-                                    </>
-                                }
-                            />
-                            <CardContentWrapper
-                                sx={{
-                                    px: 3,
-                                    pt: 0
-                                }}
-                            >
-                            </CardContentWrapper>
-                        </Card>
-                    </Fade>
-                </Grid>
+                <Fade in={true} timeout={1000}>
+                    <Grid item xs={12}>
+                        <PotentialCollaborators />
+                    </Grid>
+                    {/* <Grid item xs={12} md={6}>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                    </Grid> */}
+                </Fade>
             </Grid>
         </>
     );
