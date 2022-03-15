@@ -2,7 +2,7 @@ import { getDb } from './_get-db-client';
 
 export default async function handler(req, res) {
     const { open_to, count } = req.query;
-    const parsed = open_to ? open_to.split() : [];
+    const parsed = open_to ? open_to.split(',') : [];
     const openToArray = parsed.map(i => parseInt(i));
 
     const db = await getDb();
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
     const queryResults = await accounts.aggregate([
         {$match: query},
-        {$sample: {size: parseInt(count) || 5}}
+        {$sample: {size: parseInt(count) || 6}}
     ]).toArray();
 
     res.json(queryResults);

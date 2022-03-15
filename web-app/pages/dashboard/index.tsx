@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Head from 'next/head';
 import { WalletContext } from 'src/contexts/WalletContext';
 import TopNavigationLayout from 'src/layouts/TopNavigationLayout';
@@ -13,9 +13,16 @@ import {
     Fade
 } from '@mui/material';
 import PotentialCollaborators from './potential-collaborators';
+import { AppContext } from '@/contexts/AppContext';
+import Collaborators from './collaborators';
 
 function CreateAccount() {
     const wallet = useContext(WalletContext);
+    const app = useContext(AppContext);
+
+    useEffect(() => {
+        console.log(app);
+    },[]);
 
     return (
         <>
@@ -30,15 +37,14 @@ function CreateAccount() {
                 alignItems="stretch"
                 spacing={3}
             >
-                <Fade in={true} timeout={1000}>
-                    <Grid item xs={12}>
-                        <PotentialCollaborators />
-                    </Grid>
-                    {/* <Grid item xs={12} md={6}>
-                    </Grid>
+                <Grid item xs={12}>
+                    <PotentialCollaborators />
+                </Grid>
+                {app?.availability.map(item => {return (
                     <Grid item xs={12} md={6}>
-                    </Grid> */}
-                </Fade>
+                        <Collaborators availabilityId={item.id} />
+                    </Grid>
+                )})}
             </Grid>
         </>
     );

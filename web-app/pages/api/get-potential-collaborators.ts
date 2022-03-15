@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
     const queryResults = await accounts.aggregate([
         {$match: query},
-        {$sample: {size: 5}}
+        {$sample: {size: 6}}
     ]).toArray();
 
     res.json(queryResults);

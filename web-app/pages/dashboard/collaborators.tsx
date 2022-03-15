@@ -11,20 +11,24 @@ const CardContentWrapper = styled(CardContent)(
   `
 );
 
-export default function PotentialCollaborators(props) {
+export default function Collaborators(props) {
+    const { availabilityId } = props;
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
     const [data, setData] = useState([]);
+    const availability = app.availability.find(a => a.id === availabilityId);
 
     useEffect(() => {
         if (!wallet.address) return;
-        fetch(`/api/get-potential-collaborators?address=${wallet.address}`)
+
+
+        fetch(`/api/collaborators?open_to=${availabilityId}&count=8`)
             .then(async response => {
                 const result = await response.json();
                 console.log(result);
                 setData(result);
             });
-    }, [wallet.address]);
+    }, [wallet.address, availabilityId]);
 
     return (
         <>
@@ -44,12 +48,8 @@ export default function PotentialCollaborators(props) {
                     }}
                     title={
                         <>
-                            <Typography variant="h3">
-                                Potential Collaborators
-                            </Typography>
-                            <Typography variant="subtitle1">
-                                Based on your interest you could
-                                collaborate with them
+                            <Typography variant="h6">
+                                Collaborators interested in {availability.text}
                             </Typography>
                         </>
                     }
@@ -62,7 +62,7 @@ export default function PotentialCollaborators(props) {
                 >
                     <Grid container spacing={3}>
                         {data.map(item => { return (
-                            <Grid key={item.address} item xs={6} md={3} lg={2} sx={{ textAlign: 'center' }}>
+                            <Grid key={item.address} item xs={6} md={4} lg={3} sx={{ textAlign: 'center' }}>
                                 <Link href={`/profile/${item.address}`}>
                                     <a>
                                         {item.profilePhoto &&
