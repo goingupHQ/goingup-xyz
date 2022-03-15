@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Head from 'next/head';
 import { WalletContext } from 'src/contexts/WalletContext';
 import TopNavigationLayout from 'src/layouts/TopNavigationLayout';
@@ -12,15 +12,17 @@ import {
     Button,
     Fade
 } from '@mui/material';
-
-const CardContentWrapper = styled(CardContent)(
-    () => `
-        position: relative;
-  `
-);
+import PotentialCollaborators from './potential-collaborators';
+import { AppContext } from '@/contexts/AppContext';
+import Collaborators from './collaborators';
 
 function CreateAccount() {
     const wallet = useContext(WalletContext);
+    const app = useContext(AppContext);
+
+    useEffect(() => {
+        console.log(app);
+    },[]);
 
     return (
         <>
@@ -28,7 +30,7 @@ function CreateAccount() {
                 <title>Dashboard</title>
             </Head>
             <Grid
-                sx={{ px: { xs: 2, md: 4} }}
+                sx={{ px: { xs: 2, md: 4 } }}
                 container
                 direction="row"
                 justifyContent="center"
@@ -36,39 +38,13 @@ function CreateAccount() {
                 spacing={3}
             >
                 <Grid item xs={12}>
-                    <Fade in={true} timeout={1000}>
-                        <Card
-                            sx={{
-                                height: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                marginTop: { xs: '2rem', md:'3rem'}
-                            }}
-                        >
-                            <CardHeader
-                                sx={{
-                                    px: 3,
-                                    pt: 3,
-                                    alignItems: 'flex-start'
-                                }}
-                                title={
-                                    <>
-                                        <Typography variant="h1">
-                                            Dashboard
-                                        </Typography>
-                                    </>
-                                }
-                            />
-                            <CardContentWrapper
-                                sx={{
-                                    px: 3,
-                                    pt: 0
-                                }}
-                            >
-                            </CardContentWrapper>
-                        </Card>
-                    </Fade>
+                    <PotentialCollaborators />
                 </Grid>
+                {app?.availability.map(item => {return (
+                    <Grid item xs={12} md={6}>
+                        <Collaborators availabilityId={item.id} />
+                    </Grid>
+                )})}
             </Grid>
         </>
     );

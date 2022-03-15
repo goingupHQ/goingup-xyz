@@ -37,9 +37,11 @@ const Poaps = (props) => {
         const url = `https://frontend.poap.tech/actions/scan/${account.address}`
         fetch(url)
             .then(async response => {
-                const result = await response.json();
-                console.log('poaps', result);
-                setPoaps(result);
+                if (response.status === 200) {
+                    const result = await response.json();
+                    console.log('poaps', result);
+                    setPoaps(result);
+                }
             })
             .catch((err) => {
                 console.log(err);
