@@ -41,7 +41,7 @@ function CreateAccount() {
                     <PotentialCollaborators />
                 </Grid>
                 {app?.availability.map(item => {return (
-                    <Grid item xs={12} md={6}>
+                    <Grid key={item.id} item xs={12} md={6}>
                         <Collaborators availabilityId={item.id} />
                     </Grid>
                 )})}
