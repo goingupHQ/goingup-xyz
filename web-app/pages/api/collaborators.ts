@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     const db = await getDb();
     const accounts = await db.collection('accounts');
 
-    const query = {};
+    const query: any = {};
     if (openToArray.length) query.openTo = { $in: openToArray };
 
     const queryResults = await accounts.aggregate([
