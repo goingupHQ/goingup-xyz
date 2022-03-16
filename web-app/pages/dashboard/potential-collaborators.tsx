@@ -11,7 +11,7 @@ const CardContentWrapper = styled(CardContent)(
   `
 );
 
-export default function PotentialCollaborators(props) {
+export default function PotentialCollaborators() {
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
     const [data, setData] = useState([]);
