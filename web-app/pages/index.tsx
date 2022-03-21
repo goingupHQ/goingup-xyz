@@ -4,6 +4,7 @@ import TopNavigationLayout from 'src/layouts/TopNavigationLayout';
 // import { Authenticated } from 'src/components/Authenticated';
 
 import DashboardCryptoContent from 'src/content/DashboardPages/crypto';
+import { Typography } from '@mui/material';
 
 function MainApp() {
     return (
@@ -11,7 +12,7 @@ function MainApp() {
             <Head>
                 <title>Going Up</title>
             </Head>
-            <DashboardCryptoContent />
+
         </>
     );
 }
