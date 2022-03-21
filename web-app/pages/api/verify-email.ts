@@ -11,7 +11,16 @@ export default async function handler(req, res) {
         const rec = await col.findOne({ code });
 
         if (rec) {
-            await db.collection('accounts').updateOne({ address }, { $set: { email: rec.email } });
+            await db.collection('accounts')
+                .updateOne({ address },
+                    {
+                        $set: {
+                            email: rec.email
+                        },
+                        $inc: {
+                            reputationScore: 10
+                        }
+                    });
             res.status(200).send('email-verified');
         } else {
             res.status(400).send('no-record-found');

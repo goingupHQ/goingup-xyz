@@ -37,6 +37,9 @@ export default async function handler(req, res) {
                 $set: {
                     linkedIn: `${user.localizedFirstName} ${user.localizedLastName}`,
                     linkedInUser: user
+                },
+                $inc: {
+                    reputationScore: 10
                 }
             })
 

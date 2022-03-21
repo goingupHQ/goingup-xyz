@@ -21,8 +21,10 @@ import PersonalInfo from './personal-info';
 import ProjectGoals from './project-goals';
 import InviteFriends from './invite-friends';
 import { LoadingButton } from '@mui/lab';
+import { useRouter } from 'next/router';
 
 export default function CreateAccountForm() {
+    const router = useRouter();
     const wallet = useContext(WalletContext);
     const theme = useTheme();
     const { enqueueSnackbar } = useSnackbar();
@@ -171,6 +173,7 @@ export default function CreateAccountForm() {
 
             if (response.status === 200) {
                 enqueueSnackbar('Your account was successfully created', { variant: 'success' });
+                router.push(`/profile/${wallet.address}`);
             } else {
                 enqueueSnackbar('There was a problem creating your account', { variant: 'error' });
             }

@@ -19,7 +19,8 @@ import {
     Avatar,
     IconButton,
     CircularProgress,
-    Box
+    Box,
+    LinearProgress
 } from '@mui/material';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { LoadingButton } from '@mui/lab';
@@ -77,35 +78,47 @@ const TopSection = (props) => {
             });
 
             if (upload.ok) {
-                console.log(`Uploaded successfully to ${upload.url}${filename}`, photoType);
+                console.log(
+                    `Uploaded successfully to ${upload.url}${filename}`,
+                    photoType
+                );
 
                 let account: any = {};
-                if (photoType === 'cover-photo') account.coverPhoto = `${upload.url}${filename}`;
-                if (photoType === 'profile-photo') account.profilePhoto = `${upload.url}${filename}`;
+                if (photoType === 'cover-photo')
+                    account.coverPhoto = `${upload.url}${filename}`;
+                if (photoType === 'profile-photo')
+                    account.profilePhoto = `${upload.url}${filename}`;
 
                 const response = await fetch('/api/update-account', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         address,
                         signature,
                         account
                     })
-                })
+                });
 
                 if (response.status === 200) {
                     props.refresh();
-                    const msg = photoType === 'cover-photo' ? 'Cover photo uploaded' : 'Profile photo uploaded';
+                    const msg =
+                        photoType === 'cover-photo'
+                            ? 'Cover photo uploaded'
+                            : 'Profile photo uploaded';
                     enqueueSnackbar(msg, { variant: 'success' });
                 }
             } else {
-                throw('Upload failed.');
+                throw 'Upload failed.';
             }
         } catch (err) {
-            const msg = `Could not upload your ${photoType === 'cover-photo' ? 'cover' : 'profile'} photo`;
-            enqueueSnackbar('Could not upload your cover photo', { variant: 'error' });
+            const msg = `Could not upload your ${
+                photoType === 'cover-photo' ? 'cover' : 'profile'
+            } photo`;
+            enqueueSnackbar('Could not upload your cover photo', {
+                variant: 'error'
+            });
             console.log(err);
         } finally {
             if (photoType === 'cover-photo') {
@@ -123,8 +136,10 @@ const TopSection = (props) => {
     useEffect(() => {
         if (wallet.address) {
             setCheckingRel(true);
-            fetch(`/api/get-rel?address=${wallet.address}&target=${account.address}`)
-                .then(async response => {
+            fetch(
+                `/api/get-rel?address=${wallet.address}&target=${account.address}`
+            )
+                .then(async (response) => {
                     const result = await response.json();
                     setFollowing(result.following);
                 })
@@ -134,7 +149,9 @@ const TopSection = (props) => {
 
     const follow = async () => {
         if (!wallet.address) {
-            enqueueSnackbar(`Connect your wallet to follow ${account.name}`, { variant: 'info' });
+            enqueueSnackbar(`Connect your wallet to follow ${account.name}`, {
+                variant: 'info'
+            });
             return;
         }
 
@@ -142,32 +159,42 @@ const TopSection = (props) => {
         const message = 'follow';
         const signature = await ethersSigner.signMessage(message);
 
-        const response =
-            await fetch(`/api/follow?address=${address}&follows=${account.address}&signature=${signature}`);
+        const response = await fetch(
+            `/api/follow?address=${address}&follows=${account.address}&signature=${signature}`
+        );
 
         if (response.status === 200) {
-            enqueueSnackbar(`You are now following ${account.name}`, {variant: 'success'});
+            enqueueSnackbar(`You are now following ${account.name}`, {
+                variant: 'success'
+            });
             setFollowing(true);
         } else {
-            enqueueSnackbar(`Could not follow ${account.name}`, {variant: 'error'});
+            enqueueSnackbar(`Could not follow ${account.name}`, {
+                variant: 'error'
+            });
         }
-    }
+    };
 
     const unfollow = async () => {
         const { address, ethersSigner } = wallet;
         const message = 'unfollow';
         const signature = await ethersSigner.signMessage(message);
 
-        const response =
-            await fetch(`/api/unfollow?address=${address}&follows=${account.address}&signature=${signature}`);
+        const response = await fetch(
+            `/api/unfollow?address=${address}&follows=${account.address}&signature=${signature}`
+        );
 
         if (response.status === 200) {
-            enqueueSnackbar(`You have unfollowed ${account.name}`, {variant: 'success'});
+            enqueueSnackbar(`You have unfollowed ${account.name}`, {
+                variant: 'success'
+            });
             setFollowing(false);
         } else {
-            enqueueSnackbar(`Could not unfollow ${account.name}`, {variant: 'error'});
+            enqueueSnackbar(`Could not unfollow ${account.name}`, {
+                variant: 'error'
+            });
         }
-    }
+    };
 
     return (
         <>
@@ -195,6 +222,22 @@ const TopSection = (props) => {
                                     <Typography variant="subtitle1">
                                         {account.address}
                                     </Typography>
+
+                                    <Typography variant="subtitle1">
+                                        Reputation Score:{' '}
+                                        {Math.round(100 * (account.reputationScore / app.maxReputationScore))}%{' '}
+                                        ({account.reputationScore}{' out of '}
+                                        {app.maxReputationScore})
+                                    </Typography>
+                                    <LinearProgress
+                                        variant="determinate"
+                                        color="success"
+                                        value={
+                                            100 *
+                                            (account.reputationScore /
+                                                app.maxReputationScore)
+                                        }
+                                    />
                                 </>
                             }
                         />
@@ -233,101 +276,123 @@ const TopSection = (props) => {
                                 variant="rounded"
                             ></Avatar>
                             {myAccount && (
-                            <>
-                                <input
-                                    ref={uploadCoverInputRef}
-                                    accept="image/*"
-                                    id="contained-button-file"
-                                    type="file"
-                                    style={{ display: 'none' }}
-                                    onChange={e => { uploadPhoto(e, 'cover-photo') }}
-                                />
-                                <LoadingButton
-                                    color="primary"
-                                    variant="outlined"
-                                    size="small"
-                                    loading={uploadingCover}
-                                    loadingIndicator="Uploading..."
-                                    sx={{
-                                        position: 'absolute',
-                                        right: 36,
-                                        top: 10
-                                    }}
-                                    onClick={() => {
-                                        uploadCoverInputRef.current.click();
-                                    }}
-                                >
-                                    Change cover photo
-                                </LoadingButton>
-
-                                <input
-                                    ref={uploadProfileInputRef}
-                                    accept="image/*"
-                                    id="contained-button-file"
-                                    type="file"
-                                    style={{ display: 'none' }}
-                                    onChange={e => { uploadPhoto(e, 'profile-photo') }}
-                                />
-                                <IconButton
-                                    disabled={uploadingProfile}
-                                    color="primary"
-                                    sx={{
-                                        position: 'absolute',
-                                        left: 150,
-                                        top: 200
-                                    }}
-                                    onClick={() => {
-                                        uploadProfileInputRef.current.click();
-                                    }}
-                                >
-                                    {uploadingProfile &&
-                                    <CircularProgress size="20px" />
-                                    }
-                                    {!uploadingProfile &&
-                                    <FileUploadIcon />
-                                    }
-                                </IconButton>
-                                <Box display="flex" sx={{ marginBottom: 2 }} justifyContent={{ xs: 'center', md:'initial' }}>
-                                    <Button color="primary" variant="contained" onClick={() => { editProfileRef.current.showModal() }}>
-                                        Edit My GoingUP Profile
-                                    </Button>
-                                </Box>
-                            </>
-                            )}
-
-                            {!myAccount &&
-                            <>
-                                {checkingRel &&
-                                <CircularProgress />
-                                }
-
-                                {!checkingRel &&
                                 <>
-                                    <Box display="flex" sx={{ marginBottom: 2 }} justifyContent={{ xs: 'center', md:'initial' }}>
-                                        {!following &&
-                                        <Button
-                                            variant="contained"
-                                            color="secondary"
-                                            onClick={follow}
-                                        >
-                                            Follow
-                                        </Button>
-                                        }
+                                    <input
+                                        ref={uploadCoverInputRef}
+                                        accept="image/*"
+                                        id="contained-button-file"
+                                        type="file"
+                                        style={{ display: 'none' }}
+                                        onChange={(e) => {
+                                            uploadPhoto(e, 'cover-photo');
+                                        }}
+                                    />
+                                    <LoadingButton
+                                        color="primary"
+                                        variant="outlined"
+                                        size="small"
+                                        loading={uploadingCover}
+                                        loadingIndicator="Uploading..."
+                                        sx={{
+                                            position: 'absolute',
+                                            right: 36,
+                                            top: 10
+                                        }}
+                                        onClick={() => {
+                                            uploadCoverInputRef.current.click();
+                                        }}
+                                    >
+                                        Change cover photo
+                                    </LoadingButton>
 
-                                        {following &&
+                                    <input
+                                        ref={uploadProfileInputRef}
+                                        accept="image/*"
+                                        id="contained-button-file"
+                                        type="file"
+                                        style={{ display: 'none' }}
+                                        onChange={(e) => {
+                                            uploadPhoto(e, 'profile-photo');
+                                        }}
+                                    />
+                                    <IconButton
+                                        disabled={uploadingProfile}
+                                        color="primary"
+                                        sx={{
+                                            position: 'absolute',
+                                            left: 150,
+                                            top: 200
+                                        }}
+                                        onClick={() => {
+                                            uploadProfileInputRef.current.click();
+                                        }}
+                                    >
+                                        {uploadingProfile && (
+                                            <CircularProgress size="20px" />
+                                        )}
+                                        {!uploadingProfile && (
+                                            <FileUploadIcon />
+                                        )}
+                                    </IconButton>
+                                    <Box
+                                        display="flex"
+                                        sx={{ marginBottom: 2 }}
+                                        justifyContent={{
+                                            xs: 'center',
+                                            md: 'initial'
+                                        }}
+                                    >
                                         <Button
-                                            variant="outlined"
-                                            color="secondary"
-                                            onClick={unfollow}
+                                            color="primary"
+                                            variant="contained"
+                                            onClick={() => {
+                                                editProfileRef.current.showModal();
+                                            }}
                                         >
-                                            Unfollow
+                                            Edit My GoingUP Profile
                                         </Button>
-                                        }
                                     </Box>
                                 </>
-                                }
-                            </>
-                            }
+                            )}
+
+                            {!myAccount && (
+                                <>
+                                    {checkingRel && <CircularProgress />}
+
+                                    {!checkingRel && (
+                                        <>
+                                            <Box
+                                                display="flex"
+                                                sx={{ marginBottom: 2 }}
+                                                justifyContent={{
+                                                    xs: 'center',
+                                                    md: 'initial'
+                                                }}
+                                            >
+                                                {!following && (
+                                                    <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        onClick={follow}
+                                                    >
+                                                        Follow
+                                                    </Button>
+                                                )}
+
+                                                {following && (
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="secondary"
+                                                        onClick={unfollow}
+                                                    >
+                                                        Unfollow
+                                                    </Button>
+                                                )}
+                                            </Box>
+                                        </>
+                                    )}
+                                </>
+                            )}
 
                             <Stack
                                 direction={{ xs: 'column', md: 'row' }}
@@ -337,14 +402,11 @@ const TopSection = (props) => {
                                     marginBottom: { xs: '24px', md: '8px' }
                                 }}
                             >
-                                <Typography variant="h4">
-                                    Occupation
-                                </Typography>
+                                <Typography variant="h4">Occupation</Typography>
                                 <Chip
                                     label={
                                         app.occupations.find(
-                                            (o) =>
-                                                o.id == account.occupation
+                                            (o) => o.id == account.occupation
                                         )?.text || 'None'
                                     }
                                     variant="outlined"
@@ -358,24 +420,22 @@ const TopSection = (props) => {
                                     marginBottom: { xs: '24px', md: '8px' }
                                 }}
                             >
-                                <Typography variant="h4">
-                                    Open To
-                                </Typography>
-                                {account.openTo &&
-                                <>
-                                    {account.openTo.map((item) => (
-                                        <Chip
-                                            key={item}
-                                            label={
-                                                app.availability.find(
-                                                    (a) => a.id == item
-                                                )?.text
-                                            }
-                                            variant="outlined"
-                                        />
-                                    ))}
-                                </>
-                                }
+                                <Typography variant="h4">Open To</Typography>
+                                {account.openTo && (
+                                    <>
+                                        {account.openTo.map((item) => (
+                                            <Chip
+                                                key={item}
+                                                label={
+                                                    app.availability.find(
+                                                        (a) => a.id == item
+                                                    )?.text
+                                                }
+                                                variant="outlined"
+                                            />
+                                        ))}
+                                    </>
+                                )}
                             </Stack>
                             <Stack
                                 direction={{ xs: 'column', md: 'row' }}
@@ -388,21 +448,21 @@ const TopSection = (props) => {
                                 <Typography variant="h4">
                                     Project Goals
                                 </Typography>
-                                {account.projectGoals &&
-                                <>
-                                    {account.projectGoals.map((item) => (
-                                        <Chip
-                                            key={item}
-                                            label={
-                                                app.userGoals.find(
-                                                    (a) => a.id == item
-                                                )?.text
-                                            }
-                                            variant="outlined"
-                                        />
-                                    ))}
-                                </>
-                                }
+                                {account.projectGoals && (
+                                    <>
+                                        {account.projectGoals.map((item) => (
+                                            <Chip
+                                                key={item}
+                                                label={
+                                                    app.userGoals.find(
+                                                        (a) => a.id == item
+                                                    )?.text
+                                                }
+                                                variant="outlined"
+                                            />
+                                        ))}
+                                    </>
+                                )}
                             </Stack>
                             <Stack
                                 direction={{ xs: 'column', md: 'row' }}
@@ -415,31 +475,38 @@ const TopSection = (props) => {
                                 <Typography variant="h4">
                                     Ideal Collaborators
                                 </Typography>
-                                {account.idealCollab &&
-                                <>
-                                    {account.idealCollab.map((item) => (
-                                        <Chip
-                                            key={item}
-                                            label={
-                                                app.occupations.find(
-                                                    (o) => o.id == item
-                                                )?.text
-                                            }
-                                            variant="outlined"
-                                        />
-                                    ))}
-                                </>
-                                }
+                                {account.idealCollab && (
+                                    <>
+                                        {account.idealCollab.map((item) => (
+                                            <Chip
+                                                key={item}
+                                                label={
+                                                    app.occupations.find(
+                                                        (o) => o.id == item
+                                                    )?.text
+                                                }
+                                                variant="outlined"
+                                            />
+                                        ))}
+                                    </>
+                                )}
                             </Stack>
-                            <ContactsAndIntegrations account={account} refresh={props.refresh} />
+                            <ContactsAndIntegrations
+                                account={account}
+                                refresh={props.refresh}
+                            />
                         </CardContentWrapper>
                     </Card>
                 </Fade>
             </Grid>
 
-            <EditProfile ref={editProfileRef} account={account} refresh={props.refresh} />
+            <EditProfile
+                ref={editProfileRef}
+                account={account}
+                refresh={props.refresh}
+            />
         </>
-    )
-}
+    );
+};
 
 export default TopSection;

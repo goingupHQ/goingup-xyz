@@ -53,6 +53,9 @@ export default async function handler(req, res) {
                 $set: {
                     discord: user.username,
                     discordUser: user
+                },
+                $inc: {
+                    reputationScore: 10
                 }
             })
 

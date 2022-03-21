@@ -15,7 +15,9 @@ export default async function handler(req, res) {
         const db = dbClient.db('main');
         const accounts = db.collection('accounts');
         const account = body.account;
-        await accounts.updateOne({ address: body.address }, { $set: account });
+        const payload: any = { $set: account }
+        if (account.twitter) payload.$inc = { reputationScore: 10 }
+        await accounts.updateOne({ address: body.address }, payload);
         res.status(200).send('account-updated');
     } else {
         res.status(401).send('invalid-signature');

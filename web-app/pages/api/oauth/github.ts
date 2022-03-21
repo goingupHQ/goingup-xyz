@@ -37,6 +37,9 @@ export default async function handler(req, res) {
                 $set: {
                     github: user.login,
                     githubUser: user
+                },
+                $inc: {
+                    reputationScore: 10
                 }
             })
 
