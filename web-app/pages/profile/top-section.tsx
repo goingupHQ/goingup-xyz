@@ -231,6 +231,7 @@ const TopSection = (props) => {
                                     </Typography>
                                     <LinearProgress
                                         variant="determinate"
+                                        color="success"
                                         value={
                                             100 *
                                             (account.reputationScore /
