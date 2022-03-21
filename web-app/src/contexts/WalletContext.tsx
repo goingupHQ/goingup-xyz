@@ -125,14 +125,13 @@ export function WalletProvider({ children }: Props) {
         enqueueSnackbar('Wallet connected', { variant: 'success' });
         const response = await fetch(`/api/has-account?address=${userAddress}`);
         if (response.status === 200) {
-            const result = await response.json();
-            console.log(result);
+            const result = await response.json(); console.log(router);
 
-            if (result.hasAccount && router.pathname?.toLowerCase() === '/create-account') {
+            if (result.hasAccount && router.pathname?.toLowerCase() === '/create-account' && router.pathname?.toLowerCase() !== '/profile/[address]') {
                 router.push(`/profile/${userAddress}`);
             }
 
-            if (!result.hasAccount && router.pathname !== '/create-account') {
+            if (!result.hasAccount && router.pathname !== '/create-account' && router.pathname?.toLowerCase() !== '/profile/[address]') {
                 router.push('/create-account');
             }
         } else {
