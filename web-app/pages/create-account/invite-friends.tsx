@@ -1,6 +1,8 @@
 import { useContext } from 'react';
 import {
     Box,
+    Grid,
+    TextareaAutosize,
     TextField
     // Select,
     // InputLabel,
@@ -25,57 +27,78 @@ function InviteFriends(props) {
         email3,
         setEmail3,
         email4,
-        setEmail4
+        setEmail4,
+        inviteMessage,
+        setInviteMessage
     } = props.state;
 
     return (
         <>
             <Box>
-                <h3>Invite up to four friends by typing the email addresses below</h3>
+                <h3>
+                    Invite up to four friends by typing the email addresses
+                    below
+                </h3>
             </Box>
-            <Box
-                sx={{
-                    display: 'grid',
-                    gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)' }
-                }}
-            >
-                <TextField
-                    label="Email Address 1"
-                    variant="outlined"
-                    sx={fieldStyle}
-                    value={email1}
-                    onChange={(e) => {
-                        setEmail1(e.target.value);
-                    }}
-                />
-                <TextField
-                    label="Email Address 2"
-                    variant="outlined"
-                    sx={fieldStyle}
-                    value={email2}
-                    onChange={(e) => {
-                        setEmail2(e.target.value);
-                    }}
-                />
-                <TextField
-                    label="Email Address 3"
-                    variant="outlined"
-                    sx={fieldStyle}
-                    value={email3}
-                    onChange={(e) => {
-                        setEmail3(e.target.value);
-                    }}
-                />
-                <TextField
-                    label="Email Address 4"
-                    variant="outlined"
-                    sx={fieldStyle}
-                    value={email4}
-                    onChange={(e) => {
-                        setEmail4(e.target.value);
-                    }}
-                />
-            </Box>
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                    <TextField
+                        fullWidth
+                        label="Email Address 1"
+                        variant="outlined"
+                        value={email1}
+                        onChange={(e) => {
+                            setEmail1(e.target.value);
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <TextField
+                        fullWidth
+                        label="Email Address 2"
+                        variant="outlined"
+                        value={email2}
+                        onChange={(e) => {
+                            setEmail2(e.target.value);
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <TextField
+                        fullWidth
+                        label="Email Address 3"
+                        variant="outlined"
+                        value={email3}
+                        onChange={(e) => {
+                            setEmail3(e.target.value);
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <TextField
+                        fullWidth
+                        label="Email Address 4"
+                        variant="outlined"
+                        value={email4}
+                        onChange={(e) => {
+                            setEmail4(e.target.value);
+                        }}
+                    />
+                </Grid>
+
+                <Grid item xs={12}>
+                    <TextField
+                        multiline
+                        fullWidth
+                        minRows={3}
+                        label="Optional personal message"
+                        value={inviteMessage}
+                        onChange={(e) => {
+                            setInviteMessage(e.target.value);
+                        }}
+                    />
+                </Grid>
+            </Grid>
         </>
     );
 }
