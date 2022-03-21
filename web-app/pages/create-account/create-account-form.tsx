@@ -45,6 +45,7 @@ export default function CreateAccountForm() {
     const [email1, setEmail1] = useState<any>('');
     const [email3, setEmail3] = useState<any>('');
     const [email4, setEmail4] = useState<any>('');
+    const [inviteMessage, setInviteMessage] = useState<String>(null);
     const [creating, setCreating] = useState<boolean>(false);
 
     const state = {
@@ -65,7 +66,9 @@ export default function CreateAccountForm() {
         email3,
         setEmail3,
         email4,
-        setEmail4
+        setEmail4,
+        inviteMessage,
+        setInviteMessage
     };
 
     const personalInfoRef = useRef(null);
@@ -159,7 +162,8 @@ export default function CreateAccountForm() {
                     signature,
                     account: {
                         name, occupation, openTo, projectGoals, idealCollab
-                    }
+                    },
+                    email1, email2, email3, email4, inviteMessage
                 })
             })
 
