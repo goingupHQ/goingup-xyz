@@ -7,6 +7,7 @@ type AppContext = {
     occupations: Array<Occupation>;
     userGoals: Array<UserGoal>;
     api: WebAPI;
+    maxReputationScore: number;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -61,6 +62,8 @@ const userGoals: Array<UserGoal> = [
     { id: 5, text: 'Contribute to a community' },
 ]
 
+const maxReputationScore = 140;
+
 export function AppProvider({ children }: Props) {
     return (
         <AppContext.Provider
@@ -68,7 +71,8 @@ export function AppProvider({ children }: Props) {
                 availability,
                 occupations,
                 userGoals,
-                api
+                api,
+                maxReputationScore
             }}
         >
             {children}
