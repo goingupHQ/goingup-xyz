@@ -19,6 +19,7 @@ export default async function handler(req, res) {
 
         const { account, email1, email2, email3, email4, inviteMessage } = body;
         account.address = body.address;
+        account.reputationScore = 50; // completed onboarding score
         const result = await accounts.insertOne(account);
 
         if (email1 || email2 || email3 || email4) {
@@ -42,6 +43,15 @@ export default async function handler(req, res) {
             }
         }
 
+        if (req.query.referrer) {
+            try {
+                await accounts.updateOne({ address: req.query.referrer }, {
+                    $inc: { reputationScore: 10 }
+                });
+            } catch (err) {
+                console.log(err);
+            }
+        }
 
         res.status(200).send('account-created');
     } else {
