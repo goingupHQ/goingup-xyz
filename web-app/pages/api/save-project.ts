@@ -14,15 +14,37 @@ export default async function handler(req, res) {
     if (isSignatureValid) {
         const db = await getDb();
         const accounts = db.collection('accounts');
-        const project = body.project;
+        const { mode, project} = body;
 
-        if (project.id === 0) {
+        if (mode === 'create') {
             // new project
             project.id = new ObjectId();
-            const payload: any = { $push: { projects: project } }
+            const payload: any = { $push: { projects: project } };
             await accounts.updateOne({ address: body.address }, payload);
-        } else {
+        } else if (mode === 'update') {
             // existing project
+            const projectId = new ObjectId(project.id);
+
+            await accounts.updateOne({ address: body.address },
+                {
+                    $set: {
+                        'projects.$[element].title': project.title,
+                        'projects.$[element].description': project.description,
+                        'projects.$[element].completion': project.completion,
+                        'projects.$[element].projectUrl': project.projectUrl,
+                        'projects.$[element].skills': project.skills
+                    }
+                },
+                {
+                    arrayFilters: [{
+                        'element.id': projectId
+                    }]
+                })
+        } else if (mode === 'delete') {
+            // delete project
+            const projectId = new ObjectId(project.id);
+            const payload: any = { $pull: { projects: { id: projectId } } };
+            await accounts.updateOne({ address: body.address }, payload);
         }
 
         res.status(200).send('project-saved');

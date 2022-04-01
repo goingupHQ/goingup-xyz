@@ -9,6 +9,7 @@ import {
     styled,
 } from '@mui/material';
 import { useRouter } from 'next/router';
+import Projects from './projects';
 import Poaps from './poaps';
 
 const CardContentWrapper = styled(CardContent)(
@@ -51,6 +52,7 @@ function ProfilePage() {
                     spacing={3}
                 >
                     <TopSection account={account} refresh={getAccount} />
+                    <Projects account={account} />
                     <Poaps account={account} refresh={getAccount} />
                 </Grid>
             </>

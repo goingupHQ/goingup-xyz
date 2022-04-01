@@ -16,6 +16,7 @@ import {
     Button
 } from '@mui/material';
 import ProjectForm from './project-form';
+import ProjectsList from '../../src/components/common/ProjectsList';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -32,22 +33,22 @@ function Projects() {
     const loadProjects = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`/api/get-account?address=${wallet.address}`);
+            const response = await fetch(
+                `/api/get-account?address=${wallet.address}`
+            );
             const result = await response.json();
-            console.log(result);
-            if (result.projects) setProjects(result.project);
+            if (result.projects) setProjects(result.projects);
             else setProjects([]);
+            console.log(result.proejcts);
         } catch (err) {
             console.log(err);
         } finally {
             setLoading(false);
         }
-
-    }
+    };
 
     useEffect(() => {
-        // loadProjects();
-        setLoading(false);
+        loadProjects();
     }, [wallet.address]);
 
     return (
@@ -101,12 +102,33 @@ function Projects() {
 
                                 {projects?.length === 0 && (
                                     <>
-                                        <Alert
-                                            severity="warning"
-                                        >
+                                        <Alert severity="warning">
                                             You have no projects yet
                                         </Alert>
-                                        <Button variant="contained" sx={{marginTop: 2}} onClick={() => formRef.current.show('create')}>Add your first project</Button>
+                                        <Button
+                                            variant="contained"
+                                            sx={{ marginTop: 2 }}
+                                            onClick={() =>
+                                                formRef.current.show('create')
+                                            }
+                                        >
+                                            Add your first project
+                                        </Button>
+                                    </>
+                                )}
+
+                                {projects?.length > 0 && (
+                                    <>
+                                        <Button
+                                            variant="contained"
+                                            sx={{ marginTop: 2, marginBottom: 2 }}
+                                            onClick={() =>
+                                                formRef.current.show('create')
+                                            }
+                                        >
+                                            Add Project
+                                        </Button>
+                                        <ProjectsList projects={projects} formRef={formRef} />
                                     </>
                                 )}
                             </CardContentWrapper>
