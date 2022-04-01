@@ -29,20 +29,25 @@ function Projects() {
     const [loading, setLoading] = useState(true);
 
     const formRef = useRef(null);
+    const loadProjects = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`/api/get-account?address=${wallet.address}`);
+            const result = await response.json();
+            console.log(result);
+            if (result.projects) setProjects(result.project);
+            else setProjects([]);
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
+
+    }
 
     useEffect(() => {
-        fetch(`/api/get-account?address=${wallet.address}`)
-            .then(async (response) => {
-                const result = await response.json();
-                console.log(result);
-                if (result.projects) setProjects([]);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        // loadProjects();
+        setLoading(false);
     }, [wallet.address]);
 
     return (
@@ -94,7 +99,7 @@ function Projects() {
                                     </Alert>
                                 )}
 
-                                {projects.length === 0 && (
+                                {projects?.length === 0 && (
                                     <>
                                         <Alert
                                             severity="warning"
@@ -110,7 +115,7 @@ function Projects() {
                 </Grid>
             </Grid>
 
-            <ProjectForm ref={formRef} />
+            <ProjectForm ref={formRef} loadProjects={loadProjects} />
 
             <Backdrop open={loading}>
                 <CircularProgress />

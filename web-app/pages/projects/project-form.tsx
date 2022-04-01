@@ -2,9 +2,11 @@ import { AppContext } from '@/contexts/AppContext';
 import { WalletContext } from '@/contexts/WalletContext';
 import { LoadingButton, DesktopDatePicker } from '@mui/lab';
 import {
+    Autocomplete,
     Box,
     Button,
     Checkbox,
+    Chip,
     Dialog,
     DialogActions,
     DialogContent,
@@ -26,6 +28,7 @@ const ProjectForm = (props, ref) => {
     const [project, setProject] = useState(null);
     const [open, setOpen] = useState(false);
 
+    const [id, setId] = useState(0);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [completion, setCompletion] = useState(null);
@@ -35,9 +38,6 @@ const ProjectForm = (props, ref) => {
     const [saving, setSaving] = useState(false);
 
     const wallet = useContext(WalletContext);
-    const appContext = useContext(AppContext);
-    const { availability, occupations, userGoals } = appContext;
-
     const { enqueueSnackbar } = useSnackbar();
 
     useImperativeHandle(ref, () => ({
@@ -45,6 +45,7 @@ const ProjectForm = (props, ref) => {
             setMode(mode);
 
             if (mode === 'update') {
+                setId(project.id);
                 setTitle(project.title);
                 setDescription(project.description);
                 setCompletion(project.completion);
@@ -52,6 +53,7 @@ const ProjectForm = (props, ref) => {
                 setProjectUrl(project.projectUrl);
             }
             if (mode === 'create') {
+                setId(0);
                 setTitle('');
                 setDescription('');
                 setCompletion(null);
@@ -71,14 +73,24 @@ const ProjectForm = (props, ref) => {
     };
 
     const saveChanges = async () => {
+        if (!title) {
+            enqueueSnackbar('Project title is required', { variant: 'error' });
+            return;
+        }
+
+        if (!description) {
+            enqueueSnackbar('Project description is required', { variant: 'error' });
+            return;
+        }
+
         setSaving(true);
 
         try {
             const { address, ethersSigner } = wallet;
-            const message = 'update-account';
+            const message = 'save-project';
             const signature = await ethersSigner.signMessage(message);
 
-            const response = await fetch('/api/update-account22/', {
+            const response = await fetch('/api/save-project/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -86,21 +98,25 @@ const ProjectForm = (props, ref) => {
                 body: JSON.stringify({
                     address,
                     signature,
-                    account: {
+                    project: {
+                        id,
                         title,
-                        completion
+                        description,
+                        completion,
+                        skills,
+                        projectUrl
                     }
                 })
             });
 
             if (response.status === 200) {
-                enqueueSnackbar('Profile changes saved', {
+                enqueueSnackbar('Project saved', {
                     variant: 'success'
                 });
-                props.refresh();
+                if (props.loadProjects) props.loadProjects();
                 setOpen(false);
             } else if (response.status >= 400) {
-                enqueueSnackbar('Failed to save profile changes', {
+                enqueueSnackbar('Failed to save project', {
                     variant: 'error'
                 });
             }
@@ -148,13 +164,13 @@ const ProjectForm = (props, ref) => {
                             variant="outlined"
                             required
                             sx={fieldStyle}
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
                         />
 
                         <DesktopDatePicker
                             label="Completion"
-                            inputFormat="MM/dd/yyyy"
+                            // inputFormat="MM/dd/yyyy"
                             value={completion}
                             onChange={(value) => setCompletion(value)}
                             renderInput={(params) => (
@@ -166,10 +182,39 @@ const ProjectForm = (props, ref) => {
                             label="Project URL"
                             placeholder="https://project.io/"
                             variant="outlined"
-                            required
                             sx={fieldStyle}
                             value={projectUrl}
                             onChange={(e) => setProjectUrl(e.target.value)}
+                        />
+
+                        <Autocomplete
+                            multiple
+                            options={[]}
+                            value={skills}
+                            // @ts-ignore
+                            onChange={(event, value) => {
+                                setSkills(value)
+                            }}
+                            freeSolo
+                            renderTags={(value, getTagProps) =>
+                                value.map((option, index) => (
+                                    <Chip
+                                        variant="outlined"
+                                        label={option}
+                                        {...getTagProps({ index })}
+                                    />
+                                ))
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    variant="outlined"
+                                    label="Skills & Deliverables"
+                                />
+                            )}
+                            sx={{
+                                m: 1
+                            }}
                         />
                     </Box>
                 </DialogContent>
