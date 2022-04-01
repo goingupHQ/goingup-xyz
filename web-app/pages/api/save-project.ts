@@ -19,10 +19,28 @@ export default async function handler(req, res) {
         if (project.id === 0) {
             // new project
             project.id = new ObjectId();
-            const payload: any = { $push: { projects: project } }
+            const payload: any = { $push: { projects: project } };
             await accounts.updateOne({ address: body.address }, payload);
         } else {
             // existing project
+            const projectId = new ObjectId(project.id);
+            console.log('update project', project);
+
+            await accounts.updateOne({ address: body.address },
+                {
+                    $set: {
+                        'projects.$[element].title': project.title,
+                        'projects.$[element].description': project.description,
+                        'projects.$[element].completion': project.completion,
+                        'projects.$[element].projectUrl': project.projectUrl,
+                        'projects.$[element].skills': project.skills
+                    }
+                },
+                {
+                    arrayFilters: [{
+                        'element.id': projectId
+                    }]
+                })
         }
 
         res.status(200).send('project-saved');
