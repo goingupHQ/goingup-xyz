@@ -43,7 +43,7 @@ export default function ProjectsList(props) {
                                 </TableCell>
                                 <TableCell>{p.description}</TableCell>
                                 <TableCell>
-                                    {moment(p.completion).format('LL')}
+                                    {p.completion ? moment(p.completion).format('LL') : ``}
                                 </TableCell>
                                 <TableCell>
                                     <a href={p.projectUrl} target="_blank" rel="noopener noreferrer">
