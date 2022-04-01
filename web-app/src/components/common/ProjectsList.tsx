@@ -60,7 +60,9 @@ export default function ProjectsList(props) {
                                             <Button onClick={() => formRef.current?.show('update', p)}>
                                                 Update
                                             </Button>
-                                            <Button>Delete</Button>
+                                            <Button onClick={() => formRef.current?.show('delete', p)}>
+                                                Delete
+                                            </Button>
                                         </ButtonGroup>
                                     </TableCell>
                                 )}

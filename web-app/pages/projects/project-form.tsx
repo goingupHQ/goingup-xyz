@@ -44,7 +44,7 @@ const ProjectForm = (props, ref) => {
         show(mode, project) {
             setMode(mode);
 
-            if (mode === 'update') {
+            if (mode === 'update' || mode === 'delete') {
                 setId(project.id);
                 setTitle(project.title);
                 setDescription(project.description);
@@ -98,6 +98,7 @@ const ProjectForm = (props, ref) => {
                 body: JSON.stringify({
                     address,
                     signature,
+                    mode,
                     project: {
                         id,
                         title,
@@ -136,6 +137,7 @@ const ProjectForm = (props, ref) => {
                 <DialogTitle>
                     {mode === 'create' && `Add Project`}
                     {mode === 'update' && `Edit Project`}
+                    {mode === 'delete' && `Delete Project`}
                 </DialogTitle>
                 <DialogContent>
                     <Box
@@ -152,6 +154,7 @@ const ProjectForm = (props, ref) => {
                             placeholder="Project #1"
                             variant="outlined"
                             required
+                            disabled={mode === 'delete'}
                             sx={fieldStyle}
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
@@ -163,6 +166,7 @@ const ProjectForm = (props, ref) => {
                             label="Project Description"
                             variant="outlined"
                             required
+                            disabled={mode === 'delete'}
                             sx={fieldStyle}
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
@@ -172,6 +176,7 @@ const ProjectForm = (props, ref) => {
                             label="Completion"
                             // inputFormat="MM/dd/yyyy"
                             value={completion}
+                            disabled={mode === 'delete'}
                             onChange={(value) => setCompletion(value)}
                             renderInput={(params) => (
                                 <TextField {...params} sx={fieldStyle} />
@@ -182,6 +187,7 @@ const ProjectForm = (props, ref) => {
                             label="Project URL"
                             placeholder="https://project.io/"
                             variant="outlined"
+                            disabled={mode === 'delete'}
                             sx={fieldStyle}
                             value={projectUrl}
                             onChange={(e) => setProjectUrl(e.target.value)}
@@ -191,6 +197,7 @@ const ProjectForm = (props, ref) => {
                             multiple
                             options={[]}
                             value={skills}
+                            disabled={mode === 'delete'}
                             // @ts-ignore
                             onChange={(event, value) => {
                                 setSkills(value)
@@ -228,12 +235,14 @@ const ProjectForm = (props, ref) => {
                     </Button>
                     <LoadingButton
                         loading={saving}
-                        loadingIndicator="Saving..."
-                        color="primary"
+                        loadingIndicator={mode === 'delete' ? 'Deleting...' : 'Saving...'}
+                        color={mode === 'delete' ? 'error' : 'primary'}
                         variant="contained"
                         onClick={saveChanges}
                     >
-                        Save Changes
+                        {mode === 'create' && `Add Project`}
+                        {mode === 'update' && `Update Project`}
+                        {mode === 'delete' && 'Delete Project'}
                     </LoadingButton>
                 </DialogActions>
             </Dialog>

@@ -14,17 +14,16 @@ export default async function handler(req, res) {
     if (isSignatureValid) {
         const db = await getDb();
         const accounts = db.collection('accounts');
-        const project = body.project;
+        const { mode, project} = body;
 
-        if (project.id === 0) {
+        if (mode === 'create') {
             // new project
             project.id = new ObjectId();
             const payload: any = { $push: { projects: project } };
             await accounts.updateOne({ address: body.address }, payload);
-        } else {
+        } else if (mode === 'update') {
             // existing project
             const projectId = new ObjectId(project.id);
-            console.log('update project', project);
 
             await accounts.updateOne({ address: body.address },
                 {
@@ -41,6 +40,11 @@ export default async function handler(req, res) {
                         'element.id': projectId
                     }]
                 })
+        } else if (mode === 'delete') {
+            // delete project
+            const projectId = new ObjectId(project.id);
+            const payload: any = { $pull: { projects: { id: projectId } } };
+            await accounts.updateOne({ address: body.address }, payload);
         }
 
         res.status(200).send('project-saved');
