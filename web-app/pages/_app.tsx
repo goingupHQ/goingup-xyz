@@ -17,7 +17,8 @@ import 'src/utils/chart';
 // import { store } from 'src/store';
 import Loader from 'src/components/Loader';
 // import AdapterDateFns from '@mui/lab/AdapterDateFns';
-// import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateAdapter from '@mui/lab/AdapterMoment';
 import useScrollTop from 'src/hooks/useScrollTop';
 import { SnackbarProvider } from 'notistack';
 import { AuthConsumer, AuthProvider } from 'src/contexts/JWTAuthContext';
@@ -58,37 +59,39 @@ function MyApp(props: MyAppProps) {
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
             </Head>
-            <SidebarProvider>
-                <ThemeProvider>
-                    <SnackbarProvider
-                        maxSnack={6}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right'
-                        }}
-                        preventDuplicate
-                    >
-                        <AppProvider>
-                            <WalletProvider>
-                                <AuthProvider>
-                                    <CssBaseline />
-                                    <AuthConsumer>
-                                        {(auth) =>
-                                            !auth.isInitialized ? (
-                                                <Loader />
-                                            ) : (
-                                                getLayout(
-                                                    <Component {...pageProps} />
+            <LocalizationProvider dateAdapter={DateAdapter}>
+                <SidebarProvider>
+                    <ThemeProvider>
+                        <SnackbarProvider
+                            maxSnack={6}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right'
+                            }}
+                            preventDuplicate
+                        >
+                            <AppProvider>
+                                <WalletProvider>
+                                    <AuthProvider>
+                                        <CssBaseline />
+                                        <AuthConsumer>
+                                            {(auth) =>
+                                                !auth.isInitialized ? (
+                                                    <Loader />
+                                                ) : (
+                                                    getLayout(
+                                                        <Component {...pageProps} />
+                                                    )
                                                 )
-                                            )
-                                        }
-                                    </AuthConsumer>
-                                </AuthProvider>
-                            </WalletProvider>
-                        </AppProvider>
-                    </SnackbarProvider>
-                </ThemeProvider>
-            </SidebarProvider>
+                                            }
+                                        </AuthConsumer>
+                                    </AuthProvider>
+                                </WalletProvider>
+                            </AppProvider>
+                        </SnackbarProvider>
+                    </ThemeProvider>
+                </SidebarProvider>
+            </LocalizationProvider>
         </CacheProvider>
     );
 }
