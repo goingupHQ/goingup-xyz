@@ -29,7 +29,7 @@ export default function ProjectsList(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {projects.map((p) => (
+                        {projects?.map((p) => (
                             <TableRow
                                 key={p.id}
                                 sx={{
