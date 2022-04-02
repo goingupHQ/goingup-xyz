@@ -223,10 +223,15 @@ const TopSection = (props) => {
                                         {account.address}
                                     </Typography>
 
-                                    <Typography variant="subtitle1">
+                                    <Typography variant="h4" sx={{ marginTop: 2 }}>
                                         Reputation Score:{' '}
-                                        {Math.round(100 * (account.reputationScore / app.maxReputationScore))}%{' '}
-                                        ({account.reputationScore}{' out of '}
+                                        {Math.round(
+                                            100 *
+                                                (account.reputationScore /
+                                                    app.maxReputationScore)
+                                        )}
+                                        % ({account.reputationScore}
+                                        {' out of '}
                                         {app.maxReputationScore})
                                     </Typography>
                                     <LinearProgress
@@ -237,6 +242,7 @@ const TopSection = (props) => {
                                             (account.reputationScore /
                                                 app.maxReputationScore)
                                         }
+                                        sx={{ height: 20 }}
                                     />
                                 </>
                             }

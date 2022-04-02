@@ -1,8 +1,6 @@
-import Identicon from '@/components/common/Identicon';
-import { AppContext } from '@/contexts/AppContext';
+import ProfileLink from '@/components/common/ProfileLink';
 import { WalletContext } from '@/contexts/WalletContext';
-import { Avatar, Card, CardContent, CardHeader, Grid, Stack, styled, Typography } from '@mui/material'
-import Link from 'next/link';
+import { Backdrop, Card, CardContent, CardHeader, CircularProgress, Grid, Skeleton, styled, Typography } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 
 const CardContentWrapper = styled(CardContent)(
@@ -13,16 +11,24 @@ const CardContentWrapper = styled(CardContent)(
 
 export default function PotentialCollaborators() {
     const wallet = useContext(WalletContext);
-    const app = useContext(AppContext);
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!wallet.address) return;
+
+        setLoading(true);
         fetch(`/api/get-potential-collaborators?address=${wallet.address}`)
             .then(async response => {
                 const result = await response.json();
                 console.log(result);
                 setData(result);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     }, [wallet.address]);
 
@@ -57,27 +63,19 @@ export default function PotentialCollaborators() {
                 <CardContentWrapper
                     sx={{
                         px: 3,
-                        pt: 0
+                        pt: 3,
+                        textAlign: 'center'
                     }}
                 >
+                    {loading ? <CircularProgress /> : (
                     <Grid container spacing={3}>
                         {data.map(item => { return (
                             <Grid key={item.address} item xs={6} md={3} lg={2} sx={{ textAlign: 'center' }}>
-                                <Link href={`/profile/${item.address}`}>
-                                    <a>
-                                        {item.profilePhoto &&
-                                            <Avatar src={item.profilePhoto} variant="rounded" sx={{ height: 64, width: 64, margin: 'auto' }} />
-                                        }
-                                        {!item.profilePhoto &&
-                                            <Identicon address={item.address} size={64}  />
-                                        }
-                                        <Typography variant="h5">{item.name}</Typography>
-                                        <Typography variant="body1">{app.occupations.find(o => o.id == item.occupation)?.text}</Typography>
-                                    </a>
-                                </Link>
+                                <ProfileLink profile={item} />
                             </Grid>
                         )})}
                     </Grid>
+                    )}
                 </CardContentWrapper>
             </Card>
         </>

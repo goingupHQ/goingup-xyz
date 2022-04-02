@@ -47,16 +47,16 @@ const menuItems: MenuItems[] = [
                 link: '/users',
                 icon: PeopleAltTwoToneIcon
             },
-            {
-                name: 'Events',
-                link: '/events',
-                icon: EmojiEventsTwoToneIcon
-            },
-            {
-                name: 'Mentoring',
-                link: '/mentoring',
-                icon: LocalLibraryTwoToneIcon
-            },
+            // {
+            //     name: 'Events',
+            //     link: '/events',
+            //     icon: EmojiEventsTwoToneIcon
+            // },
+            // {
+            //     name: 'Mentoring',
+            //     link: '/mentoring',
+            //     icon: LocalLibraryTwoToneIcon
+            // },
             {
                 name: 'Settings',
                 link: '/settings',
