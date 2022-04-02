@@ -17,11 +17,12 @@ import {
     Typography
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import InboxTwoToneIcon from '@mui/icons-material/InboxTwoTone';
+//  import InboxTwoToneIcon from '@mui/icons-material/InboxTwoTone';
 import UnfoldMoreTwoToneIcon from '@mui/icons-material/UnfoldMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
+import WorkTwoToneIcon from '@mui/icons-material/WorkTwoTone';
 import Identicon from '@/components/common/Identicon';
 
 const UserBoxButton = styled(Button)(
@@ -248,7 +249,7 @@ function Userbox() {
                         <AccountBoxTwoToneIcon fontSize="small" />
                         <ListItemText primary={t('Profile')} />
                     </ListItem>
-                    <ListItem
+                    {/* <ListItem
                         onClick={() => {
                             handleClose();
                         }}
@@ -256,14 +257,15 @@ function Userbox() {
                     >
                         <InboxTwoToneIcon fontSize="small" />
                         <ListItemText primary={t('Inbox')} />
-                    </ListItem>
+                    </ListItem> */}
                     <ListItem
                         onClick={() => {
                             handleClose();
+                            router.push(`/projects`);
                         }}
                         button
                     >
-                        <AccountTreeTwoToneIcon fontSize="small" />
+                        <WorkTwoToneIcon fontSize="small" />
                         <ListItemText primary={t('Projects')} />
                     </ListItem>
                 </List>
