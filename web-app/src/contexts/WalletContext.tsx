@@ -2,12 +2,14 @@ import {
     ReactNode,
     useState,
     createContext,
-    useEffect
+    useEffect,
+    useRef
 } from 'react';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import { useSnackbar } from 'notistack';
+import WalletChainSelection from './WalletChainSelection';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
 type WalletContext = {
@@ -62,6 +64,7 @@ let web3Modal;
 export function WalletProvider({ children }: Props) {
     const router = useRouter();
     const { enqueueSnackbar } = useSnackbar();
+    const wselRef = useRef(null);
 
     useEffect(() => {
         const providerOptions = {
@@ -82,11 +85,22 @@ export function WalletProvider({ children }: Props) {
 
     const [address, setAddress] = useState(null);
     const [network, setNetwork] = useState(null);
+    const [chain, setChain] = useState(null);
     const [ethersProvider, setEthersProvider] = useState(null);
     const [ethersSigner, setEthersSigner] = useState(null);
     const [walletType, setWalletType] = useState(null);
 
     const connect = async () => {
+        if (!address) wselRef.current.showModal();
+    }
+
+    const disconnect = async () => {
+        if (chain === 'Ethereum') {
+            disconnectEthereum();
+        }
+    }
+
+    const connectEthereum = async () => {
         const instance = await web3Modal.connect();
         instance.on('accountsChanged', (accounts) => {
             setAddress(ethers.utils.getAddress(accounts[0]));
@@ -116,16 +130,17 @@ export function WalletProvider({ children }: Props) {
                 userAddress = ethers.utils.getAddress(instance.accounts[0]); break;
         }
 
-        setAddress(userAddress);
+        setChain(`Ethereum`);
         setNetwork(instance.networkVersion);
         setWalletType(walletType);
         setEthersProvider(provider);
         setEthersSigner(signer);
+        setAddress(userAddress);
 
         enqueueSnackbar('Wallet connected', { variant: 'success' });
         const response = await fetch(`/api/has-account?address=${userAddress}`);
         if (response.status === 200) {
-            const result = await response.json(); console.log(router);
+            const result = await response.json();
 
             if (result.hasAccount && router.pathname?.toLowerCase() === '/create-account' && router.pathname?.toLowerCase() !== '/profile/[address]') {
                 router.push(`/profile/${userAddress}`);
@@ -139,7 +154,7 @@ export function WalletProvider({ children }: Props) {
         }
     };
 
-    const disconnect = async () => {
+    const disconnectEthereum = async () => {
         web3Modal.clearCachedProvider();
 
         setAddress(null);
@@ -162,6 +177,7 @@ export function WalletProvider({ children }: Props) {
             }}
         >
             {children}
+            <WalletChainSelection ref={wselRef} connectEthereum={connectEthereum} />
         </WalletContext.Provider>
     );
 }
