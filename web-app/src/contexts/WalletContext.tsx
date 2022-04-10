@@ -162,6 +162,20 @@ export function WalletProvider({ children }: Props) {
         setEthersProvider(null);
     };
 
+    const connectCardano = async () => {
+        // @ts-ignore
+        const flint = window.cardano?.flint;
+        if (!flint) {
+            enqueueSnackbar('You do not have Flint wallet. Please install Flint wallet and try again.', { variant: 'error' });
+            return;
+        }
+
+        const fw = await flint.enable();
+        console.log(fw);
+        console.log(await fw.getUsedAddresses());
+
+    }
+
     return (
         <WalletContext.Provider
             value={{
@@ -177,7 +191,7 @@ export function WalletProvider({ children }: Props) {
             }}
         >
             {children}
-            <WalletChainSelection ref={wselRef} connectEthereum={connectEthereum} />
+            <WalletChainSelection ref={wselRef} connectEthereum={connectEthereum} connectCardano={connectCardano} />
         </WalletContext.Provider>
     );
 }

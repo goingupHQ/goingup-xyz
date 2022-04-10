@@ -11,7 +11,7 @@ import {
 import { forwardRef, useContext, useImperativeHandle, useState, useEffect } from 'react';
 
 const EditProfile = (props, ref) => {
-    const { connectEthereum } = props;
+    const { connectEthereum, connectCardano } = props;
     const [open, setOpen] = useState(false);
     const theme = useTheme();
     const wallet = useContext(WalletContext);
@@ -75,7 +75,7 @@ const EditProfile = (props, ref) => {
                             alignItems="center"
                             sx={chainItemSx}
                             onClick={(e) => {
-                                // handleClose();
+                                connectCardano();
                             }}
                         >
                             <img
