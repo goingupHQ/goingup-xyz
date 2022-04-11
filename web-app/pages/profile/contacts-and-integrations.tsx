@@ -70,7 +70,7 @@ const ContactsAndIntegrations = (props) => {
         if (myAccount) {
             const { address, ethersSigner } =  wallet;
             const message = 'connect-github';
-            const signature = await ethersSigner.signMessage(message);
+            const signature = await wallet.signMessage(message);
 
             const auth = uuid();
             const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=github&message=${message}&signature=${signature}`);
@@ -95,7 +95,7 @@ const ContactsAndIntegrations = (props) => {
         if (myAccount) {
             const { address, ethersSigner } =  wallet;
             const message = 'connect-linkedin';
-            const signature = await ethersSigner.signMessage(message);
+            const signature = await wallet.signMessage(message);
             const auth = uuid();
             const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=linkedin&message=${message}&signature=${signature}`);
 
@@ -120,7 +120,7 @@ const ContactsAndIntegrations = (props) => {
         if (myAccount) {
             const { address, ethersSigner } =  wallet;
             const message = 'connect-discord';
-            const signature = await ethersSigner.signMessage(message);
+            const signature = await wallet.signMessage(message);
 
             const auth = uuid();
             const savedResponse = await fetch(`/api/oauth/requests?address=${address}&uuid=${auth}&type=discord&message=${message}&signature=${signature}`);

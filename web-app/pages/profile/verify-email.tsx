@@ -59,7 +59,7 @@ const VerifyEmail = (props, ref) => {
 
         setSendingCode(true);
         const { address, ethersSigner } = wallet;
-        const signature = await ethersSigner.signMessage('send-verification-email-code');
+        const signature = await wallet.signMessage('send-verification-email-code');
 
         try {
             const valid = email.toLowerCase().match(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
@@ -93,7 +93,7 @@ const VerifyEmail = (props, ref) => {
 
         try {
             const { address, ethersSigner } = wallet;
-            const signature = await ethersSigner.signMessage('verify-email');
+            const signature = await wallet.signMessage('verify-email');
 
             const response = await fetch(`/api/verify-email?address=${address}&signature=${signature}&code=${code}`);
 

@@ -37,7 +37,8 @@ const EditProfile = (props, ref) => {
     const chainItemSx = {
         padding: 2,
         '&:hover': {
-            backgroundColor: theme.colors.primary.main
+            backgroundColor: theme.colors.secondary.main,
+            color: theme.colors.primary.dark
         },
         cursor: 'pointer',
         borderRadius: '5px'

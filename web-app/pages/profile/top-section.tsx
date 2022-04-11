@@ -70,7 +70,7 @@ const TopSection = (props) => {
 
             const { address, ethersSigner } = wallet;
             const message = 'update-account';
-            const signature = await ethersSigner.signMessage(message);
+            const signature = await wallet.signMessage(message);
 
             const upload = await fetch(url, {
                 method: 'POST',
@@ -155,9 +155,8 @@ const TopSection = (props) => {
             return;
         }
 
-        const { address, ethersSigner } = wallet;
-        const message = 'follow';
-        const signature = await ethersSigner.signMessage(message);
+        const { address } = wallet;
+        const signature = await wallet.signMessage('follow');
 
         const response = await fetch(
             `/api/follow?address=${address}&follows=${account.address}&signature=${signature}`
@@ -178,7 +177,7 @@ const TopSection = (props) => {
     const unfollow = async () => {
         const { address, ethersSigner } = wallet;
         const message = 'unfollow';
-        const signature = await ethersSigner.signMessage(message);
+        const signature = await wallet.signMessage(message);
 
         const response = await fetch(
             `/api/unfollow?address=${address}&follows=${account.address}&signature=${signature}`

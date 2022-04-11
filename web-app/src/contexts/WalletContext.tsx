@@ -5,6 +5,7 @@ import Web3Modal from 'web3modal';
 import { useSnackbar } from 'notistack';
 import WalletChainSelection from './WalletChainSelection';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import Web3Token from 'web3-cardano-token/dist/browser';
 
 type WalletContext = {
     chain: string;
@@ -15,6 +16,7 @@ type WalletContext = {
     ethersSigner: ethers.providers.JsonRpcSigner;
     connect: () => Promise<any>;
     disconnect: () => Promise<any>;
+    signMessage: (message: string) => Promise<any>;
     networks: any;
     walletTypes: any;
 };
@@ -97,6 +99,31 @@ export function WalletProvider({ children }: Props) {
         }
     };
 
+    const checkForGoingUpAccount = async (address) => {
+        const response = await fetch(`/api/has-account?address=${address}`);
+        if (response.status === 200) {
+            const result = await response.json();
+
+            if (
+                result.hasAccount &&
+                router.pathname?.toLowerCase() === '/create-account' &&
+                router.pathname?.toLowerCase() !== '/profile/[address]'
+            ) {
+                router.push(`/profile/${address}`);
+            }
+
+            if (
+                !result.hasAccount &&
+                router.pathname !== '/create-account' &&
+                router.pathname?.toLowerCase() !== '/profile/[address]'
+            ) {
+                router.push('/create-account');
+            }
+        } else {
+            throw `${response.status}: ${(await response).text()}`;
+        }
+    };
+
     const connectEthereum = async () => {
         const instance = await web3Modal.connect();
         instance.on('accountsChanged', (accounts) => {
@@ -140,31 +167,6 @@ export function WalletProvider({ children }: Props) {
         checkForGoingUpAccount(userAddress);
     };
 
-    const checkForGoingUpAccount = async address => {
-        const response = await fetch(`/api/has-account?address=${address}`);
-        if (response.status === 200) {
-            const result = await response.json();
-
-            if (
-                result.hasAccount &&
-                router.pathname?.toLowerCase() === '/create-account' &&
-                router.pathname?.toLowerCase() !== '/profile/[address]'
-            ) {
-                router.push(`/profile/${address}`);
-            }
-
-            if (
-                !result.hasAccount &&
-                router.pathname !== '/create-account' &&
-                router.pathname?.toLowerCase() !== '/profile/[address]'
-            ) {
-                router.push('/create-account');
-            }
-        } else {
-            throw `${response.status}: ${(await response).text()}`;
-        }
-    }
-
     const disconnectEthereum = async () => {
         web3Modal.clearCachedProvider();
 
@@ -207,6 +209,30 @@ export function WalletProvider({ children }: Props) {
         clearState();
     };
 
+    const signMessage = async (message) => {
+        if (chain === 'Ethereum') {
+            const signature = await ethersSigner.signMessage(message);
+            return signature;
+        } else if (chain === 'Cardano') {
+            // @ts-ignore
+            const cardano = window.cardano;
+            await cardano.flint.enable();
+
+            // getting address from which we will sign message
+            const address = (await cardano.getUsedAddresses())[0];
+
+            // generating a token with 1 day of expiration time
+            const token = await Web3Token.sign(
+                (msg) =>
+                    cardano.signData(address, Buffer.from(msg).toString('hex')),
+                '1d'
+            );
+
+            console.log(token);
+            return token;
+        }
+    };
+
     return (
         <WalletContext.Provider
             value={{
@@ -219,7 +245,8 @@ export function WalletProvider({ children }: Props) {
                 networks,
                 walletTypes,
                 connect,
-                disconnect
+                disconnect,
+                signMessage
             }}
         >
             {children}
