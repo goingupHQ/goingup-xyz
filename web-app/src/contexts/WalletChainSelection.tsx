@@ -75,7 +75,7 @@ const EditProfile = (props, ref) => {
                             spacing={2}
                             alignItems="center"
                             sx={chainItemSx}
-                            onClick={(e) => {
+                            onClick={() => {
                                 connectCardano();
                             }}
                         >
