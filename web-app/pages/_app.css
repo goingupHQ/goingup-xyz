@@ -1,4 +1,4 @@
-.web3modal-modal-lightbox { z-index: 1000 !important; }
+.web3modal-modal-lightbox { z-index: 100000 !important; }
 a {
     text-decoration: none;
 }

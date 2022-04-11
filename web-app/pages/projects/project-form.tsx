@@ -88,7 +88,7 @@ const ProjectForm = (props, ref) => {
         try {
             const { address, ethersSigner } = wallet;
             const message = 'save-project';
-            const signature = await ethersSigner.signMessage(message);
+            const signature = await wallet.signMessage(message);
 
             const response = await fetch('/api/save-project/', {
                 method: 'POST',

@@ -101,7 +101,7 @@ const VerifyTwitter = (props, ref) => {
 
             const { address, ethersSigner } = wallet;
             const message = 'update-account';
-            const signature = await ethersSigner.signMessage(message);
+            const signature = await wallet.signMessage(message);
 
             const response = await fetch('/api/update-account/', {
                 method: 'POST',
