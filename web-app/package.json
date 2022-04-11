@@ -95,6 +95,7 @@
     "swiper": "6.8.4",
     "typescript": "4.4.4",
     "uuid": "^8.3.2",
+    "web3-cardano-token": "^0.0.12",
     "web3modal": "^1.9.5",
     "yup": "0.32.11"
   },

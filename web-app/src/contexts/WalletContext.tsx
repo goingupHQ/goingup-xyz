@@ -1,10 +1,4 @@
-import {
-    ReactNode,
-    useState,
-    createContext,
-    useEffect,
-    useRef
-} from 'react';
+import { ReactNode, useState, createContext, useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
@@ -13,6 +7,7 @@ import WalletChainSelection from './WalletChainSelection';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
 type WalletContext = {
+    chain: string;
     address: string;
     network: string;
     walletType: string;
@@ -32,9 +27,9 @@ type Props = {
 };
 
 const walletTypes = {
-    'metamask': { display: 'MetaMask' },
-    'walletconnect': { display: 'WalletConnect' }
-}
+    metamask: { display: 'MetaMask' },
+    walletconnect: { display: 'WalletConnect' }
+};
 
 const networks = {
     1: {
@@ -92,13 +87,15 @@ export function WalletProvider({ children }: Props) {
 
     const connect = async () => {
         if (!address) wselRef.current.showModal();
-    }
+    };
 
     const disconnect = async () => {
         if (chain === 'Ethereum') {
             disconnectEthereum();
+        } else if (chain === 'Cardano') {
+            disconnectCardano();
         }
-    }
+    };
 
     const connectEthereum = async () => {
         const instance = await web3Modal.connect();
@@ -124,10 +121,12 @@ export function WalletProvider({ children }: Props) {
         switch (walletType) {
             case 'metamask':
                 // @ts-ignore
-                userAddress = ethers.utils.getAddress(instance.selectedAddress); break;
+                userAddress = ethers.utils.getAddress(instance.selectedAddress);
+                break;
             case 'walletconnect':
                 // @ts-ignore
-                userAddress = ethers.utils.getAddress(instance.accounts[0]); break;
+                userAddress = ethers.utils.getAddress(instance.accounts[0]);
+                break;
         }
 
         setChain(`Ethereum`);
@@ -138,25 +137,42 @@ export function WalletProvider({ children }: Props) {
         setAddress(userAddress);
 
         enqueueSnackbar('Wallet connected', { variant: 'success' });
-        const response = await fetch(`/api/has-account?address=${userAddress}`);
+        checkForGoingUpAccount(userAddress);
+    };
+
+    const checkForGoingUpAccount = async address => {
+        const response = await fetch(`/api/has-account?address=${address}`);
         if (response.status === 200) {
             const result = await response.json();
 
-            if (result.hasAccount && router.pathname?.toLowerCase() === '/create-account' && router.pathname?.toLowerCase() !== '/profile/[address]') {
-                router.push(`/profile/${userAddress}`);
+            if (
+                result.hasAccount &&
+                router.pathname?.toLowerCase() === '/create-account' &&
+                router.pathname?.toLowerCase() !== '/profile/[address]'
+            ) {
+                router.push(`/profile/${address}`);
             }
 
-            if (!result.hasAccount && router.pathname !== '/create-account' && router.pathname?.toLowerCase() !== '/profile/[address]') {
+            if (
+                !result.hasAccount &&
+                router.pathname !== '/create-account' &&
+                router.pathname?.toLowerCase() !== '/profile/[address]'
+            ) {
                 router.push('/create-account');
             }
         } else {
-            throw(`${response.status}: ${(await response).text()}`)
+            throw `${response.status}: ${(await response).text()}`;
         }
-    };
+    }
 
     const disconnectEthereum = async () => {
         web3Modal.clearCachedProvider();
 
+        clearState();
+    };
+
+    const clearState = () => {
+        setChain(null);
         setAddress(null);
         setNetwork(null);
         setEthersProvider(null);
@@ -166,19 +182,35 @@ export function WalletProvider({ children }: Props) {
         // @ts-ignore
         const flint = window.cardano?.flint;
         if (!flint) {
-            enqueueSnackbar('You do not have Flint wallet. Please install Flint wallet and try again.', { variant: 'error' });
+            enqueueSnackbar(
+                'You do not have Flint wallet. Please install Flint wallet and try again.',
+                { variant: 'error' }
+            );
             return;
         }
 
         const fw = await flint.enable();
-        console.log(fw);
-        console.log(await fw.getUsedAddresses());
+        const address = (await fw.getUsedAddresses())[0];
 
-    }
+        setChain(`Cardano`);
+        setNetwork(await fw.getNetworkId());
+        setWalletType('flint');
+        setEthersProvider(null);
+        setEthersSigner(null);
+        setAddress(address);
+        // const token = await CardanoWeb3.sign(msg => flint.signData(address, new Buffer('myString').toString('hex');))
+
+        checkForGoingUpAccount(address);
+    };
+
+    const disconnectCardano = async () => {
+        clearState();
+    };
 
     return (
         <WalletContext.Provider
             value={{
+                chain,
                 address,
                 network,
                 walletType,
@@ -191,7 +223,11 @@ export function WalletProvider({ children }: Props) {
             }}
         >
             {children}
-            <WalletChainSelection ref={wselRef} connectEthereum={connectEthereum} connectCardano={connectCardano} />
+            <WalletChainSelection
+                ref={wselRef}
+                connectEthereum={connectEthereum}
+                connectCardano={connectCardano}
+            />
         </WalletContext.Provider>
     );
 }

@@ -162,7 +162,8 @@ function Userbox() {
                         component="span"
                         sx={{
                             display: { xs: 'inline-block', md: 'inline-block' },
-                            width: { xs: '120px', md: 'auto'}
+                            width: { xs: '120px', md: 'auto'},
+                            maxWidth: { xs: '350px' }
                         }}
                     >
                         <UserBoxText
