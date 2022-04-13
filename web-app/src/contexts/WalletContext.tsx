@@ -6,50 +6,7 @@ import { useSnackbar } from 'notistack';
 import WalletChainSelection from './WalletChainSelection';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3Token from 'web3-cardano-token/dist/browser';
-import {
-    Address,
-    BaseAddress,
-    MultiAsset,
-    Assets,
-    ScriptHash,
-    Costmdls,
-    Language,
-    CostModel,
-    AssetName,
-    TransactionUnspentOutput,
-    TransactionUnspentOutputs,
-    TransactionOutput,
-    Value,
-    TransactionBuilder,
-    TransactionBuilderConfigBuilder,
-    TransactionOutputBuilder,
-    LinearFee,
-    BigNum,
-    BigInt,
-    TransactionHash,
-    TransactionInputs,
-    TransactionInput,
-    TransactionWitnessSet,
-    Transaction,
-    PlutusData,
-    PlutusScripts,
-    PlutusScript,
-    PlutusList,
-    Redeemers,
-    Redeemer,
-    RedeemerTag,
-    Ed25519KeyHashes,
-    ConstrPlutusData,
-    ExUnits,
-    Int,
-    NetworkInfo,
-    EnterpriseAddress,
-    TransactionOutputs,
-    hash_transaction,
-    hash_script_data,
-    hash_plutus_data,
-    ScriptDataHash, Ed25519KeyHash, NativeScript, StakeCredential
-} from "@emurgo/cardano-serialization-lib-asmjs"
+import { Address } from '@emurgo/cardano-serialization-lib-asmjs';
 
 type WalletContext = {
     chain: string;
@@ -244,7 +201,9 @@ export function WalletProvider({ children }: Props) {
 
         const fw = await flint.enable();
         const rawAddress = (await fw.getUsedAddresses())[0];
-        const computedAddress = Address.from_bytes(Buffer.from(rawAddress, "hex")).to_bech32();
+        const computedAddress = Address.from_bytes(
+            Buffer.from(rawAddress, 'hex')
+        ).to_bech32();
         console.log(computedAddress);
 
         setChain(`Cardano`);
