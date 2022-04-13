@@ -184,7 +184,7 @@ function Userbox() {
                                 <UserBoxDescriptionMain
                                     variant="body2"
                                 >
-                                    {wallet.walletTypes[wallet.walletType]?.display} {wallet.networks[wallet.network]?.name} {wallet.network ? `[${wallet.network}]` : ``}
+                                    {wallet.walletTypes[wallet.walletType]?.display} {wallet.networks[wallet.network]?.name}
                                 </UserBoxDescriptionMain>
                             }
                         </UserBoxText>

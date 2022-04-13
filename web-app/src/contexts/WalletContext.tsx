@@ -6,6 +6,50 @@ import { useSnackbar } from 'notistack';
 import WalletChainSelection from './WalletChainSelection';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3Token from 'web3-cardano-token/dist/browser';
+import {
+    Address,
+    BaseAddress,
+    MultiAsset,
+    Assets,
+    ScriptHash,
+    Costmdls,
+    Language,
+    CostModel,
+    AssetName,
+    TransactionUnspentOutput,
+    TransactionUnspentOutputs,
+    TransactionOutput,
+    Value,
+    TransactionBuilder,
+    TransactionBuilderConfigBuilder,
+    TransactionOutputBuilder,
+    LinearFee,
+    BigNum,
+    BigInt,
+    TransactionHash,
+    TransactionInputs,
+    TransactionInput,
+    TransactionWitnessSet,
+    Transaction,
+    PlutusData,
+    PlutusScripts,
+    PlutusScript,
+    PlutusList,
+    Redeemers,
+    Redeemer,
+    RedeemerTag,
+    Ed25519KeyHashes,
+    ConstrPlutusData,
+    ExUnits,
+    Int,
+    NetworkInfo,
+    EnterpriseAddress,
+    TransactionOutputs,
+    hash_transaction,
+    hash_script_data,
+    hash_plutus_data,
+    ScriptDataHash, Ed25519KeyHash, NativeScript, StakeCredential
+} from "@emurgo/cardano-serialization-lib-asmjs"
 
 type WalletContext = {
     chain: string;
@@ -30,7 +74,8 @@ type Props = {
 
 const walletTypes = {
     metamask: { display: 'MetaMask' },
-    walletconnect: { display: 'WalletConnect' }
+    walletconnect: { display: 'WalletConnect' },
+    flint: { display: 'Flint' }
 };
 
 const networks = {
@@ -54,6 +99,12 @@ const networks = {
     },
     80001: {
         name: 'Polygon Mumbai Testnet'
+    },
+    'CARDANO-0': {
+        name: 'Cardano Testnet'
+    },
+    'CARDANO-1': {
+        name: 'Cardano Mainnet'
     }
 };
 
@@ -192,14 +243,16 @@ export function WalletProvider({ children }: Props) {
         }
 
         const fw = await flint.enable();
-        const address = (await fw.getUsedAddresses())[0];
+        const rawAddress = (await fw.getUsedAddresses())[0];
+        const computedAddress = Address.from_bytes(Buffer.from(rawAddress, "hex")).to_bech32();
+        console.log(computedAddress);
 
         setChain(`Cardano`);
-        setNetwork(await fw.getNetworkId());
+        setNetwork(`CARDANO-${await fw.getNetworkId()}`);
         setWalletType('flint');
         setEthersProvider(null);
         setEthersSigner(null);
-        setAddress(address);
+        setAddress(computedAddress);
         // const token = await CardanoWeb3.sign(msg => flint.signData(address, new Buffer('myString').toString('hex');))
 
         checkForGoingUpAccount(address);
