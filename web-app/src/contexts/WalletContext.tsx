@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack';
 import WalletChainSelection from './WalletChainSelection';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3Token from 'web3-cardano-token/dist/browser';
-import { Address } from '@emurgo/cardano-serialization-lib-asmjs';
+import { Address } from '@emurgo/cardano-serialization-lib-browser';
 
 type WalletContext = {
     chain: string;
