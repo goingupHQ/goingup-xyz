@@ -12,6 +12,8 @@ contract GoingUpReputationScore is ERC20, ERC20Burnable, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 
+    uint256 public mintPrice = 10000000000000000; // 0.01 native asset (ETH, MATIC)    
+
     constructor() ERC20("GoingUp Reputation Score", "GRSC") {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(MINTER_ROLE, msg.sender);
@@ -19,18 +21,27 @@ contract GoingUpReputationScore is ERC20, ERC20Burnable, AccessControl {
     }
 
     modifier onlyAdmin {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender));
+        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Sender is not admin");
         _;
     }
 
     modifier onlyMinter {
-        require(hasRole(MINTER_ROLE, msg.sender));
+        require(hasRole(MINTER_ROLE, msg.sender), "Sender is not minter");
         _;
     }
 
     modifier onlyBurner {
-        require(hasRole(BURNER_ROLE, msg.sender));
+        require(hasRole(BURNER_ROLE, msg.sender), "Sender is not burner");
         _;
+    }
+
+    function setMintPrice(uint256 price) public onlyAdmin {
+        mintPrice = price;
+    }
+
+    function mintAndSend(address account, uint256 amount) public payable {
+        require(mintPrice == 0 || msg.value >= mintPrice * amount, "Amount sent not enough");
+        _mint(account, amount);
     }
 
     function manualMint(address account, uint256 amount) public onlyMinter {
