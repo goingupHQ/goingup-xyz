@@ -1,17 +1,16 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.14;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract GoingUpNFT is ERC721, AccessControl, ERC721Burnable, ERC721Pausable, ERC721Enumerable {
+contract GoingUpNFT is ERC1155, AccessControl, ERC1155Burnable, ERC1155Pausable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdTracker;
 
@@ -22,20 +21,20 @@ contract GoingUpNFT is ERC721, AccessControl, ERC721Burnable, ERC721Pausable, ER
     uint256 public mintPrice = 10000000000000000; // 0.01 native asset (ETH, MATIC)     
     uint256 public tokenTierMultiplier = 5;
 
-    string private _baseTokenURI = 'https://app.goingup.xyz/api/token/';
+    string private _baseTokenURI = 'https://app.goingup.xyz/api/token-metadata/';
 
-    constructor() ERC721("GoingUp NFT", "GNFT") {
+    constructor() ERC1155(_baseTokenURI) {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(MINTER_ROLE, msg.sender);
         _setupRole(BURNER_ROLE, msg.sender);
         _setupRole(PAUSER_ROLE, msg.sender);
     }
 
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override(ERC721, ERC721Pausable, ERC721Enumerable) {
-        super._beforeTokenTransfer(from, to, amount);
+    function _beforeTokenTransfer(address operator, address from, address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data) internal virtual override(ERC1155, ERC1155Pausable) {
+        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721Enumerable, AccessControl) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC1155, AccessControl) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
@@ -67,40 +66,36 @@ contract GoingUpNFT is ERC721, AccessControl, ERC721Burnable, ERC721Pausable, ER
         mintPrice = price;
     }
 
-    function mint(address to) public payable whenNotPaused {
-        require(mintPrice == 0 || msg.value >= mintPrice, "Amount sent not enough");
-        _mint(to, _tokenIdTracker.current());
-        _tokenIdTracker.increment();
-    }
+    // function mint(address to) public payable whenNotPaused {
+    //     require(mintPrice == 0 || msg.value >= mintPrice, "Amount sent not enough");
+    //     _mint(to, _tokenIdTracker.current());
+    //     _tokenIdTracker.increment();
+    // }
 
-    function mint(address to, uint qty) public payable whenNotPaused {
-        require(mintPrice == 0 || msg.value >= mintPrice * qty, "Amount sent not enough");
+    // function mint(address to, uint qty) public payable whenNotPaused {
+    //     require(mintPrice == 0 || msg.value >= mintPrice * qty, "Amount sent not enough");
 
-        for (uint i = 0; i < qty; i++) {
-            _mint(to, _tokenIdTracker.current());
-            _tokenIdTracker.increment();
-        }        
-    }
+    //     for (uint i = 0; i < qty; i++) {
+    //         _mint(to, _tokenIdTracker.current());
+    //         _tokenIdTracker.increment();
+    //     }        
+    // }
 
-    function manualMint(address to) public onlyMinter whenNotPaused {
-        _mint(to, _tokenIdTracker.current());
-        _tokenIdTracker.increment();
-    }
+    // function manualMint(address to) public onlyMinter whenNotPaused {
+    //     _mint(to, _tokenIdTracker.current());
+    //     _tokenIdTracker.increment();
+    // }
 
-    function manualMint(address to, uint qty) public onlyMinter whenNotPaused {
-        for (uint i = 0; i < qty; i++) {
-            _mint(to, _tokenIdTracker.current());
-            _tokenIdTracker.increment();
-        }
-    }
+    // function manualMint(address to, uint qty) public onlyMinter whenNotPaused {
+    //     for (uint i = 0; i < qty; i++) {
+    //         _mint(to, _tokenIdTracker.current());
+    //         _tokenIdTracker.increment();
+    //     }
+    // }
 
-    function manualBurn(uint256 tokenID) public onlyBurner {
-        _burn(tokenID);
-    }    
-
-    function _baseURI() internal view virtual override returns (string memory) {
-        return _baseTokenURI;
-    }
+    // function manualBurn(uint256 tokenID) public onlyBurner {
+    //     _burn(tokenID);
+    // }    
 
     function setBaseTokenURI(string memory baseTokenURI) public onlyAdmin {
         _baseTokenURI = baseTokenURI;
