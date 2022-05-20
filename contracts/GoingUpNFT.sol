@@ -10,23 +10,23 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract GoingUpNFT is ERC1155, AccessControl, ERC1155Burnable, ERC1155Pausable {
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIdTracker;
+contract GoingUpNFT is ERC1155, AccessControl, ERC1155Pausable {
+    struct TokenSetting {
+        string description;
+        string metadataURI;
+        uint category;
+        uint tier;
+        uint price;
+    }
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
-    uint256 public mintPrice = 10000000000000000; // 0.01 native asset (ETH, MATIC)     
-    uint256 public tokenTierMultiplier = 5;
+    mapping(uint256 => TokenSetting) public tokenSettings;
 
-    string private _baseTokenURI = 'https://app.goingup.xyz/api/token-metadata/';
-
-    constructor() ERC1155(_baseTokenURI) {
+    constructor() ERC1155("https://app.goingup.xyz/api/1155-metadata/") {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(MINTER_ROLE, msg.sender);
-        _setupRole(BURNER_ROLE, msg.sender);
         _setupRole(PAUSER_ROLE, msg.sender);
     }
 
@@ -48,11 +48,6 @@ contract GoingUpNFT is ERC1155, AccessControl, ERC1155Burnable, ERC1155Pausable 
         _;
     }
 
-    modifier onlyBurner {
-        require(hasRole(BURNER_ROLE, msg.sender), "Sender is not burner");
-        _;
-    }
-
     modifier onlyPauser {
         require(hasRole(PAUSER_ROLE, msg.sender), "Sender is not pauser");
         _;
@@ -62,43 +57,35 @@ contract GoingUpNFT is ERC1155, AccessControl, ERC1155Burnable, ERC1155Pausable 
     
     function unpauseContract() public onlyPauser whenPaused { _unpause(); }
 
-    function setMintPrice(uint256 price) public onlyAdmin {
-        mintPrice = price;
+    function setTokenSettings(uint256 tokenID, string calldata _description, string calldata _metadataURI, uint _category, uint _tier, uint _price) public onlyAdmin {
+        tokenSettings[tokenID] = TokenSetting({
+            description: _description,
+            metadataURI: _metadataURI,
+            category: _category,
+            tier: _tier,
+            price: _price
+        });
     }
 
-    // function mint(address to) public payable whenNotPaused {
-    //     require(mintPrice == 0 || msg.value >= mintPrice, "Amount sent not enough");
-    //     _mint(to, _tokenIdTracker.current());
-    //     _tokenIdTracker.increment();
-    // }
+    function mint(address account, uint256 tokenID, uint256 qty) public payable whenNotPaused {
+        TokenSetting memory ts = tokenSettings[tokenID];
+        require(ts.category != 0 && ts.tier != 0, "Token setting not found");
+        require(ts.price == 0 || msg.value >= ts.price * qty, "Amount sent not enough");
+        _mint(account, tokenID, qty, "");
+    }
 
-    // function mint(address to, uint qty) public payable whenNotPaused {
-    //     require(mintPrice == 0 || msg.value >= mintPrice * qty, "Amount sent not enough");
+    function manualMint(address account, uint256 tokenID, uint256 qty) public onlyMinter whenNotPaused {
+        _mint(account, tokenID, qty, "");
+    }
 
-    //     for (uint i = 0; i < qty; i++) {
-    //         _mint(to, _tokenIdTracker.current());
-    //         _tokenIdTracker.increment();
-    //     }        
-    // }
+    function manualMintBatch(address account, uint256[] calldata tokenIDs, uint256[] calldata qtys) public onlyMinter whenNotPaused {        
+        _mintBatch(account, tokenIDs, qtys, "");
+    }   
 
-    // function manualMint(address to) public onlyMinter whenNotPaused {
-    //     _mint(to, _tokenIdTracker.current());
-    //     _tokenIdTracker.increment();
-    // }
-
-    // function manualMint(address to, uint qty) public onlyMinter whenNotPaused {
-    //     for (uint i = 0; i < qty; i++) {
-    //         _mint(to, _tokenIdTracker.current());
-    //         _tokenIdTracker.increment();
-    //     }
-    // }
-
-    // function manualBurn(uint256 tokenID) public onlyBurner {
-    //     _burn(tokenID);
-    // }    
-
-    function setBaseTokenURI(string memory baseTokenURI) public onlyAdmin {
-        _baseTokenURI = baseTokenURI;
+    function uri(uint256 tokenID) override public view returns (string memory) {
+        TokenSetting memory ts = tokenSettings[tokenID];
+        require(ts.category != 0 && ts.tier != 0, "Token not found");
+        return ts.metadataURI;
     }
 
     function withdrawFunds() public onlyAdmin {
