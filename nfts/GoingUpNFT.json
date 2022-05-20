@@ -1,0 +1,7 @@
+{
+    "name": "GoingUP NFTs",
+    "description": "Utility tokens for GoingUP platform",
+    "external_link": "https://goingup.xyz",
+    "seller_fee_basis_points": 1000,
+    "fee_recipient": "0x68D99e952cF3D4faAa6411C1953979F54552A8F7"
+}

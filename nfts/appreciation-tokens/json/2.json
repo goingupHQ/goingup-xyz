@@ -1,20 +1,18 @@
 {
-    "name": "GoingUP Appreciation Token T4",
-    "description": "Tier 4 Appreciate Token from GoingUP.xyz",
-    "image": "ipfs://Qma2MQ4xZMXocCp1gcDx4SVyZmBvd1BHAuy4ZicD9iHYXc/Appreciation-Tier-4.png",
+    "name": "GoingUP Appreciation Token T2",
+    "description": "Tier 2 Appreciate Token from GoingUP.xyz",
+    "image": "ipfs://Qmbn5uzNpwZ7nfQokgs9Ek4qAZY64ZsMT2yJjW5XgUmSf9/Appreciation-Tier-2.png",
     "attributes": [
         {
             "display_type": "date",
             "trait_type": "Created On",
-            "value": 1653043067
+            "value": 1653042772
         },
         {
-            "display_type": "number",
             "trait_type": "Tier",
-            "value": 4
+            "value": 2
         },
         {
-            "display_type": "number",
             "trait_type": "Category ID",
             "value": 1
         },
@@ -25,7 +23,7 @@
         {
             "display_type": "boost_number",
             "trait_type": "Reputation Score Boost",
-            "value": 50
+            "value": 5
         }
     ]
 }

@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract GoingUpNFT is ERC1155, AccessControl, ERC1155Pausable {
     struct TokenSetting {
@@ -19,6 +18,7 @@ contract GoingUpNFT is ERC1155, AccessControl, ERC1155Pausable {
         uint price;
     }
 
+    string private _contractURI = "ipfs://QmYWnXmp5wLUeCNHsrS3PLtnFBXhEwpnKvmRhrjYY3id2J";
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
@@ -87,6 +87,10 @@ contract GoingUpNFT is ERC1155, AccessControl, ERC1155Pausable {
         require(ts.category != 0 && ts.tier != 0, "Token not found");
         return ts.metadataURI;
     }
+
+    function setContractURI(string calldata _uri) public onlyAdmin { _contractURI = _uri; }
+
+    function contractURI() public view returns (string memory) { return _contractURI; }
 
     function withdrawFunds() public onlyAdmin {
         payable(msg.sender).transfer(address(this).balance);
