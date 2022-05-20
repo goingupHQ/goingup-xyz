@@ -1,0 +1,31 @@
+{
+    "name": "GoingUP Appreciation Token T4",
+    "description": "Tier 4 Appreciate Token from GoingUP.xyz",
+    "image": "ipfs://Qma2MQ4xZMXocCp1gcDx4SVyZmBvd1BHAuy4ZicD9iHYXc/Appreciation-Tier-4.png",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "Created On",
+            "value": 1653043067
+        },
+        {
+            "display_type": "number",
+            "trait_type": "Tier",
+            "value": 4
+        },
+        {
+            "display_type": "number",
+            "trait_type": "Category ID",
+            "value": 1
+        },
+        {
+            "trait_type": "Category",
+            "value": "Appreciation Token"
+        },
+        {
+            "display_type": "boost_number",
+            "trait_type": "Reputation Score Boost",
+            "value": 50
+        }
+    ]
+}
