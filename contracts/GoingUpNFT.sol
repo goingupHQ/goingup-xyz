@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.14;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
@@ -20,6 +20,7 @@ contract GoingUpNFT is ERC721, AccessControl, ERC721Burnable, ERC721Pausable, ER
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
     uint256 public mintPrice = 10000000000000000; // 0.01 native asset (ETH, MATIC)     
+    uint256 public tokenTierMultiplier = 5;
 
     string private _baseTokenURI = 'https://app.goingup.xyz/api/token/';
 
@@ -66,15 +67,31 @@ contract GoingUpNFT is ERC721, AccessControl, ERC721Burnable, ERC721Pausable, ER
         mintPrice = price;
     }
 
-    function mintAndSend(address to) public payable {
+    function mint(address to) public payable whenNotPaused {
         require(mintPrice == 0 || msg.value >= mintPrice, "Amount sent not enough");
         _mint(to, _tokenIdTracker.current());
         _tokenIdTracker.increment();
     }
 
-    function manualMint(address to) public onlyMinter {
+    function mint(address to, uint qty) public payable whenNotPaused {
+        require(mintPrice == 0 || msg.value >= mintPrice * qty, "Amount sent not enough");
+
+        for (uint i = 0; i < qty; i++) {
+            _mint(to, _tokenIdTracker.current());
+            _tokenIdTracker.increment();
+        }        
+    }
+
+    function manualMint(address to) public onlyMinter whenNotPaused {
         _mint(to, _tokenIdTracker.current());
         _tokenIdTracker.increment();
+    }
+
+    function manualMint(address to, uint qty) public onlyMinter whenNotPaused {
+        for (uint i = 0; i < qty; i++) {
+            _mint(to, _tokenIdTracker.current());
+            _tokenIdTracker.increment();
+        }
     }
 
     function manualBurn(uint256 tokenID) public onlyBurner {
