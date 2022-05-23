@@ -55,7 +55,7 @@ const SendAppreciationToken = (props, ref) => {
         try {
             if (wallet.chain === 'Ethereum') {
                 if (wallet.network != '137') {
-                    enqueueSnackbar(`Please switch to Polygon Mainnet`, { variant: 'error'});
+                    enqueueSnackbar(`Please switch to Polygon Mainnet 💫`, { variant: 'error'});
                     return;
                 }
                 const address = process.env.NEXT_PUBLIC_GOINGUP_UTILITY_TOKEN;
