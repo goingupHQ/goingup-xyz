@@ -27,6 +27,7 @@ import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import EditProfile from './edit-profile';
 import ContactsAndIntegrations from './contacts-and-integrations';
+import SendAppreciationToken from '@/components/common/SendAppreciationToken';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -50,6 +51,7 @@ const TopSection = (props) => {
     const uploadCoverInputRef = useRef<any>(null);
     const uploadProfileInputRef = useRef<any>(null);
     const editProfileRef = useRef<any>(null);
+    const sendAppreciationRef = useRef<any>(null);
 
     const uploadPhoto = async (e, photoType) => {
         if (photoType === 'cover-photo') setUploadingCover(true);
@@ -222,7 +224,10 @@ const TopSection = (props) => {
                                         {account.address}
                                     </Typography>
 
-                                    <Typography variant="h4" sx={{ marginTop: 2 }}>
+                                    <Typography
+                                        variant="h4"
+                                        sx={{ marginTop: 2 }}
+                                    >
                                         Reputation Score:{' '}
                                         {Math.round(
                                             100 *
@@ -393,6 +398,17 @@ const TopSection = (props) => {
                                                         Unfollow
                                                     </Button>
                                                 )}
+
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() => {
+                                                        sendAppreciationRef.current.showModal();
+                                                    }}
+                                                    sx={{ marginX: 1 }}
+                                                >
+                                                    Send Appreciation Token
+                                                </Button>
                                             </Box>
                                         </>
                                     )}
@@ -509,6 +525,12 @@ const TopSection = (props) => {
                 ref={editProfileRef}
                 account={account}
                 refresh={props.refresh}
+            />
+
+            <SendAppreciationToken
+                ref={sendAppreciationRef}
+                sendToName={account.name}
+                sendToAddress={account.address}
             />
         </>
     );
