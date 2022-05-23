@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { forwardRef, useContext, useImperativeHandle, useState, useEffect } from 'react';
 
-const EditProfile = (props, ref) => {
+const WalletChainSelection = (props, ref) => {
     const { connectEthereum, connectCardano } = props;
     const [open, setOpen] = useState(false);
     const theme = useTheme();
@@ -93,4 +93,4 @@ const EditProfile = (props, ref) => {
     );
 };
 
-export default forwardRef(EditProfile);
+export default forwardRef(WalletChainSelection);
