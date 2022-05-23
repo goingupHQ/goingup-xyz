@@ -162,7 +162,7 @@ export function WalletProvider({ children }: Props) {
             setNetwork(networkId);
         });
 
-        const provider = new ethers.providers.Web3Provider(instance);
+        const provider = new ethers.providers.Web3Provider(instance, 'any');
         const signer = provider.getSigner();
 
         let walletType = null;
