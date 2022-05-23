@@ -6,6 +6,7 @@ import { useSnackbar } from 'notistack';
 import WalletChainSelection from './WalletChainSelection';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3Token from 'web3-cardano-token/dist/browser';
+// @ts-ignore
 import { Address } from '@emurgo/cardano-serialization-lib-browser';
 
 type WalletContext = {
@@ -96,7 +97,23 @@ export function WalletProvider({ children }: Props) {
     const [walletType, setWalletType] = useState(null);
 
     const connect = async () => {
-        if (!address) wselRef.current.showModal();
+        let cache;
+
+        try {
+            cache = JSON.parse(localStorage.getItem('wallet-context-cache'));
+        } catch (err) {  }
+
+        if (cache) {
+            if (!address) {
+                if (cache.blockchain === 'ethereum') {
+                    connectEthereum();
+                } else if (cache.blockchain === 'cardano') {
+                    connectCardano();
+                }
+            }
+        } else {
+            if (!address) wselRef.current.showModal();
+        }
     };
 
     const disconnect = async () => {
@@ -105,6 +122,8 @@ export function WalletProvider({ children }: Props) {
         } else if (chain === 'Cardano') {
             disconnectCardano();
         }
+
+        localStorage.removeItem('wallet-context-cache');
     };
 
     const checkForGoingUpAccount = async (address) => {
@@ -173,6 +192,10 @@ export function WalletProvider({ children }: Props) {
 
         enqueueSnackbar('Wallet connected', { variant: 'success' });
         checkForGoingUpAccount(userAddress);
+        localStorage.setItem('wallet-context-cache', JSON.stringify({
+            blockchain: 'ethereum',
+            type: walletType
+        }));
     };
 
     const disconnectEthereum = async () => {
@@ -215,6 +238,11 @@ export function WalletProvider({ children }: Props) {
         // const token = await CardanoWeb3.sign(msg => flint.signData(address, new Buffer('myString').toString('hex');))
 
         checkForGoingUpAccount(address);
+
+        localStorage.setItem('wallet-context-cache', JSON.stringify({
+            blockchain: 'cardano',
+            type: 'flint'
+        }));
     };
 
     const disconnectCardano = async () => {
