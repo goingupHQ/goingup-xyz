@@ -108,7 +108,7 @@ const SendAppreciationToken = (props, ref) => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sx={{ textAlign: 'center' }}>
-                            <img src={`/images/appreciation-token-t${tier}-display.png`} style={{ minWidth: '400px' }} />
+                            <img src={`/images/appreciation-token-t${tier}-display.png`} style={{ minWidth: '300px' }} />
                         </Grid>
                     </Grid>
                 </DialogContent>
