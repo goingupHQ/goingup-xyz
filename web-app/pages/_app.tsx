@@ -24,7 +24,6 @@ import useScrollTop from 'src/hooks/useScrollTop';
 import { SnackbarProvider } from 'notistack';
 import { AuthConsumer, AuthProvider } from 'src/contexts/JWTAuthContext';
 import { AppProvider } from '@/contexts/AppContext';
-import { hotjar } from 'react-hotjar';
 
 import './_app.css';
 
