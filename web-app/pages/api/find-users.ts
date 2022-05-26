@@ -15,6 +15,7 @@ export default async function handler(req, res) {
     if (primaryGoalsArray) query.projectGoals = { $in: primaryGoalsArray };
     if (idealCollabArray) query.idealCollab = { $in: idealCollabArray };
 
+    query.mock = { $exists: false };
 
     const queryResults = await accounts.aggregate([
         {$match: query},

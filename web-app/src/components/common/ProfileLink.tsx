@@ -5,12 +5,12 @@ import { Avatar, LinearProgress, Typography, Box } from '@mui/material';
 import Identicon from './Identicon';
 
 export default function ProfileLink(props) {
-    const { profile } = props;
+    const { profile, hideReputationScore, onClick } = props;
     const app = useContext(AppContext);
     return (
         <>
             <Link href={`/profile/${profile.address}`}>
-                <a>
+                <a style={{ textAlign: 'center' }} onClick={onClick}>
                     {profile.profilePhoto && (
                         <Avatar
                             src={profile.profilePhoto}
@@ -31,6 +31,7 @@ export default function ProfileLink(props) {
                     </Typography>
                 </a>
             </Link>
+            {!hideReputationScore &&
             <Box sx={{ textAlign: 'center' }}>
                 <Typography variant="body1">
                     Reputation Score {Math.round(100 *
@@ -46,6 +47,7 @@ export default function ProfileLink(props) {
                     sx={{ height: 20 }}
                 />
             </Box>
+            }
         </>
     );
 }

@@ -14,19 +14,18 @@ module.exports = withImages(
             defaultLocale: 'en',
             locales: ['en']
         },
-        webpack: function (config, options) {
-            console.log(options.webpack.version); // 5.18.0
-            config.experiments = { asyncWebAssembly: true, layers: true };
+        // webpack: function (config, options) {
+        //     config.experiments = { asyncWebAssembly: true, layers: true };
 
-            if (options.isServer) {
-                config.output.webassemblyModuleFilename =
-                    './../static/wasm/[modulehash].wasm';
-            } else {
-                config.output.webassemblyModuleFilename =
-                    'static/wasm/[modulehash].wasm';
-            }
+        //     if (options.isServer) {
+        //         config.output.webassemblyModuleFilename =
+        //             './../static/wasm/[modulehash].wasm';
+        //     } else {
+        //         config.output.webassemblyModuleFilename =
+        //             'static/wasm/[modulehash].wasm';
+        //     }
 
-            return config;
-        }
+        //     return config;
+        // }
     })
 );

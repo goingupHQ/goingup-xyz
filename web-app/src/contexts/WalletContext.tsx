@@ -5,8 +5,9 @@ import Web3Modal from 'web3modal';
 import { useSnackbar } from 'notistack';
 import WalletChainSelection from './WalletChainSelection';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import Web3Token from 'web3-cardano-token/dist/browser';
-import { Address } from '@emurgo/cardano-serialization-lib-browser';
+// import Web3Token from 'web3-cardano-token/dist/browser';
+// // @ts-ignore
+// import { Address } from '@emurgo/cardano-serialization-lib-browser';
 
 type WalletContext = {
     chain: string;
@@ -96,7 +97,23 @@ export function WalletProvider({ children }: Props) {
     const [walletType, setWalletType] = useState(null);
 
     const connect = async () => {
-        if (!address) wselRef.current.showModal();
+        let cache;
+
+        try {
+            cache = JSON.parse(localStorage.getItem('wallet-context-cache'));
+        } catch (err) {  }
+
+        if (cache) {
+            if (!address) {
+                if (cache.blockchain === 'ethereum') {
+                    connectEthereum();
+                } else if (cache.blockchain === 'cardano') {
+                    connectCardano();
+                }
+            }
+        } else {
+            if (!address) wselRef.current.showModal();
+        }
     };
 
     const disconnect = async () => {
@@ -105,6 +122,8 @@ export function WalletProvider({ children }: Props) {
         } else if (chain === 'Cardano') {
             disconnectCardano();
         }
+
+        localStorage.removeItem('wallet-context-cache');
     };
 
     const checkForGoingUpAccount = async (address) => {
@@ -143,7 +162,7 @@ export function WalletProvider({ children }: Props) {
             setNetwork(networkId);
         });
 
-        const provider = new ethers.providers.Web3Provider(instance);
+        const provider = new ethers.providers.Web3Provider(instance, 'any');
         const signer = provider.getSigner();
 
         let walletType = null;
@@ -173,6 +192,10 @@ export function WalletProvider({ children }: Props) {
 
         enqueueSnackbar('Wallet connected', { variant: 'success' });
         checkForGoingUpAccount(userAddress);
+        localStorage.setItem('wallet-context-cache', JSON.stringify({
+            blockchain: 'ethereum',
+            type: walletType
+        }));
     };
 
     const disconnectEthereum = async () => {
@@ -189,32 +212,37 @@ export function WalletProvider({ children }: Props) {
     };
 
     const connectCardano = async () => {
-        // @ts-ignore
-        const flint = window.cardano?.flint;
-        if (!flint) {
-            enqueueSnackbar(
-                'You do not have Flint wallet. Please install Flint wallet and try again.',
-                { variant: 'error' }
-            );
-            return;
-        }
+        // // @ts-ignore
+        // const flint = window.cardano?.flint;
+        // if (!flint) {
+        //     enqueueSnackbar(
+        //         'You do not have Flint wallet. Please install Flint wallet and try again.',
+        //         { variant: 'error' }
+        //     );
+        //     return;
+        // }
 
-        const fw = await flint.enable();
-        const rawAddress = (await fw.getUsedAddresses())[0];
-        const computedAddress = Address.from_bytes(
-            Buffer.from(rawAddress, 'hex')
-        ).to_bech32();
-        console.log(computedAddress);
+        // const fw = await flint.enable();
+        // const rawAddress = (await fw.getUsedAddresses())[0];
+        // const computedAddress = Address.from_bytes(
+        //     Buffer.from(rawAddress, 'hex')
+        // ).to_bech32();
+        // console.log(computedAddress);
 
-        setChain(`Cardano`);
-        setNetwork(`CARDANO-${await fw.getNetworkId()}`);
-        setWalletType('flint');
-        setEthersProvider(null);
-        setEthersSigner(null);
-        setAddress(computedAddress);
-        // const token = await CardanoWeb3.sign(msg => flint.signData(address, new Buffer('myString').toString('hex');))
+        // setChain(`Cardano`);
+        // setNetwork(`CARDANO-${await fw.getNetworkId()}`);
+        // setWalletType('flint');
+        // setEthersProvider(null);
+        // setEthersSigner(null);
+        // setAddress(computedAddress);
+        // // const token = await CardanoWeb3.sign(msg => flint.signData(address, new Buffer('myString').toString('hex');))
 
-        checkForGoingUpAccount(address);
+        // checkForGoingUpAccount(address);
+
+        // localStorage.setItem('wallet-context-cache', JSON.stringify({
+        //     blockchain: 'cardano',
+        //     type: 'flint'
+        // }));
     };
 
     const disconnectCardano = async () => {
@@ -226,22 +254,22 @@ export function WalletProvider({ children }: Props) {
             const signature = await ethersSigner.signMessage(message);
             return signature;
         } else if (chain === 'Cardano') {
-            // @ts-ignore
-            const cardano = window.cardano;
-            await cardano.flint.enable();
+        //     // @ts-ignore
+        //     const cardano = window.cardano;
+        //     await cardano.flint.enable();
 
-            // getting address from which we will sign message
-            const address = (await cardano.getUsedAddresses())[0];
+        //     // getting address from which we will sign message
+        //     const address = (await cardano.getUsedAddresses())[0];
 
-            // generating a token with 1 day of expiration time
-            const token = await Web3Token.sign(
-                (msg) =>
-                    cardano.signData(address, Buffer.from(msg).toString('hex')),
-                '1d'
-            );
+        //     // generating a token with 1 day of expiration time
+        //     const token = await Web3Token.sign(
+        //         (msg) =>
+        //             cardano.signData(address, Buffer.from(msg).toString('hex')),
+        //         '1d'
+        //     );
 
-            console.log(token);
-            return token;
+        //     console.log(token);
+        //     return token;
         }
     };
 

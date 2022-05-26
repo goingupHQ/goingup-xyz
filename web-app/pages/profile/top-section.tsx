@@ -27,6 +27,9 @@ import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import EditProfile from './edit-profile';
 import ContactsAndIntegrations from './contacts-and-integrations';
+import SendAppreciationToken from '@/components/common/SendAppreciationToken';
+import FollowersList from './followers-list';
+import FollowingList from './following-list';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -39,6 +42,9 @@ const TopSection = (props) => {
     const [uploadingProfile, setUploadingProfile] = useState<boolean>(false);
     const [following, setFollowing] = useState<boolean>(false);
     const [checkingRel, setCheckingRel] = useState<boolean>(true);
+    const [gettingFollowStats, setGettingFollowStats] = useState<boolean>(true);
+    const [followersCount, setFollowersCount] = useState(0);
+    const [followingCount, setFollowingCount] = useState(0);
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
@@ -50,6 +56,9 @@ const TopSection = (props) => {
     const uploadCoverInputRef = useRef<any>(null);
     const uploadProfileInputRef = useRef<any>(null);
     const editProfileRef = useRef<any>(null);
+    const sendAppreciationRef = useRef<any>(null);
+    const followersListRef = useRef<any>(null);
+    const followingListRef = useRef<any>(null);
 
     const uploadPhoto = async (e, photoType) => {
         if (photoType === 'cover-photo') setUploadingCover(true);
@@ -138,12 +147,19 @@ const TopSection = (props) => {
             setCheckingRel(true);
             fetch(
                 `/api/get-rel?address=${wallet.address}&target=${account.address}`
-            )
-                .then(async (response) => {
+            ).then(async (response) => {
+                const result = await response.json();
+                setFollowing(result.following);
+            })
+            .finally(() => setCheckingRel(false));
+
+            setGettingFollowStats(true);
+            fetch(`/api/get-follow-stats?address=${account.address}`)
+                .then(async response => {
                     const result = await response.json();
-                    setFollowing(result.following);
-                })
-                .finally(() => setCheckingRel(false));
+                    setFollowersCount(result.followers);
+                    setFollowingCount(result.following);
+                }).finally(() => setGettingFollowStats(false));
         }
     }, [wallet.address, account.address]);
 
@@ -222,7 +238,10 @@ const TopSection = (props) => {
                                         {account.address}
                                     </Typography>
 
-                                    <Typography variant="h4" sx={{ marginTop: 2 }}>
+                                    <Typography
+                                        variant="h4"
+                                        sx={{ marginTop: 2 }}
+                                    >
                                         Reputation Score:{' '}
                                         {Math.round(
                                             100 *
@@ -393,11 +412,51 @@ const TopSection = (props) => {
                                                         Unfollow
                                                     </Button>
                                                 )}
+
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() => {
+                                                        sendAppreciationRef.current.showModal();
+                                                    }}
+                                                    sx={{ marginX: 1 }}
+                                                >
+                                                    Send Appreciation Token
+                                                </Button>
                                             </Box>
                                         </>
                                     )}
                                 </>
                             )}
+
+                            <Stack
+                                direction={{ xs: 'column', md: 'row' }}
+                                spacing={1}
+                                alignItems="center"
+                                sx={{
+                                    marginBottom: { xs: '24px', md: '8px' }
+                                }}
+                            >
+                                {gettingFollowStats &&
+                                <Typography variant="h4">
+                                    Getting follow stats <CircularProgress size="14px" />
+                                </Typography>
+                                }
+
+                                {!gettingFollowStats &&
+                                <>
+                                    <Typography variant="h4">
+                                        <span style={{ cursor: 'pointer' }} onClick={() => followersListRef.current.showModal()}>
+                                            {followersCount} Follower{followersCount > 1 ? 's' : ''}
+                                        </span>
+                                        {' | '}
+                                        <span style={{ cursor: 'pointer' }} onClick={() => followingListRef.current.showModal()}>
+                                            {followingCount} Following
+                                        </span>
+                                    </Typography>
+                                </>
+                                }
+                            </Stack>
 
                             <Stack
                                 direction={{ xs: 'column', md: 'row' }}
@@ -510,6 +569,15 @@ const TopSection = (props) => {
                 account={account}
                 refresh={props.refresh}
             />
+
+            <SendAppreciationToken
+                ref={sendAppreciationRef}
+                sendToName={account.name}
+                sendToAddress={account.address}
+            />
+
+            <FollowersList ref={followersListRef} account={account} />
+            <FollowingList ref={followingListRef} account={account} />
         </>
     );
 };

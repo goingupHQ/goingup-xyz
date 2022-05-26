@@ -8,17 +8,12 @@ import {
     CardContent,
     Typography,
     styled,
-    Button,
     Fade,
-    Stack,
-    Chip,
-    CardMedia,
-    Avatar,
-    IconButton,
     CircularProgress,
     Box
 } from '@mui/material';
 import { useRouter } from 'next/router';
+import moment from 'moment';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -96,10 +91,14 @@ const Poaps = (props) => {
                                 </Typography>
                             }
 
-                            <Grid container spacing={4}>
-                            {poaps.map(p => { return (
-                                <Grid item xs={4} sm={4} md={3} lg={2} key={p.event.id}>
-                                    <img src={p.event.image_url} height={100} width={100} />
+                            <Grid container spacing={2} sx={{ marginTop: 1 }}>
+                            {!loading && poaps.map(p => { return (
+                                <Grid item xs={12} md={6} lg={3} key={p.event.id} sx={{ textAlign: 'center' }}>
+                                    <a href={p.event.event_url} target="_blank" rel="noopener noreferrer">
+                                        <img src={p.event.image_url} style={{ width: '200px' }} />
+                                            <Typography variant="h3">{p.event.name}</Typography>
+                                        <Typography variant="h4">{moment(p.event.start_date).format('LL')}</Typography>
+                                    </a>
                                 </Grid>
                             )})}
                             </Grid>

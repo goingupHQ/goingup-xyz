@@ -1,6 +1,7 @@
-import type { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode, useEffect } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Router from 'next/router';
 import nProgress from 'nprogress';
@@ -12,7 +13,7 @@ import createEmotionCache from 'src/createEmotionCache';
 import { appWithTranslation } from 'next-i18next';
 import { SidebarProvider } from 'src/contexts/SidebarContext';
 import { WalletProvider, WalletContext } from 'src/contexts/WalletContext';
-import 'src/utils/chart';
+// import 'src/utils/chart';
 // import { Provider as ReduxProvider } from 'react-redux';
 // import { store } from 'src/store';
 import Loader from 'src/components/Loader';
@@ -50,6 +51,25 @@ function MyApp(props: MyAppProps) {
     Router.events.on('routeChangeError', nProgress.done);
     Router.events.on('routeChangeComplete', nProgress.done);
 
+    const CrispWithNoSSR = dynamic(
+        () => import('./../src/components/services/crisp'),
+        { ssr: false }
+    );
+
+    useEffect(() => {
+        (function(h,o,t,j,a,r){
+            // @ts-ignore
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            // @ts-ignore
+            h._hjSettings={hjid:2959009,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            // @ts-ignore
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    }, [])
+
     return (
         <CacheProvider value={emotionCache}>
             <Head>
@@ -59,6 +79,7 @@ function MyApp(props: MyAppProps) {
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
             </Head>
+            <CrispWithNoSSR />
             <LocalizationProvider dateAdapter={DateAdapter}>
                 <SidebarProvider>
                     <ThemeProvider>
@@ -66,7 +87,7 @@ function MyApp(props: MyAppProps) {
                             maxSnack={6}
                             anchorOrigin={{
                                 vertical: 'bottom',
-                                horizontal: 'right'
+                                horizontal: 'left'
                             }}
                             preventDuplicate
                         >
@@ -80,7 +101,9 @@ function MyApp(props: MyAppProps) {
                                                     <Loader />
                                                 ) : (
                                                     getLayout(
-                                                        <Component {...pageProps} />
+                                                        <Component
+                                                            {...pageProps}
+                                                        />
                                                     )
                                                 )
                                             }
