@@ -445,12 +445,14 @@ const TopSection = (props) => {
 
                                 {!gettingFollowStats &&
                                 <>
-                                    <Typography variant="h4" sx={{ cursor: 'pointer' }} onClick={() => followersListRef.current.showModal()}>
-                                        {followersCount} Follower{followersCount > 1 ? 's' : ''}
-                                    </Typography>
-                                    <Typography variant="h4"> | </Typography>
-                                    <Typography variant="h4" sx={{ cursor: 'pointer' }} onClick={() => followingListRef.current.showModal()}>
-                                        {followingCount} Following
+                                    <Typography variant="h4">
+                                        <span style={{ cursor: 'pointer' }} onClick={() => followersListRef.current.showModal()}>
+                                            {followersCount} Follower{followersCount > 1 ? 's' : ''}
+                                        </span>
+                                        {' | '}
+                                        <span style={{ cursor: 'pointer' }} onClick={() => followingListRef.current.showModal()}>
+                                            {followingCount} Following
+                                        </span>
                                     </Typography>
                                 </>
                                 }
