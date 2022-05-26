@@ -114,7 +114,8 @@ const AppreciationTokens = (props) => {
                                 // @ts-ignore
                                 <Grid item xs={12} md={6} lg={3} sx={tokenGridStyle}>
                                     <img src="/images/appreciation-token-t1-display.png" style={tokenImageStyle} />
-                                    <Typography variant="h3">{balances[0]} T1 Token{balances[0] !== 1 ? 's' : '' }</Typography>
+                                    <Typography variant="h3">{balances[0]} Token{balances[0] !== 1 ? 's' : '' }</Typography>
+                                    <Typography variant="h4">Tier 1 Appreciation</Typography>
                                 </Grid>
                                 }
 
@@ -122,7 +123,8 @@ const AppreciationTokens = (props) => {
                                 // @ts-ignore
                                 <Grid item xs={12} md={6} lg={3} sx={tokenGridStyle}>
                                     <img src="/images/appreciation-token-t2-display.png" style={tokenImageStyle} />
-                                    <Typography variant="h3">{balances[1]} T2 Token{balances[0] !== 1 ? 's' : '' }</Typography>
+                                    <Typography variant="h3">{balances[1]} Token{balances[0] !== 1 ? 's' : '' }</Typography>
+                                    <Typography variant="h4">Tier 2 Appreciation</Typography>
                                 </Grid>
                                 }
 
@@ -130,7 +132,8 @@ const AppreciationTokens = (props) => {
                                 // @ts-ignore
                                 <Grid item xs={12} md={6} lg={3} sx={tokenGridStyle}>
                                     <img src="/images/appreciation-token-t3-display.png" style={tokenImageStyle} />
-                                    <Typography variant="h3">{balances[2]} T3 Token{balances[0] !== 1 ? 's' : '' }</Typography>
+                                    <Typography variant="h3">{balances[2]} Token{balances[0] !== 1 ? 's' : '' }</Typography>
+                                    <Typography variant="h4">Tier 3 Appreciation</Typography>
                                 </Grid>
                                 }
 
@@ -138,7 +141,8 @@ const AppreciationTokens = (props) => {
                                 // @ts-ignore
                                 <Grid item xs={12} md={6} lg={3} sx={tokenGridStyle}>
                                     <img src="/images/appreciation-token-t4-display.png" style={tokenImageStyle} />
-                                    <Typography variant="h3">{balances[3]} T4 Token{balances[0] !== 1 ? 's' : '' }</Typography>
+                                    <Typography variant="h3">{balances[3]} Token{balances[0] !== 1 ? 's' : '' }</Typography>
+                                    <Typography variant="h4">Tier 4 Appreciation</Typography>
                                 </Grid>
                                 }
                             </Grid>
