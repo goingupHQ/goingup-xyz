@@ -38,7 +38,8 @@ const AppreciationTokens = (props) => {
     const router = useRouter();
     const { address } = props.account;
     const contractAddress = process.env.NEXT_PUBLIC_GOINGUP_UTILITY_TOKEN;
-    const contract = new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
+    const provider = new ethers.providers.AlchemyProvider(137, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_KEY);
+    const contract = new ethers.Contract(contractAddress, artifact.abi, provider);
 
     useEffect(() => {
         const load = async () => {
@@ -110,7 +111,7 @@ const AppreciationTokens = (props) => {
                             }
 
                             <Grid container spacing={4} sx={{ marginTop: 1 }}>
-                                {balances[0] &&
+                                {balances[0] > 0 &&
                                 // @ts-ignore
                                 <Grid item xs={12} md={6} lg={3} sx={tokenGridStyle}>
                                     <img src="/images/appreciation-token-t1-display.png" style={tokenImageStyle} />
@@ -119,7 +120,7 @@ const AppreciationTokens = (props) => {
                                 </Grid>
                                 }
 
-                                {balances[1] &&
+                                {balances[1] > 0 &&
                                 // @ts-ignore
                                 <Grid item xs={12} md={6} lg={3} sx={tokenGridStyle}>
                                     <img src="/images/appreciation-token-t2-display.png" style={tokenImageStyle} />
@@ -128,7 +129,7 @@ const AppreciationTokens = (props) => {
                                 </Grid>
                                 }
 
-                                {balances[2] &&
+                                {balances[2] > 0 &&
                                 // @ts-ignore
                                 <Grid item xs={12} md={6} lg={3} sx={tokenGridStyle}>
                                     <img src="/images/appreciation-token-t3-display.png" style={tokenImageStyle} />
@@ -137,7 +138,7 @@ const AppreciationTokens = (props) => {
                                 </Grid>
                                 }
 
-                                {balances[3] &&
+                                {balances[3] > 0 &&
                                 // @ts-ignore
                                 <Grid item xs={12} md={6} lg={3} sx={tokenGridStyle}>
                                     <img src="/images/appreciation-token-t4-display.png" style={tokenImageStyle} />
