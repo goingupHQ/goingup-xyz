@@ -28,6 +28,8 @@ import { useSnackbar } from 'notistack';
 import EditProfile from './edit-profile';
 import ContactsAndIntegrations from './contacts-and-integrations';
 import SendAppreciationToken from '@/components/common/SendAppreciationToken';
+import FollowersList from './followers-list';
+import FollowingList from './following-list';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -40,6 +42,9 @@ const TopSection = (props) => {
     const [uploadingProfile, setUploadingProfile] = useState<boolean>(false);
     const [following, setFollowing] = useState<boolean>(false);
     const [checkingRel, setCheckingRel] = useState<boolean>(true);
+    const [gettingFollowStats, setGettingFollowStats] = useState<boolean>(true);
+    const [followersCount, setFollowersCount] = useState(0);
+    const [followingCount, setFollowingCount] = useState(0);
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
@@ -52,6 +57,8 @@ const TopSection = (props) => {
     const uploadProfileInputRef = useRef<any>(null);
     const editProfileRef = useRef<any>(null);
     const sendAppreciationRef = useRef<any>(null);
+    const followersListRef = useRef<any>(null);
+    const followingListRef = useRef<any>(null);
 
     const uploadPhoto = async (e, photoType) => {
         if (photoType === 'cover-photo') setUploadingCover(true);
@@ -140,12 +147,19 @@ const TopSection = (props) => {
             setCheckingRel(true);
             fetch(
                 `/api/get-rel?address=${wallet.address}&target=${account.address}`
-            )
-                .then(async (response) => {
+            ).then(async (response) => {
+                const result = await response.json();
+                setFollowing(result.following);
+            })
+            .finally(() => setCheckingRel(false));
+
+            setGettingFollowStats(true);
+            fetch(`/api/get-follow-stats?address=${account.address}`)
+                .then(async response => {
                     const result = await response.json();
-                    setFollowing(result.following);
-                })
-                .finally(() => setCheckingRel(false));
+                    setFollowersCount(result.followers);
+                    setFollowingCount(result.following);
+                }).finally(() => setGettingFollowStats(false));
         }
     }, [wallet.address, account.address]);
 
@@ -423,6 +437,33 @@ const TopSection = (props) => {
                                     marginBottom: { xs: '24px', md: '8px' }
                                 }}
                             >
+                                {gettingFollowStats &&
+                                <Typography variant="h4">
+                                    Getting follow stats <CircularProgress size="14px" />
+                                </Typography>
+                                }
+
+                                {!gettingFollowStats &&
+                                <>
+                                    <Typography variant="h4" sx={{ cursor: 'pointer' }} onClick={() => followersListRef.current.showModal()}>
+                                        {followersCount} Follower{followersCount > 1 ? 's' : ''}
+                                    </Typography>
+                                    <Typography variant="h4"> | </Typography>
+                                    <Typography variant="h4" sx={{ cursor: 'pointer' }} onClick={() => followingListRef.current.showModal()}>
+                                        {followingCount} Following
+                                    </Typography>
+                                </>
+                                }
+                            </Stack>
+
+                            <Stack
+                                direction={{ xs: 'column', md: 'row' }}
+                                spacing={1}
+                                alignItems="center"
+                                sx={{
+                                    marginBottom: { xs: '24px', md: '8px' }
+                                }}
+                            >
                                 <Typography variant="h4">Occupation</Typography>
                                 <Chip
                                     label={
@@ -532,6 +573,9 @@ const TopSection = (props) => {
                 sendToName={account.name}
                 sendToAddress={account.address}
             />
+
+            <FollowersList ref={followersListRef} account={account} />
+            <FollowingList ref={followingListRef} account={account} />
         </>
     );
 };
