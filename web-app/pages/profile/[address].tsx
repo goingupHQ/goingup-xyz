@@ -11,6 +11,7 @@ import {
 import { useRouter } from 'next/router';
 import Projects from './projects';
 import Poaps from './poaps';
+import AppreciationTokens from './appreciation-tokens';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -53,6 +54,7 @@ function ProfilePage() {
                 >
                     <TopSection account={account} refresh={getAccount} />
                     <Projects account={account} />
+                    <AppreciationTokens account={account} refresh={getAccount} />
                     <Poaps account={account} refresh={getAccount} />
                 </Grid>
             </>
