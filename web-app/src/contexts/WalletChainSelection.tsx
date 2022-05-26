@@ -70,7 +70,7 @@ const WalletChainSelection = (props, ref) => {
                             <h1>Connect using Ethereum</h1>
                         </Stack>
 
-                        <Stack
+                        {/* <Stack
                             direction="row"
                             spacing={2}
                             alignItems="center"
@@ -85,7 +85,7 @@ const WalletChainSelection = (props, ref) => {
                                 height={64}
                             />
                             <h1>Connect using Cardano</h1>
-                        </Stack>
+                        </Stack> */}
                     </Stack>
                 </DialogContent>
             </Dialog>

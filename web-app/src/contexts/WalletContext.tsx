@@ -5,9 +5,9 @@ import Web3Modal from 'web3modal';
 import { useSnackbar } from 'notistack';
 import WalletChainSelection from './WalletChainSelection';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import Web3Token from 'web3-cardano-token/dist/browser';
-// @ts-ignore
-import { Address } from '@emurgo/cardano-serialization-lib-browser';
+// import Web3Token from 'web3-cardano-token/dist/browser';
+// // @ts-ignore
+// import { Address } from '@emurgo/cardano-serialization-lib-browser';
 
 type WalletContext = {
     chain: string;
@@ -212,37 +212,37 @@ export function WalletProvider({ children }: Props) {
     };
 
     const connectCardano = async () => {
-        // @ts-ignore
-        const flint = window.cardano?.flint;
-        if (!flint) {
-            enqueueSnackbar(
-                'You do not have Flint wallet. Please install Flint wallet and try again.',
-                { variant: 'error' }
-            );
-            return;
-        }
+        // // @ts-ignore
+        // const flint = window.cardano?.flint;
+        // if (!flint) {
+        //     enqueueSnackbar(
+        //         'You do not have Flint wallet. Please install Flint wallet and try again.',
+        //         { variant: 'error' }
+        //     );
+        //     return;
+        // }
 
-        const fw = await flint.enable();
-        const rawAddress = (await fw.getUsedAddresses())[0];
-        const computedAddress = Address.from_bytes(
-            Buffer.from(rawAddress, 'hex')
-        ).to_bech32();
-        console.log(computedAddress);
+        // const fw = await flint.enable();
+        // const rawAddress = (await fw.getUsedAddresses())[0];
+        // const computedAddress = Address.from_bytes(
+        //     Buffer.from(rawAddress, 'hex')
+        // ).to_bech32();
+        // console.log(computedAddress);
 
-        setChain(`Cardano`);
-        setNetwork(`CARDANO-${await fw.getNetworkId()}`);
-        setWalletType('flint');
-        setEthersProvider(null);
-        setEthersSigner(null);
-        setAddress(computedAddress);
-        // const token = await CardanoWeb3.sign(msg => flint.signData(address, new Buffer('myString').toString('hex');))
+        // setChain(`Cardano`);
+        // setNetwork(`CARDANO-${await fw.getNetworkId()}`);
+        // setWalletType('flint');
+        // setEthersProvider(null);
+        // setEthersSigner(null);
+        // setAddress(computedAddress);
+        // // const token = await CardanoWeb3.sign(msg => flint.signData(address, new Buffer('myString').toString('hex');))
 
-        checkForGoingUpAccount(address);
+        // checkForGoingUpAccount(address);
 
-        localStorage.setItem('wallet-context-cache', JSON.stringify({
-            blockchain: 'cardano',
-            type: 'flint'
-        }));
+        // localStorage.setItem('wallet-context-cache', JSON.stringify({
+        //     blockchain: 'cardano',
+        //     type: 'flint'
+        // }));
     };
 
     const disconnectCardano = async () => {
@@ -254,22 +254,22 @@ export function WalletProvider({ children }: Props) {
             const signature = await ethersSigner.signMessage(message);
             return signature;
         } else if (chain === 'Cardano') {
-            // @ts-ignore
-            const cardano = window.cardano;
-            await cardano.flint.enable();
+        //     // @ts-ignore
+        //     const cardano = window.cardano;
+        //     await cardano.flint.enable();
 
-            // getting address from which we will sign message
-            const address = (await cardano.getUsedAddresses())[0];
+        //     // getting address from which we will sign message
+        //     const address = (await cardano.getUsedAddresses())[0];
 
-            // generating a token with 1 day of expiration time
-            const token = await Web3Token.sign(
-                (msg) =>
-                    cardano.signData(address, Buffer.from(msg).toString('hex')),
-                '1d'
-            );
+        //     // generating a token with 1 day of expiration time
+        //     const token = await Web3Token.sign(
+        //         (msg) =>
+        //             cardano.signData(address, Buffer.from(msg).toString('hex')),
+        //         '1d'
+        //     );
 
-            console.log(token);
-            return token;
+        //     console.log(token);
+        //     return token;
         }
     };
 
