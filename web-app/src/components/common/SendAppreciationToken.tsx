@@ -42,7 +42,7 @@ const SendAppreciationToken = (props, ref) => {
         }
     }));
 
-    const handleClose = () => {
+    const close = () => {
         setOpen(false);
     };
 
@@ -66,6 +66,7 @@ const SendAppreciationToken = (props, ref) => {
                 const tx = await contract.mint(sendToAddress, tier, 1, { value: settings.price });
 
                 enqueueSnackbar(`The appreciation token mint transaction has been submitted to the blockchain 👍`, { variant: 'success' });
+                close();
             }
 
             if (wallet.chain === 'Cardano') {
@@ -81,7 +82,7 @@ const SendAppreciationToken = (props, ref) => {
 
     return (
         <div>
-            <Dialog open={open} onClose={handleClose} maxWidth="lg">
+            <Dialog open={open} onClose={close} maxWidth="lg">
                 <DialogTitle>
                     Send Appreciation Token To {sendToName}
                 </DialogTitle>
@@ -116,7 +117,7 @@ const SendAppreciationToken = (props, ref) => {
                     <Button
                         color="secondary"
                         variant="contained"
-                        onClick={handleClose}
+                        onClick={close}
                     >
                         Cancel
                     </Button>
