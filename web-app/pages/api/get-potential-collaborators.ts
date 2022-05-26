@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     const account = await accounts.findOne({ address });
     const { idealCollab } = account;
 
-    const query = { idealCollab: { $in: idealCollab }};
+    const query = { idealCollab: { $in: idealCollab }, mock: { $exists: false } };
 
     const queryResults = await accounts.aggregate([
         {$match: query},
