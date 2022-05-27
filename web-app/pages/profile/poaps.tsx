@@ -44,7 +44,7 @@ const Poaps = (props) => {
             .finally(() => {
                 setLoading(false);
             })
-    }, [])
+    }, [address])
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);

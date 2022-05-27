@@ -57,7 +57,7 @@ const AppreciationTokens = (props) => {
             }
         }
         load();
-    }, [])
+    }, [address])
 
 
 
@@ -110,6 +110,7 @@ const AppreciationTokens = (props) => {
                                 </Typography>
                             }
 
+                            {!loading &&
                             <Grid container spacing={4} sx={{ marginTop: 1 }}>
                                 {balances[0] > 0 &&
                                 // @ts-ignore
@@ -147,6 +148,7 @@ const AppreciationTokens = (props) => {
                                 </Grid>
                                 }
                             </Grid>
+                            }
                         </CardContentWrapper>
                     </Card>
                 </Fade>
