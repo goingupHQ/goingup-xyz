@@ -2,3 +2,7 @@
 a {
     text-decoration: none;
 }
+
+.MuiCardHeader-content {
+    max-width: 100%;
+}

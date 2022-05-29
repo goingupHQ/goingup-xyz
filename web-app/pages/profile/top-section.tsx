@@ -260,6 +260,7 @@ const TopSection = (props) => {
                                             (account.reputationScore /
                                                 app.maxReputationScore)
                                         }
+
                                         sx={{ height: 20 }}
                                     />
                                 </>
