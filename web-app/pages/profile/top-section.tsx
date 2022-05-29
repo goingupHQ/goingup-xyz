@@ -301,6 +301,7 @@ const TopSection = (props) => {
                                 }}
                                 variant="rounded"
                             ></Avatar>
+
                             {myAccount && (
                                 <>
                                     <input
@@ -389,7 +390,7 @@ const TopSection = (props) => {
                                         <>
                                             <Box
                                                 display="flex"
-                                                sx={{ marginBottom: 2 }}
+                                                sx={{ marginBottom: 2, flexDirection: { xs: 'column', md: 'row' } }}
                                                 justifyContent={{
                                                     xs: 'center',
                                                     md: 'initial'
@@ -421,7 +422,7 @@ const TopSection = (props) => {
                                                     onClick={() => {
                                                         sendAppreciationRef.current.showModal();
                                                     }}
-                                                    sx={{ marginX: 1 }}
+                                                    sx={{ marginX: { xs: 0, md: 1 }, marginY: { xs: 1, md: 0 } }}
                                                 >
                                                     Send Appreciation Token
                                                 </Button>
