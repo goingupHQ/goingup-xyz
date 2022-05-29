@@ -231,14 +231,15 @@ const TopSection = (props) => {
                             }}
                             title={
                                 <>
-                                    <Typography variant="h1">
+                                    <Typography variant="h1" className="truncate-text">
                                         {possessive(account.name)} Profile
                                     </Typography>
-                                    <Typography variant="subtitle1">
+                                    <Typography variant="subtitle1" className="truncate-text">
                                         {account.address}
                                     </Typography>
 
                                     <Typography
+                                        className="truncate-text"
                                         variant="h4"
                                         sx={{ marginTop: 2 }}
                                     >
@@ -249,7 +250,7 @@ const TopSection = (props) => {
                                                     app.maxReputationScore)
                                         )}
                                         % ({account.reputationScore}
-                                        {' out of '}
+                                        {' / '}
                                         {app.maxReputationScore})
                                     </Typography>
                                     <LinearProgress
@@ -296,7 +297,7 @@ const TopSection = (props) => {
                                     height: 128,
                                     position: 'absolute',
                                     top: 200,
-                                    left: 60
+                                    left: { xs: 40, md: 60 }
                                 }}
                                 variant="rounded"
                             ></Avatar>
@@ -345,7 +346,7 @@ const TopSection = (props) => {
                                         color="primary"
                                         sx={{
                                             position: 'absolute',
-                                            left: 150,
+                                            left: { xs: 130, md: 150 },
                                             top: 200
                                         }}
                                         onClick={() => {

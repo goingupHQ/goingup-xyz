@@ -6,3 +6,8 @@ a {
 .MuiCardHeader-content {
     max-width: 100%;
 }
+
+.truncate-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
