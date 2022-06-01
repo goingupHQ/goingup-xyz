@@ -12,7 +12,8 @@ import {
     Grid,
     InputLabel,
     MenuItem,
-    Typography
+    Typography,
+    TextField
 } from '@mui/material';
 import {
     forwardRef,
@@ -51,30 +52,46 @@ const SendAppreciationToken = (props, ref) => {
     };
 
     const send = async () => {
-        setSending(true)
+        setSending(true);
         try {
             if (wallet.chain === 'Ethereum') {
                 if (wallet.network != '137') {
-                    enqueueSnackbar(`Please switch to Polygon Mainnet 💫`, { variant: 'error'});
+                    enqueueSnackbar(`Please switch to Polygon Mainnet 💫`, {
+                        variant: 'error'
+                    });
                     return;
                 }
                 const address = process.env.NEXT_PUBLIC_GOINGUP_UTILITY_TOKEN;
                 const signer = wallet.ethersSigner;
 
-                const contract = new ethers.Contract(address, GoingUpNFTArtifact.abi, signer);
+                const contract = new ethers.Contract(
+                    address,
+                    GoingUpNFTArtifact.abi,
+                    signer
+                );
                 const settings = await contract.tokenSettings(tier);
-                const tx = await contract.mint(sendToAddress, tier, 1, { value: settings.price });
+                const tx = await contract.mint(sendToAddress, tier, 1, {
+                    value: settings.price
+                });
 
-                enqueueSnackbar(`The appreciation token mint transaction has been submitted to the blockchain 👍`, { variant: 'success' });
+                enqueueSnackbar(
+                    `The appreciation token mint transaction has been submitted to the blockchain 👍`,
+                    { variant: 'success' }
+                );
                 close();
             }
 
             if (wallet.chain === 'Cardano') {
-                enqueueSnackbar('Sorry, appreciation tokens are not yet available for Cardano', { variant: 'error' });
+                enqueueSnackbar(
+                    'Sorry, appreciation tokens are not yet available for Cardano',
+                    { variant: 'error' }
+                );
             }
         } catch (err) {
             console.log(err);
-            enqueueSnackbar('Sorry something went wrong 😥', { variant: 'error' });
+            enqueueSnackbar('Sorry something went wrong 😥', {
+                variant: 'error'
+            });
         } finally {
             setSending(false);
         }
@@ -86,9 +103,13 @@ const SendAppreciationToken = (props, ref) => {
                 <DialogTitle>
                     Send Appreciation Token To {sendToName}
                 </DialogTitle>
-                <DialogContent sx={{  }}>
+                <DialogContent>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sx={{ paddingTop: '25px !important' }}>
+                        <Grid
+                            item
+                            xs={12}
+                            sx={{ paddingTop: '25px !important' }}
+                        >
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">
                                     Token Tier
@@ -99,17 +120,40 @@ const SendAppreciationToken = (props, ref) => {
                                     value={tier}
                                     label="Token Tier"
                                     // @ts-ignore
-                                    onChange={e => { setTier(parseInt(e.target.value)) }}
+                                    onChange={(e) => {
+                                        setTier(parseInt(e.target.value));
+                                    }}
                                 >
-                                    <MenuItem value={1}>Appreciation Token Tier 1</MenuItem>
-                                    <MenuItem value={2}>Appreciation Token Tier 2</MenuItem>
-                                    <MenuItem value={3}>Appreciation Token Tier 3</MenuItem>
-                                    <MenuItem value={4}>Appreciation Token Tier 4</MenuItem>
+                                    <MenuItem value={1}>
+                                        Appreciation Token Tier 1
+                                    </MenuItem>
+                                    <MenuItem value={2}>
+                                        Appreciation Token Tier 2
+                                    </MenuItem>
+                                    <MenuItem value={3}>
+                                        Appreciation Token Tier 3
+                                    </MenuItem>
+                                    <MenuItem value={4}>
+                                        Appreciation Token Tier 4
+                                    </MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sx={{ textAlign: 'center' }}>
-                            <img src={`/images/appreciation-token-t${tier}-display.png`} style={{ minWidth: '300px' }} />
+                            <img
+                                src={`/images/appreciation-token-t${tier}-display.png`}
+                                style={{ maxWidth: '200px' }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                            <TextField
+                                label="Message"
+                                multiline
+                                rows={4}
+                                fullWidth
+                                // value={value}
+                                // onChange={handleChange}
+                            />
                         </Grid>
                     </Grid>
                 </DialogContent>
