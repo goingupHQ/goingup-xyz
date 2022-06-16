@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Contract } from 'ethers';
 import { getDb } from './../_get-db-client';
 import { utilityAddress, utilityInterface, utilityProvider, utilityContract } from './get-utility-contract';
