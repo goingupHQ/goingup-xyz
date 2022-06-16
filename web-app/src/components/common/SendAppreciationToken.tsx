@@ -24,8 +24,7 @@ import {
 } from 'react';
 import { ethers } from 'ethers';
 import { useSnackbar } from 'notistack';
-import GoingUpNFTArtifact from './../../../artifacts/GoingUpNFT.json';
-import { copyFileSync } from 'fs';
+import artifact from './../../../artifacts/GoingUpUtilityToken.json';
 
 const SendAppreciationToken = (props, ref) => {
     const { sendToName, sendToAddress } = props;
@@ -33,6 +32,7 @@ const SendAppreciationToken = (props, ref) => {
     const [sending, setSending] = useState(false);
 
     const [tier, setTier] = useState(1);
+    const [message, setMessage] = useState('');
 
     const wallet = useContext(WalletContext);
     const { enqueueSnackbar } = useSnackbar();
@@ -55,22 +55,22 @@ const SendAppreciationToken = (props, ref) => {
         setSending(true);
         try {
             if (wallet.chain === 'Ethereum') {
-                if (wallet.network != '137') {
-                    enqueueSnackbar(`Please switch to Polygon Mainnet 💫`, {
+                if (wallet.network != wallet.utilityToken.chainId) {
+                    enqueueSnackbar(`Please switch to ${wallet.utilityToken.chainName} 💫`, {
                         variant: 'error'
                     });
                     return;
                 }
-                const address = process.env.NEXT_PUBLIC_GOINGUP_UTILITY_TOKEN;
+                const address = wallet.utilityToken.address;
                 const signer = wallet.ethersSigner;
 
                 const contract = new ethers.Contract(
                     address,
-                    GoingUpNFTArtifact.abi,
+                    artifact.abi,
                     signer
                 );
                 const settings = await contract.tokenSettings(tier);
-                const tx = await contract.mint(sendToAddress, tier, 1, {
+                const tx = await contract.mint(sendToAddress, tier, 1, Boolean(message), message, {
                     value: settings.price
                 });
 
@@ -105,6 +105,12 @@ const SendAppreciationToken = (props, ref) => {
                 </DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2}>
+                        <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                            <img
+                                src={`/images/appreciation-token-t${tier}-display.png`}
+                                style={{ maxWidth: '200px' }}
+                            />
+                        </Grid>
                         <Grid
                             item
                             xs={12}
@@ -119,8 +125,8 @@ const SendAppreciationToken = (props, ref) => {
                                     id="demo-simple-select"
                                     value={tier}
                                     label="Token Tier"
-                                    // @ts-ignore
                                     onChange={(e) => {
+                                        // @ts-ignore
                                         setTier(parseInt(e.target.value));
                                     }}
                                 >
@@ -140,19 +146,13 @@ const SendAppreciationToken = (props, ref) => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sx={{ textAlign: 'center' }}>
-                            <img
-                                src={`/images/appreciation-token-t${tier}-display.png`}
-                                style={{ maxWidth: '200px' }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sx={{ textAlign: 'center' }}>
                             <TextField
                                 label="Message"
                                 multiline
                                 rows={4}
                                 fullWidth
-                                // value={value}
-                                // onChange={handleChange}
+                                value={message}
+                                onChange={e => setMessage(e.target.value)}
                             />
                         </Grid>
                     </Grid>
