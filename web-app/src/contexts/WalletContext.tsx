@@ -260,8 +260,12 @@ export function WalletProvider({ children }: Props) {
     };
 
     const utilityToken = {
+        chainId: 5,
+        chainName: 'Goerli Testnet',
         address: '0x28C24386360CA182bf4e58FC0847F42d29Ad0219',
-        provider: new ethers.providers.AlchemyProvider(5, '8L_6aM0-crh5sm3t4BFg6Hjv90NIh0bw')
+        get provider() {
+            return new ethers.providers.AlchemyProvider(this.chainId, '8L_6aM0-crh5sm3t4BFg6Hjv90NIh0bw')
+        }
     }
 
     return (
