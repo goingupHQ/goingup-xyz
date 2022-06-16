@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ReactNode, useState, createContext, useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
@@ -5,12 +6,8 @@ import Web3Modal from 'web3modal';
 import { useSnackbar } from 'notistack';
 import WalletChainSelection from './WalletChainSelection';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-// import Web3Token from 'web3-cardano-token/dist/browser';
-// // @ts-ignore
-// import { Address } from '@emurgo/cardano-serialization-lib-browser';
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const WalletContext = createContext<WalletContext>({} as WalletContext);
+export const WalletContext = createContext({});
 
 type Props = {
     children: ReactNode;
@@ -262,7 +259,7 @@ export function WalletProvider({ children }: Props) {
     const utilityToken = {
         chainId: 5,
         chainName: 'Goerli Testnet',
-        address: '0x28C24386360CA182bf4e58FC0847F42d29Ad0219',
+        address: '0x75c390a5B9BE38caC9F9Ff1159805C750e6e6d23',
         get provider() {
             return new ethers.providers.AlchemyProvider(this.chainId, '8L_6aM0-crh5sm3t4BFg6Hjv90NIh0bw')
         }

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { AppContext } from '@/contexts/AppContext';
 import { WalletContext } from '@/contexts/WalletContext';
 import { LoadingButton } from '@mui/lab';
