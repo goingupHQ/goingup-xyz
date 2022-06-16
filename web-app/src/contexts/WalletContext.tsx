@@ -9,20 +9,6 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 // // @ts-ignore
 // import { Address } from '@emurgo/cardano-serialization-lib-browser';
 
-type WalletContext = {
-    chain: string;
-    address: string;
-    network: string;
-    walletType: string;
-    ethersProvider: ethers.providers.Web3Provider;
-    ethersSigner: ethers.providers.JsonRpcSigner;
-    connect: () => Promise<any>;
-    disconnect: () => Promise<any>;
-    signMessage: (message: string) => Promise<any>;
-    networks: any;
-    walletTypes: any;
-};
-
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const WalletContext = createContext<WalletContext>({} as WalletContext);
 
@@ -273,6 +259,11 @@ export function WalletProvider({ children }: Props) {
         }
     };
 
+    const utilityToken = {
+        address: '0x28C24386360CA182bf4e58FC0847F42d29Ad0219',
+        provider: new ethers.providers.AlchemyProvider(5, '8L_6aM0-crh5sm3t4BFg6Hjv90NIh0bw')
+    }
+
     return (
         <WalletContext.Provider
             value={{
@@ -286,7 +277,8 @@ export function WalletProvider({ children }: Props) {
                 walletTypes,
                 connect,
                 disconnect,
-                signMessage
+                signMessage,
+                utilityToken
             }}
         >
             {children}

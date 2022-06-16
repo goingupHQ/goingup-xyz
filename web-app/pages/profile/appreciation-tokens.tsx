@@ -37,8 +37,11 @@ const AppreciationTokens = (props) => {
     const app = useContext(AppContext);
     const router = useRouter();
     const { address } = props.account;
-    const contractAddress = process.env.NEXT_PUBLIC_GOINGUP_UTILITY_TOKEN;
-    const provider = new ethers.providers.AlchemyProvider(137, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_KEY);
+    // const contractAddress = process.env.NEXT_PUBLIC_GOINGUP_UTILITY_TOKEN;
+    // const provider = new ethers.providers.AlchemyProvider(137, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_KEY);
+
+    const contractAddress = wallet.utilityToken.address;
+    const provider = wallet.utilityToken.provider;
     const contract = new ethers.Contract(contractAddress, artifact.abi, provider);
 
     useEffect(() => {
