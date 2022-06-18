@@ -256,12 +256,21 @@ export function WalletProvider({ children }: Props) {
         }
     };
 
+    // const utilityToken = {
+    //     chainId: 5,
+    //     chainName: 'Goerli Testnet',
+    //     address: '0x75c390a5B9BE38caC9F9Ff1159805C750e6e6d23',
+    //     get provider() {
+    //         return new ethers.providers.AlchemyProvider(this.chainId, '8L_6aM0-crh5sm3t4BFg6Hjv90NIh0bw')
+    //     }
+    // }
+
     const utilityToken = {
-        chainId: 5,
-        chainName: 'Goerli Testnet',
-        address: '0x75c390a5B9BE38caC9F9Ff1159805C750e6e6d23',
+        chainId: 137,
+        chainName: 'Polygon Mainnet',
+        address: '0x10D7B3aFA213D93a922a062fb91E8EcbD4A703d2',
         get provider() {
-            return new ethers.providers.AlchemyProvider(this.chainId, '8L_6aM0-crh5sm3t4BFg6Hjv90NIh0bw')
+            return new ethers.providers.AlchemyProvider(this.chainId, 'QoyYGyWecbDsHBaaDFapJeqKEFgFyRMM')
         }
     }
 
