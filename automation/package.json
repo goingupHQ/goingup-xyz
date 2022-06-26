@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node automation-process.mjs",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy-heroku": "cd.., git subtree push --prefix /automation heroku main, cd automation"
   },
