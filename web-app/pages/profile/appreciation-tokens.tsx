@@ -9,16 +9,9 @@ import {
     CardContent,
     Typography,
     styled,
-    Button,
     Fade,
     Stack,
-    Chip,
-    CardMedia,
-    Avatar,
-    IconButton,
     CircularProgress,
-    Box,
-    Badge
 } from '@mui/material';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
@@ -229,7 +222,7 @@ const AppreciationTokens = (props) => {
                                                 {balances[1] !== 1 ? 's' : ''}
                                             </Typography>
                                             <Typography variant="h4">
-                                                Tier 1 Appreciation
+                                                Tier 2 Appreciation
                                             </Typography>
                                         </Grid>
 
