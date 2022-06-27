@@ -1,5 +1,7 @@
-import { ReactNode, useState, createContext, useEffect, Dispatch } from 'react';
+// @ts-nocheck
+import { ReactNode, useState, createContext, useEffect, Dispatch, useContext } from 'react';
 import { Availability, Occupation, UserGoal } from './AppTypes';
+import { WalletContext } from './WalletContext';
 import api, { WebAPI } from './WebAPI';
 
 type AppContext = {
@@ -65,6 +67,35 @@ const userGoals: Array<UserGoal> = [
 const maxReputationScore = 140;
 
 export function AppProvider({ children }: Props) {
+    const wallet = useContext(WalletContext);
+    const [notifications, setNotifications] = useState<Array<string>>([]);
+    const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
+
+    const getNotifications = async () => {
+        console.log('getting notifications for user:', wallet.address);
+        if (wallet.address) {
+            const response = await fetch(`/api/get-notifications?address=${wallet.address}`);
+
+            if (response.status === 200) {
+                const result = await response.json();
+                const unreadCount = result.filter(n => !n.read).length; console.log(unreadCount);
+                setNotifications(result);
+                setUnreadNotifications(unreadCount);
+            } else {
+                console.error(`Error getting notifications: ${response.status}`);
+            }
+        }
+    };
+
+    let notificationsInterval;
+    useEffect(() => {
+        getNotifications();
+
+        if (notificationsInterval) clearInterval(notificationsInterval);
+        notificationsInterval = setInterval(() => {
+            getNotifications();
+        }, 10000);
+    }, [wallet.address]);
     return (
         <AppContext.Provider
             value={{
@@ -72,7 +103,9 @@ export function AppProvider({ children }: Props) {
                 occupations,
                 userGoals,
                 api,
-                maxReputationScore
+                maxReputationScore,
+                notifications,
+                unreadNotifications
             }}
         >
             {children}

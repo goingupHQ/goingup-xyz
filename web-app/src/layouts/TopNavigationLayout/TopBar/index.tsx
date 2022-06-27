@@ -146,10 +146,10 @@ function TopBar() {
                                 display: { xs: 'none', sm: 'inline-flex' }
                             }}
                         >
-                            {/* <LanguageSwitcher />
+                            {/* <LanguageSwitcher /> */}
                             <Box mx={1}>
                                 <Notifications />
-                            </Box> */}
+                            </Box>
                         </Box>
                         <Userbox />
                         <Box
