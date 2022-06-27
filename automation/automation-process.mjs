@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { ethers } from "ethers";
 import fs from 'fs';
+import { sendEmail } from './services/_sendinblue.mjs';
 import { MongoClient } from 'mongodb';
 
 const uri = process.env.MONGODB_URI;
@@ -25,22 +26,26 @@ const utilityContract = new ethers.Contract(utilityAddress, utilityArtifact.abi,
 utilityContract.on('TransferSingle', async (operator, from, to, tokenId) => {
     console.log(`TransferSingle: ${operator} ${from} ${to} ${tokenId}`);
     const token = await utilityContract.tokenSettings(tokenId);
-    console.log(token);
 
     if (token.category.eq(1)) {
-        const now = new Date();
         // appreciation tokens
+        const now = new Date();
         const insertResp = await notifications.insertOne({
             address: to,
-            message: `You have received a Tier ${tokenId} Appreciation Token from ${operator}`,
+            message: `You have received a Tier ${tokenId} Appreciation Token from ${from === '0x0000000000000000000000000000000000000000' ? operator : from}`,
             timestamp: now,
             read: false
         });
-        console.log(insertResp);
+        console.info(insertResp);
 
         if (from === '0x0000000000000000000000000000000000000000') {
             const updateResp = await accounts.updateOne({ address: to }, { $push: { mintedUtilityTokens: { tokenId, timestamp: now } } });
-            console.log(updateResp);
+            console.info(updateResp);
+        }
+
+        const account = await accounts.findOne({ address: to });
+        if (account?.email) {
+            sendEmail(account.name, account.email, `Tier ${tokenId} Appreciation Token Received`, `You have received a Tier ${tokenId} Appreciation Token from ${from === '0x0000000000000000000000000000000000000000' ? operator : from}`);
         }
     }
 });
