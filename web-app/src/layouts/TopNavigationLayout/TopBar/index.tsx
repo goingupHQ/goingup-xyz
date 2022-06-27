@@ -143,7 +143,7 @@ function TopBar() {
                         <Box
                             component="span"
                             sx={{
-                                display: { xs: 'none', sm: 'inline-flex' }
+                                display: { xs: 'inline-flex', sm: 'inline-flex' }
                             }}
                         >
                             {/* <LanguageSwitcher /> */}
