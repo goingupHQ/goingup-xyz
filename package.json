@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "react-hotjar": "^5.0.0"
+    "react-hotjar": "^5.0.0",
+    "truncate-eth-address": "^1.0.2"
   }
 }

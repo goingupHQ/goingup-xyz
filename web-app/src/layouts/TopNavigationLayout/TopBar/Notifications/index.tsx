@@ -162,11 +162,12 @@ function Notifications() {
                 >
                     <Typography variant="h5">{t('Notifications')}</Typography>
                     <Link
-                        href="#"
                         variant="caption"
                         sx={{
-                            textTransform: 'none'
+                            textTransform: 'none',
+                            cursor: 'pointer'
                         }}
+                        onClick={app.markAllNotificationsAsRead}
                     >
                         {t('Mark all as read')}
                     </Link>

@@ -78,12 +78,21 @@ export function AppProvider({ children }: Props) {
 
             if (response.status === 200) {
                 const result = await response.json();
-                const unreadCount = result.filter(n => !n.read).length; console.log(unreadCount);
+                const unreadCount = result.filter(n => !n.read).length;
                 setNotifications(result);
                 setUnreadNotifications(unreadCount);
             } else {
                 console.error(`Error getting notifications: ${response.status}`);
             }
+        }
+    };
+
+    const markAllNotificationsAsRead = async () => {
+        if (wallet.address) {
+            await fetch(`/api/mark-notifs-read?address=${wallet.address}`);
+            const mapped = notifications.map(n => ({ ...n, read: true }));
+            setUnreadNotifications(0);
+            setNotifications(mapped);
         }
     };
 
@@ -105,7 +114,8 @@ export function AppProvider({ children }: Props) {
                 api,
                 maxReputationScore,
                 notifications,
-                unreadNotifications
+                unreadNotifications,
+                markAllNotificationsAsRead
             }}
         >
             {children}
