@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@mui/material';
 import { createContext, useEffect, useState } from 'react';
 
 const availability = [
@@ -49,10 +50,10 @@ export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
     const [mode, setMode] = useState('dark');
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     useEffect(() => {
         const cache = localStorage.getItem('color-mode'); console.log('cache', cache)
         if (!cache) {
-            const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
             localStorage.setItem('color-mode', prefersDarkMode ? 'dark' : 'light');
             setMode('dark');
         } else {
