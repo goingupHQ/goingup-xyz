@@ -28,6 +28,28 @@ export default function Layout({ children }) {
           background2: {
             main: '#19222C',
           },
+          hoverAward: {
+            main: '#FFE555',
+          },
+          activeAward: {
+            main: '#FFF4B8',
+          },
+          hoverFollow: {
+            main: '#5537C3',
+            text: '#F4CE00',
+          },
+          activeFollow: {
+            main: '#3AB795',
+            text: '#FFFFFF',
+          },
+          hoverViewAllProjects: {
+            main: 'transparent',
+            text: '#F4CE00',
+          },
+          activeViewAllProjects: {
+            main: 'transparent',
+            text: '#D2B200',
+          }
         },
         typography: {
           fontFamily: 'Questrial',
