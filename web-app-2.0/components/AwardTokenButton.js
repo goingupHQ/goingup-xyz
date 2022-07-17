@@ -9,13 +9,10 @@ export default function AwardTokenButton() {
   return (
     <Button
       variant='contained'
-      color={active ? "primary" : "activeAward"}
+      color={active ? "primary" : "activePrimary"}
       sx={{
         ':hover': {
-          backgroundColor: 'hoverAward.main',
-        },
-        '&:active': {
-          color: '#0F151C',
+          backgroundColor: 'hoverPrimary.main',
         },
       }}
       onClick={handleClick}
