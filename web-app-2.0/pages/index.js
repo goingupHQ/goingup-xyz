@@ -53,8 +53,8 @@ export default function Home() {
         </Card>
         <Card>
           <CardContent>
-            <Stack direction='column' spacing={4}>
-              <h1>Buttons</h1>
+            <h1>Buttons</h1>
+            <Stack direction='row' spacing={4}>
               <AwardTokenButton />
               <FollowButton />
               <ViewAllProjectsButton />
