@@ -13,6 +13,12 @@ export default function Layout({ children }) {
           primary: {
             main: '#F4CE00',
           },
+          hoverPrimary: {
+            main: '#FFE555',
+          },
+          activePrimary: {
+            main: '#FFF4B8',
+          },
           secondary: {
             main: '#7A55FF',
           },
@@ -28,11 +34,8 @@ export default function Layout({ children }) {
           background2: {
             main: '#19222C',
           },
-          hoverAward: {
-            main: '#FFE555',
-          },
-          activeAward: {
-            main: '#FFF4B8',
+          backgroundLight: {
+            main: '#FFFFFF'
           },
           hoverFollow: {
             main: '#5537C3',
