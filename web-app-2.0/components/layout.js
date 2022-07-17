@@ -83,6 +83,7 @@ export default function Layout({ children }) {
             fontWeight: 'medium',
           },
         },
+        spacing: [0, 10, 15, 20, 30, 60, 80],
       }),
     [app.mode]
   );
