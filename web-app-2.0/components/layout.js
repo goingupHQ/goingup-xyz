@@ -43,12 +43,10 @@ export default function Layout({ children }) {
             text: '#FFFFFF',
           },
           hoverViewAllProjects: {
-            main: 'transparent',
-            text: '#F4CE00',
+            main: '#F4CE00',
           },
           activeViewAllProjects: {
-            main: 'transparent',
-            text: '#D2B200',
+            main: '#D2B200',
           }
         },
         typography: {
