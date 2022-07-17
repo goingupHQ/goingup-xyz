@@ -1,38 +1,80 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
-import { Box, Button, Card, CardContent, CardHeader, Stack } from '@mui/material'
-import { AppContext } from '../contexts/app-context';
-import { useContext } from 'react';
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { AppContext } from "../contexts/app-context";
+import { useContext } from "react";
+import AwardTokenButton from "../components/AwardTokenButton";
+import FollowButton from "../components/FollowButton";
+import ViewAllProjectsButton from "../components/ViewAllProjectsButton";
 
 export default function Home() {
-    const app = useContext(AppContext);
+  const app = useContext(AppContext);
 
-    return (
-        <div className={styles.container}>
-            <Head>
-                <title>GoingUP</title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>GoingUP</title>
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
 
-            <Box>
-                <Card>
-                    <CardContent>
-                        <Stack direction="column" spacing={4}>
-                            <h1>Hello</h1>
-                            <Button variant="contained" color="primary" onClick={() => {
-                                if (app.mode === 'dark') {
-                                    app.setLightMode();
-                                } else {
-                                    app.setDarkMode();
-                                }
-                            }}>Toggle Mode</Button>
-                            <Button variant="contained" color="secondary">Secondary Button</Button>
-                        </Stack>
-                    </CardContent>
-                </Card>
-
-            </Box>
-        </div>
-    );
+      <Box>
+        <Card>
+          <CardContent>
+            <Stack direction='column' spacing={4}>
+              <h1>Hello</h1>
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={() => {
+                  if (app.mode === "dark") {
+                    app.setLightMode();
+                  } else {
+                    app.setDarkMode();
+                  }
+                }}
+              >
+                Toggle Mode
+              </Button>
+              <Button variant='contained' color='secondary'>
+                Secondary Button
+              </Button>
+            </Stack>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent>
+            <Stack direction='column' spacing={4}>
+              <h1>Buttons</h1>
+              <AwardTokenButton />
+              <FollowButton />
+              <ViewAllProjectsButton />
+            </Stack>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent>
+            <Stack direction='column' spacing={4}>
+              <h1>Typography</h1>
+              <Typography variant='h1'>Heading 1 32pt</Typography>
+              <Typography variant='h2'>Heading 2 24pt</Typography>
+              <Typography variant='h3'>Heading 3 18pt</Typography>
+              <Typography variant='sh1'>Subheading 1 16pt</Typography>
+              <Typography variant='sh2'>Subheading 2 14pt</Typography>
+              <Typography variant='sh3'>Subheading 3 12pt</Typography>
+              <Typography variant='p'>Paragraph 16pt</Typography>
+            </Stack>
+          </CardContent>
+        </Card>
+      </Box>
+    </div>
+  );
 }
