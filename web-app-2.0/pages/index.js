@@ -15,6 +15,7 @@ import { useContext } from "react";
 import AwardTokenButton from "../components/AwardTokenButton";
 import FollowButton from "../components/FollowButton";
 import ViewAllProjectsButton from "../components/ViewAllProjectsButton";
+import ViewProfileButton from "../components/ViewProfileButton";
 
 export default function Home() {
   const app = useContext(AppContext);
@@ -57,6 +58,7 @@ export default function Home() {
               <AwardTokenButton />
               <FollowButton />
               <ViewAllProjectsButton />
+              <ViewProfileButton />
             </Stack>
           </CardContent>
         </Card>
