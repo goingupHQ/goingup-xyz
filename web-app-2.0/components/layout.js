@@ -1,6 +1,13 @@
-import { createTheme, ThemeProvider } from '@mui/material';
+import { createTheme, ThemeProvider, Typography, Box, Toolbar, IconButton } from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
+import AppBar from '@mui/material/AppBar';
+import DragHandleOutlinedIcon from '@mui/icons-material/DragHandleOutlined';
+import MarkEmailUnreadOutlinedIcon from '@mui/icons-material/MarkEmailUnreadOutlined';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
+import PetsOutlinedIcon from '@mui/icons-material/PetsOutlined';
+
 
 export default function Layout({ children }) {
     const app = useContext(AppContext);
@@ -10,13 +17,13 @@ export default function Layout({ children }) {
             createTheme({
                 palette: {
                     mode: app.mode,
-                    background: {
-                        dark: "#0F151C",
-                        light: "#FFFFFF",
-                    },
                     primary: {
                         main: '#F4CE00',
                     },
+                    background: {
+                        dark: "#0F151C",
+                        light: "#FFFFFF",
+                      },
                     hoverPrimary: {
                         main: '#FFE555',
                     },
@@ -137,6 +144,58 @@ export default function Layout({ children }) {
     return (
         <>
             <ThemeProvider theme={theme}>
+                <Box color="background">
+                <AppBar>
+                <Toolbar>
+                    <Typography variant="h1" sx={{ flexGrow: 3 }}>
+                        GoingUP
+                    </Typography>
+                    <Typography variant="sh1" sx={{ flexGrow: 3, display: { xs: 'none', md: 'block' }}}>
+                        Search...
+                    </Typography>
+                    <IconButton
+                        size="large"
+                        color="inherit"
+                        aria-label="email"
+                        sx={{ display: { xs: 'none', md: 'block' }}}
+                    >
+                        <MarkEmailUnreadOutlinedIcon />
+                    </IconButton>
+                    <IconButton
+                        size="large"
+                        color="inherit"
+                        aria-label="settings"
+                        sx={{ display: { xs: 'none', md: 'block' }}}
+                    >
+                        <SettingsOutlinedIcon />
+                    </IconButton>
+                    <IconButton
+                        size="large"
+                        color="inherit"
+                        aria-label="language"
+                        sx={{ display: { xs: 'none', md: 'block' }}}
+                    >
+                        <LanguageOutlinedIcon />
+                    </IconButton>
+                    <IconButton
+                        size="small"
+                        color="inherit"
+                        aria-label="wallet"
+                        variant="p"
+                    >
+                        <PetsOutlinedIcon sx={{ display: { xs: 'none', md: 'block' }}} />Connect Wallet
+                    </IconButton>
+                    <IconButton
+                        size="large"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ display: { md: 'none', xs: 'block' } }}
+                    >
+                        <DragHandleOutlinedIcon />
+                    </IconButton>
+                </Toolbar>
+                </AppBar>
+                </Box>
                 {children}
             </ThemeProvider>;
         </>
