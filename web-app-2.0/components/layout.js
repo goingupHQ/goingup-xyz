@@ -51,6 +51,24 @@ export default function Layout({ children }) {
                     activeViewAllProjects: {
                         main: '#D2B200',
                     },
+                    hoverTabDark: {
+                        main: '#151E26',
+                    },
+                    hoverTabLight: {
+                        main: '#F5F5F5',
+                    },
+                    hoverListDark: {
+                        main: '#F4CE00',
+                    },
+                    hoverListLight: {
+                        main: '#F4CE00',
+                    },
+                    formBorder: {
+                        main: '#FF8199',
+                    },
+                    icon: {
+                        main: '#22272F',
+                    }
                 },
                 typography: {
                     fontFamily: 'Questrial',
