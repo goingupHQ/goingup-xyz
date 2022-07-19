@@ -10,6 +10,10 @@ export default function Layout({ children }) {
             createTheme({
                 palette: {
                     mode: app.mode,
+                    background: {
+                        dark: "#0F151C",
+                        light: "#FFFFFF",
+                    },
                     primary: {
                         main: '#F4CE00',
                     },
@@ -127,7 +131,7 @@ export default function Layout({ children }) {
 
     useEffect(() => {
         document.body.style.backgroundColor =
-            app.mode === 'dark' ? theme.palette.background.default : theme.palette.background.default;
+            app.mode === 'dark' ? theme.palette.background.dark : theme.palette.background.light;
     }, [app.mode]);
 
     return (
