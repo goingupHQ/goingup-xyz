@@ -21,6 +21,7 @@ export default function Layout({ children }) {
                         main: '#F4CE00',
                     },
                     background: {
+                        paper: "transparent",
                         dark: "#0F151C",
                         light: "#FFFFFF",
                       },
@@ -78,7 +79,7 @@ export default function Layout({ children }) {
                         main: '#FF8199',
                     },
                     icon: {
-                        main: '#22272F',
+                        main: '#4D5F72',
                     }
                 },
                 typography: {
@@ -144,8 +145,8 @@ export default function Layout({ children }) {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <Box color="background">
-                <AppBar>
+                <Box>
+                <AppBar elevation={0}>
                 <Toolbar>
                     <Typography variant="h1" sx={{ flexGrow: 3 }}>
                         GoingUP
@@ -155,7 +156,7 @@ export default function Layout({ children }) {
                     </Typography>
                     <IconButton
                         size="large"
-                        color="inherit"
+                        color="icon"
                         aria-label="email"
                         sx={{ display: { xs: 'none', md: 'block' }}}
                     >
@@ -163,7 +164,7 @@ export default function Layout({ children }) {
                     </IconButton>
                     <IconButton
                         size="large"
-                        color="inherit"
+                        color="icon"
                         aria-label="settings"
                         sx={{ display: { xs: 'none', md: 'block' }}}
                     >
@@ -171,7 +172,7 @@ export default function Layout({ children }) {
                     </IconButton>
                     <IconButton
                         size="large"
-                        color="inherit"
+                        color="icon"
                         aria-label="language"
                         sx={{ display: { xs: 'none', md: 'block' }}}
                     >
@@ -181,7 +182,6 @@ export default function Layout({ children }) {
                         size="small"
                         color="inherit"
                         aria-label="wallet"
-                        variant="p"
                     >
                         <PetsOutlinedIcon sx={{ display: { xs: 'none', md: 'block' }}} />Connect Wallet
                     </IconButton>
