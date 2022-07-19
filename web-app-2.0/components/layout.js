@@ -91,7 +91,7 @@ export default function Layout({ children }) {
                     },
                 },
                 shape: {
-                    borderRadius: '12px',
+                    borderRadius: '8px',
                 },
                 components: {
                     MuiButtonBase: {
@@ -112,5 +112,11 @@ export default function Layout({ children }) {
             app.mode === 'dark' ? theme.palette.background.default : theme.palette.background.default;
     }, [app.mode]);
 
-    return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+    return (
+        <>
+            <ThemeProvider theme={theme}>
+                {children}
+            </ThemeProvider>;
+        </>
+    );
 }
