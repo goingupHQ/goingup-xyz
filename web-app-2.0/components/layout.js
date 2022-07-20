@@ -18,7 +18,7 @@ export default function Layout({ children }) {
                 palette: {
                     mode: app.mode,
                     primary: {
-                        main: '#F4CE00',
+                        main: app.mode === 'dark' ? '#000' : '#FFF',
                     },
                     background: {
                         paper: "transparent",
@@ -135,10 +135,11 @@ export default function Layout({ children }) {
                     MuiAppBar: {
                         defaultProps: {
                             sx: {
-                                backgroundColor: app.mode === 'dark' ? 'blue' : 'orange',
+                                backgroundColor: app.mode === 'dark' ? 'navy' : 'yellow',
                             }
                         }
-                    }
+                    },
+
                 },
                 spacing: [0, 10, 15, 20, 30, 60, 80],
             }),
