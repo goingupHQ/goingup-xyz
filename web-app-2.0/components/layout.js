@@ -1,4 +1,4 @@
-import { createTheme, ThemeProvider, Typography, Box, Toolbar, IconButton, Divider } from '@mui/material';
+import { createTheme, ThemeProvider, Typography, Box, Toolbar, IconButton, Divider, TextField } from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
 import AppBar from '@mui/material/AppBar';
@@ -6,7 +6,10 @@ import DragHandleOutlinedIcon from '@mui/icons-material/DragHandleOutlined';
 import MarkEmailUnreadOutlinedIcon from '@mui/icons-material/MarkEmailUnreadOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
-import PetsOutlinedIcon from '@mui/icons-material/PetsOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
+
 
 
 export default function Layout({ children }) {
@@ -33,6 +36,9 @@ export default function Layout({ children }) {
                     },
                     secondary: {
                         main: '#7A55FF',
+                    },
+                    error: {
+                        main: '#FF8199',
                     },
                     text1: {
                         main: '#FFFFFF',
@@ -136,8 +142,7 @@ export default function Layout({ children }) {
                         defaultProps: {
                             sx: {
                                 backgroundColor: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
-                                height: 80,
-                                maxWidth: 1440,
+                                height: '80px',
                             },
                             elevation: 0
                         }
@@ -150,7 +155,6 @@ export default function Layout({ children }) {
                     MuiDivider: {
                         defaultProps: {
                             color: app.mode === 'dark' ? '#25303C' : '#E7E7E7',
-                            width: 1440,
                         }
                     }
                 },
@@ -173,9 +177,25 @@ export default function Layout({ children }) {
                     <Typography variant="h1" sx={{ flexGrow: 3 }}>
                         GoingUP
                     </Typography>
-                    <Typography variant="sh1" sx={{ flexGrow: 3, display: { xs: 'none', md: 'block' }}}>
-                        Search...
-                    </Typography>
+                    <TextField
+                        sx={{ display: { backgroundColor: '#19222C', height: 40, width: 495, xs: 'none', md: 'block', }}}
+                        InputProps={{
+                        disableUnderline: true,
+                        startAdornment: (
+                            <InputAdornment>
+                                <IconButton
+                                size="small"
+                                color="icon"
+                                aria-label="search"
+                            >
+                                <SearchIcon />Search...
+                            </IconButton>
+                            </InputAdornment>
+                        ),
+                        }}
+                        id='standard-basic'
+                        variant='standard'
+                    />
                     <IconButton
                         size="large"
                         color="icon"
@@ -200,13 +220,25 @@ export default function Layout({ children }) {
                     >
                         <LanguageOutlinedIcon />
                     </IconButton>
-                    <IconButton
-                        size="small"
-                        color="inherit"
-                        aria-label="wallet"
-                    >
-                        <PetsOutlinedIcon sx={{ display: { xs: 'none', md: 'block' }}} />Connect Wallet
-                    </IconButton>
+                    <TextField
+                        sx={{ alignItems: 'center', display: { backgroundColor: '#19222C', height: 40, width: 148 }}}
+                        InputProps={{
+                        disableUnderline: true,
+                        startAdornment: (
+                            <InputAdornment>
+                                <IconButton
+                                size="small"
+                                color="inherit"
+                                aria-label="wallet"
+                            >
+                                <PersonOutlineIcon sx={{ backgroundColor: '#19222C', display: {  xs: 'none', md: 'block' }}} /><Typography fontSize='14px'>Connect Wallet</Typography>
+                            </IconButton>
+                            </InputAdornment>
+                        ),
+                        }}
+                        id='standard-basic'
+                        variant='standard'
+                    />
                     <IconButton
                         size="large"
                         color="inherit"

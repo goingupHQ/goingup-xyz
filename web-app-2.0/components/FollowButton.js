@@ -13,6 +13,8 @@ export default function FollowButton() {
       variant='contained'
       color={active ? "secondary" : "activeFollow"}
       sx={{
+        height: '24px',
+        width: '53px',
         ':hover': {
           backgroundColor: 'hoverFollow.main',
           color: 'hoverFollow.text',

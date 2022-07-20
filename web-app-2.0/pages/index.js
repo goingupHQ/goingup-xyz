@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import { Box, Button, Card, CardContent, CardHeader, Stack, Typography } from '@mui/material';
+import { Button, Card, CardContent, Stack, Typography, TextField } from '@mui/material';
 import { AppContext } from '../contexts/app-context';
 import { useContext } from 'react';
 import AwardTokenButton from '../components/AwardTokenButton';
@@ -51,6 +51,16 @@ export default function Home() {
                             <FollowButton />
                             <ViewAllProjectsButton />
                             <ViewProfileButton />
+                        </Stack>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardContent>
+                        <h1>Forms</h1>
+                        <Stack direction="row" spacing={4}>
+                        <TextField sx={{ height: '52px', width: '390px' }} InputLabelProps={{ shrink: false }} id="outlined-basic" placeholder='Unfilled' variant="outlined" />
+                        <TextField sx={{ height: '52px', width: '390px' }} InputLabelProps={{ shrink: false }} id="outlined-basic" placeholder="Filled" variant="outlined" />
+                        <TextField sx={{ height: '52px', width: '390px' }} id="outlined-basic" label="" variant="outlined" helperText="Input the text" error />
                         </Stack>
                     </CardContent>
                 </Card>
