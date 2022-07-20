@@ -79,7 +79,7 @@ export default function Layout({ children }) {
                         main: '#F4CE00',
                     },
                     hoverListLight: {
-                        main: '#F4CE00',
+                        main: '#378CDB',
                     },
                     formBorder: {
                         main: '#FF8199',
@@ -178,7 +178,7 @@ export default function Layout({ children }) {
                         GoingUP
                     </Typography>
                     <TextField
-                        sx={{ display: { backgroundColor: '#19222C', height: 40, width: 495, xs: 'none', md: 'block', }}}
+                        sx={{ display: { backgroundColor: app.mode === 'dark' ? '#19222C' : '#F5F5F5', height: 40, width: 495, xs: 'none', md: 'block', }}}
                         InputProps={{
                         disableUnderline: true,
                         startAdornment: (
@@ -221,7 +221,7 @@ export default function Layout({ children }) {
                         <LanguageOutlinedIcon />
                     </IconButton>
                     <TextField
-                        sx={{ alignItems: 'center', display: { backgroundColor: '#19222C', height: 40, width: 148 }}}
+                        sx={{ alignItems: 'center', display: { backgroundColor: app.mode === 'dark' ? '#19222C' : '#F5F5F5', height: 40, width: 148 }}}
                         InputProps={{
                         disableUnderline: true,
                         startAdornment: (
@@ -231,7 +231,7 @@ export default function Layout({ children }) {
                                 color="inherit"
                                 aria-label="wallet"
                             >
-                                <PersonOutlineIcon sx={{ backgroundColor: '#19222C', display: {  xs: 'none', md: 'block' }}} /><Typography fontSize='14px'>Connect Wallet</Typography>
+                                <PersonOutlineIcon sx={{ backgroundColor: app.mode === 'dark' ? '#19222C' : '#F5F5F5', display: {  xs: 'none', md: 'block' }}} /><Typography fontSize='14px'>Connect Wallet</Typography>
                             </IconButton>
                             </InputAdornment>
                         ),
