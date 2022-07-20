@@ -80,7 +80,8 @@ export default function Layout({ children }) {
                     },
                     icon: {
                         main: '#4D5F72',
-                    }
+                    },
+
                 },
                 typography: {
                     fontFamily: 'Questrial',
@@ -128,6 +129,13 @@ export default function Layout({ children }) {
                         defaultProps: {
                             style: {
                                 padding: '10px 40px'
+                            }
+                        }
+                    },
+                    MuiAppBar: {
+                        defaultProps: {
+                            sx: {
+                                backgroundColor: app.mode === 'dark' ? 'blue' : 'orange',
                             }
                         }
                     }
