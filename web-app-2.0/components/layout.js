@@ -1,4 +1,4 @@
-import { createTheme, ThemeProvider, Typography, Box, Toolbar, IconButton } from '@mui/material';
+import { createTheme, ThemeProvider, Typography, Box, Toolbar, IconButton, Divider } from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
 import AppBar from '@mui/material/AppBar';
@@ -18,7 +18,7 @@ export default function Layout({ children }) {
                 palette: {
                     mode: app.mode,
                     primary: {
-                        main: app.mode === 'dark' ? '#000' : '#FFF',
+                        main: '#F4CE00',
                     },
                     background: {
                         paper: "transparent",
@@ -135,11 +135,24 @@ export default function Layout({ children }) {
                     MuiAppBar: {
                         defaultProps: {
                             sx: {
-                                backgroundColor: app.mode === 'dark' ? 'navy' : 'yellow',
-                            }
+                                backgroundColor: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
+                                height: 80,
+                                maxWidth: 1440,
+                            },
+                            elevation: 0
                         }
                     },
-
+                    MuiCard: {
+                        defaultProps: {
+                                elevation: 0
+                        }
+                    },
+                    MuiDivider: {
+                        defaultProps: {
+                            color: app.mode === 'dark' ? '#25303C' : '#E7E7E7',
+                            width: 1440,
+                        }
+                    }
                 },
                 spacing: [0, 10, 15, 20, 30, 60, 80],
             }),
@@ -155,7 +168,7 @@ export default function Layout({ children }) {
         <>
             <ThemeProvider theme={theme}>
                 <Box>
-                <AppBar elevation={0}>
+                <AppBar>
                 <Toolbar>
                     <Typography variant="h1" sx={{ flexGrow: 3 }}>
                         GoingUP
@@ -203,6 +216,7 @@ export default function Layout({ children }) {
                         <DragHandleOutlinedIcon />
                     </IconButton>
                 </Toolbar>
+                <Divider />
                 </AppBar>
                 </Box>
                 {children}

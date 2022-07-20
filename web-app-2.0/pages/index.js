@@ -54,7 +54,7 @@ export default function Home() {
                         </Stack>
                     </CardContent>
                 </Card>
-                <Card elevation={0}>
+                <Card>
                     <CardContent>
                         <Stack direction="column" spacing={4}>
                             <h1>Typography</h1>
