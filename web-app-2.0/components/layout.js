@@ -85,7 +85,7 @@ export default function Layout({ children }) {
                         main: '#FF8199',
                     },
                     icon: {
-                        main: '#4D5F72',
+                        main: app.mode === 'dark' ? '#EFEFEF' : '#010101',
                     },
                 },
                 typography: {
@@ -162,6 +162,13 @@ export default function Layout({ children }) {
                     md: '600px',
                     xl: '1440px',
                 },
+                icons: {
+                    sizes: {
+                        small: 16,
+                        medium: 24,
+                        large: 32
+                    }
+                }
             }),
         [app.mode]
     );
@@ -185,9 +192,9 @@ export default function Layout({ children }) {
                             }}
                         >
                             <img src={ app.mode === 'dark' ? '/images/goingup-logo-dark.svg' : '/images/goingup-logo-light.svg' } alt="logo" />
-                            <SearchIcon />
-                            <MessageIcon />
-                            <SettingsIcon />
+                            <SearchIcon size="small" />
+                            <MessageIcon size="medium" />
+                            <SettingsIcon size="large" />
                             <GlobeIcon />
                             <MenuIcon />
                             <UserIcon />
