@@ -156,10 +156,6 @@ export default function Layout({ children }) {
                     },
                 },
                 spacing: [0, 10, 15, 20, 30, 60, 80],
-                breakpoints: {
-                    md: '600px',
-                    xl: '1440px',
-                },
                 icons: {
                     sizes: {
                         small: 16,
@@ -210,7 +206,7 @@ export default function Layout({ children }) {
                             <Box sx={{ display: { xs: 'none', md: 'block' } }}>
                                 <GlobeIcon />
                             </Box>
-                            <Box sx={{ px: '25px', marginLeft: "auto" }}>
+                            <Box sx={{ px: '25px' }}>
                                 <UserIcon />
                             </Box>
                             <Box sx={{ display: { md: 'none', xs: 'block' } }}>
