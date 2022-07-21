@@ -1,7 +1,6 @@
-import { createTheme, ThemeProvider, Typography, Box, Toolbar, IconButton, Divider, TextField } from '@mui/material';
+import { createTheme, ThemeProvider, Typography, Box, Toolbar, IconButton, Divider, TextField, AppBar } from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
-import AppBar from '@mui/material/AppBar';
 import DragHandleOutlinedIcon from '@mui/icons-material/DragHandleOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -11,6 +10,7 @@ import GlobeIcon from './icons/GlobeIcon';
 import MenuIcon from './icons/MenuIcon';
 import UserIcon from './icons/UserIcon';
 import SearchIcon from './icons/SearchIcon';
+import SearchBox from './SearchBox';
 
 export default function Layout({ children }) {
     const app = useContext(AppContext);
@@ -166,9 +166,9 @@ export default function Layout({ children }) {
                     sizes: {
                         small: 16,
                         medium: 24,
-                        large: 32
-                    }
-                }
+                        large: 32,
+                    },
+                },
             }),
         [app.mode]
     );
@@ -191,7 +191,17 @@ export default function Layout({ children }) {
                                 },
                             }}
                         >
-                            <img src={ app.mode === 'dark' ? '/images/goingup-logo-dark.svg' : '/images/goingup-logo-light.svg' } alt="logo" />
+                            <img
+                                src={
+                                    app.mode === 'dark'
+                                        ? '/images/goingup-logo-dark.svg'
+                                        : '/images/goingup-logo-light.svg'
+                                }
+                                alt="logo"
+                            />
+
+                            <SearchBox />
+
                             <SearchIcon size="small" />
                             <MessageIcon size="medium" />
                             <SettingsIcon size="large" />
