@@ -165,6 +165,10 @@ export default function Layout({ children }) {
           },
         },
         spacing: [0, 10, 15, 20, 30, 60, 80],
+        breakpoints: {
+            md: '600px',
+            xl: '1440px'
+        }
       }),
     [app.mode]
   );
@@ -181,8 +185,11 @@ export default function Layout({ children }) {
       <ThemeProvider theme={theme}>
         <Box>
           <AppBar>
-            <Toolbar sx={{ marginX: "105px" }}>
-              <Typography variant='h1' sx={{ flexGrow: 3 }}>
+            <Toolbar sx={{ marginX: {
+                md: '15px',  lg: '105px'
+            }
+             }}>
+              <Typography variant='h1'>
                 GoingUP
               </Typography>
               <TextField
@@ -194,6 +201,8 @@ export default function Layout({ children }) {
                     width: 495,
                     xs: "none",
                     md: "block",
+                    marginLeft: '141px',
+                    marginRight: '141px'
                   },
                 }}
                 InputProps={{
@@ -211,37 +220,40 @@ export default function Layout({ children }) {
                 variant='standard'
               />
               <IconButton
+                disableElevation
+                disableRipple
                 size='large'
                 color='icon'
                 aria-label='email'
-                sx={{ display: { xs: "none", md: "block" } }}
+                sx={{ width: '20px', display: { xs: "none", md: "block" } }}
               >
                 <MarkEmailUnreadOutlinedIcon />
               </IconButton>
               <IconButton
+                disableElevation
+                disableRipple
                 size='large'
                 color='icon'
                 aria-label='settings'
-                sx={{ display: { xs: "none", md: "block" } }}
+                sx={{ width: '20px', display: { xs: "none", md: "block" } }}
               >
                 <SettingsOutlinedIcon />
               </IconButton>
               <IconButton
+                disableElevation
+                disableRipple
                 size='large'
                 color='icon'
                 aria-label='language'
-                sx={{ display: { xs: "none", md: "block" } }}
+                sx={{ width: '20px', display: { xs: "none", md: "block" } }}
               >
                 <LanguageOutlinedIcon />
               </IconButton>
               <TextField
                 sx={{
-                  alignItems: "center",
                   display: {
                     backgroundColor:
-                      app.mode === "dark" ? "#19222C" : "#F5F5F5",
-                    height: 40,
-                    width: 148,
+                      app.mode === "dark" ? "#19222C" : "#F5F5F5"
                   },
                 }}
                 InputProps={{
@@ -249,6 +261,8 @@ export default function Layout({ children }) {
                   startAdornment: (
                     <InputAdornment>
                       <IconButton
+                          disableElevation
+                          disableRipple
                         size='small'
                         color='inherit'
                         aria-label='wallet'
@@ -257,7 +271,7 @@ export default function Layout({ children }) {
                           sx={{
                             backgroundColor:
                               app.mode === "dark" ? "#19222C" : "#F5F5F5",
-                            display: { xs: "none", md: "block" },
+                            display: { xs: "none", md: "block" }
                           }}
                         />
                         <Typography fontSize='14px'>Connect Wallet</Typography>
@@ -272,7 +286,7 @@ export default function Layout({ children }) {
                 size='large'
                 color='inherit'
                 aria-label='menu'
-                sx={{ display: { md: "none", xs: "block" } }}
+                sx={{ marginLeft: '140px', display: { md: "none", xs: "block" } }}
               >
                 <DragHandleOutlinedIcon />
               </IconButton>
