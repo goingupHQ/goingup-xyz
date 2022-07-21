@@ -197,17 +197,24 @@ export default function Layout({ children }) {
                                 }
                                 alt="logo"
                             />
-                            <SearchBox />
-                            <MessageIcon size="medium" />
-                            <Box sx={{ px: '25px' }}>
-                            <SettingsIcon size="medium" />
+
+                            <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+                                <SearchBox />
                             </Box>
-                            <GlobeIcon />
+                            <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+                                <MessageIcon size="medium" />
+                            </Box>
+                            <Box sx={{ px: '25px', display: { xs: 'none', md: 'block' } }}>
+                                <SettingsIcon size="medium" />
+                            </Box>
+                            <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+                                <GlobeIcon />
+                            </Box>
                             <Box sx={{ px: '25px', marginLeft: "auto" }}>
-                            <UserIcon />
+                                <UserIcon />
                             </Box>
                             <Box sx={{ display: { md: 'none', xs: 'block' } }}>
-                            <MenuIcon />
+                                <MenuIcon />
                             </Box>
                         </Toolbar>
                         <Divider />
