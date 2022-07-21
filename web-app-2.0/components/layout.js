@@ -3,12 +3,14 @@ import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
 import AppBar from '@mui/material/AppBar';
 import DragHandleOutlinedIcon from '@mui/icons-material/DragHandleOutlined';
-import MarkEmailUnreadOutlinedIcon from '@mui/icons-material/MarkEmailUnreadOutlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import InputAdornment from '@mui/material/InputAdornment';
-import SearchIcon from '@mui/icons-material/Search';
+import SettingsIcon from './icons/SettingsIcon';
+import MessageIcon from './icons/MessageIcon';
+import GlobeIcon from './icons/GlobeIcon';
+import MenuIcon from './icons/MenuIcon';
+import UserIcon from './icons/UserIcon';
+import SearchIcon from './icons/SearchIcon';
 
 export default function Layout({ children }) {
     const app = useContext(AppContext);
@@ -183,102 +185,12 @@ export default function Layout({ children }) {
                             }}
                         >
                             <img src={ app.mode === 'dark' ? '/images/goingup-logo-dark.svg' : '/images/goingup-logo-light.svg' } alt="logo" />
-                            {/* <Typography variant="h1">GoingUP</Typography> */}
-                            <TextField
-                                sx={{
-                                    display: {
-                                        backgroundColor: app.mode === 'dark' ? '#19222C' : '#F5F5F5',
-                                        height: 40,
-                                        width: 495,
-                                        xs: 'none',
-                                        md: 'block',
-                                        marginLeft: '141px',
-                                        marginRight: '141px',
-                                    },
-                                }}
-                                InputProps={{
-                                    disableUnderline: true,
-                                    startAdornment: (
-                                        <InputAdornment>
-                                            <IconButton size="small" color="icon" aria-label="search">
-                                                <SearchIcon />
-                                                Search...
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                id="standard-basic"
-                                variant="standard"
-                            />
-                            <IconButton
-                                disableElevation
-                                disableRipple
-                                size="large"
-                                color="icon"
-                                aria-label="email"
-                                sx={{ width: '20px', display: { xs: 'none', md: 'block' } }}
-                            >
-                                <MarkEmailUnreadOutlinedIcon />
-                            </IconButton>
-                            <IconButton
-                                disableElevation
-                                disableRipple
-                                size="large"
-                                color="icon"
-                                aria-label="settings"
-                                sx={{ width: '20px', display: { xs: 'none', md: 'block' } }}
-                            >
-                                <SettingsOutlinedIcon />
-                            </IconButton>
-                            <IconButton
-                                disableElevation
-                                disableRipple
-                                size="large"
-                                color="icon"
-                                aria-label="language"
-                                sx={{ width: '20px', display: { xs: 'none', md: 'block' } }}
-                            >
-                                <LanguageOutlinedIcon />
-                            </IconButton>
-                            <TextField
-                                sx={{
-                                    display: {
-                                        backgroundColor: app.mode === 'dark' ? '#19222C' : '#F5F5F5',
-                                    },
-                                }}
-                                InputProps={{
-                                    disableUnderline: true,
-                                    startAdornment: (
-                                        <InputAdornment>
-                                            <IconButton
-                                                disableElevation
-                                                disableRipple
-                                                size="small"
-                                                color="inherit"
-                                                aria-label="wallet"
-                                            >
-                                                <PersonOutlineIcon
-                                                    sx={{
-                                                        backgroundColor: app.mode === 'dark' ? '#19222C' : '#F5F5F5',
-                                                        display: { xs: 'none', md: 'block' },
-                                                    }}
-                                                />
-                                                <Typography fontSize="14px">Connect Wallet</Typography>
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                id="standard-basic"
-                                variant="standard"
-                            />
-                            <IconButton
-                                size="large"
-                                color="inherit"
-                                aria-label="menu"
-                                sx={{ marginLeft: '140px', display: { md: 'none', xs: 'block' } }}
-                            >
-                                <DragHandleOutlinedIcon />
-                            </IconButton>
+                            <SearchIcon />
+                            <MessageIcon />
+                            <SettingsIcon />
+                            <GlobeIcon />
+                            <MenuIcon />
+                            <UserIcon />
                         </Toolbar>
                         <Divider />
                     </AppBar>
