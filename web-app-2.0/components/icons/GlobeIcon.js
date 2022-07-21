@@ -1,4 +1,4 @@
-import { Box, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 
 export default function GlobeIcon(props) {
     const theme = useTheme();

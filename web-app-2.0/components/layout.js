@@ -1,9 +1,6 @@
-import { createTheme, ThemeProvider, Typography, Box, Toolbar, IconButton, Divider, TextField, AppBar } from '@mui/material';
+import { createTheme, ThemeProvider, Box, Toolbar, Divider, AppBar } from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
-import DragHandleOutlinedIcon from '@mui/icons-material/DragHandleOutlined';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import InputAdornment from '@mui/material/InputAdornment';
 import SettingsIcon from './icons/SettingsIcon';
 import MessageIcon from './icons/MessageIcon';
 import GlobeIcon from './icons/GlobeIcon';
@@ -27,6 +24,7 @@ export default function Layout({ children }) {
                         paper: 'transparent',
                         dark: '#0F151C',
                         light: '#FFFFFF',
+                        searchBar: app.mode === 'dark' ? '#19222C' : '#F5F5F5',
                     },
                     hoverPrimary: {
                         main: '#FFE555',
@@ -199,15 +197,18 @@ export default function Layout({ children }) {
                                 }
                                 alt="logo"
                             />
-
                             <SearchBox />
-
-                            <SearchIcon size="small" />
                             <MessageIcon size="medium" />
-                            <SettingsIcon size="large" />
+                            <Box sx={{ px: '25px' }}>
+                            <SettingsIcon size="medium" />
+                            </Box>
                             <GlobeIcon />
-                            <MenuIcon />
+                            <Box sx={{ px: '25px', marginLeft: "auto" }}>
                             <UserIcon />
+                            </Box>
+                            <Box sx={{ display: { md: 'none', xs: 'block' } }}>
+                            <MenuIcon />
+                            </Box>
                         </Toolbar>
                         <Divider />
                     </AppBar>
