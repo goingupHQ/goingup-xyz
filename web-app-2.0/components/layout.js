@@ -1,4 +1,4 @@
-import { createTheme, ThemeProvider, Box, Toolbar, Divider, AppBar } from '@mui/material';
+import { createTheme, ThemeProvider, Box, Toolbar, Divider, AppBar, Button } from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
 import SettingsIcon from './icons/SettingsIcon';
@@ -8,6 +8,10 @@ import MenuIcon from './icons/MenuIcon';
 import UserIcon from './icons/UserIcon';
 import SearchIcon from './icons/SearchIcon';
 import SearchBox from './SearchBox';
+import DashboardIcon from './icons/DashboardIcon';
+import ProjectsIcon from './icons/ProjectsIcon';
+import ProfileIcon from './icons/ProfileIcon';
+import CollaboratorsIcon from './icons/CollaboratorsIcon';
 
 export default function Layout({ children }) {
     const app = useContext(AppContext);
@@ -83,8 +87,10 @@ export default function Layout({ children }) {
                         main: '#FF8199',
                     },
                     icon: {
-                        main: app.mode === 'dark' ? '#EFEFEF' : '#010101',
+                        main: app.mode === 'dark' ? '#4D5F72' : '#010101',
                     },
+                    hoverTab: {
+                        main: '#4D5F72',                    }
                 },
                 typography: {
                     fontFamily: 'Questrial',
@@ -131,7 +137,9 @@ export default function Layout({ children }) {
                     MuiButtonBase: {
                         defaultProps: {
                             style: {
-                                padding: '10px 40px',
+                                // padding: '10px 40px',
+                                width: 155,
+                                height: 44
                             },
                         },
                     },
@@ -181,7 +189,7 @@ export default function Layout({ children }) {
                             sx={{
                                 marginX: {
                                     md: '15px',
-                                    lg: '105px',
+                                    lg: '72px',
                                 },
                             }}
                         >
@@ -193,7 +201,6 @@ export default function Layout({ children }) {
                                 }
                                 alt="logo"
                             />
-
                             <Box sx={{ display: { xs: 'none', md: 'block' } }}>
                                 <SearchBox />
                             </Box>
@@ -214,6 +221,59 @@ export default function Layout({ children }) {
                             </Box>
                         </Toolbar>
                         <Divider />
+                        <Box 
+                            sx={{
+                                marginX: {
+                                    xs: '25px',
+                                    lg: '105px',
+                                },
+                                marginY: '30px'
+                            }}
+                        >
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                sx={{
+                                    ':hover': {
+                                        backgroundColor: 'hoverPrimary.main',
+                                    },
+                                }}
+                            >
+                            <DashboardIcon size="small" /> Dashboard
+                            </Button>
+                            <Button
+                                sx={{
+                                    color: '#4D5F72',
+                                    ':hover': {
+                                    color: 'hoverTab.main',
+                                    },
+                                }}
+                            >
+                                <ProjectsIcon />Projects
+                            </Button>
+                            <Button
+                                disableElevation
+                                disableRipple
+                                sx={{
+                                    color: '#4D5F72',
+                                    ':hover': {
+                                    color: 'hoverTab.main',
+                                    },
+                                }}
+                            >
+                               <ProfileIcon />Profile
+                            </Button>
+                            <Button
+                                sx={{
+                                    color: '#4D5F72',
+                                    ':hover': {
+                                    color: 'hoverTab.main',
+                                    },
+                                }}
+                            >
+                                <CollaboratorsIcon />Collaborators
+                            </Button>
+                        </Box>
                     </AppBar>
                 </Box>
                 {children}
