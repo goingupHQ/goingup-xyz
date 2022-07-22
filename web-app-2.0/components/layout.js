@@ -11,7 +11,6 @@ import DashboardIcon from './icons/DashboardIcon';
 import ProjectsIcon from './icons/ProjectsIcon';
 import ProfileIcon from './icons/ProfileIcon';
 import CollaboratorsIcon from './icons/CollaboratorsIcon';
-import { display } from '@mui/system';
 
 export default function Layout({ children }) {
     const app = useContext(AppContext);
