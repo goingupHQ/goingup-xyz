@@ -19,7 +19,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <Stack direction="column" spacing={3} marginY={6}>
+            <Stack direction="column" spacing={3} marginY={'100px'}>
                 <Card>
                     <CardContent>
                         <h1>Hello</h1>{' '}

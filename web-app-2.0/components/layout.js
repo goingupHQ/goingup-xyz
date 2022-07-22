@@ -1,17 +1,17 @@
-import { createTheme, ThemeProvider, Box, Toolbar, Divider, AppBar, Button } from '@mui/material';
+import { createTheme, ThemeProvider, Box, Toolbar, Divider, AppBar, Button, Grid, Typography } from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
 import SettingsIcon from './icons/SettingsIcon';
 import MessageIcon from './icons/MessageIcon';
 import GlobeIcon from './icons/GlobeIcon';
 import MenuIcon from './icons/MenuIcon';
-import UserIcon from './icons/UserIcon';
-import SearchIcon from './icons/SearchIcon';
+import WalletIcon from './icons/WalletIcon';
 import SearchBox from './SearchBox';
 import DashboardIcon from './icons/DashboardIcon';
 import ProjectsIcon from './icons/ProjectsIcon';
 import ProfileIcon from './icons/ProfileIcon';
 import CollaboratorsIcon from './icons/CollaboratorsIcon';
+import { display } from '@mui/system';
 
 export default function Layout({ children }) {
     const app = useContext(AppContext);
@@ -137,9 +137,9 @@ export default function Layout({ children }) {
                     MuiButtonBase: {
                         defaultProps: {
                             style: {
-                                // padding: '10px 40px',
-                                width: 155,
-                                height: 44
+                                // // padding: '10px 40px',
+                                // width: 155,
+                                // height: 44
                             },
                         },
                     },
@@ -147,7 +147,7 @@ export default function Layout({ children }) {
                         defaultProps: {
                             sx: {
                                 backgroundColor: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
-                                height: '80px',
+                                // height: '80px',
                             },
                             elevation: 0,
                         },
@@ -183,15 +183,15 @@ export default function Layout({ children }) {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <Box>
+                <Grid container>
                     <AppBar>
                         <Toolbar
-                            sx={{
-                                marginX: {
-                                    md: '15px',
-                                    lg: '72px',
-                                },
-                            }}
+                            // sx={{
+                            //     marginX: {
+                            //         md: '15px',
+                            //         lg: '72px',
+                            //     },
+                            // }}
                         >
                             <img
                                 src={
@@ -201,35 +201,43 @@ export default function Layout({ children }) {
                                 }
                                 alt="logo"
                             />
-                            <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+                            <Grid container sm={4} sx={{ display: { xs: 'none', sm: 'block' } }}>
                                 <SearchBox />
-                            </Box>
-                            <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-                                <MessageIcon size="medium" />
-                            </Box>
-                            <Box sx={{ px: '25px', display: { xs: 'none', md: 'block' } }}>
-                                <SettingsIcon size="medium" />
-                            </Box>
-                            <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-                                <GlobeIcon />
-                            </Box>
-                            <Box sx={{ px: '25px' }}>
-                                <UserIcon />
-                            </Box>
-                            <Box sx={{ display: { md: 'none', xs: 'block' } }}>
+                            </Grid>
+                            <Grid sm={4} container direction="row-reverse">
+                                <Grid sm={1} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                                    <MessageIcon size="medium" />
+                                </Grid>
+                                <Grid sm={3} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                                    <SettingsIcon size="medium" />
+                                </Grid>
+                                <Grid sm={3} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                                    <GlobeIcon />
+                                </Grid>
+                            </Grid>
+                            <Grid container direction={{ xs: 'row', sm: 'row-reverse'}} xs={12} sm={2}>
+                                <WalletIcon />
+                            </Grid>
+                            <Grid container direction='row-reverse' xs={1} sx={{ display: { sm: 'none', xs: 'block' } }}>
                                 <MenuIcon />
-                            </Box>
+                            </Grid>
                         </Toolbar>
-                        <Divider />
+                        <Divider 
+                            sx={{
+                                display: { xs: 'none', sm: 'block' }
+                            }}
+                        />
                         <Box 
                             sx={{
                                 marginX: {
                                     xs: '25px',
-                                    lg: '105px',
+                                    // lg: '105px',
                                 },
-                                marginY: '30px'
+                                marginY: '30px',
+                                display: { xs: 'none', sm: 'block' }
                             }}
                         >
+                            
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -274,8 +282,18 @@ export default function Layout({ children }) {
                                 <CollaboratorsIcon />Collaborators
                             </Button>
                         </Box>
+                        <Typography 
+                                variant='h2'
+                                sx={{
+                                    display: { sm: 'none' },
+                                    marginY: '30px',
+                                    marginX: 'auto'
+                                }}
+                            >
+                                Dashboard
+                            </Typography>
                     </AppBar>
-                </Box>
+                </Grid>
                 {children}
             </ThemeProvider>
             ;

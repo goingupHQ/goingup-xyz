@@ -10,14 +10,18 @@ const Search = styled('div')(({ theme }) => ({
     '&:hover': {
         backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
+    marginRight: theme.spacing(3),
     marginLeft: 0,
-    marginRight: 137,
-    width: '495px',
-    height: '40px',
+    width: '100%',
+    // marginRight: 137,
+    // width: '495px',
+    // height: '40px',
     [theme.breakpoints.up('sm')]: {
-        marginLeft: 131,
-        width: '495px',
-        height: '40px',
+        marginLeft: theme.spacing(4),
+        width: 'auto',
+        marginLeft: 50,
+        // width: '495px',
+        // height: '40px',
     },
 }));
 
