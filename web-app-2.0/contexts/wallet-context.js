@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import { useSnackbar } from 'notistack';
-import WalletChainSelection from './WalletChainSelection';
+import WalletChainSelection from './wallet-chain-selection';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
 export const WalletContext = createContext({});
@@ -149,7 +149,7 @@ export function WalletProvider({ children }) {
         // @ts-ignore
         if (instance.isWalletConnect) walletType = 'walletconnect';
 
-        let userAddress: string | null = null;
+        let userAddress = null;
         switch (walletType) {
             case 'metamask':
                 // @ts-ignore
