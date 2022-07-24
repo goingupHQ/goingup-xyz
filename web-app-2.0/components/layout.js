@@ -203,14 +203,14 @@ export default function Layout({ children }) {
                             <Grid item sm={4} sx={{ display: { xs: 'none', sm: 'block' } }}>
                                 <SearchBox />
                             </Grid>
-                            <Grid item sm={4} container direction="row-reverse">
-                                <Grid item sm={1} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Grid item sm={4} container direction="row" justifyContent="flex-end">
+                                <Grid item sm={3} sx={{ display: { xs: 'none', sm: 'block' } }}>
                                     <MessageIcon size="medium" />
                                 </Grid>
                                 <Grid item sm={3} sx={{ display: { xs: 'none', sm: 'block' } }}>
                                     <SettingsIcon size="medium" />
                                 </Grid>
-                                <Grid item sm={3} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                                <Grid item sm={1} sx={{ display: { xs: 'none', sm: 'block' } }}>
                                     <GlobeIcon />
                                 </Grid>
                             </Grid>
@@ -297,7 +297,7 @@ export default function Layout({ children }) {
                             </Typography>
                     </AppBar>
                 </Grid>
-                {children}
+                {/* {children} */}
             </ThemeProvider>
             ;
         </>
