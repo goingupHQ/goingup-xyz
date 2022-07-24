@@ -200,24 +200,24 @@ export default function Layout({ children }) {
                                 }
                                 alt="logo"
                             />
-                            <Grid container sm={4} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Grid item sm={4} sx={{ display: { xs: 'none', sm: 'block' } }}>
                                 <SearchBox />
                             </Grid>
-                            <Grid sm={4} container direction="row-reverse">
-                                <Grid sm={1} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Grid item sm={4} container direction="row-reverse">
+                                <Grid item sm={1} sx={{ display: { xs: 'none', sm: 'block' } }}>
                                     <MessageIcon size="medium" />
                                 </Grid>
-                                <Grid sm={3} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                                <Grid item sm={3} sx={{ display: { xs: 'none', sm: 'block' } }}>
                                     <SettingsIcon size="medium" />
                                 </Grid>
-                                <Grid sm={3} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                                <Grid item sm={3} sx={{ display: { xs: 'none', sm: 'block' } }}>
                                     <GlobeIcon />
                                 </Grid>
                             </Grid>
-                            <Grid container direction={{ xs: 'row', sm: 'row-reverse'}} xs={12} sm={2}>
+                            <Grid item container direction={{ xs: 'row', sm: 'row-reverse'}} xs={12} sm={2}>
                                 <WalletIcon />
                             </Grid>
-                            <Grid container direction='row-reverse' xs={1} sx={{ display: { sm: 'none', xs: 'block' } }}>
+                            <Grid item xs={1} sx={{ display: { sm: 'none', xs: 'block' } }}>
                                 <MenuIcon />
                             </Grid>
                         </Toolbar>
