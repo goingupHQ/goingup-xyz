@@ -86,7 +86,7 @@ export default function Layout({ children }) {
                         main: '#FF8199',
                     },
                     icon: {
-                        main: app.mode === 'dark' ? '#4D5F72' : '#010101',
+                        main: app.mode === 'dark' ? '#4D5F72' : '#4D5F72',
                     },
                     hoverTab: {
                         main: '#4D5F72',                    }
@@ -246,7 +246,8 @@ export default function Layout({ children }) {
                                     },
                                 }}
                             >
-                            <DashboardIcon size="small" /> Dashboard
+                            <DashboardIcon size="small" />
+                            <Typography marginLeft={1}>Dashboard</Typography>
                             </Button>
                             <Button
                                 sx={{
@@ -256,7 +257,8 @@ export default function Layout({ children }) {
                                     },
                                 }}
                             >
-                                <ProjectsIcon />Projects
+                                <ProjectsIcon />
+                                <Typography marginLeft={1}>Projects</Typography>
                             </Button>
                             <Button
                                 disableElevation
@@ -268,7 +270,8 @@ export default function Layout({ children }) {
                                     },
                                 }}
                             >
-                               <ProfileIcon />Profile
+                               <ProfileIcon />
+                               <Typography marginLeft={1}>Profile</Typography>
                             </Button>
                             <Button
                                 sx={{
@@ -278,7 +281,8 @@ export default function Layout({ children }) {
                                     },
                                 }}
                             >
-                                <CollaboratorsIcon />Collaborators
+                                <CollaboratorsIcon />
+                                <Typography marginLeft={1}> Collaborators</Typography>
                             </Button>
                         </Box>
                         <Typography 
