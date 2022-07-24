@@ -12,6 +12,7 @@ import ProjectsIcon from './icons/ProjectsIcon';
 import ProfileIcon from './icons/ProfileIcon';
 import CollaboratorsIcon from './icons/CollaboratorsIcon';
 import UserBox from './user-box';
+import MobileDashboard from './MobileDashboard';
 
 export default function Layout({ children }) {
     const app = useContext(AppContext);
@@ -289,6 +290,7 @@ export default function Layout({ children }) {
                         >
                             Dashboard
                         </Typography>
+                        <MobileDashboard />
                 </AppBar>
                 {children}
             </ThemeProvider>
