@@ -265,10 +265,16 @@ export function WalletProvider({ children }) {
         },
     };
 
+    const setWeb3ModalTheme = (theme) => {
+        web3Modal.updateTheme(theme);
+    }
+
     return (
         <WalletContext.Provider
             value={{
                 chain,
+                connectEthereum,
+                disconnectEthereum,
                 address,
                 network,
                 walletType,
@@ -280,10 +286,10 @@ export function WalletProvider({ children }) {
                 disconnect,
                 signMessage,
                 utilityToken,
+                setWeb3ModalTheme
             }}
         >
             {children}
-            <WalletChainSelection ref={wselRef} connectEthereum={connectEthereum} connectCardano={connectCardano} />
         </WalletContext.Provider>
     );
 }

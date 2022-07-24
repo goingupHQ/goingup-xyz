@@ -13,13 +13,17 @@ import {
     ListItemText,
     Popover,
     styled,
-    Typography
+    Typography,
+    useTheme
 } from '@mui/material';
 import UnfoldMoreTwoToneIcon from '@mui/icons-material/UnfoldMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenIcon from './../components/icons/LockOpenIcon';
 import WorkTwoToneIcon from '@mui/icons-material/WorkTwoTone';
 import Identicon from './../components/common/Identicon';
+import WalletChainSelection from '../contexts/wallet-chain-selection';
+import CollaboratorsIcon from './icons/CollaboratorsIcon';
+import { AppContext } from '../contexts/app-context';
 
 const UserBoxButton = styled(Button)(
     ({ theme }) => `
@@ -78,13 +82,31 @@ const UserBoxLabelMain = styled(Typography)(
 export default function UserBox () {
     const router = useRouter();
     const wallet = useContext(WalletContext);
+    const app = useContext(AppContext);
 
     const ref = useRef(null);
+    const chainSelectionRef = useRef(null);
     const [isOpen, setOpen] = useState(false);
 
     const handleOpen = () => {
         if (wallet.address === null) {
-            wallet.connect();
+            let cache;
+
+            try {
+                cache = JSON.parse(localStorage.getItem('wallet-context-cache'));
+            } catch (err) {}
+
+            if (cache) {
+                if (!wallet.address) {
+                    if (cache.blockchain === 'ethereum') {
+                        wallet.connectEthereum();
+                    } else if (cache.blockchain === 'cardano') {
+                        wallet.connectCardano();
+                    }
+                }
+            } else {
+                if (!wallet.address) chainSelectionRef.current.showModal();
+            }
         } else {
             setOpen(true);
         }
@@ -97,33 +119,31 @@ export default function UserBox () {
     return (
         <>
             <UserBoxButton
-                fullWidth
+                variant="outlined"
                 color="secondary"
                 ref={ref}
                 onClick={handleOpen}
             >
-                {wallet.address === null &&
-                    <Avatar variant="rounded" />
-                }
-
-                {wallet.address !== null &&
-                    <div style={{ paddingTop: '6px' }}>
-                        <Identicon address={wallet.address} size={32} />
-                    </div>
-                }
-
                 <Box
                     display="flex"
                     flex={1}
                     alignItems="center"
-                    justifyContent="space-between"
                 >
+                    <Box sx={{ marginRight: '12px', paddingTop: '6px' }}>
+                        {wallet.address === null &&
+                            <CollaboratorsIcon />
+                            // <Avatar variant="rounded" />
+                        }
+
+                        {wallet.address !== null &&
+                            <Identicon address={wallet.address} size={32} />
+                        }
+                    </Box>
                     <Box
-                        component="span"
                         sx={{
                             display: { xs: 'inline-block', md: 'inline-block' },
-                            width: { xs: '120px', md: 'auto'},
-                            maxWidth: { xs: '350px' }
+                            width: 'auto',
+                            maxWidth: '250px'
                         }}
                     >
                         <UserBoxText
@@ -219,6 +239,7 @@ export default function UserBox () {
                     </Button>
                 </Box>
             </Popover>
+            <WalletChainSelection ref={chainSelectionRef} />
         </>
     );
 }

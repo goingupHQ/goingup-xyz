@@ -42,51 +42,49 @@ const WalletChainSelection = (props, ref) => {
     };
 
     return (
-        <div>
-            <Dialog open={open} onClose={handleClose} maxWidth="md">
-                <DialogContent sx={{ paddingY: 5 }}>
+        <Dialog open={open} onClose={handleClose} maxWidth="md">
+            <DialogContent sx={{ paddingY: 5 }}>
+                <Stack
+                    direction="column"
+                >
                     <Stack
-                        direction="column"
+                        direction="row"
+                        spacing={2}
+                        alignItems="center"
+                        sx={chainItemSx}
+                        onClick={() => {
+                            handleClose();
+                            wallet.connectEthereum();
+                        }}
                     >
-                        <Stack
-                            direction="row"
-                            spacing={2}
-                            alignItems="center"
-                            sx={chainItemSx}
-                            onClick={() => {
-                                // handleClose();
-                                connectEthereum();
-                            }}
-                        >
-                            <img
-                                src="/images/ethereum-eth-logo.svg"
-                                width={64}
-                                height={64}
-                            />
+                        <img
+                            src="/images/ethereum-eth-logo.svg"
+                            width={64}
+                            height={64}
+                        />
 
-                            <h1>Connect using Ethereum</h1>
-                        </Stack>
-
-                        {/* <Stack
-                            direction="row"
-                            spacing={2}
-                            alignItems="center"
-                            sx={chainItemSx}
-                            onClick={() => {
-                                connectCardano();
-                            }}
-                        >
-                            <img
-                                src="/images/cardano-ada-logo.svg"
-                                width={64}
-                                height={64}
-                            />
-                            <h1>Connect using Cardano</h1>
-                        </Stack> */}
+                        <h1>Connect using Ethereum</h1>
                     </Stack>
-                </DialogContent>
-            </Dialog>
-        </div>
+
+                    {/* <Stack
+                        direction="row"
+                        spacing={2}
+                        alignItems="center"
+                        sx={chainItemSx}
+                        onClick={() => {
+                            connectCardano();
+                        }}
+                    >
+                        <img
+                            src="/images/cardano-ada-logo.svg"
+                            width={64}
+                            height={64}
+                        />
+                        <h1>Connect using Cardano</h1>
+                    </Stack> */}
+                </Stack>
+            </DialogContent>
+        </Dialog>
     );
 };
 

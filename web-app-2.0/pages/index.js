@@ -1,13 +1,13 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import { Button, Card, CardContent, Stack, Typography, TextField } from '@mui/material';
+import { Button, Card, CardContent, Stack, Typography, TextField, Dialog, DialogContent } from '@mui/material';
 import { AppContext } from '../contexts/app-context';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import AwardTokenButton from '../components/AwardTokenButton';
 import FollowButton from '../components/FollowButton';
 import ViewAllProjectsButton from '../components/ViewAllProjectsButton';
 import ViewProfileButton from '../components/ViewProfileButton';
+import WalletChainSelection from '../contexts/wallet-chain-selection';
 
 export default function Home() {
     const app = useContext(AppContext);

@@ -1,4 +1,4 @@
-import { createTheme, ThemeProvider, Box, Toolbar, Divider, AppBar, Button, Grid, Typography } from '@mui/material';
+import { createTheme, ThemeProvider, Box, Toolbar, Divider, AppBar, Button, Grid, Typography, Stack } from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
 import SettingsIcon from './icons/SettingsIcon';
@@ -11,6 +11,7 @@ import DashboardIcon from './icons/DashboardIcon';
 import ProjectsIcon from './icons/ProjectsIcon';
 import ProfileIcon from './icons/ProfileIcon';
 import CollaboratorsIcon from './icons/CollaboratorsIcon';
+import UserBox from './user-box';
 
 export default function Layout({ children }) {
     const app = useContext(AppContext);
@@ -24,9 +25,11 @@ export default function Layout({ children }) {
                         main: '#F4CE00',
                     },
                     background: {
-                        paper: 'transparent',
+                        // paper: 'transparent',
                         dark: '#0F151C',
                         light: '#FFFFFF',
+                        default: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
+                        main: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
                         searchBar: app.mode === 'dark' ? '#19222C' : '#F5F5F5',
                     },
                     hoverPrimary: {
@@ -84,6 +87,9 @@ export default function Layout({ children }) {
                     },
                     formBorder: {
                         main: '#FF8199',
+                    },
+                    text: {
+                        main: app.mode === 'dark' ? '#4D5F72' : '#010101',
                     },
                     icon: {
                         main: app.mode === 'dark' ? '#4D5F72' : '#010101',
@@ -160,7 +166,7 @@ export default function Layout({ children }) {
                         defaultProps: {
                             color: app.mode === 'dark' ? '#25303C' : '#E7E7E7',
                         },
-                    },
+                    }
                 },
                 spacing: [0, 10, 15, 20, 30, 60, 80],
                 icons: {
@@ -182,117 +188,104 @@ export default function Layout({ children }) {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <Grid container>
-                    <AppBar>
-                        <Toolbar
-                            // sx={{
-                            //     marginX: {
-                            //         md: '15px',
-                            //         lg: '72px',
-                            //     },
-                            // }}
-                        >
-                            <img
-                                src={
-                                    app.mode === 'dark'
-                                        ? '/images/goingup-logo-dark.svg'
-                                        : '/images/goingup-logo-light.svg'
-                                }
-                                alt="logo"
-                            />
-                            <Grid container sm={4} sx={{ display: { xs: 'none', sm: 'block' } }}>
-                                <SearchBox />
+                <AppBar>
+                    <Toolbar>
+                        <Grid container spacing={1} alignItems="center" justifyContent="space-between">
+                            <Grid item xs={6}>
+                                <img
+                                    src={
+                                        app.mode === 'dark'
+                                            ? '/images/goingup-logo-dark.svg'
+                                            : '/images/goingup-logo-light.svg'
+                                    }
+                                    alt="logo"
+                                />
+                                {/* <SearchBox /> */}
                             </Grid>
-                            <Grid sm={4} container direction="row-reverse">
-                                <Grid sm={1} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Grid item xs={6}>
+                                <Stack direction="row" spacing={1} alignItems="center" justifyContent="flex-end">
                                     <MessageIcon size="medium" />
-                                </Grid>
-                                <Grid sm={3} sx={{ display: { xs: 'none', sm: 'block' } }}>
                                     <SettingsIcon size="medium" />
-                                </Grid>
-                                <Grid sm={3} sx={{ display: { xs: 'none', sm: 'block' } }}>
                                     <GlobeIcon />
-                                </Grid>
+                                    <UserBox />
+                                    <Box sx={{ display: { xs: 'initial', md: 'none' } }}>
+                                        <MenuIcon />
+                                    </Box>
+                                </Stack>
                             </Grid>
-                            <Grid container direction={{ xs: 'row', sm: 'row-reverse'}} xs={12} sm={2}>
-                                <WalletIcon />
-                            </Grid>
-                            <Grid container direction='row-reverse' xs={1} sx={{ display: { sm: 'none', xs: 'block' } }}>
-                                <MenuIcon />
-                            </Grid>
-                        </Toolbar>
-                        <Divider 
+                        </Grid>
+                    </Toolbar>
+                    <Divider
+                        sx={{
+                            display: { xs: 'none', sm: 'block' }
+                        }}
+                    />
+                    <Box
+                        sx={{
+                            marginX: {
+                                xs: '25px',
+                                // lg: '105px',
+                            },
+                            marginY: '30px',
+                            display: { xs: 'none', sm: 'block' }
+                        }}
+                    >
+
+                        <Button
+                            variant="contained"
+                            color="primary"
                             sx={{
-                                display: { xs: 'none', sm: 'block' }
-                            }}
-                        />
-                        <Box 
-                            sx={{
-                                marginX: {
-                                    xs: '25px',
-                                    // lg: '105px',
+                                ':hover': {
+                                    backgroundColor: 'hoverPrimary.main',
                                 },
-                                marginY: '30px',
-                                display: { xs: 'none', sm: 'block' }
                             }}
                         >
-                            
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                sx={{
-                                    ':hover': {
-                                        backgroundColor: 'hoverPrimary.main',
-                                    },
-                                }}
-                            >
-                            <DashboardIcon size="small" /> Dashboard
-                            </Button>
-                            <Button
-                                sx={{
-                                    color: '#4D5F72',
-                                    ':hover': {
-                                    color: 'hoverTab.main',
-                                    },
-                                }}
-                            >
-                                <ProjectsIcon />Projects
-                            </Button>
-                            <Button
-                                disableElevation
-                                disableRipple
-                                sx={{
-                                    color: '#4D5F72',
-                                    ':hover': {
-                                    color: 'hoverTab.main',
-                                    },
-                                }}
-                            >
-                               <ProfileIcon />Profile
-                            </Button>
-                            <Button
-                                sx={{
-                                    color: '#4D5F72',
-                                    ':hover': {
-                                    color: 'hoverTab.main',
-                                    },
-                                }}
-                            >
-                                <CollaboratorsIcon />Collaborators
-                            </Button>
-                        </Box>
-                        <Typography 
-                                variant='h2'
-                                sx={{
-                                    display: { sm: 'none' },
-                                    marginY: '30px',
-                                    marginX: 'auto'
-                                }}
-                            >
-                                Dashboard
-                            </Typography>
-                    </AppBar>
-                </Grid>
+                        <DashboardIcon size="small" /> Dashboard
+                        </Button>
+                        <Button
+                            sx={{
+                                color: '#4D5F72',
+                                ':hover': {
+                                color: 'hoverTab.main',
+                                },
+                            }}
+                        >
+                            <ProjectsIcon />Projects
+                        </Button>
+                        <Button
+                            disableElevation
+                            disableRipple
+                            sx={{
+                                color: '#4D5F72',
+                                ':hover': {
+                                color: 'hoverTab.main',
+                                },
+                            }}
+                        >
+                            <ProfileIcon />Profile
+                        </Button>
+                        <Button
+                            sx={{
+                                color: '#4D5F72',
+                                ':hover': {
+                                color: 'hoverTab.main',
+                                },
+                            }}
+                        >
+                            <CollaboratorsIcon />Collaborators
+                        </Button>
+                    </Box>
+                    <Typography
+                            variant='h2'
+                            sx={{
+                                display: { sm: 'none' },
+                                marginY: '30px',
+                                marginX: 'auto'
+                            }}
+                        >
+                            Dashboard
+                        </Typography>
+                </AppBar>
                 {children}
             </ThemeProvider>
             ;
