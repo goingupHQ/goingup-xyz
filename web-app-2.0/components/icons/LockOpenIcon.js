@@ -1,6 +1,6 @@
 import { useTheme } from '@mui/material';
 
-export default function MenuIcon(props) {
+export default function LockOpenIcon(props) {
     const theme = useTheme();
     const size = theme.icons.sizes[props.size] || 24;
     return (

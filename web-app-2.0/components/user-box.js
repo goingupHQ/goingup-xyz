@@ -23,6 +23,7 @@ import WorkTwoToneIcon from '@mui/icons-material/WorkTwoTone';
 import Identicon from './../components/common/Identicon';
 import WalletChainSelection from '../contexts/wallet-chain-selection';
 import CollaboratorsIcon from './icons/CollaboratorsIcon';
+import ChevronDownIcon from './icons/ChevronDownIcon';
 import { AppContext } from '../contexts/app-context';
 
 const UserBoxButton = styled(Button)(
@@ -123,13 +124,8 @@ export default function UserBox () {
                 color="secondary"
                 ref={ref}
                 onClick={handleOpen}
-            >
-                <Box
-                    display="flex"
-                    flex={1}
-                    alignItems="center"
-                >
-                    <Box sx={{ marginRight: '12px', paddingTop: '6px' }}>
+                startIcon={
+                    <>
                         {wallet.address === null &&
                             <CollaboratorsIcon />
                             // <Avatar variant="rounded" />
@@ -138,7 +134,17 @@ export default function UserBox () {
                         {wallet.address !== null &&
                             <Identicon address={wallet.address} size={32} />
                         }
-                    </Box>
+                    </>
+                }
+                endIcon={
+                    <ChevronDownIcon />
+                }
+            >
+                <Box
+                    display="flex"
+                    flex={1}
+                    alignItems="center"
+                >
                     <Box
                         sx={{
                             display: { xs: 'inline-block', md: 'inline-block' },
@@ -169,12 +175,6 @@ export default function UserBox () {
                             }
                         </UserBoxText>
                     </Box>
-                    <UnfoldMoreTwoToneIcon
-                        fontSize="small"
-                        sx={{
-                            ml: 1
-                        }}
-                    />
                 </Box>
             </UserBoxButton>
             <Popover
