@@ -30,7 +30,7 @@ const UserBoxButton = styled(Button)(
     background-color: ${theme.palette.background.userBox};
     height: 48px;
     width: 200px;
-    min-width: 200px;
+    min-width: 180px;
     max-width: 200px;
     &.Mui-active,
     &:hover {
@@ -111,7 +111,6 @@ export default function UserBox () {
     return (
         <>
             <UserBoxButton
-                variant="outlined"
                 color="secondary"
                 ref={ref}
                 onClick={handleOpen}

@@ -11,91 +11,89 @@ import SettingsIcon from "./icons/SettingsIcon";
 export default function MobileDashboard() {
     return (
         <Stack
+            spacing={3}
+            alignItems="flex-start"
             sx={{
                 marginX: "25px",
                 marginY: "30px",
                 display: { sm: "none" },
             }}
         >
-            <Box marginX={0} marginBottom={4}>
+            <Box width='100%' marginBottom={1}>
                 <SearchBox />
             </Box>
             <Button
-                variant='contained'
                 sx={{
-                    color: "#4D5F72",
+                    color: "#F4CE00",
                     ":hover": {
                         backgroundColor: "hoverPrimary.main",
                     },
                 }}
             >
-                <DashboardIcon size='small' />
+                <DashboardIcon color={'#F4CE00'} />
                 <Typography marginLeft={1}>Dashboard</Typography>
             </Button>
             <Button
                 sx={{
-                    color: "#4D5F72",
-                    ":hover": {
-                        color: "hoverTab.main",
-                    },
+                    color: "#FFFFFF"
                 }}
             >
-                <ProjectsIcon />
+                <ProjectsIcon color={'#FFFFFF'} />
                 <Typography marginLeft={1}>Projects</Typography>
             </Button>
             <Button
                 sx={{
-                    color: "#4D5F72",
+                    color: "#FFFFFF",
                     ":hover": {
                         color: "hoverTab.main",
                     },
                 }}
             >
-                <ProfileIcon />
+                <ProfileIcon color={'#FFFFFF'} />
                 <Typography marginLeft={1}>Profile</Typography>
             </Button>
             <Button
                 sx={{
-                    color: "#4D5F72",
+                    color: "#FFFFFF",
                     ":hover": {
                         color: "hoverTab.main",
                     },
                 }}
             >
-                <CollaboratorsIcon />
+                <CollaboratorsIcon color={'#FFFFFF'} />
                 <Typography marginLeft={1}> Collaborators</Typography>
             </Button>
             <Button
                 sx={{
-                    color: "#4D5F72",
+                    color: "#FFFFFF",
                     ":hover": {
                         color: "hoverTab.main",
                     },
                 }}
             >
-                <MessageIcon />
+                <MessageIcon color={'#FFFFFF'} />
                 <Typography marginLeft={1}> Messages</Typography>
             </Button>
             <Button
                 sx={{
-                    color: "#4D5F72",
+                    color: "#FFFFFF",
                     ":hover": {
                         color: "hoverTab.main",
                     },
                 }}
             >
-                <SettingsIcon />
+                <SettingsIcon color={'#FFFFFF'} />
                 <Typography marginLeft={1}> Settings</Typography>
             </Button>
             <Button
                 sx={{
-                    color: "#4D5F72",
+                    color: "#FFFFFF",
                     ":hover": {
                         color: "hoverTab.main",
                     },
                 }}
             >
-                <GlobeIcon />
+                <GlobeIcon color={'#FFFFFF'} />
                 <Typography marginLeft={1}> Language</Typography>
             </Button>
         </Stack>
