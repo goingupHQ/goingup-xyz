@@ -19,7 +19,7 @@ import SunIcon from '../icons/SunIcon';
 
 export default function Header(props) {
     const app = useContext(AppContext);
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false); // testing
 
     return (
         <>
