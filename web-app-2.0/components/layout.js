@@ -23,6 +23,7 @@ import ProjectsIcon from './icons/ProjectsIcon';
 import ProfileIcon from './icons/ProfileIcon';
 import CollaboratorsIcon from './icons/CollaboratorsIcon';
 import UserBox from './user-box';
+import MobileDashboard from './MobileDashboard';
 
 export default function Layout({ children }) {
     const app = useContext(AppContext);
@@ -104,7 +105,7 @@ export default function Layout({ children }) {
                         main: app.mode === 'dark' ? '#FFFFFF' : '#010101',
                     },
                     icon: {
-                        main: app.mode === 'dark' ? '#4D5F72' : '#010101',
+                        main: app.mode === 'dark' ? '#4D5F72' : '#4D5F72',
                     },
                     hoverTab: {
                         main: '#4D5F72',
@@ -252,7 +253,8 @@ export default function Layout({ children }) {
                                 },
                             }}
                         >
-                            <DashboardIcon size="small" /> Dashboard
+                            <DashboardIcon size="small" />
+                            <Typography marginLeft={1}>Dashboard</Typography>
                         </Button>
                         <Button
                             sx={{
@@ -263,7 +265,7 @@ export default function Layout({ children }) {
                             }}
                         >
                             <ProjectsIcon />
-                            Projects
+                            <Typography marginLeft={1}>Projects</Typography>
                         </Button>
                         <Button
                             disableElevation
@@ -276,7 +278,7 @@ export default function Layout({ children }) {
                             }}
                         >
                             <ProfileIcon />
-                            Profile
+                            <Typography marginLeft={1}>Profile</Typography>
                         </Button>
                         <Button
                             sx={{
@@ -287,19 +289,20 @@ export default function Layout({ children }) {
                             }}
                         >
                             <CollaboratorsIcon />
-                            Collaborators
+                            <Typography marginLeft={1}> Collaborators</Typography>
                         </Button>
                     </Box>
                     <Typography
-                        variant="h2"
-                        sx={{
-                            display: { sm: 'none' },
-                            marginY: '30px',
-                            marginX: 'auto',
-                        }}
-                    >
-                        Dashboard
-                    </Typography>
+                            variant='h2'
+                            sx={{
+                                display: { sm: 'none' },
+                                marginY: '30px',
+                                marginX: 'auto'
+                            }}
+                        >
+                            Dashboard
+                        </Typography>
+                        <MobileDashboard />
                 </AppBar>
                 {children}
             </ThemeProvider>
