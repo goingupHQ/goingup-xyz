@@ -3,6 +3,12 @@ import { useTheme } from '@mui/material';
 export default function DashboardIcon(props) {
     const theme = useTheme();
     const size = theme.icons.sizes[props.size] || 24;
+    let color;
+    if (props.color === 'primary') {
+        color = theme.palette.primary.main;
+    } else if (props.color === 'secondary') {
+        color = theme.palette.secondary.main;
+    }
 
     return (
         <svg width={size} height={size} viewBox={`0 0 24 24`} fill="none" xmlns="http://www.w3.org/2000/svg">
