@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
-import DashboardIcon from './icons/DashboardIcon';
-import ProjectsIcon from './icons/ProjectsIcon';
-import ProfileIcon from './icons/ProfileIcon';
-import CollaboratorsIcon from './icons/CollaboratorsIcon';
-import SearchBox from './SearchBox';
-import MessageIcon from './icons/MessageIcon';
-import GlobeIcon from './icons/GlobeIcon';
-import SettingsIcon from './icons/SettingsIcon';
-import MenuIcon from './icons/MenuIcon';
+import DashboardIcon from '../icons/DashboardIcon';
+import ProjectsIcon from '../icons/ProjectsIcon';
+import ProfileIcon from '../icons/ProfileIcon';
+import CollaboratorsIcon from '../icons/CollaboratorsIcon';
+import SearchBox from '../SearchBox';
+import MessageIcon from '../icons/MessageIcon';
+import GlobeIcon from '../icons/GlobeIcon';
+import SettingsIcon from '../icons/SettingsIcon';
+import MenuIcon from '../icons/MenuIcon';
 
 export default function MobileNav() {
     return (
