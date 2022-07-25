@@ -11,6 +11,7 @@ import ProfileIcon from '../icons/ProfileIcon';
 import ProjectsIcon from '../icons/ProjectsIcon';
 import SettingsIcon from '../icons/SettingsIcon';
 import MobileDashboard from '../MobileDashboard';
+import Sidebar from '../Sidebar';
 import UserBox from '../user-box';
 
 export default function Header(props) {
@@ -122,6 +123,10 @@ export default function Header(props) {
                 >
                     Dashboard
                 </Typography>
+                <Button variant='contained' color='background2' sx={{ display : { xs: 'block', sm: 'none'}, mx:'auto'}}>
+                    All Projects
+                </Button>
+                <Sidebar />
                 <MobileDashboard />
             </AppBar>
         </>

@@ -37,10 +37,7 @@ function MobileDash() {
         </Box>
         <Button
             sx={{
-                color: "#F4CE00",
-                ":hover": {
-                    backgroundColor: "hoverPrimary.main",
-                },
+                color: "#F4CE00"
             }}
         >
             <DashboardIcon color={"#F4CE00"} />

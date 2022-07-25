@@ -111,6 +111,9 @@ export default function Layout({ children }) {
                     hoverTab: {
                         main: '#4D5F72',
                     },
+                    sidebar: {
+                        main: '#394859'
+                    }
                 },
                 typography: {
                     fontFamily: 'Questrial',
