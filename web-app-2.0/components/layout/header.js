@@ -81,7 +81,7 @@ export default function Header(props) {
 
                 <Fade direction="down" in={drawerOpen} mountOnEnter unmountOnExit>
                     <Box sx={{ paddingBottom: '20px', paddingX: '32px', zIndex: 100 }}>
-                        <MobileNav />
+                        <MobileNav closeNav={() => { setDrawerOpen(false) }} />
                     </Box>
                 </Fade>
 
