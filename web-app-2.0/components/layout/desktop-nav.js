@@ -9,6 +9,7 @@ import ProjectsIcon from '../icons/ProjectsIcon';
 
 export default function DesktopNav(props) {
     const commonButtonStyle = {
+        fontSize: '1rem',
         padding: '10px 25px'
     }
 
@@ -40,7 +41,7 @@ export default function DesktopNav(props) {
                         sx={pathname === '/' ? activeButtonStyle : inactiveButtonStyle}
                         startIcon={<DashboardIcon />}
                     >
-                        <Typography>Dashboard</Typography>
+                        Dashboard
                     </Button>
                 </Link>
 
@@ -49,7 +50,7 @@ export default function DesktopNav(props) {
                         sx={pathname === '/projects' ? activeButtonStyle : inactiveButtonStyle}
                         startIcon={<ProjectsIcon />}
                     >
-                        <Typography>Projects</Typography>
+                        Projects
                     </Button>
                 </Link>
 
@@ -58,7 +59,7 @@ export default function DesktopNav(props) {
                         sx={pathname === '/profile' ? activeButtonStyle : inactiveButtonStyle}
                         startIcon={<ProfileIcon />}
                     >
-                        <Typography>Profile</Typography>
+                        Profile
                     </Button>
                 </Link>
 
@@ -67,7 +68,7 @@ export default function DesktopNav(props) {
                         sx={pathname === '/collaborators' ? activeButtonStyle : inactiveButtonStyle}
                         startIcon={<CollaboratorsIcon />}
                     >
-                        <Typography> Collaborators</Typography>
+                        Collaborators
                     </Button>
                 </Link>
             </Stack>
