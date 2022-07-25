@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import { WalletContext } from './../contexts/wallet-context';
 import { useRouter } from 'next/router';
-
 import {
     Box,
     Button,
@@ -15,6 +14,7 @@ import {
     Typography,
     useTheme
 } from '@mui/material';
+import truncateEthAddress from 'truncate-eth-address';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenIcon from './../components/icons/LockOpenIcon';
 import WorkTwoToneIcon from '@mui/icons-material/WorkTwoTone';
@@ -123,7 +123,9 @@ export default function UserBox () {
                         }
 
                         {wallet.address !== null &&
-                            <Identicon address={wallet.address} size={32} />
+                            <Box sx={{ paddingTop: '12px' }}>
+                                <Identicon address={wallet.address} size={24} />
+                            </Box>
                         }
                     </>
                 }
@@ -153,15 +155,17 @@ export default function UserBox () {
                                     `Connect Wallet`
                                 }
 
-                                {wallet.address !== null && wallet.address}
+                                {wallet.address !== null &&
+                                    truncateEthAddress(wallet.address)
+                                }
                             </UserBoxLabelMain>
-                            {wallet.address &&
+                            {/* {wallet.address &&
                                 <UserBoxDescriptionMain
                                     variant="body2"
                                 >
                                     {wallet.walletTypes[wallet.walletType]?.display} {wallet.networks[wallet.network]?.name}
                                 </UserBoxDescriptionMain>
-                            }
+                            } */}
                         </UserBoxText>
                     </Box>
                 </Box>
