@@ -27,11 +27,11 @@ const TopBarWrapper = styled(Card)(
     color: ${theme.header.textColor};
     background: ${alpha(darken(theme.colors.primary.dark, 0.2), 0.95)};
     backdrop-filter: blur(5px);
-    margin: ${theme.spacing(0, 0, 5)};
+    margin: ${theme.spacing(0, 0, 2)};
     padding: ${theme.spacing(4, 0, 44)};
 
     @media (min-width: ${theme.breakpoints.values.lg}px) {
-      margin: ${theme.spacing(0, 8, 5)};
+      margin: ${theme.spacing(0, 8, 2)};
       padding: ${theme.spacing(4, 3, 44)};
     }
     display: flex;
@@ -143,13 +143,13 @@ function TopBar() {
                         <Box
                             component="span"
                             sx={{
-                                display: { xs: 'none', sm: 'inline-flex' }
+                                display: { xs: 'inline-flex', sm: 'inline-flex' }
                             }}
                         >
-                            {/* <LanguageSwitcher />
+                            {/* <LanguageSwitcher /> */}
                             <Box mx={1}>
                                 <Notifications />
-                            </Box> */}
+                            </Box>
                         </Box>
                         <Userbox />
                         <Box
@@ -176,7 +176,8 @@ function TopBar() {
                 <DividerWrapper
                     sx={{
                         display: { xs: 'none', md: 'flex' },
-                        my: 4
+                        mt: 2,
+                        mb: 1
                     }}
                 />
                 <Box

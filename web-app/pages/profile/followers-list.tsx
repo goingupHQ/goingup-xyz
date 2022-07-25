@@ -53,14 +53,14 @@ const FollowersList = (props, ref) => {
 
     return (
         <div>
-            <Dialog open={open} onClose={close} fullWidth maxWidth="xs">
+            <Dialog open={open} onClose={close} fullWidth maxWidth="sm">
                 <DialogTitle>
                     {account.name}'s Followers {getting && <CircularProgress size="10pt" />}
                 </DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2}>
                         {list.map(item => { return (
-                            <Grid item xs={12} key={item._id}>
+                            <Grid item xs={6} md={4} lg={3}  key={item._id}>
                                 <ProfileLink profile={item.profile[0]} hideReputationScore onClick={close} />
                             </Grid>
                         )})}

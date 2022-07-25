@@ -2,3 +2,16 @@
 a {
     text-decoration: none;
 }
+
+.MuiCardHeader-content {
+    max-width: 100%;
+}
+
+.truncate-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.css-1h4tde6-MuiPaper-root-MuiCard-root {
+    padding-top: 10px !important;
+}
