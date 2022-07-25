@@ -10,7 +10,7 @@ import GlobeIcon from './icons/GlobeIcon';
 import SettingsIcon from './icons/SettingsIcon';
 import MenuIcon from './icons/MenuIcon';
 
-export default function MobileDashboard() {
+export default function MobileNav() {
     return (
         <Stack
             spacing={3}

@@ -1,29 +1,9 @@
 import {
     createTheme,
     ThemeProvider,
-    Box,
-    Toolbar,
-    Divider,
-    AppBar,
-    Button,
-    Grid,
-    Typography,
-    Stack,
 } from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
-import SettingsIcon from './icons/SettingsIcon';
-import MessageIcon from './icons/MessageIcon';
-import GlobeIcon from './icons/GlobeIcon';
-import MenuIcon from './icons/MenuIcon';
-import WalletIcon from './icons/WalletIcon';
-import SearchBox from './SearchBox';
-import DashboardIcon from './icons/DashboardIcon';
-import ProjectsIcon from './icons/ProjectsIcon';
-import ProfileIcon from './icons/ProfileIcon';
-import CollaboratorsIcon from './icons/CollaboratorsIcon';
-import UserBox from './user-box';
-import MobileDashboard from './MobileDashboard';
 import Header from './layout/header';
 
 export default function Layout({ children }) {

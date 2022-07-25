@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Divider, Drawer, Grid, IconButton, Slide, Stack, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Divider, Drawer, Fade, Grid, IconButton, Slide, Stack, Toolbar, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useContext } from 'react';
 import { AppContext } from '../../contexts/app-context';
@@ -11,7 +11,7 @@ import MessageIcon from '../icons/MessageIcon';
 import ProfileIcon from '../icons/ProfileIcon';
 import ProjectsIcon from '../icons/ProjectsIcon';
 import SettingsIcon from '../icons/SettingsIcon';
-import MobileDashboard from '../MobileDashboard';
+import MobileNav from '../MobileNav';
 import UserBox from '../user-box';
 
 export default function Header(props) {
@@ -21,7 +21,7 @@ export default function Header(props) {
     return (
         <>
             <AppBar>
-                <Toolbar>
+                <Toolbar sx={{ zIndex: 101 }}>
                     <Grid container spacing={1} alignItems="center" justifyContent="space-between" marginY={1}>
                         <Grid item xs={6}>
                             <Box
@@ -120,12 +120,13 @@ export default function Header(props) {
                     </Button>
                 </Box>
 
+                <Fade direction="down" in={drawerOpen} mountOnEnter unmountOnExit>
+                    <Box sx={{ paddingBottom: '20px', paddingX: '32px', zIndex: 100 }}>
+                        <MobileNav />
+                    </Box>
+                </Fade>
+
             </AppBar>
-            <Slide direction="down" in={drawerOpen} mountOnEnter unmountOnExit>
-                <Box sx={{ paddingTop: '60px' }}>
-                    <MobileDashboard />
-                </Box>
-            </Slide>
         </>
     );
 }
