@@ -1,7 +1,8 @@
-import { AppBar, Box, Button, Divider, Grid, IconButton, Stack, Toolbar, Typography } from '@mui/material';
-import React from 'react';
+import { AppBar, Box, Button, Divider, Drawer, Grid, IconButton, Slide, Stack, Toolbar, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import { useContext } from 'react';
 import { AppContext } from '../../contexts/app-context';
+import CloseIcon from '../icons/CloseIcon';
 import CollaboratorsIcon from '../icons/CollaboratorsIcon';
 import DashboardIcon from '../icons/DashboardIcon';
 import GlobeIcon from '../icons/GlobeIcon';
@@ -11,25 +12,30 @@ import ProfileIcon from '../icons/ProfileIcon';
 import ProjectsIcon from '../icons/ProjectsIcon';
 import SettingsIcon from '../icons/SettingsIcon';
 import MobileDashboard from '../MobileDashboard';
-import Sidebar from '../Sidebar';
 import UserBox from '../user-box';
 
 export default function Header(props) {
     const app = useContext(AppContext);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+
     return (
         <>
             <AppBar>
                 <Toolbar>
                     <Grid container spacing={1} alignItems="center" justifyContent="space-between" marginY={1}>
                         <Grid item xs={6}>
-                            <img
+                            <Box
+                                component="img"
                                 src={
                                     app.mode === 'dark'
                                         ? '/images/goingup-logo-dark.svg'
                                         : '/images/goingup-logo-light.svg'
                                 }
                                 alt="logo"
-                            />
+                                sx={{
+                                    width: { xs: '110px', md: 'auto' },
+                                }}
+                            ></Box>
                             {/* <SearchBox /> */}
                         </Grid>
                         <Grid item xs={6}>
@@ -40,12 +46,12 @@ export default function Header(props) {
                                     <GlobeIcon />
                                 </Stack>
                                 <UserBox />
-                                <Box sx={{ display: { xs: 'initial', md: 'none' } }}>
-                                    <IconButton>
-                                        <MenuIcon />
+                                <Box sx={{ display: { xs: 'initial', md: 'none' }, marginLeft: '0px !important' }}>
+                                    <IconButton onClick={() => setDrawerOpen(!drawerOpen)}>
+                                        {drawerOpen ? <CloseIcon /> : <MenuIcon />}
                                     </IconButton>
-
                                 </Box>
+
                             </Stack>
                         </Grid>
                     </Grid>
@@ -113,22 +119,13 @@ export default function Header(props) {
                         <Typography marginLeft={1}> Collaborators</Typography>
                     </Button>
                 </Box>
-                <Typography
-                    variant="h2"
-                    sx={{
-                        display: { sm: 'none' },
-                        marginY: '10px',
-                        marginX: 'auto',
-                    }}
-                >
-                    Dashboard
-                </Typography>
-                <Button variant='contained' color='background2' sx={{ display : { xs: 'block', sm: 'none'}, mx:'auto'}}>
-                    All Projects
-                </Button>
-                <Sidebar />
-                <MobileDashboard />
+
             </AppBar>
+            <Slide direction="down" in={drawerOpen} mountOnEnter unmountOnExit>
+                <Box sx={{ paddingTop: '60px' }}>
+                    <MobileDashboard />
+                </Box>
+            </Slide>
         </>
     );
 }

@@ -31,7 +31,7 @@ const UserBoxButton = styled(Button)(
     background-color: ${theme.palette.background.userBox};
     height: 48px;
     width: 200px;
-    min-width: 180px;
+    min-width: 200px;
     max-width: 200px;
     &.Mui-active,
     &:hover {
@@ -138,36 +138,30 @@ export default function UserBox () {
                     flex={1}
                     alignItems="center"
                 >
-                    <Box
+                    <UserBoxText
                         sx={{
-                            display: { xs: 'inline-block', md: 'inline-block' },
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis'
                         }}
                     >
-                        <UserBoxText
-                            sx={{
-                                overflow: 'hidden',
-                                whiteSpace: 'nowrap',
-                                textOverflow: 'ellipsis'
-                            }}
-                        >
-                            <UserBoxLabelMain variant="body1">
-                                {wallet.address === null &&
-                                    `Connect Wallet`
-                                }
+                        <UserBoxLabelMain variant="body1">
+                            {wallet.address === null &&
+                                `Connect Wallet`
+                            }
 
-                                {wallet.address !== null &&
-                                    truncateEthAddress(wallet.address)
-                                }
-                            </UserBoxLabelMain>
-                            {/* {wallet.address &&
-                                <UserBoxDescriptionMain
-                                    variant="body2"
-                                >
-                                    {wallet.walletTypes[wallet.walletType]?.display} {wallet.networks[wallet.network]?.name}
-                                </UserBoxDescriptionMain>
-                            } */}
-                        </UserBoxText>
-                    </Box>
+                            {wallet.address !== null &&
+                                truncateEthAddress(wallet.address)
+                            }
+                        </UserBoxLabelMain>
+                        {/* {wallet.address &&
+                            <UserBoxDescriptionMain
+                                variant="body2"
+                            >
+                                {wallet.walletTypes[wallet.walletType]?.display} {wallet.networks[wallet.network]?.name}
+                            </UserBoxDescriptionMain>
+                        } */}
+                    </UserBoxText>
                 </Box>
             </UserBoxButton>
             <Popover
