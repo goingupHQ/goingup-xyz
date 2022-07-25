@@ -196,7 +196,6 @@ export default function Layout({ children }) {
                     {children}
                 </Box>
             </ThemeProvider>
-            ;
         </>
     );
 }
