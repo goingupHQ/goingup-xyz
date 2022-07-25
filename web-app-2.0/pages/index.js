@@ -1,25 +1,20 @@
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
-import { Button, Card, CardContent, Stack, Typography, TextField, Dialog, DialogContent } from '@mui/material';
+import { Typography } from '@mui/material';
 import { AppContext } from '../contexts/app-context';
-import { useContext, useState } from 'react';
-import AwardTokenButton from '../components/AwardTokenButton';
-import FollowButton from '../components/FollowButton';
-import ViewAllProjectsButton from '../components/ViewAllProjectsButton';
-import ViewProfileButton from '../components/ViewProfileButton';
-import WalletChainSelection from '../contexts/wallet-chain-selection';
+import { useContext, } from 'react';
 
 export default function Home() {
     const app = useContext(AppContext);
 
     return (
-        <div className={styles.container}>
+        <>
             <Head>
-                <title>GoingUP</title>
-                <link rel="icon" href="/favicon.ico" />
+                <title>GoingUP: Dashboard</title>
             </Head>
 
-            <Stack direction="column" spacing={3} marginY={'100px'}>
+            <Typography variant="h1">Dashboard</Typography>
+
+            {/* <Stack direction="column" spacing={3} marginY={'100px'}>
                 <Card>
                     <CardContent>
                         <h1>Hello</h1>{' '}
@@ -78,7 +73,7 @@ export default function Home() {
                         </Stack>
                     </CardContent>
                 </Card>
-            </Stack>
-        </div>
+            </Stack> */}
+        </>
     );
 }
