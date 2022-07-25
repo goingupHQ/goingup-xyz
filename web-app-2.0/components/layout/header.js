@@ -11,8 +11,9 @@ import MessageIcon from '../icons/MessageIcon';
 import ProfileIcon from '../icons/ProfileIcon';
 import ProjectsIcon from '../icons/ProjectsIcon';
 import SettingsIcon from '../icons/SettingsIcon';
-import MobileNav from '../MobileNav';
+import MobileNav from './mobile-nav';
 import UserBox from '../user-box';
+import DesktopNav from './desktop-nav';
 
 export default function Header(props) {
     const app = useContext(AppContext);
@@ -61,64 +62,7 @@ export default function Header(props) {
                         display: { xs: 'none', sm: 'block' },
                     }}
                 />
-                <Box
-                    sx={{
-                        marginX: {
-                            xs: '25px',
-                            // lg: '105px',
-                        },
-                        marginY: '30px',
-                        display: { xs: 'none', sm: 'block' },
-                    }}
-                >
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        sx={{
-                            ':hover': {
-                                backgroundColor: 'hoverPrimary.main',
-                            },
-                        }}
-                    >
-                        <DashboardIcon size="small" />
-                        <Typography marginLeft={1}>Dashboard</Typography>
-                    </Button>
-                    <Button
-                        sx={{
-                            color: '#4D5F72',
-                            ':hover': {
-                                color: 'hoverTab.main',
-                            },
-                        }}
-                    >
-                        <ProjectsIcon />
-                        <Typography marginLeft={1}>Projects</Typography>
-                    </Button>
-                    <Button
-                        disableElevation
-                        disableRipple
-                        sx={{
-                            color: '#4D5F72',
-                            ':hover': {
-                                color: 'hoverTab.main',
-                            },
-                        }}
-                    >
-                        <ProfileIcon />
-                        <Typography marginLeft={1}>Profile</Typography>
-                    </Button>
-                    <Button
-                        sx={{
-                            color: '#4D5F72',
-                            ':hover': {
-                                color: 'hoverTab.main',
-                            },
-                        }}
-                    >
-                        <CollaboratorsIcon />
-                        <Typography marginLeft={1}> Collaborators</Typography>
-                    </Button>
-                </Box>
+                <DesktopNav />
 
                 <Fade direction="down" in={drawerOpen} mountOnEnter unmountOnExit>
                     <Box sx={{ paddingBottom: '20px', paddingX: '32px', zIndex: 100 }}>
