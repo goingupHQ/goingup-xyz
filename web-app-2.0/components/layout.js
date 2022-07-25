@@ -1,4 +1,15 @@
-import { createTheme, ThemeProvider, Box, Toolbar, Divider, AppBar, Button, Grid, Typography, Stack } from '@mui/material';
+import {
+    createTheme,
+    ThemeProvider,
+    Box,
+    Toolbar,
+    Divider,
+    AppBar,
+    Button,
+    Grid,
+    Typography,
+    Stack,
+} from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
 import SettingsIcon from './icons/SettingsIcon';
@@ -25,12 +36,13 @@ export default function Layout({ children }) {
                         main: '#F4CE00',
                     },
                     background: {
-                        // paper: 'transparent',
+                        // paper: app.mode === 'dark' ? '#19222C' : '#E6DDD3',
                         dark: '#0F151C',
                         light: '#FFFFFF',
                         default: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
                         main: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
                         searchBar: app.mode === 'dark' ? '#19222C' : '#F5F5F5',
+                        userBox: app.mode === 'dark' ? '#19222C' : '#EDEFED',
                     },
                     hoverPrimary: {
                         main: '#FFE555',
@@ -89,13 +101,14 @@ export default function Layout({ children }) {
                         main: '#FF8199',
                     },
                     text: {
-                        main: app.mode === 'dark' ? '#4D5F72' : '#010101',
+                        main: app.mode === 'dark' ? '#FFFFFF' : '#010101',
                     },
                     icon: {
                         main: app.mode === 'dark' ? '#4D5F72' : '#010101',
                     },
                     hoverTab: {
-                        main: '#4D5F72',                    }
+                        main: '#4D5F72',
+                    },
                 },
                 typography: {
                     fontFamily: 'Questrial',
@@ -166,7 +179,7 @@ export default function Layout({ children }) {
                         defaultProps: {
                             color: app.mode === 'dark' ? '#25303C' : '#E7E7E7',
                         },
-                    }
+                    },
                 },
                 spacing: [0, 10, 15, 20, 30, 60, 80],
                 icons: {
@@ -217,7 +230,7 @@ export default function Layout({ children }) {
                     </Toolbar>
                     <Divider
                         sx={{
-                            display: { xs: 'none', sm: 'block' }
+                            display: { xs: 'none', sm: 'block' },
                         }}
                     />
                     <Box
@@ -227,10 +240,9 @@ export default function Layout({ children }) {
                                 // lg: '105px',
                             },
                             marginY: '30px',
-                            display: { xs: 'none', sm: 'block' }
+                            display: { xs: 'none', sm: 'block' },
                         }}
                     >
-
                         <Button
                             variant="contained"
                             color="primary"
@@ -240,17 +252,18 @@ export default function Layout({ children }) {
                                 },
                             }}
                         >
-                        <DashboardIcon size="small" /> Dashboard
+                            <DashboardIcon size="small" /> Dashboard
                         </Button>
                         <Button
                             sx={{
                                 color: '#4D5F72',
                                 ':hover': {
-                                color: 'hoverTab.main',
+                                    color: 'hoverTab.main',
                                 },
                             }}
                         >
-                            <ProjectsIcon />Projects
+                            <ProjectsIcon />
+                            Projects
                         </Button>
                         <Button
                             disableElevation
@@ -258,33 +271,35 @@ export default function Layout({ children }) {
                             sx={{
                                 color: '#4D5F72',
                                 ':hover': {
-                                color: 'hoverTab.main',
+                                    color: 'hoverTab.main',
                                 },
                             }}
                         >
-                            <ProfileIcon />Profile
+                            <ProfileIcon />
+                            Profile
                         </Button>
                         <Button
                             sx={{
                                 color: '#4D5F72',
                                 ':hover': {
-                                color: 'hoverTab.main',
+                                    color: 'hoverTab.main',
                                 },
                             }}
                         >
-                            <CollaboratorsIcon />Collaborators
+                            <CollaboratorsIcon />
+                            Collaborators
                         </Button>
                     </Box>
                     <Typography
-                            variant='h2'
-                            sx={{
-                                display: { sm: 'none' },
-                                marginY: '30px',
-                                marginX: 'auto'
-                            }}
-                        >
-                            Dashboard
-                        </Typography>
+                        variant="h2"
+                        sx={{
+                            display: { sm: 'none' },
+                            marginY: '30px',
+                            marginX: 'auto',
+                        }}
+                    >
+                        Dashboard
+                    </Typography>
                 </AppBar>
                 {children}
             </ThemeProvider>
