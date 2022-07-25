@@ -1,6 +1,7 @@
 import {
+    Box,
     createTheme,
-    ThemeProvider,
+    ThemeProvider
 } from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
@@ -100,33 +101,37 @@ export default function Layout({ children }) {
                     h1: {
                         fontSize: '32px',
                         fontWeight: 'bold',
+                        color: app.mode === 'dark' ? '#FFFFFF' : '#010101',
                     },
                     h2: {
                         fontSize: '24px',
                         fontWeight: 'bold',
+                        color: app.mode === 'dark' ? '#FFFFFF' : '#010101',
                     },
                     h3: {
                         fontSize: '18px',
                         fontWeight: 'bold',
+                        color: app.mode === 'dark' ? '#FFFFFF' : '#010101',
                     },
                     sh1: {
                         fontSize: '16px',
                         fontWeight: '500',
-                        color: '#4D5F72',
+                        color: app.mode === 'dark' ? '#FFFFFF' : '#010101',
                     },
                     sh2: {
                         fontSize: '14px',
                         fontWeight: '500',
-                        color: '#4D5F72',
+                        color: app.mode === 'dark' ? '#FFFFFF' : '#010101',
                     },
                     sh3: {
                         fontSize: '12px',
                         fontWeight: '500',
-                        color: '#4D5F72',
+                        color: app.mode === 'dark' ? '#FFFFFF' : '#010101',
                     },
                     p: {
                         fontSize: '16px',
                         fontWeight: 'medium',
+                        color: app.mode === 'dark' ? '#FFFFFF' : '#010101',
                     },
                     button: {
                         textTransform: 'capitalize',
@@ -187,7 +192,9 @@ export default function Layout({ children }) {
         <>
             <ThemeProvider theme={theme}>
                 <Header />
-                {children}
+                <Box sx={{ paddingTop: { xs: '60px', md: '150px' } }}>
+                    {children}
+                </Box>
             </ThemeProvider>
             ;
         </>
