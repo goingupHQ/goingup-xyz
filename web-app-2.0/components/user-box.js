@@ -29,17 +29,9 @@ const UserBoxButton = styled(Button)(
     padding: ${theme.spacing(0, 1)};
     background-color: ${theme.palette.background.userBox};
     height: 48px;
-
-    .MuiSvgIcon-root {
-      transition: ${theme.transitions.create(['color'])};
-      font-size: ${theme.typography.pxToRem(24)};
-    }
-
-    .MuiAvatar-root {
-      width: 34px;
-      height: 34px;
-    }
-
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
     &.Mui-active,
     &:hover {
       .MuiSvgIcon-root {
@@ -147,8 +139,6 @@ export default function UserBox () {
                     <Box
                         sx={{
                             display: { xs: 'inline-block', md: 'inline-block' },
-                            width: 'auto',
-                            maxWidth: '250px'
                         }}
                     >
                         <UserBoxText
