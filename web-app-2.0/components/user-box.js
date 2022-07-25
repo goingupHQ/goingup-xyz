@@ -3,7 +3,6 @@ import { WalletContext } from './../contexts/wallet-context';
 import { useRouter } from 'next/router';
 
 import {
-    Avatar,
     Box,
     Button,
     Divider,
@@ -16,7 +15,6 @@ import {
     Typography,
     useTheme
 } from '@mui/material';
-import UnfoldMoreTwoToneIcon from '@mui/icons-material/UnfoldMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenIcon from './../components/icons/LockOpenIcon';
 import WorkTwoToneIcon from '@mui/icons-material/WorkTwoTone';
@@ -29,6 +27,7 @@ import { AppContext } from '../contexts/app-context';
 const UserBoxButton = styled(Button)(
     ({ theme }) => `
     padding: ${theme.spacing(0, 1)};
+    background-color: ${theme.palette.background.userBox};
     height: 48px;
 
     .MuiSvgIcon-root {
@@ -62,20 +61,19 @@ const UserBoxText = styled(Box)(
 );
 
 const UserBoxDescription = styled(Typography)(
-    ({ theme }) => `
-        color: ${theme.palette.secondary.light};
-`
+    ({ theme }) => ``
 );
 
 const UserBoxDescriptionMain = styled(Typography)(
     ({ theme }) => `
-        color: ${theme.colors.alpha.trueWhite[50]};
-`
+    color: ${theme.palette.text};
+    `
 );
 
 const UserBoxLabelMain = styled(Typography)(
     ({ theme }) => `
     font-weight: ${theme.typography.fontWeightBold};
+    color: ${theme.palette.text.main};
     display: block;
 `
 );
@@ -84,6 +82,7 @@ export default function UserBox () {
     const router = useRouter();
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
+    const theme = useTheme();
 
     const ref = useRef(null);
     const chainSelectionRef = useRef(null);
@@ -127,7 +126,7 @@ export default function UserBox () {
                 startIcon={
                     <>
                         {wallet.address === null &&
-                            <CollaboratorsIcon />
+                            <CollaboratorsIcon color={theme.palette.text.main} />
                             // <Avatar variant="rounded" />
                         }
 
@@ -137,7 +136,7 @@ export default function UserBox () {
                     </>
                 }
                 endIcon={
-                    <ChevronDownIcon />
+                    <ChevronDownIcon color={theme.palette.text.main} />
                 }
             >
                 <Box
