@@ -23,6 +23,8 @@ import WalletChainSelection from '../contexts/wallet-chain-selection';
 import CollaboratorsIcon from './icons/CollaboratorsIcon';
 import ChevronDownIcon from './icons/ChevronDownIcon';
 import { AppContext } from '../contexts/app-context';
+import ProjectsIcon from './icons/ProjectsIcon';
+import ProfileIcon from './icons/ProfileIcon';
 
 const UserBoxButton = styled(Button)(
     ({ theme }) => `
@@ -194,9 +196,8 @@ export default function UserBox () {
                             handleClose();
                             router.push(`/profile/${wallet.address}`)
                         }}
-                        button
+                        button={true}
                     >
-                        <AccountBoxTwoToneIcon fontSize="small" />
                         <ListItemText primary="Profile" />
                     </ListItem>
                     {/* <ListItem
@@ -215,18 +216,13 @@ export default function UserBox () {
                         }}
                         button
                     >
-                        <WorkTwoToneIcon fontSize="small" />
+                        <ProjectsIcon />
                         <ListItemText primary="Projects" />
                     </ListItem>
                 </List>
                 <Divider />
                 <Box m={1}>
-                    <Button color="primary" fullWidth onClick={() => { wallet.disconnect(); handleClose(); }}>
-                        <LockOpenIcon
-                            sx={{
-                                mr: 1
-                            }}
-                        />
+                    <Button color="primary" fullWidth onClick={() => { wallet.disconnect(); handleClose(); }} startIcon={<LockOpenIcon color="primary" />}>
                         Disconnect this wallet
                     </Button>
                 </Box>
