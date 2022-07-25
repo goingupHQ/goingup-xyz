@@ -5,14 +5,13 @@ import {
     Box,
     Button,
     Divider,
-    alpha,
     List,
     ListItem,
-    ListItemText,
     Popover,
     styled,
     Typography,
-    useTheme
+    useTheme,
+    Stack
 } from '@mui/material';
 import truncateEthAddress from 'truncate-eth-address';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
@@ -60,7 +59,7 @@ const UserBoxDescription = styled(Typography)(
 
 const UserBoxDescriptionMain = styled(Typography)(
     ({ theme }) => `
-    color: ${theme.palette.text};
+    color: ${theme.palette.text.main};
     `
 );
 
@@ -177,17 +176,15 @@ export default function UserBox () {
                 onClose={handleClose}
                 open={isOpen}
                 anchorOrigin={{
-                    vertical: 'center',
+                    vertical: 'bottom',
                     horizontal: 'center'
                 }}
-                transformOrigin={{
-                    vertical: 'center',
-                    horizontal: 'center'
-                }}
+                marginThreshold={24}
             >
                 <List
                     sx={{
-                        p: 1
+                        p: 1,
+                        width: 'auto',
                     }}
                     component="nav"
                 >
@@ -196,36 +193,50 @@ export default function UserBox () {
                             handleClose();
                             router.push(`/profile/${wallet.address}`)
                         }}
-                        button={true}
-                    >
-                        <ListItemText primary="Profile" />
-                    </ListItem>
-                    {/* <ListItem
-                        onClick={() => {
-                            handleClose();
-                        }}
                         button
+                        sx={{
+                            borderRadius: theme.shape.borderRadius
+                        }}
                     >
-                        <InboxTwoToneIcon fontSize="small" />
-                        <ListItemText primary={t('Inbox')} />
-                    </ListItem> */}
+                        <Stack direction="row" spacing={1}>
+                            <ProfileIcon color={theme.palette.text.main} />
+                            <Typography variant="body1">Profile</Typography>
+                        </Stack>
+                    </ListItem>
                     <ListItem
                         onClick={() => {
                             handleClose();
                             router.push(`/projects`);
                         }}
                         button
+                        sx={{
+                            borderRadius: theme.shape.borderRadius
+                        }}
                     >
-                        <ProjectsIcon />
-                        <ListItemText primary="Projects" />
+                        <Stack direction="row" spacing={1}>
+                            <ProjectsIcon color={theme.palette.text.main} />
+                            <Typography variant="body1">Projects</Typography>
+                        </Stack>
+                    </ListItem>
+
+                    <Divider sx={{ marginY: 2 }} />
+
+                    <ListItem
+                        onClick={() => {
+                            wallet.disconnect();
+                            handleClose();
+                        }}
+                        button
+                        sx={{
+                            borderRadius: theme.shape.borderRadius
+                        }}
+                    >
+                        <Stack direction="row" spacing={1}>
+                            <LockOpenIcon color={theme.palette.text.main} />
+                            <Typography variant="body1">Disconnect this wallet</Typography>
+                        </Stack>
                     </ListItem>
                 </List>
-                <Divider />
-                <Box m={1}>
-                    <Button color="primary" fullWidth onClick={() => { wallet.disconnect(); handleClose(); }} startIcon={<LockOpenIcon color="primary" />}>
-                        Disconnect this wallet
-                    </Button>
-                </Box>
             </Popover>
             <WalletChainSelection ref={chainSelectionRef} />
         </>
