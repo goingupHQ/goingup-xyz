@@ -8,6 +8,8 @@ export default function ProjectsIcon(props) {
         color = theme.palette.primary.main;
     } else if (props.color === 'secondary') {
         color = theme.palette.secondary.main;
+    } else {
+        color = props.color
     }
 
     return (
