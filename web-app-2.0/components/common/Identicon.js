@@ -11,7 +11,7 @@ export default function Identicon({ address, size }) {
                 Jazzicon(size || 36, parseInt(address.slice(2, 10), 16))
             );
         }
-    }, [address]);
+    }, [address, size]);
 
     return <div className="rounded" ref={ref} />;
 }
