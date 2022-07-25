@@ -14,6 +14,8 @@ import SettingsIcon from '../icons/SettingsIcon';
 import MobileNav from './mobile-nav';
 import UserBox from '../user-box';
 import DesktopNav from './desktop-nav';
+import MoonIcon from '../icons/MoonIcon';
+import SunIcon from '../icons/SunIcon';
 
 export default function Header(props) {
     const app = useContext(AppContext);
@@ -42,9 +44,22 @@ export default function Header(props) {
                         <Grid item xs={6}>
                             <Stack direction="row" spacing={2} alignItems="center" justifyContent="flex-end">
                                 <Stack spacing={2} direction="row" sx={{ display: { xs: 'none', md: 'initial' } }}>
-                                    <MessageIcon />
-                                    <SettingsIcon />
-                                    <GlobeIcon />
+                                    <IconButton>
+                                        <MessageIcon />
+                                    </IconButton>
+                                    <IconButton>
+                                        <SettingsIcon />
+                                    </IconButton>
+                                    <IconButton onClick={() => {
+                                        if (app.mode === 'dark') {
+                                            app.setLightMode();
+                                        } else {
+                                            app.setDarkMode();
+                                        }
+                                    }}>
+                                        {app.mode === 'light' && <SunIcon />}
+                                        {app.mode === 'dark' && <MoonIcon />}
+                                    </IconButton>
                                 </Stack>
                                 <UserBox />
                                 <Box sx={{ display: { xs: 'initial', md: 'none' }, marginLeft: '0px !important' }}>
