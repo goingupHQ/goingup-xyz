@@ -24,8 +24,8 @@ export default function Header(props) {
     return (
         <>
             <AppBar>
-                <Toolbar sx={{ zIndex: 101 }}>
-                    <Grid container spacing={1} alignItems="center" justifyContent="space-between" marginY={1}>
+                <Toolbar sx={{ paddingTop: { xs: '12px' } }}>
+                    <Grid container spacing={1} alignItems="center" justifyContent="space-between">
                         <Grid item xs={6}>
                             <Box
                                 component="img"
@@ -37,6 +37,7 @@ export default function Header(props) {
                                 alt="logo"
                                 sx={{
                                     width: { xs: '110px', md: 'auto' },
+                                    paddingTop: { xs: '6px', md: 'initial' }
                                 }}
                             ></Box>
                             {/* <SearchBox /> */}
@@ -75,6 +76,7 @@ export default function Header(props) {
                 <Divider
                     sx={{
                         display: { xs: 'none', sm: 'block' },
+                        marginTop: '12px'
                     }}
                 />
                 <DesktopNav />

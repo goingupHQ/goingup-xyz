@@ -33,6 +33,7 @@ export default function MobileNav(props) {
             alignItems="flex-start"
             sx={{
                 display: { sm: 'none' },
+                paddingTop: '18px'
             }}
         >
             {/* <Box width="100%" marginBottom={1}>

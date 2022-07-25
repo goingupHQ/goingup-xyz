@@ -192,7 +192,7 @@ export default function Layout({ children }) {
         <>
             <ThemeProvider theme={theme}>
                 <Header />
-                <Box sx={{ paddingTop: { xs: '60px', md: '150px' } }}>
+                <Box sx={{ paddingTop: { xs: '42px', md: '150px' } }}>
                     {children}
                 </Box>
             </ThemeProvider>
