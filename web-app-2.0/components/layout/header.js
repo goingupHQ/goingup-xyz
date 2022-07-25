@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Divider, Grid, Stack, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Divider, Grid, IconButton, Stack, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import { useContext } from 'react';
 import { AppContext } from '../../contexts/app-context';
@@ -40,7 +40,10 @@ export default function Header(props) {
                                 </Stack>
                                 <UserBox />
                                 <Box sx={{ display: { xs: 'initial', md: 'none' } }}>
-                                    <MenuIcon />
+                                    <IconButton>
+                                        <MenuIcon />
+                                    </IconButton>
+
                                 </Box>
                             </Stack>
                         </Grid>
