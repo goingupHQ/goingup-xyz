@@ -204,7 +204,7 @@ export default function Layout({ children }) {
             <ThemeProvider theme={theme}>
                 <AppBar>
                     <Toolbar>
-                        <Grid container spacing={1} alignItems="center" justifyContent="space-between">
+                        <Grid container spacing={1} alignItems="center" justifyContent="space-between" marginY={1}>
                             <Grid item xs={6}>
                                 <img
                                     src={
@@ -298,7 +298,7 @@ export default function Layout({ children }) {
                             variant='h2'
                             sx={{
                                 display: { sm: 'none' },
-                                marginY: '30px',
+                                marginY: '10px',
                                 marginX: 'auto'
                             }}
                         >
