@@ -111,7 +111,6 @@ export default function UserBox () {
     return (
         <>
             <UserBoxButton
-                variant="outlined"
                 color="secondary"
                 ref={ref}
                 onClick={handleOpen}
