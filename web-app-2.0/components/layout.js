@@ -217,10 +217,12 @@ export default function Layout({ children }) {
                                 {/* <SearchBox /> */}
                             </Grid>
                             <Grid item xs={6}>
-                                <Stack direction="row" spacing={1} alignItems="center" justifyContent="flex-end">
-                                    <MessageIcon size="medium" />
-                                    <SettingsIcon size="medium" />
-                                    <GlobeIcon />
+                                <Stack direction="row" spacing={2} alignItems="center" justifyContent="flex-end">
+                                    <Stack spacing={2} direction="row" sx={{ display: { xs: 'none', md: 'initial' }}} >
+                                        <MessageIcon />
+                                        <SettingsIcon />
+                                        <GlobeIcon/>
+                                    </Stack>
                                     <UserBox />
                                     <Box sx={{ display: { xs: 'initial', md: 'none' } }}>
                                         <MenuIcon />
