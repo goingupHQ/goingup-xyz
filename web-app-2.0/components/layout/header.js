@@ -16,6 +16,7 @@ import UserBox from '../user-box';
 import DesktopNav from './desktop-nav';
 import MoonIcon from '../icons/MoonIcon';
 import SunIcon from '../icons/SunIcon';
+import Sidebar from './Sidebar';
 
 export default function Header(props) {
     const app = useContext(AppContext);
@@ -68,25 +69,23 @@ export default function Header(props) {
                                         {drawerOpen ? <CloseIcon /> : <MenuIcon />}
                                     </IconButton>
                                 </Box>
-
                             </Stack>
                         </Grid>
                     </Grid>
                 </Toolbar>
                 <Divider
                     sx={{
-                        display: { xs: 'none', sm: 'block' },
+                        display: { xs: 'none', sm: 'none', md: 'block' },
                         marginTop: '12px'
                     }}
                 />
                 <DesktopNav />
-
                 <Fade direction="down" in={drawerOpen} mountOnEnter unmountOnExit>
                     <Box sx={{ paddingBottom: '20px', paddingX: '32px', zIndex: 100 }}>
                         <MobileNav closeNav={() => { setDrawerOpen(false) }} />
                     </Box>
                 </Fade>
-
+                <Sidebar />
             </AppBar>
         </>
     );
