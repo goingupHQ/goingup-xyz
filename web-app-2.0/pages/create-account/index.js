@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Head from 'next/head';
 import { WalletContext } from '../../contexts/wallet-context';
-// import TopNavigationLayout from 'src/layouts/TopNavigationLayout';
+
 import {
     Grid,
     Card,
@@ -97,9 +97,5 @@ function CreateAccount() {
         </>
     );
 }
-
-CreateAccount.getLayout = (page) => (
-    <TopNavigationLayout>{page}</TopNavigationLayout>
-);
 
 export default CreateAccount;
