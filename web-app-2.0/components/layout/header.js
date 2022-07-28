@@ -86,16 +86,6 @@ export default function Header(props) {
                         <MobileNav closeNav={() => { setDrawerOpen(false) }} />
                     </Box>
                 </Fade>
-                <Stack 
-                    direction="row"
-                    alignItems="flex-start"
-                    spacing={2}
-                    >
-                        <Sidebar />
-                    <Box width='70%'>
-                        <CreateAccount />
-                    </Box>
-                </Stack>
             </AppBar>
         </>
     );
