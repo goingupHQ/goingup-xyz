@@ -6,7 +6,6 @@ import CollaboratorsIcon from '../icons/CollaboratorsIcon';
 import DashboardIcon from '../icons/DashboardIcon';
 import ProfileIcon from '../icons/ProfileIcon';
 import ProjectsIcon from '../icons/ProjectsIcon';
-import Sidebar from './Sidebar';
 
 export default function DesktopNav(props) {
     const commonButtonStyle = {
