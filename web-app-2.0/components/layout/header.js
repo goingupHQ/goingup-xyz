@@ -17,6 +17,7 @@ import DesktopNav from './desktop-nav';
 import MoonIcon from '../icons/MoonIcon';
 import SunIcon from '../icons/SunIcon';
 import Sidebar from './Sidebar';
+import CreateAccount from '../../pages/create-account';
 
 export default function Header(props) {
     const app = useContext(AppContext);
@@ -85,7 +86,16 @@ export default function Header(props) {
                         <MobileNav closeNav={() => { setDrawerOpen(false) }} />
                     </Box>
                 </Fade>
-                <Sidebar />
+                <Stack 
+                    direction="row"
+                    alignItems="flex-start"
+                    spacing={2}
+                    >
+                        <Sidebar />
+                    <Box width='70%'>
+                        <CreateAccount />
+                    </Box>
+                </Stack>
             </AppBar>
         </>
     );
