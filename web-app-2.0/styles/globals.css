@@ -7,6 +7,14 @@ body {
   font-family: Questrial;
 }
 
+.-cbwsdk-css-reset * {
+  font-family: Questrial !important;
+}
+
+#walletconnect-wrapper * {
+  font-family: Questrial !important;
+}
+
 a {
   color: inherit;
   text-decoration: none !important;
