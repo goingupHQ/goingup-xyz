@@ -1,99 +1,66 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import Head from 'next/head';
 import { WalletContext } from '../../contexts/wallet-context';
 
-import {
-    Grid,
-    Card,
-    CardHeader,
-    CardContent,
-    Typography,
-    styled,
-    Button,
-    Fade
-} from '@mui/material';
+import { Box, Typography, Button, Fade, Stack } from '@mui/material';
 import CreateAccountForm from './create-account-form';
-
-const CardContentWrapper = styled(CardContent)(
-    () => `
-        position: relative;
-  `
-);
+import WalletChainSelection from '../../contexts/wallet-chain-selection';
 
 function CreateAccount() {
     const wallet = useContext(WalletContext);
+    const chainSelectionRef = useRef(null);
+    const connect = () => {
+        if (wallet.address === null) {
+            let cache;
+
+            try {
+                cache = JSON.parse(localStorage.getItem('wallet-context-cache'));
+            } catch (err) {}
+
+            if (cache) {
+                if (!wallet.address) {
+                    if (cache.blockchain === 'ethereum') {
+                        wallet.connectEthereum();
+                    } else if (cache.blockchain === 'cardano') {
+                        wallet.connectCardano();
+                    }
+                }
+            } else {
+                if (!wallet.address) chainSelectionRef.current.showModal();
+            }
+        } else {
+            setOpen(true);
+        }
+    };
 
     return (
         <>
             <Head>
                 <title>Create an account with GoingUP</title>
             </Head>
-            <Grid
-                sx={{ px: { xs: 2, md: 4} }}
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="stretch"
-                spacing={3}
-            >
-                <Grid item xs={12}>
-                    <Fade in={true} timeout={1000}>
-                        <Card
-                            sx={{
-                                height: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                marginTop: { xs: '2rem', md:'3rem'}
-                            }}
-                        >
-                            <CardHeader
-                                sx={{
-                                    px: 3,
-                                    pt: 3,
-                                    alignItems: 'flex-start'
-                                }}
-                                title={
-                                    <>
-                                        <Typography variant="h1">
-                                            Create Account
-                                        </Typography>
-                                        {wallet.address !== null && (
-                                            <Typography variant="subtitle1">
-                                                Fill in the fields below to sign up for an account
-                                            </Typography>
-                                        )}
 
-                                        {wallet.address == null && (
-                                            <Typography variant="subtitle1">
-                                                Connect your wallet first
-                                            </Typography>
-                                        )}
-                                    </>
-                                }
-                            />
-                            <CardContentWrapper
-                                sx={{
-                                    px: 3,
-                                    pt: 0
-                                }}
-                            >
-                                {wallet.address !== null && <CreateAccountForm />}
+            <Fade in={true} timeout={1000}>
+                <Box fullWidth>
+                    <Typography variant="h1">Create Account</Typography>
+                    <Typography variant="subtitle1" sx={{ marginBottom: 4 }}>
+                        {wallet.address !== null && `Fill in the fields below to sign up for an account`}
+                        {wallet.address == null && `Connect your wallet first`}
+                    </Typography>
 
-                                {wallet.address === null &&
-                                <>
-                                    <Typography variant="h3">
-                                        A wallet address is required to create an account
-                                    </Typography>
-                                    <Button variant="contained" sx={{ mt: 3 }} onClick={wallet.connect}>
-                                        Click here to connect a wallet
-                                    </Button>
-                                </>
-                                }
-                            </CardContentWrapper>
-                        </Card>
-                    </Fade>
-                </Grid>
-            </Grid>
+                    {wallet.address !== null && <CreateAccountForm />}
+
+                    {wallet.address === null && (
+                        <Stack fullWidth justifyContent="center" alignItems="center" direction="column">
+                            <Typography variant="h3">A wallet address is required to create an account</Typography>
+                            <img src="/images/illustrations/connection-lost.svg" style={{ width: '100%', maxWidth: '500px'}} />
+                            <Button variant="contained" sx={{ mt: 3 }} onClick={connect}>
+                                Click here to connect a wallet
+                            </Button>
+                        </Stack>
+                    )}
+                </Box>
+            </Fade>
+            <WalletChainSelection ref={chainSelectionRef} />
         </>
     );
 }
