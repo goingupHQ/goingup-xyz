@@ -3,8 +3,8 @@ import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import { useSnackbar } from 'notistack';
-import WalletChainSelection from './wallet-chain-selection';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 
 export const WalletContext = createContext({});
 
@@ -45,27 +45,35 @@ const networks = {
 };
 
 let web3Modal;
+const providerOptions = {
+    walletconnect: {
+        package: WalletConnectProvider,
+        options: {
+            infuraId: '86d5aa67154b4d1283f804fe39fcb07c',
+        },
+    },
+    coinbasewallet: {
+        package: CoinbaseWalletSDK,
+        options: {
+            appName: 'GoingUP',
+            infuraId: '86d5aa67154b4d1283f804fe39fcb07c',
+            chainId: 1,
+        },
+        theme: 'light',
+    },
+};
+
+const web3ModalOptions = {
+    // network: 'mainnet',
+    cacheProvider: true,
+    providerOptions,
+    theme: 'light'
+}
+
 export function WalletProvider({ children }) {
     const router = useRouter();
     const { enqueueSnackbar } = useSnackbar();
     const wselRef = useRef(null);
-
-    useEffect(() => {
-        const providerOptions = {
-            walletconnect: {
-                package: WalletConnectProvider,
-                options: {
-                    infuraId: '86d5aa67154b4d1283f804fe39fcb07c',
-                },
-            },
-        };
-
-        web3Modal = new Web3Modal({
-            // network: 'mainnet',
-            cacheProvider: true,
-            providerOptions,
-        });
-    }, []);
 
     const [address, setAddress] = useState(null);
     const [network, setNetwork] = useState(null);
@@ -130,6 +138,7 @@ export function WalletProvider({ children }) {
     };
 
     const connectEthereum = async () => {
+        web3Modal = new Web3Modal(web3ModalOptions);
         const instance = await web3Modal.connect();
         instance.on('accountsChanged', (accounts) => {
             setAddress(ethers.utils.getAddress(accounts[0]));
@@ -266,8 +275,12 @@ export function WalletProvider({ children }) {
     };
 
     const setWeb3ModalTheme = (theme) => {
-        web3Modal.updateTheme(theme);
-    }
+        web3ModalOptions.theme = theme;
+        web3ModalOptions.providerOptions.coinbasewallet.darkMode = theme === 'dark';
+        web3ModalOptions.providerOptions.coinbasewallet.options.darkMode = theme === 'dark';
+        web3ModalOptions.providerOptions.coinbasewallet.theme = theme;
+        console.log(web3ModalOptions);
+    };
 
     return (
         <WalletContext.Provider
@@ -286,7 +299,7 @@ export function WalletProvider({ children }) {
                 disconnect,
                 signMessage,
                 utilityToken,
-                setWeb3ModalTheme
+                setWeb3ModalTheme,
             }}
         >
             {children}

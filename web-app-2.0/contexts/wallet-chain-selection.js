@@ -6,12 +6,13 @@ import {
     useTheme
 } from '@mui/material';
 import { forwardRef, useContext, useImperativeHandle, useState, useEffect } from 'react';
+import { AppContext } from './app-context';
 
 const WalletChainSelection = (props, ref) => {
-    const { connectEthereum, connectCardano } = props;
     const [open, setOpen] = useState(false);
     const theme = useTheme();
     const wallet = useContext(WalletContext);
+    const app = useContext(AppContext);
 
     useEffect(() => {
         if (wallet.address) setOpen(false);
@@ -54,6 +55,7 @@ const WalletChainSelection = (props, ref) => {
                         sx={chainItemSx}
                         onClick={() => {
                             handleClose();
+                            wallet.setWeb3ModalTheme(app.mode)
                             wallet.connectEthereum();
                         }}
                     >
