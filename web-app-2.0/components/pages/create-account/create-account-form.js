@@ -16,7 +16,7 @@ import {
     styled
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { WalletContext } from '../../contexts/wallet-context';
+import { WalletContext } from '../../../contexts/wallet-context';
 import PersonalInfo from './personal-info';
 import ProjectGoals from './project-goals';
 import InviteFriends from './invite-friends';

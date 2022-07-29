@@ -2,14 +2,9 @@ import { useContext } from 'react';
 import {
     Box,
     Grid,
-    TextareaAutosize,
     TextField
-    // Select,
-    // InputLabel,
-    // FormControl,
-    // MenuItem,
 } from '@mui/material';
-import { AppContext } from '../../contexts/app-context';
+import { AppContext } from '../../../contexts/app-context';
 
 const fieldStyle = {
     m: 1
@@ -18,8 +13,6 @@ const fieldStyle = {
 function InviteFriends(props) {
     const appContext = useContext(AppContext);
     const { availability, occupations } = appContext;
-
-    const state = props.state = {}; // fixes prerendering build error
 
     const {
         email1,
@@ -32,7 +25,7 @@ function InviteFriends(props) {
         setEmail4,
         inviteMessage,
         setInviteMessage
-    } = state;
+    } = props.state;
 
     return (
         <>

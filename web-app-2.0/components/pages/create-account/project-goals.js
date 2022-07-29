@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Box, TextField, Select, InputLabel, FormControl, MenuItem, Checkbox, ListItemText } from '@mui/material';
-import { AppContext } from '../../contexts/app-context';
+import { AppContext } from '../../../contexts/app-context';
 
 const fieldStyle = {
     m: 1
@@ -10,12 +10,10 @@ function ProjectGoals(props) {
     const appContext = useContext(AppContext);
     const { userGoals, occupations } = appContext;
 
-    const state = props.state = {}; // fixes prerendering build error
-
     const {
         projectGoals, setProjectGoals,
         idealCollab, setIdealCollab
-    } = state;
+    } = props.state;
 
     return (
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)' } }}>

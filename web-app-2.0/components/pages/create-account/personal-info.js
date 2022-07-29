@@ -6,12 +6,10 @@ import {
     InputLabel,
     FormControl,
     MenuItem,
-    useTheme,
-    useMediaQuery,
     Checkbox,
     ListItemText
 } from '@mui/material';
-import { AppContext } from '../../contexts/app-context';
+import { AppContext } from '../../../contexts/app-context';
 
 const fieldStyle = {
     m: 1
@@ -21,13 +19,11 @@ function PersonalInfo(props) {
     const appContext = useContext(AppContext);
     const { availability, occupations } = appContext;
 
-    const state = props.state = {}; // fixes prerendering build error
-
     const {
         name, setName,
         occupation, setOccupation,
         openTo, setOpenTo
-    } = state;
+    } = props.state;
 
     return (
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)'} }}>

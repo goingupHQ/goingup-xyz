@@ -1,10 +1,10 @@
 import React, { useContext, useRef } from 'react';
 import Head from 'next/head';
-import { WalletContext } from '../../contexts/wallet-context';
+import { WalletContext } from '../contexts/wallet-context';
 
 import { Box, Typography, Button, Fade, Stack } from '@mui/material';
-import CreateAccountForm from './create-account-form';
-import WalletChainSelection from '../../contexts/wallet-chain-selection';
+import CreateAccountForm from '../components/pages/create-account/create-account-form';
+import WalletChainSelection from '../contexts/wallet-chain-selection';
 
 function CreateAccount() {
     const wallet = useContext(WalletContext);
