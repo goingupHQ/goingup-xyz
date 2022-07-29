@@ -16,8 +16,6 @@ import UserBox from '../user-box';
 import DesktopNav from './desktop-nav';
 import MoonIcon from '../icons/MoonIcon';
 import SunIcon from '../icons/SunIcon';
-import Sidebar from './Sidebar';
-import CreateAccount from '../../pages/create-account';
 
 export default function Header(props) {
     const app = useContext(AppContext);
