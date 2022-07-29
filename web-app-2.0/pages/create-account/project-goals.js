@@ -10,10 +10,12 @@ function ProjectGoals(props) {
     const appContext = useContext(AppContext);
     const { userGoals, occupations } = appContext;
 
+    const state = props.state = {}; // fixes prerendering build error
+
     const {
         projectGoals, setProjectGoals,
         idealCollab, setIdealCollab
-    } = props.state;
+    } = state;
 
     return (
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)' } }}>

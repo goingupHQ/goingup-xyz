@@ -21,11 +21,13 @@ function PersonalInfo(props) {
     const appContext = useContext(AppContext);
     const { availability, occupations } = appContext;
 
+    const state = props.state = {}; // fixes prerendering build error
+
     const {
         name, setName,
         occupation, setOccupation,
         openTo, setOpenTo
-    } = props.state;
+    } = state;
 
     return (
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)'} }}>

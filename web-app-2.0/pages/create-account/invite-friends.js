@@ -19,6 +19,8 @@ function InviteFriends(props) {
     const appContext = useContext(AppContext);
     const { availability, occupations } = appContext;
 
+    const state = props.state = {}; // fixes prerendering build error
+
     const {
         email1,
         setEmail1,
@@ -30,7 +32,7 @@ function InviteFriends(props) {
         setEmail4,
         inviteMessage,
         setInviteMessage
-    } = props.state;
+    } = state;
 
     return (
         <>
