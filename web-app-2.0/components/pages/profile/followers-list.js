@@ -55,7 +55,7 @@ const FollowersList = (props, ref) => {
         <div>
             <Dialog open={open} onClose={close} fullWidth maxWidth="sm">
                 <DialogTitle>
-                    {account.name}'s Followers {getting && <CircularProgress size="10pt" />}
+                    {`${account.name}'s`} Followers {getting && <CircularProgress size="10pt" />}
                 </DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2}>
