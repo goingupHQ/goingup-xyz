@@ -7,12 +7,12 @@ body {
   font-family: Questrial;
 }
 
-.-cbwsdk-css-reset * {
+.-cbwsdk-css-reset *, .SnackbarItem-wrappedRoot *, #walletconnect-wrapper * {
   font-family: Questrial !important;
 }
 
-#walletconnect-wrapper * {
-  font-family: Questrial !important;
+.SnackbarItem-wrappedRoot * {
+  font-weight: bolder;
 }
 
 a {
