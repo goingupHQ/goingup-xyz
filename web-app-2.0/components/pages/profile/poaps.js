@@ -29,6 +29,7 @@ const Poaps = (props) => {
     const { address } = props.account;
 
     useEffect(() => {
+        // do some
         setLoading(true);
         const url = `https://frontend.poap.tech/actions/scan/${account.address}`
         fetch(url)
@@ -45,6 +46,7 @@ const Poaps = (props) => {
             .finally(() => {
                 setLoading(false);
             })
+            // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address])
 
     const wallet = useContext(WalletContext);

@@ -47,6 +47,7 @@ const AppreciationTokens = (props) => {
     );
 
     useEffect(() => {
+        // do some
         const load = async () => {
             setLoading(true);
             try {
@@ -76,6 +77,7 @@ const AppreciationTokens = (props) => {
             }
         };
         load();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address]);
 
     const getMessages = async (tokenID, address) => {

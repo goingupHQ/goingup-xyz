@@ -25,6 +25,7 @@ const FollowingList = (props, ref) => {
     const [list, setList] = useState([]);
 
     useEffect(() => {
+        // do some
         if (open) {
             setGetting(true);
             fetch(`/api/get-following?address=${account.address}`)
@@ -34,6 +35,7 @@ const FollowingList = (props, ref) => {
                 })
                 .finally(() => setGetting(false));
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open])
 
     useImperativeHandle(ref, () => ({

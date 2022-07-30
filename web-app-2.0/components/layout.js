@@ -180,8 +180,10 @@ export default function Layout({ children }) {
     );
 
     useEffect(() => {
+        // do some
         document.body.style.backgroundColor =
             app.mode === 'dark' ? theme.palette.background.dark : theme.palette.background.light;
+            // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [app.mode]);
 
     return (

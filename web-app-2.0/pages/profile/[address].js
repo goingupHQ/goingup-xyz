@@ -28,7 +28,9 @@ function ProfilePage() {
     };
 
     useEffect(() => {
+        // do some
         getAccount();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address]);
 
     return (
