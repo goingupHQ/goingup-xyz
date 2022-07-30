@@ -52,7 +52,7 @@ function CreateAccount() {
                     {wallet.address === null && (
                         <Stack fullWidth justifyContent="center" alignItems="center" direction="column">
                             <Typography variant="h3">A wallet address is required to create an account</Typography>
-                            <Image src="/images/illustrations/connection-lost.svg" alt='connection-lost' style={{ width: '100%', maxWidth: '500px'}} />
+                            <img src="/images/illustrations/connection-lost.svg" alt='connection-lost' style={{ width: '100%', maxWidth: '500px'}} />
                             <Button variant="contained" sx={{ mt: 3 }} onClick={connect}>
                                 Click here to connect a wallet
                             </Button>

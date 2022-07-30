@@ -3,7 +3,6 @@ import { ethers } from 'ethers';
 import { useSnackbar } from 'notistack';
 import React, { useContext, useState } from 'react';
 import { WalletContext } from '../../../../contexts/wallet-context';
-import isAdmin from '../../../../pages/api/admin/_isAdmin';
 
 export default function AddWalletToWhitelist(props) {
     const [walletAddress, setWalletAddress] = useState('');
