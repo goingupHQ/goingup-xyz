@@ -17,6 +17,7 @@ import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import artifact from '../../../../artifacts/GoingUpUtilityToken.json';
+import Image from 'next/image';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -165,8 +166,9 @@ const AppreciationTokens = (props) => {
                                             // @ts-ignore
                                             sx={tokenGridStyle}
                                         >
-                                            <img
+                                            <Image
                                                 src="/images/appreciation-token-t1-display.png"
+                                                alt='appreciation-token-t1'
                                                 style={tokenImageStyle}
                                             />
                                             <Typography variant="h3">
@@ -213,8 +215,9 @@ const AppreciationTokens = (props) => {
                                             // @ts-ignore
                                             sx={tokenGridStyle}
                                         >
-                                            <img
+                                            <Image
                                                 src="/images/appreciation-token-t2-display.png"
+                                                alt='appreciation-token-t2'
                                                 style={tokenImageStyle}
                                             />
                                             <Typography variant="h3">
@@ -261,8 +264,9 @@ const AppreciationTokens = (props) => {
                                             // @ts-ignore
                                             sx={tokenGridStyle}
                                         >
-                                            <img
+                                            <Image
                                                 src="/images/appreciation-token-t3-display.png"
+                                                alt='appreciation-token-t3'
                                                 style={tokenImageStyle}
                                             />
                                             <Typography variant="h3">
@@ -309,8 +313,9 @@ const AppreciationTokens = (props) => {
                                             // @ts-ignore
                                             sx={tokenGridStyle}
                                         >
-                                            <img
+                                            <Image
                                                 src="/images/appreciation-token-t4-display.png"
+                                                alt='appreciation-token-t4'
                                                 style={tokenImageStyle}
                                             />
                                             <Typography variant="h3">

@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import Head from 'next/head';
 import { WalletContext } from '../contexts/wallet-context';
-
+import Image from 'next/image';
 import { Box, Typography, Button, Fade, Stack } from '@mui/material';
 import CreateAccountForm from '../components/pages/create-account/create-account-form';
 import WalletChainSelection from '../contexts/wallet-chain-selection';
@@ -52,7 +52,7 @@ function CreateAccount() {
                     {wallet.address === null && (
                         <Stack fullWidth justifyContent="center" alignItems="center" direction="column">
                             <Typography variant="h3">A wallet address is required to create an account</Typography>
-                            <img src="/images/illustrations/connection-lost.svg" style={{ width: '100%', maxWidth: '500px'}} />
+                            <Image src="/images/illustrations/connection-lost.svg" alt='connection-lost' style={{ width: '100%', maxWidth: '500px'}} />
                             <Button variant="contained" sx={{ mt: 3 }} onClick={connect}>
                                 Click here to connect a wallet
                             </Button>

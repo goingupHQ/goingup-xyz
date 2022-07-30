@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import moment from 'moment';
+import Image from 'next/image';
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -95,7 +96,7 @@ const Poaps = (props) => {
                             {!loading && poaps.map(p => { return (
                                 <Grid item xs={12} md={6} lg={3} key={p.event.id} sx={{ textAlign: 'center' }}>
                                     <a href={p.event.event_url} target="_blank" rel="noopener noreferrer">
-                                        <img src={p.event.image_url} style={{ width: '200px' }} />
+                                        <Image src={p.event.image_url} alt='' style={{ width: '200px' }} />
                                             <Typography variant="h3">{p.event.name}</Typography>
                                         <Typography variant="h4">{moment(p.event.start_date).format('LL')}</Typography>
                                     </a>
