@@ -26,7 +26,6 @@ import {
 import { ethers } from 'ethers';
 import { useSnackbar } from 'notistack';
 import artifact from '../../../artifacts/GoingUpUtilityToken.json';
-import Image from 'next/image';
 
 const SendAppreciationToken = (props, ref) => {
     const { sendToName, sendToAddress } = props;
@@ -108,10 +107,10 @@ const SendAppreciationToken = (props, ref) => {
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sx={{ textAlign: 'center' }}>
-                            <Image
+                            <img
                                 src={`/images/appreciation-token-t${tier}-display.png`}
-                                alt='appreciation-token'
                                 style={{ maxWidth: '200px' }}
+                                alt='appreciation-token'
                             />
                         </Grid>
                         <Grid

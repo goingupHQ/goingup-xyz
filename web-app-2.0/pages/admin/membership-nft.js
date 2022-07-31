@@ -1,6 +1,5 @@
 import { Box, Button, Fade, Stack, TextField, Typography } from '@mui/material'
 import Head from 'next/head'
-import Image from 'next/image';
 import React, { useContext, useState } from 'react'
 import AddWalletToWhitelist from '../../components/pages/admin/membership-nft/add-wallet-to-whitelist';
 import SetMerkleRoot from '../../components/pages/admin/membership-nft/set-merkle-root';
