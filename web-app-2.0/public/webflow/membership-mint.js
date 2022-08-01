@@ -44,6 +44,14 @@ const mint = async () => {
     document.querySelector('.web3modal-modal-lightbox').style.zIndex = 10000;
     const web3ModalProvider = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(web3ModalProvider);
+
+    const { chainId } = await provider.getNetwork();
+
+    if (chainId !== 1) {
+        alert('Please connect to the mainnet');
+        return;
+    }
+
     const signer = provider.getSigner();
     const address = await signer.getAddress();
     const response = await fetch(
@@ -52,8 +60,18 @@ const mint = async () => {
 
     if (response.status === 200) {
         const merkleProof = await response.json();
-        const tx = await contract.mint(merkleProof);
-        alert(`Mint transaction submitted to the blockchain. Please monitor your wallet for transaction result.`);
+        try {
+            const signerContract = new ethers.Contract(contractAddress, abi, signer);
+            const tx = await signerContract.mint(merkleProof);
+            alert(`Mint transaction submitted to the blockchain. Please monitor your wallet for transaction result.`);
+        } catch (err) {
+            console.log(err);
+            if (err?.data?.originalError?.message === 'execution reverted: not whitelisted') {
+                alert('You are not whitelisted to mint NFTs');
+            } else {
+                alert('Something went wrong. Please contact GoingUP support.');
+            }
+        }
     }
 };
 
