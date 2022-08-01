@@ -32,7 +32,18 @@ web3Modal = new Web3Modal({
 });
 
 const mint = async () => {
-    const provider = await web3Modal.connect();
+    console.log('hello');
+    const web3ModalProvider = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(web3ModalProvider);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    const response = await fetch(`https://goingup-xyz-dev.vercel.app/api/admin/membership-nft/get-merkle-proof?address=${address}`)
+
+    if (response.status === 200) {
+        const merkleProof = await response.json();
+        const tx = await contract.mint(merkleProof);
+        alert(`Mint transaction submitted to the blockchain. Please monitor your wallet for transaction result.`);
+    }
 };
 
 document.getElementById('mint-button').addEventListener('click', mint);
