@@ -23,21 +23,32 @@ const providerOptions = {
             infuraId: '86d5aa67154b4d1283f804fe39fcb07c',
         },
     },
+    coinbasewallet: {
+        package: CoinbaseWalletSDK,
+        options: {
+            appName: 'GoingUP Exclusive Premium Membership NFT',
+            infuraId: '86d5aa67154b4d1283f804fe39fcb07c',
+            chainId: 1,
+            darkMode: true
+        },
+    },
 };
 
 web3Modal = new Web3Modal({
     cacheProvider: false,
     providerOptions,
-    theme: 'dark'
+    theme: 'dark',
 });
 
 const mint = async () => {
-    console.log('hello');
+    document.querySelector('.web3modal-modal-lightbox').style.zIndex = 10000;
     const web3ModalProvider = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(web3ModalProvider);
     const signer = provider.getSigner();
     const address = await signer.getAddress();
-    const response = await fetch(`https://goingup-xyz-dev.vercel.app/api/admin/membership-nft/get-merkle-proof?address=${address}`)
+    const response = await fetch(
+        `https://goingup-xyz-dev.vercel.app/api/admin/membership-nft/get-merkle-proof?address=${address}`
+    );
 
     if (response.status === 200) {
         const merkleProof = await response.json();
