@@ -147,7 +147,7 @@ const ContactsAndIntegrations = (props) => {
                 //     marginBottom: { xs: '24px', md: '8px' }
                 // }}
             >
-                <Typography variant="h4">
+                <Typography variant="h3">
                     Contacts &amp; Profiles
                 </Typography>
                 <Chip

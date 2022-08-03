@@ -239,7 +239,7 @@ const TopSection = (props) => {
 
                                     <Typography
                                         className="truncate-text"
-                                        variant="h4"
+                                        variant="h3"
                                         sx={{ marginTop: 2 }}
                                     >
                                         Reputation Score:{' '}
@@ -447,7 +447,7 @@ const TopSection = (props) => {
 
                                 {!gettingFollowStats &&
                                 <>
-                                    <Typography variant="h4">
+                                    <Typography variant="h3">
                                         <span style={{ cursor: 'pointer' }} onClick={() => followersListRef.current.showModal()}>
                                             {followersCount} Follower{followersCount > 1 ? 's' : ''}
                                         </span>
@@ -468,7 +468,7 @@ const TopSection = (props) => {
                                     marginBottom: { xs: '24px', md: '8px' }
                                 }}
                             >
-                                <Typography variant="h4">Occupation</Typography>
+                                <Typography variant="h3">Occupation</Typography>
                                 <Chip
                                     label={
                                         app.occupations.find(
@@ -486,7 +486,7 @@ const TopSection = (props) => {
                                     marginBottom: { xs: '24px', md: '8px' }
                                 }}
                             >
-                                <Typography variant="h4">Open To</Typography>
+                                <Typography variant="h3">Open To</Typography>
                                 {account.openTo && (
                                     <>
                                         {account.openTo.map((item) => (
@@ -511,7 +511,7 @@ const TopSection = (props) => {
                                     marginBottom: { xs: '24px', md: '8px' }
                                 }}
                             >
-                                <Typography variant="h4">
+                                <Typography variant="h3">
                                     Project Goals
                                 </Typography>
                                 {account.projectGoals && (
@@ -538,7 +538,7 @@ const TopSection = (props) => {
                                     marginBottom: { xs: '24px', md: '8px' }
                                 }}
                             >
-                                <Typography variant="h4">
+                                <Typography variant="h3">
                                     Ideal Collaborators
                                 </Typography>
                                 {account.idealCollab && (
