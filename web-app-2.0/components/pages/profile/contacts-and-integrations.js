@@ -140,58 +140,58 @@ const ContactsAndIntegrations = (props) => {
     return (
         <>
             <Stack
-                direction={{ xs: 'column', md: 'row' }}
+                direction={ 'row' }
                 spacing={1}
                 alignItems="center"
                 // sx={{
                 //     marginBottom: { xs: '24px', md: '8px' }
                 // }}
             >
-                <Typography variant="h3">
+                {/* <Typography variant="h3">
                     Contacts &amp; Profiles
-                </Typography>
+                </Typography> */}
                 <Chip
                     icon={(<Email fontSize="small" />)}
-                    label={
-                        account.email ||
-                        (myAccount ? 'Connect your Email' : 'not connected')
-                    }
+                    // label={
+                    //     account.email ||
+                    //     (myAccount ? 'Connect your Email' : 'not connected')
+                    // }
                     variant="outlined"
                     onClick={emailChipClicked}
                 />
                 <Chip
                     icon={(<Twitter fontSize="small" />)}
-                    label={
-                        (account.twitter ? `@${account.twitter}` : null) ||
-                        (myAccount ? 'Connect your Twitter account' : 'not connected')
-                    }
+                    // label={
+                    //     (account.twitter ? `@${account.twitter}` : null) ||
+                    //     (myAccount ? 'Connect your Twitter account' : 'not connected')
+                    // }
                     variant="outlined"
                     onClick={twitterChipClicked}
                 />
                 <Chip
                     icon={(<GitHub fontSize="small" />)}
-                    label={
-                        account.github ||
-                        (myAccount ? 'Connect your GitHub account' : 'not connected')
-                    }
+                    // label={
+                    //     account.github ||
+                    //     (myAccount ? 'Connect your GitHub account' : 'not connected')
+                    // }
                     variant="outlined"
                     onClick={githubChipClicked}
                 />
                 <Chip
                     icon={(<LinkedIn fontSize="small" />)}
-                    label={
-                        account.linkedIn ||
-                        (myAccount ? 'Connect your LinkedIn account' : 'not connected')
-                    }
+                    // label={
+                    //     account.linkedIn ||
+                    //     (myAccount ? 'Connect your LinkedIn account' : 'not connected')
+                    // }
                     variant="outlined"
                     onClick={linkedinChipClicked}
                 />
                 <Chip
                     icon={(<FontAwesomeIcon icon={faDiscord} />)}
-                    label={
-                        account.discord ||
-                        (myAccount ? 'Connect your Discord account' : 'not connected')
-                    }
+                    // label={
+                    //     account.discord ||
+                    //     (myAccount ? 'Connect your Discord account' : 'not connected')
+                    // }
                     variant="outlined"
                     onClick={discordChipClicked}
                 />
