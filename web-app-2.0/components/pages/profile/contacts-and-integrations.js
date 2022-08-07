@@ -142,7 +142,6 @@ const ContactsAndIntegrations = (props) => {
             <Stack
                 direction={ 'row' }
                 spacing={1}
-                alignItems="center"
                 // sx={{
                 //     marginBottom: { xs: '24px', md: '8px' }
                 // }}
@@ -151,48 +150,53 @@ const ContactsAndIntegrations = (props) => {
                     Contacts &amp; Profiles
                 </Typography> */}
                 <Chip
-                    icon={(<Email fontSize="small" />)}
+                    sx={{ borderRadius: '0px', height: '28px', width: '38px' }}
+                    icon={(<Email fontSize="small" sx={{ alignItems: 'center' }}/>)}
                     // label={
                     //     account.email ||
                     //     (myAccount ? 'Connect your Email' : 'not connected')
                     // }
-                    variant="outlined"
+                    variant="filled"
                     onClick={emailChipClicked}
                 />
                 <Chip
+                sx={{ borderRadius: '0px', height: '28px', width: '28x' }}
                     icon={(<Twitter fontSize="small" />)}
                     // label={
                     //     (account.twitter ? `@${account.twitter}` : null) ||
                     //     (myAccount ? 'Connect your Twitter account' : 'not connected')
                     // }
-                    variant="outlined"
+                    variant="filled"
                     onClick={twitterChipClicked}
                 />
                 <Chip
+                sx={{ borderRadius: '0px', height: '28px', width: '28x' }}
                     icon={(<GitHub fontSize="small" />)}
                     // label={
                     //     account.github ||
                     //     (myAccount ? 'Connect your GitHub account' : 'not connected')
                     // }
-                    variant="outlined"
+                    variant="filled"
                     onClick={githubChipClicked}
                 />
                 <Chip
+                sx={{ borderRadius: '0px', height: '28px', width: '28x' }}
                     icon={(<LinkedIn fontSize="small" />)}
                     // label={
                     //     account.linkedIn ||
                     //     (myAccount ? 'Connect your LinkedIn account' : 'not connected')
                     // }
-                    variant="outlined"
+                    variant="filled"
                     onClick={linkedinChipClicked}
                 />
                 <Chip
+                sx={{ borderRadius: '0px', height: '28px', width: '28x' }}
                     icon={(<FontAwesomeIcon icon={faDiscord} />)}
                     // label={
                     //     account.discord ||
                     //     (myAccount ? 'Connect your Discord account' : 'not connected')
                     // }
-                    variant="outlined"
+                    variant="filled"
                     onClick={discordChipClicked}
                 />
             </Stack>
