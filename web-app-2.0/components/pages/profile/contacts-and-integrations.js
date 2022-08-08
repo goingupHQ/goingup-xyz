@@ -1,30 +1,21 @@
 import { AppContext } from '../../../contexts/app-context';
 import { WalletContext } from '../../../contexts/wallet-context';
-import { Twitter, GitHub, LinkedIn, Email } from '@mui/icons-material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import {
     Grid,
-    Fade,
-    Card,
-    CardHeader,
     CardContent,
-    Typography,
     styled,
     Stack,
-    Chip
+    IconButton
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useContext, useRef } from 'react';
 import { v4 as uuid } from 'uuid';
 import VerifyTwitter from './verify-twitter'
 import VerifyEmail from './verify-email';
-
-const CardContentWrapper = styled(CardContent)(
-    () => `
-        position: relative;
-  `
-);
+import TwitterIcon from '../../icons/TwitterIcon';
+import DiscordIcon from '../../icons/DiscordIcon';
+import LinkedinIcon from '../../icons/LinkedinIcon';
+import GithubIcon from '../../icons/GithubIcon';
 
 const ContactsAndIntegrations = (props) => {
     const { account, refresh } = props;
@@ -138,71 +129,26 @@ const ContactsAndIntegrations = (props) => {
     }
 
     return (
-        <>
+        <Grid>
             <Stack
                 direction={ 'row' }
-                spacing={1}
-                // sx={{
-                //     marginBottom: { xs: '24px', md: '8px' }
-                // }}
             >
-                {/* <Typography variant="h3">
-                    Contacts &amp; Profiles
-                </Typography> */}
-                <Chip
-                    sx={{ borderRadius: '0px', height: '28px', width: '38px' }}
-                    icon={(<Email fontSize="small" sx={{ alignItems: 'center' }}/>)}
-                    // label={
-                    //     account.email ||
-                    //     (myAccount ? 'Connect your Email' : 'not connected')
-                    // }
-                    variant="filled"
-                    onClick={emailChipClicked}
-                />
-                <Chip
-                sx={{ borderRadius: '0px', height: '28px', width: '28x' }}
-                    icon={(<Twitter fontSize="small" />)}
-                    // label={
-                    //     (account.twitter ? `@${account.twitter}` : null) ||
-                    //     (myAccount ? 'Connect your Twitter account' : 'not connected')
-                    // }
-                    variant="filled"
-                    onClick={twitterChipClicked}
-                />
-                <Chip
-                sx={{ borderRadius: '0px', height: '28px', width: '28x' }}
-                    icon={(<GitHub fontSize="small" />)}
-                    // label={
-                    //     account.github ||
-                    //     (myAccount ? 'Connect your GitHub account' : 'not connected')
-                    // }
-                    variant="filled"
-                    onClick={githubChipClicked}
-                />
-                <Chip
-                sx={{ borderRadius: '0px', height: '28px', width: '28x' }}
-                    icon={(<LinkedIn fontSize="small" />)}
-                    // label={
-                    //     account.linkedIn ||
-                    //     (myAccount ? 'Connect your LinkedIn account' : 'not connected')
-                    // }
-                    variant="filled"
-                    onClick={linkedinChipClicked}
-                />
-                <Chip
-                sx={{ borderRadius: '0px', height: '28px', width: '28x' }}
-                    icon={(<FontAwesomeIcon icon={faDiscord} />)}
-                    // label={
-                    //     account.discord ||
-                    //     (myAccount ? 'Connect your Discord account' : 'not connected')
-                    // }
-                    variant="filled"
-                    onClick={discordChipClicked}
-                />
+                <IconButton onClick={twitterChipClicked}>
+                    <TwitterIcon />
+                </IconButton>
+                <IconButton onClick={discordChipClicked}>
+                    <DiscordIcon />
+                </IconButton>
+                <IconButton onClick={linkedinChipClicked}>
+                    <LinkedinIcon />
+                </IconButton>
+                <IconButton onClick={githubChipClicked}>
+                    <GithubIcon />
+                </IconButton>
             </Stack>
             <VerifyTwitter ref={verifyTwitterRef} account={account} />
             <VerifyEmail ref={verifyEmailRef} account={account} refresh={refresh} />
-        </>
+        </Grid>
     );
 };
 

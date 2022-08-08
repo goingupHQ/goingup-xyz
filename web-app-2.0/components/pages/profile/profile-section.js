@@ -6,9 +6,12 @@ import {
     CardHeader,
     Typography,
     Fade,
-    Chip,
     Avatar,
     Stack,
+    Box,
+    CircularProgress,
+    Badge,
+    Button,
 } from "@mui/material";
 import ContactsAndIntegrations from "./contacts-and-integrations";
 
@@ -26,25 +29,80 @@ const ProfileSection = (props) => {
             >
                 <Fade in={true} timeout={1000}>
                     <Card>
-                        <Grid item container paddingX={"30px"} marginY={"30px"}>
+                        <Grid item container paddingX={"15px"} marginY={"15px"}>
                             <Grid md={8}>
                                 <CardHeader
                                     avatar={
-                                        <Avatar
-                                            src={account.profilePhoto}
-                                            sx={{
-                                                width: 128,
-                                                height: 128,
+                                        <Badge
+                                            overlap='circular'
+                                            anchorOrigin={{
+                                                vertical: "bottom",
+                                                horizontal: "right",
                                             }}
-                                            variant='rounded'
-                                        />
+                                            badgeContent={
+                                                <Box
+                                                    sx={{
+                                                        position: "relative",
+                                                        display: "inline-flex",
+                                                    }}
+                                                >
+                                                    <CircularProgress
+                                                        thickness={6}
+                                                        variant='determinate'
+                                                        color='success'
+                                                        value={
+                                                            100 *
+                                                            (account.reputationScore /
+                                                                app.maxReputationScore)
+                                                        }
+                                                        sx={{
+                                                            color: "#3AB795",
+                                                            position:
+                                                                "relative",
+                                                            display:
+                                                                "inline-flex",
+                                                        }}
+                                                    />
+                                                    <Box
+                                                        sx={{
+                                                            top: 0,
+                                                            left: 0,
+                                                            bottom: 0,
+                                                            right: 0,
+                                                            position:
+                                                                "absolute",
+                                                            display: "flex",
+                                                            alignItems:
+                                                                "center",
+                                                            justifyContent:
+                                                                "center",
+                                                        }}
+                                                    >
+                                                        <Typography color={'#3AB795'} variant='caption'>
+                                                            {" "}
+                                                            {Math.round(
+                                                                100 *
+                                                                    (account.reputationScore /
+                                                                        app.maxReputationScore)
+                                                            )}
+                                                            %
+                                                        </Typography>
+                                                    </Box>
+                                                </Box>
+                                            }
+                                        >
+                                            <Avatar
+                                                src={account.profilePhoto}
+                                                sx={{
+                                                    width: 114,
+                                                    height: 114,
+                                                }}
+                                            />
+                                        </Badge>
                                     }
                                     title={
                                         <>
-                                            <Typography
-                                                variant='h1'
-                                                className='truncate-text'
-                                            >
+                                            <Typography variant='h1'>
                                                 {account.name}
                                             </Typography>
                                             <Typography>
@@ -63,7 +121,8 @@ const ProfileSection = (props) => {
                                                     <>
                                                         {account.idealCollab.map(
                                                             (item) => (
-                                                                <Typography
+                                                                <Button
+                                                                    variant='secondary'
                                                                     key={item}
                                                                 >
                                                                     {
@@ -75,7 +134,7 @@ const ProfileSection = (props) => {
                                                                                 item
                                                                         )?.text
                                                                     }
-                                                                </Typography>
+                                                                </Button>
                                                             )
                                                         )}
                                                     </>
@@ -88,7 +147,6 @@ const ProfileSection = (props) => {
                             <Grid md={4}>
                                 <Stack
                                     direction='row'
-                                    spacing={2}
                                     alignItems='center'
                                     justifyContent={{
                                         xs: "none",
@@ -108,23 +166,24 @@ const ProfileSection = (props) => {
                                     justifyContent='flex-end'
                                     marginY={"15px"}
                                 >
-                                    <Typography>{account.address}</Typography>
+                                    <Typography
+                                        sx={{ backgroundColor: "#253340" }}
+                                    >
+                                        {account.address}
+                                    </Typography>
                                 </Stack>
                             </Grid>
                             <Typography>
-                                Lorem Ipsum is simply dummy text of the printing
-                                and typesetting industry. Lorem Ipsum has been
-                                the industry&apos;s standard dummy text ever
-                                since the 1500s, when an unknown printer took a
-                                galley of type and scrambled it to make a type
-                                specimen book. It has survived not only five
-                                centuries, but also the leap into electronic
-                                typesetting, remaining essentially unchanged. It
-                                was popularised in the 1960s with the release of
-                                Letraset sheets containing Lorem Ipsum passages,
-                                and more recently with desktop publishing
-                                software like Aldus PageMaker including versions
-                                of Lorem Ipsum.
+                                Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit, sed do eiusmod tempor
+                                incididunt ut labore et dolore magna aliqua. Ut
+                                enim ad minim veniam, quis nostrud exercitation
+                                ullamco laboris nisi ut aliquip ex ea commodo
+                                consequat. Duis aute irure dolor in
+                                reprehenderit in voluptate velit esse cillum
+                                dolore eu fugiat nulla pariatur. Excepteur sint
+                                occaecat cupidatat non proident, sunt in culpa
+                                qui officia deserunt mollit anim id est laborum.
                             </Typography>
                         </Grid>
                     </Card>
