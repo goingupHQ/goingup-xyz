@@ -5,10 +5,12 @@ import {
 } from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
+import { WalletContext } from '../contexts/wallet-context';
 import Header from './layout/header';
 
 export default function Layout({ children }) {
     const app = useContext(AppContext);
+    const wallet = useContext(WalletContext);
 
     const theme = useMemo(
         () =>
@@ -186,11 +188,16 @@ export default function Layout({ children }) {
     );
 
     useEffect(() => {
-        // do some
+        // update body background color on theme change
         document.body.style.backgroundColor =
             app.mode === 'dark' ? theme.palette.background.dark : theme.palette.background.light;
             // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [app.mode]);
+
+    useEffect(() => {
+        // connect wallet if cached
+        if (localStorage.getItem('wallet-context-cache')) wallet.connect();
+    }, []);
 
     return (
         <>
