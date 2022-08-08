@@ -153,14 +153,14 @@ export function WalletProvider({ children }) {
         const signer = provider.getSigner();
 
         let walletType = null;
-        // @ts-ignore
         if (instance.isMetaMask) walletType = 'metamask';
-        // @ts-ignore
         if (instance.isWalletConnect) walletType = 'walletconnect';
+        if (instance.isCoinbaseWallet) walletType = 'coinbase';
 
         let userAddress = null;
         switch (walletType) {
             case 'metamask':
+            case 'coinbase':
                 // @ts-ignore
                 userAddress = ethers.utils.getAddress(instance.selectedAddress);
                 break;
