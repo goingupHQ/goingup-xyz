@@ -19,7 +19,7 @@ export default function Layout({ children }) {
                         main: '#F4CE00',
                     },
                     background: {
-                        // paper: app.mode === 'dark' ? '#19222C' : '#E6DDD3',
+                        paper: app.mode === 'dark' ? '#111921' : '#F5F5F5',
                         dark: '#0F151C',
                         light: '#FFFFFF',
                         default: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
@@ -88,6 +88,7 @@ export default function Layout({ children }) {
                     },
                     icon: {
                         main: app.mode === 'dark' ? '#4D5F72' : '#4D5F72',
+                        contacts: app.mode === 'dark' ? '#FFFFFF' : '#4D5F72',
                     },
                     hoverTab: {
                         main: '#4D5F72',
@@ -166,6 +167,11 @@ export default function Layout({ children }) {
                             color: app.mode === 'dark' ? '#25303C' : '#E7E7E7',
                         },
                     },
+                    MuiChip: {
+                        defaultProps: {
+                            borderRadius: 0
+                        }
+                    }
                 },
                 spacing: [0, 10, 15, 20, 30, 60, 80],
                 icons: {

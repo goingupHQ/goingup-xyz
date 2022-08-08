@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import Projects from "../projects";
 import Poaps from "../../components/pages/profile/poaps";
 import AppreciationTokens from "../../components/pages/profile/appreciation-tokens";
+import ProfileSection from "../../components/pages/profile/profile-section";
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -45,10 +46,14 @@ function ProfilePage() {
 
                     <Fade in={true} timeout={1000}>
                         <Box fullWidth>
-                            <TopSection
+                            <ProfileSection 
                                 account={account}
                                 refresh={getAccount}
                             />
+                            {/* <TopSection
+                                account={account}
+                                refresh={getAccount}
+                            /> */}
                             <Projects account={account} />
                             <AppreciationTokens
                                 account={account}
