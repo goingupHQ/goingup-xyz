@@ -62,8 +62,8 @@ const mint = async () => {
         const merkleProof = await response.json();
         try {
             const signerContract = new ethers.Contract(contractAddress, abi, signer);
-            // const tx = await signerContract.mint(merkleProof, { value: ethers.utils.parseEther('2.22') });
-            const tx = await signerContract.mint(merkleProof, { value: 1000000  });
+            const tx = await signerContract.mint(merkleProof, { value: ethers.utils.parseEther('2.22') });
+            // const tx = await signerContract.mint(merkleProof, { value: 1000000  });
             alert(`Mint transaction submitted to the blockchain. Please monitor your wallet for transaction result.`);
         } catch (err) {
             console.log(err);
