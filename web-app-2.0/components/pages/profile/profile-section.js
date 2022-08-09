@@ -14,10 +14,12 @@ import {
     Button,
 } from "@mui/material";
 import ContactsAndIntegrations from "./contacts-and-integrations";
+import { useTheme } from "@mui/material";
 
 const ProfileSection = (props) => {
     const app = useContext(AppContext);
     const { account } = props;
+    const theme = useTheme();
 
     return (
         <>
@@ -44,10 +46,32 @@ const ProfileSection = (props) => {
                                                     sx={{
                                                         position: "relative",
                                                         display: "inline-flex",
+                                                        backgroundColor:
+                                                            app.mode === "dark"
+                                                                ? "#121E28"
+                                                                : "#FFFFFF",
+                                                        borderRadius: "20px",
+                                                        padding: "2px",
                                                     }}
                                                 >
                                                     <CircularProgress
-                                                        thickness={6}
+                                                        variant='determinate'
+                                                        sx={{
+                                                            position:
+                                                                "absolute",
+                                                            color:
+                                                                app.mode ===
+                                                                "dark"
+                                                                    ? "#1D3042"
+                                                                    : "#CFCFCF",
+                                                        }}
+                                                        size={50}
+                                                        thickness={7}
+                                                        value={100}
+                                                    />
+                                                    <CircularProgress
+                                                        thickness={7}
+                                                        size={50}
                                                         variant='determinate'
                                                         color='success'
                                                         value={
@@ -78,7 +102,10 @@ const ProfileSection = (props) => {
                                                                 "center",
                                                         }}
                                                     >
-                                                        <Typography color={'#3AB795'} variant='caption'>
+                                                        <Typography
+                                                            color={"#3AB795"}
+                                                            variant='caption'
+                                                        >
                                                             {" "}
                                                             {Math.round(
                                                                 100 *
@@ -167,7 +194,12 @@ const ProfileSection = (props) => {
                                     marginY={"15px"}
                                 >
                                     <Typography
-                                        sx={{ backgroundColor: "#253340" }}
+                                        sx={{
+                                            backgroundColor:
+                                                app.mode === "dark"
+                                                    ? "#253340"
+                                                    : "#CFCFCF",
+                                        }}
                                     >
                                         {account.address}
                                     </Typography>

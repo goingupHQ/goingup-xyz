@@ -90,7 +90,8 @@ export default function Layout({ children }) {
                     },
                     icon: {
                         main: app.mode === 'dark' ? '#4D5F72' : '#4D5F72',
-                        contacts: app.mode === 'dark' ? '#FFFFFF' : '#4D5F72',
+                        contacts: app.mode === 'dark' ? '#FFFFFF' : '#081724',
+                        contactsBackground: app.mode === 'dark' ? '#253340' : '#CFCFCF',
                     },
                     hoverTab: {
                         main: '#4D5F72',
