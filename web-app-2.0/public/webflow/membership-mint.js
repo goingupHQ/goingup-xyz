@@ -44,14 +44,14 @@ const disableMintButton = () => {
     const mintButton = document.getElementById('mint-button');
     mintButton.style.opacity = 0.5;
     mintButton.style.pointerEvents = 'none';
-    mintButton.innerText = 'Minting...';
+    mintButton.innerText = 'Just a sec, minting...';
 }
 
 const enableMintButton = () => {
     const mintButton = document.getElementById('mint-button');
     mintButton.style.opacity = 1;
     mintButton.style.pointerEvents = 'auto';
-    mintButton.innerText = 'Mint';
+    mintButton.innerText = 'Mint Now';
 }
 
 const mint = async () => {
