@@ -95,6 +95,7 @@ const mint = async () => {
             }
         }
     } catch (err) {
+        console.log(err);
         alert('Something went wrong. Please contact GoingUP support.');
     } finally {
         enableMintButton();
