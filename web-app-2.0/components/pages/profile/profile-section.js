@@ -50,8 +50,8 @@ const ProfileSection = (props) => {
                                                             app.mode === "dark"
                                                                 ? "#121E28"
                                                                 : "#FFFFFF",
-                                                        borderRadius: "20px",
-                                                        padding: "2px",
+                                                        borderRadius: "50%",
+                                                        padding: "3px",
                                                     }}
                                                 >
                                                     <CircularProgress
