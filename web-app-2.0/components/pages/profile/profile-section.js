@@ -14,6 +14,7 @@ import {
     Button,
 } from "@mui/material";
 import ContactsAndIntegrations from "./contacts-and-integrations";
+import truncateEthAddress from 'truncate-eth-address'
 import { useTheme } from "@mui/material";
 
 const ProfileSection = (props) => {
@@ -201,7 +202,7 @@ const ProfileSection = (props) => {
                                                     : "#CFCFCF",
                                         }}
                                     >
-                                        {account.address}
+                                        {truncateEthAddress(account.address)}
                                     </Typography>
                                 </Stack>
                             </Grid>

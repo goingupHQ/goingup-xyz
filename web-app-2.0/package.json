@@ -35,6 +35,7 @@
     "sib-api-v3-sdk": "^8.4.0",
     "templates": "^1.2.9",
     "truncate-eth-address": "^1.0.2",
+    "uuid": "^8.3.2",
     "web3-cardano-token": "^0.0.12",
     "web3modal": "^1.9.8"
   },
