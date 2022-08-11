@@ -89,6 +89,8 @@ const mint = async () => {
                     alert('You are not whitelisted to mint');
                 } else if (message.includes('insufficient funds')) {
                     alert('You do not have enough ether to mint');
+                } else if (message.includes('Modal closed by user')) {
+                    console.log('Modal closed by user');
                 } else {
                     alert('Something went wrong. Please contact GoingUP support.');
                 }
