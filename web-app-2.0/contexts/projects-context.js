@@ -7,71 +7,64 @@ export const ProjectsContext = createContext();
 export const ProjectsProvider = ({ children }) => {
     const wallet = useContext(WalletContext);
 
-    const contractAddress = '0xe0b5f0c73754347E1d2E3c84382970D7A70d666B'; // polygon mumbai
+    // polygon mumbai testnet
+    const contractAddress = '0xe0b5f0c73754347E1d2E3c84382970D7A70d666B';
     const contractNetwork = 80001;
+    const networkParams = {
+        chainId: '0x13881',
+        chainName: 'Polygon Testnet',
+        nativeCurrency: {
+            name: 'MATIC',
+            symbol: 'MATIC',
+            decimals: 18,
+        },
+        rpcUrls: ['https://matic-mumbai.chainstacklabs.com'],
+        blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
+    };
 
-    async function addNetwork(type) {
+    // polygon mainnet
+    // const contractAddress = 'NOT_YET_DEPLOYED';
+    // const contractNetwork = 137;
+    // const networkParams = {
+    //     chainId: '0x89',
+    //     chainName: 'Matic Mainnet',
+    //     nativeCurrency: {
+    //         name: 'MATIC',
+    //         symbol: 'MATIC',
+    //         decimals: 18,
+    //     },
+    //     rpcUrls: ['https://polygon-rpc.com/'],
+    //     blockExplorerUrls: ['https://polygonscan.com/'],
+    // };
 
-        if (type === 'web3') {
-            if (typeof ethereum !== 'undefined') {
-                eth = new Web3Eth(ethereum);
-            } else if (typeof web3 !== 'undefined') {
-                eth = new Web3Eth(web3.givenProvider);
-            } else {
-                eth = new Web3Eth(ethereum);
-            }
-        }
-
-        if (typeof eth !== 'undefined') {
-            var network = 0;
-            network = await eth.net.getId();
-            netID = network.toString();
-            var params;
-            if (isTestnet == "false") {
-                if (netID == "137") {
-                    alert("Polygon Network has already been added to Metamask.");
-                    return;
-                } else {
-                    params = [{
-                        chainId: '0x89',
-                        chainName: 'Matic Mainnet',
-                        nativeCurrency: {
-                            name: 'MATIC',
-                            symbol: 'MATIC',
-                            decimals: 18
-                        },
-                        rpcUrls: ['https://polygon-rpc.com/'],
-                        blockExplorerUrls: ['https://polygonscan.com/']
-                    }]
-                }
-            } else {
-                if (netID == "80001") {
-                    alert("Polygon Mumbai Network has already been added to Metamask.");
-                    return;
-                } else {
-                    params = [{
-                        chainId: '0x13881',
-                        chainName: 'Polygon Testnet',
-                        nativeCurrency: {
-                            name: 'MATIC',
-                            symbol: 'MATIC',
-                            decimals: 18
-                        },
-                        rpcUrls: ['https://matic-mumbai.chainstacklabs.com'],
-                        blockExplorerUrls: ['https://mumbai.polygonscan.com/']
-                    }]
-                }
-            }
-
-            window.ethereum.request({ method: 'wallet_addEthereumChain', params })
-                .then(() => console.log('Success'))
-                .catch((error) => console.log("Error", error.message));
+    async function switchToCorrectNetwork() {
+        if (wallet.walletType === 'walletconnect') {
+            throw new Error('WalletConnect does not support adding networks. Please add the network manually.');
         } else {
-            alert('Unable to locate a compatible web3 browser!');
+            try {
+                await ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: networkParams.chainId }],
+                });
+            } catch (switchError) {
+                if (switchError.code === 4902) {
+                    await ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [
+                            networkParams
+                        ],
+                    });
+                }
+            }
         }
     }
 
+    const isCorrectNetwork = wallet?.network === contractNetwork;
+
     const value = {
+        networkParams,
+        isCorrectNetwork,
+        switchToCorrectNetwork,
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };
