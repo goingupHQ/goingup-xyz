@@ -60,19 +60,30 @@ export const ProjectsProvider = ({ children }) => {
         }
     }
 
-    const isCorrectNetwork = wallet?.network === contractNetwork;
+    useEffect(() => {
+        setIsCorrectNetwork(wallet.network == contractNetwork);
+    }, [wallet]);
+
+    console.log(wallet.network, contractNetwork);
+    const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network == contractNetwork);
 
     const getContract = () => {
         const contract = new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
     }
 
     const getProjects = async () => {
+        return [];
+    }
+
+    const createProject = async (name, description, started, ended, primaryUrl, tags, isPrivate) => {
+        const contract = get
     }
 
     const value = {
         networkParams,
         isCorrectNetwork,
         switchToCorrectNetwork,
+        getProjects
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };
