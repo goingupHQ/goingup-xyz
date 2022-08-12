@@ -12,9 +12,11 @@ import {
     CircularProgress,
     Badge,
     Button,
+    Divider,
+    Paper,
 } from "@mui/material";
 import ContactsAndIntegrations from "./contacts-and-integrations";
-import truncateEthAddress from 'truncate-eth-address'
+import truncateEthAddress from "truncate-eth-address";
 import { useTheme } from "@mui/material";
 
 const ProfileSection = (props) => {
@@ -188,20 +190,43 @@ const ProfileSection = (props) => {
                                     />
                                 </Stack>
                                 <Stack
+                                    sx={{
+                                        border: 3,
+                                        borderColor:
+                                            app.mode === "dark"
+                                                ? "#253340"
+                                                : "#CFCFCF",
+                                        borderRadius: "8px",
+
+                                        backgroundColor:
+                                            app.mode === "dark"
+                                                ? "#253340"
+                                                : "#CFCFCF",
+                                    }}
                                     direction='row'
-                                    spacing={2}
                                     alignItems='center'
-                                    justifyContent='flex-end'
+                                    justifyContent={{
+                                        xs: "center",
+                                        md: "space-evenly",
+                                    }}
                                     marginY={"15px"}
                                 >
-                                    <Typography
+                                    <Box
                                         sx={{
                                             backgroundColor:
                                                 app.mode === "dark"
-                                                    ? "#253340"
-                                                    : "#CFCFCF",
+                                                    ? "#111921"
+                                                    : "#F5F5F5",
+                                            paddingX: 3,
                                         }}
                                     >
+                                        <Typography>
+                                            {account.name
+                                                .toLowerCase()
+                                                .replace(/\s/g, "") + ".eth"}
+                                        </Typography>
+                                    </Box>
+                                    <Typography>
                                         {truncateEthAddress(account.address)}
                                     </Typography>
                                 </Stack>
