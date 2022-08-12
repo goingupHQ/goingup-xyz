@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { WalletContext } from './wallet-context';
 import artifact from '../artifacts/GoingUpProjects.json';
+console.log('Projects ABI', artifact.abi);
 
 export const ProjectsContext = createContext();
 
@@ -60,6 +61,13 @@ export const ProjectsProvider = ({ children }) => {
     }
 
     const isCorrectNetwork = wallet?.network === contractNetwork;
+
+    const getContract = () => {
+        const contract = new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
+    }
+
+    const getProjects = async () => {
+    }
 
     const value = {
         networkParams,
