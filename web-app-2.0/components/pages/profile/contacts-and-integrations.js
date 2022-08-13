@@ -131,6 +131,8 @@ const ContactsAndIntegrations = (props) => {
     return (
         <Grid>
             <Stack
+                spacing={-1}
+                marginRight={-1}
                 direction={ 'row' }
             >
                 <IconButton onClick={twitterChipClicked}>
