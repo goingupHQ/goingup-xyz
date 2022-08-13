@@ -212,16 +212,15 @@ const ProfileSection = (props) => {
                                             app.mode === "dark"
                                                 ? "#111921"
                                                 : "#F5F5F5",
-                                        paddingX: 1,
                                     }}
                                 >
-                                    <Typography>
+                                    <Typography paddingX= {{xs: 1,  sm: 4}}>
                                         {account.name
                                             .toLowerCase()
                                             .replace(/\s/g, "") + ".eth"}
                                     </Typography>
                                 </Box>
-                                <Typography paddingX={1}>
+                                <Typography paddingX= {{xs: 1,  sm: 4}}>
                                     {truncateEthAddress(account.address)}
                                 </Typography>
                             </Stack>
