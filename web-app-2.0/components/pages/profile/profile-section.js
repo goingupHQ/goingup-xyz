@@ -39,8 +39,8 @@ const ProfileSection = (props) => {
                             xs: "flex-start",
                             md: "center",
                         }}
-                        paddingX={"15px"}
-                        marginY={"15px"}
+                        marginTop={"15px"}
+                        sx={{ paddingX: {xs:'15px', md:'30px'}, marginTop: {xs:'15px', md:'30px'}, marginBottom: '30px'}}
                     >
                         <Grid item>
                             <CardHeader
@@ -149,8 +149,10 @@ const ProfileSection = (props) => {
                                                     {account.idealCollab.map(
                                                         (item) => (
                                                             <Button
+                                                            disableRipple
                                                                 variant='secondary'
                                                                 key={item}
+                                                                sx={{marginX: '-13px', ":hover": { backgroundColor : 'transparent' }}}
                                                             >
                                                                 {
                                                                     app.occupations.find(
@@ -226,7 +228,7 @@ const ProfileSection = (props) => {
                                 </Typography>
                             </Stack>
                         </Grid>
-                        <Typography marginX={3}>
+                        <Typography sx={{ marginX:{ md:'30px' } }}>
                             Lorem ipsum dolor sit amet, consectetur adipiscing
                             elit, sed do eiusmod tempor incididunt ut labore et
                             dolore magna aliqua. Ut enim ad minim veniam, quis

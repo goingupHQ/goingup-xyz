@@ -24,9 +24,9 @@ export default function Header(props) {
     return (
         <>
             <AppBar>
-                <Toolbar sx={{ paddingTop: { xs: '12px' } }}>
+                <Toolbar>
                     <Grid container spacing={1} alignItems="center" justifyContent="space-between">
-                        <Grid item xs={6}>
+                        <Grid item xs={5}>
                             <Box
                                 component="img"
                                 src={
@@ -42,7 +42,7 @@ export default function Header(props) {
                             ></Box>
                             {/* <SearchBox /> */}
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={7}>
                             <Stack direction="row" spacing={2} alignItems="center" justifyContent="flex-end">
                                 <Stack spacing={2} direction="row" sx={{ display: { xs: 'none', md: 'initial' } }}>
                                     <IconButton>
