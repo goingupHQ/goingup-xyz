@@ -217,13 +217,13 @@ const ProfileSection = (props) => {
                                         borderRadius: "4px",
                                     }}
                                 >
-                                    <Typography paddingX={{ xs: 3, sm: 4 }}>
+                                    <Typography paddingX={3}>
                                         {account.name
                                             .toLowerCase()
                                             .replace(/\s/g, "") + ".eth"}
                                     </Typography>
                                 </Box>
-                                <Typography paddingX={{ xs: 3, sm: 4 }}>
+                                <Typography paddingX={4}>
                                     {truncateEthAddress(account.address)}
                                 </Typography>
                             </Stack>

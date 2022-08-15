@@ -102,6 +102,9 @@ export default function Layout({ children }) {
                     fontFamily: "Questrial",
                     h1: {
                         fontSize: "32px",
+                        "@media (max-width:600px)": {
+                            fontSize: "16px",
+                        },
                         fontWeight: "bold",
                     },
                     h2: {
@@ -213,7 +216,12 @@ export default function Layout({ children }) {
         <>
             <ThemeProvider theme={theme}>
                 <Header />
-                <Box sx={{ paddingTop: { xs: "74px", md: "150px" }, paddingX: {xs: '15px', lg:'105px' }  }}>
+                <Box
+                    sx={{
+                        paddingTop: { xs: "74px", md: "150px" },
+                        paddingX: { xs: "15px", lg: "105px" },
+                    }}
+                >
                     {children}
                 </Box>
             </ThemeProvider>
