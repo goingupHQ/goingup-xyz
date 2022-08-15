@@ -206,7 +206,7 @@ const ProfileSection = (props) => {
                                     xs: "center",
                                     md: "space-evenly",
                                 }}
-                                marginY={"15px"}
+                                marginBottom={"30px"}
                             >
                                 <Box
                                     sx={{
@@ -217,13 +217,13 @@ const ProfileSection = (props) => {
                                         borderRadius: "4px",
                                     }}
                                 >
-                                    <Typography paddingX={{ xs: 1, sm: 4 }}>
+                                    <Typography paddingX={{ xs: 3, sm: 4 }}>
                                         {account.name
                                             .toLowerCase()
                                             .replace(/\s/g, "") + ".eth"}
                                     </Typography>
                                 </Box>
-                                <Typography paddingX={{ xs: 1, sm: 4 }}>
+                                <Typography paddingX={{ xs: 3, sm: 4 }}>
                                     {truncateEthAddress(account.address)}
                                 </Typography>
                             </Stack>
