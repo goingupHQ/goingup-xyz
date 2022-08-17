@@ -40,7 +40,11 @@ const ProfileSection = (props) => {
                             md: "center",
                         }}
                         marginTop={"15px"}
-                        sx={{ paddingX: {xs:'15px', md:'30px'}, marginTop: {xs:'15px', md:'30px'}, marginBottom: '30px'}}
+                        sx={{
+                            paddingX: { xs: "15px", md: "30px" },
+                            marginTop: { xs: "15px", md: "30px" },
+                            marginBottom: "30px",
+                        }}
                     >
                         <Grid item>
                             <CardHeader
@@ -136,37 +140,54 @@ const ProfileSection = (props) => {
                                         <Typography variant='h1'>
                                             {account.name}
                                         </Typography>
-                                        <Typography>
-                                            {app.occupations.find(
-                                                (o) =>
-                                                    o.id == account.occupation
-                                            )?.text || "None"}
-                                        </Typography>
-                                        <Typography variant='p' color='#6E8094'>
-                                            Looking for:{" "}
-                                            {account.idealCollab && (
-                                                <>
-                                                    {account.idealCollab.map(
-                                                        (item) => (
-                                                            <Button
-                                                            disableRipple
-                                                                variant='secondary'
-                                                                key={item}
-                                                                sx={{marginX: '-13px', ":hover": { backgroundColor : 'transparent' }}}
-                                                            >
-                                                                {
-                                                                    app.occupations.find(
-                                                                        (o) =>
-                                                                            o.id ==
-                                                                            item
-                                                                    )?.text
-                                                                }
-                                                            </Button>
-                                                        )
-                                                    )}
-                                                </>
-                                            )}
-                                        </Typography>
+                                        <Box>
+                                            <Typography variant='sh1'>
+                                                {app.occupations.find(
+                                                    (o) =>
+                                                        o.id ==
+                                                        account.occupation
+                                                )?.text || "None"}
+                                            </Typography>
+                                        </Box>
+                                        <Box>
+                                            <Typography
+                                                variant='sh1'
+                                                color='#6E8094'
+                                            >
+                                                Looking for:{" "}
+                                                {account.idealCollab && (
+                                                    <>
+                                                        {account.idealCollab.map(
+                                                            (item) => (
+                                                                <Typography
+                                                                    marginLeft={
+                                                                        1
+                                                                    }
+                                                                    variant='sh1'
+                                                                    color={
+                                                                        app.mode ===
+                                                                        "dark"
+                                                                            ? "#FFFFFF"
+                                                                            : "#22272F"
+                                                                    }
+                                                                    key={item}
+                                                                >
+                                                                    {
+                                                                        app.occupations.find(
+                                                                            (
+                                                                                o
+                                                                            ) =>
+                                                                                o.id ==
+                                                                                item
+                                                                        )?.text
+                                                                    }
+                                                                </Typography>
+                                                            )
+                                                        )}
+                                                    </>
+                                                )}
+                                            </Typography>
+                                        </Box>
                                     </>
                                 }
                             />
@@ -215,20 +236,22 @@ const ProfileSection = (props) => {
                                                 ? "#111921"
                                                 : "#F5F5F5",
                                         borderRadius: "4px",
+
+                                        paddingY: { md: "5px" },
                                     }}
                                 >
-                                    <Typography paddingX={3}>
+                                    <Typography variant='sh2' paddingX={3}>
                                         {account.name
                                             .toLowerCase()
                                             .replace(/\s/g, "") + ".eth"}
                                     </Typography>
                                 </Box>
-                                <Typography paddingX={4}>
+                                <Typography variant='sh2' paddingX={4}>
                                     {truncateEthAddress(account.address)}
                                 </Typography>
                             </Stack>
                         </Grid>
-                        <Typography sx={{ marginX:{ md:'30px' } }}>
+                        <Typography variant='sh1' sx={{ marginX: { md: "30px" } }}>
                             Lorem ipsum dolor sit amet, consectetur adipiscing
                             elit, sed do eiusmod tempor incididunt ut labore et
                             dolore magna aliqua. Ut enim ad minim veniam, quis

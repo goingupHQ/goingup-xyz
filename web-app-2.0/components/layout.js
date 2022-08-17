@@ -117,10 +117,16 @@ export default function Layout({ children }) {
                     },
                     sh1: {
                         fontSize: "16px",
+                        "@media (max-width:600px)": {
+                            fontSize: "12px",
+                        },
                         fontWeight: "500",
                     },
                     sh2: {
                         fontSize: "14px",
+                        "@media (max-width:600px)": {
+                            fontSize: "10px",
+                        },
                         fontWeight: "500",
                     },
                     sh3: {
