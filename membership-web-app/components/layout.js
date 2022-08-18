@@ -12,7 +12,7 @@ export default function Layout({ children }) {
                         flexDirection: 'column',
                         alignItems: 'center',
                         width: '100%',
-                        paddingY: 2,
+                        pt: 5,
                     }}
                 >
                     <Box
@@ -24,7 +24,9 @@ export default function Layout({ children }) {
                             marginLeft: '-3px'
                         }}
                     />
-                    <main>{children}</main>
+
+                    {children}
+
                     <Footer />
                 </Stack>
             </Slide>

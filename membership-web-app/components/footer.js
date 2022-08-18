@@ -1,4 +1,6 @@
 import { Box, Grid, Stack, Typography, Link, Divider } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDiscord, faTwitter, faTelegram, faGithub } from '@fortawesome/free-brands-svg-icons';
 import React from 'react';
 
 export default function Footer(props) {
@@ -8,9 +10,11 @@ export default function Footer(props) {
             sx={{
                 backgroundColor: 'rgba(92,49,255,0.99)',
                 width: '100%',
-                padding: 6,
+                paddingY: 4,
+                paddingX: { xs: 2, md: 6, lg: 12, xl: 22 },
             }}
             columnSpacing={4}
+            rowSpacing={{ xs: 4, md: 2 }}
         >
             <Grid item xs={12} md={6}>
                 <Box
@@ -25,7 +29,7 @@ export default function Footer(props) {
                 <Typography variant="h6">The web3 professional community for high-potential builders.</Typography>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
                 <Typography variant="h4">Create your web3-native profile. No crypto experience needed.</Typography>
 
                 <Typography variant="h6">
@@ -90,7 +94,7 @@ export default function Footer(props) {
 
             </Grid>
 
-            <Grid item xs={12} sx={{ mt: 6, mb: 2 }}>
+            <Grid item xs={12} sx={{ mt: 4, mb: 2 }}>
                 <Divider />
             </Grid>
 
@@ -98,6 +102,26 @@ export default function Footer(props) {
                 <Typography variant="body1">
                     © 2022 UP Protocol Inc.
                 </Typography>
+            </Grid>
+
+            <Grid item xs={6}>
+                <Stack direction="row" spacing={3} justifyContent="end">
+                    <Link href="https://twitter.com/GoingupHQ" rel="noopener noreferrer" target="_blank">
+                        <FontAwesomeIcon icon={faTwitter} size="lg" />
+                    </Link>
+
+                    <Link href="https://discord.com/invite/KPVZ" rel="noopener noreferrer" target="_blank">
+                        <FontAwesomeIcon icon={faDiscord} size="lg" />
+                    </Link>
+
+                    <Link href={null} rel="noopener noreferrer" target="_blank">
+                        <FontAwesomeIcon icon={faTelegram} size="lg" />
+                    </Link>
+
+                    <Link href={null} rel="noopener noreferrer" target="_blank">
+                        <FontAwesomeIcon icon={faGithub} size="lg" />
+                    </Link>
+                </Stack>
             </Grid>
         </Grid>
     );

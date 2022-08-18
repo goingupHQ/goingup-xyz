@@ -23,3 +23,7 @@ body {
     font-family: Syne;
     background-color: #111921;
 }
+
+.uYscM, .web3modal-modal-lightbox {
+    z-index: 10000 !important;
+}
