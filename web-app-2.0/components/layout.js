@@ -144,6 +144,20 @@ export default function Layout({ children }) {
                     allVariants: {
                         color: app.mode === "dark" ? "#FFFFFF" : "#010101",
                     },
+                    rep: {
+                        fontSize: "15px",
+                        "@media (max-width:600px)": {
+                            fontSize: "7px",
+                        },
+                        fontWeight: "500",
+                    },
+                    walletText: {
+                        fontSize: "12px",
+                        "@media (max-width:600px)": {
+                            fontSize: "10px",
+                        },
+                        fontWeight: "500",
+                    }
                 },
                 shape: {
                     borderRadius: "8px",

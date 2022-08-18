@@ -29,10 +29,10 @@ const UserBoxButton = styled(Button)(
     ({ theme }) => `
     padding: ${theme.spacing(0, 1)};
     background-color: ${theme.palette.background.userBox};
-    height: 48px;
-    width: 200px;
-    min-width: 200px;
-    max-width: 200px;
+    height: 40px;
+    width: 148px;
+    min-width: 90px;
+    max-width: 148px;
     &.Mui-active,
     &:hover {
       .MuiSvgIcon-root {
@@ -123,8 +123,8 @@ export default function UserBox () {
                         }
 
                         {wallet.address !== null &&
-                            <Box sx={{ paddingTop: '12px' }}>
-                                <Identicon address={wallet.address} size={24} />
+                            <Box sx={{ paddingTop: '12px', display: {xs: 'none', md: 'initial'} }}>
+                                <Identicon address={wallet.address} size={24}/>
                             </Box>
                         }
                     </>
@@ -145,7 +145,7 @@ export default function UserBox () {
                             textOverflow: 'ellipsis'
                         }}
                     >
-                        <UserBoxLabelMain variant="body1">
+                        <UserBoxLabelMain variant="walletText">
                             {wallet.address === null &&
                                 `Connect Wallet`
                             }
