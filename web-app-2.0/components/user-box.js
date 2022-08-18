@@ -24,6 +24,7 @@ import ChevronDownIcon from './icons/ChevronDownIcon';
 import { AppContext } from '../contexts/app-context';
 import ProjectsIcon from './icons/ProjectsIcon';
 import ProfileIcon from './icons/ProfileIcon';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const UserBoxButton = styled(Button)(
     ({ theme }) => `
@@ -111,7 +112,7 @@ export default function UserBox () {
 
     return (
         <>
-            <UserBoxButton
+            {/* <UserBoxButton
                 color="secondary"
                 ref={ref}
                 onClick={handleOpen}
@@ -154,16 +155,27 @@ export default function UserBox () {
                                 truncateEthAddress(wallet.address)
                             }
                         </UserBoxLabelMain>
-                        {/* {wallet.address &&
+                        {wallet.address &&
                             <UserBoxDescriptionMain
                                 variant="body2"
                             >
                                 {wallet.walletTypes[wallet.walletType]?.display} {wallet.networks[wallet.network]?.name}
                             </UserBoxDescriptionMain>
-                        } */}
+                        } 
                     </UserBoxText>
                 </Box>
-            </UserBoxButton>
+            </UserBoxButton> */}
+            <ConnectButton
+              chainStatus={"none"}
+              showBalance={{
+                smallScreen: false,
+                largeScreen: true,
+              }}
+              accountStatus={{
+                smallScreen: "avatar",
+                largeScreen: "full",
+              }}
+            />
             <Popover
                 disableScrollLock
                 anchorEl={ref.current}
