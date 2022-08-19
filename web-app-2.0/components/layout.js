@@ -146,7 +146,7 @@ export default function Layout({ children }) {
                     },
                     rep: {
                         fontSize: "15px",
-                        "@media (max-width:600px)": {
+                        "@media (max-width:900px)": {
                             fontSize: "7px",
                         },
                         fontWeight: "500",
