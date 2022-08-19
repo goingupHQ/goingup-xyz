@@ -19,14 +19,14 @@ import SunIcon from '../icons/SunIcon';
 
 export default function Header(props) {
     const app = useContext(AppContext);
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false); // testing
 
     return (
         <>
             <AppBar>
-                <Toolbar sx={{ zIndex: 101 }}>
-                    <Grid container spacing={1} alignItems="center" justifyContent="space-between" marginY={1}>
-                        <Grid item xs={6}>
+                <Toolbar>
+                    <Grid container spacing={1} alignItems="center" justifyContent="space-between">
+                        <Grid item xs={5}>
                             <Box
                                 component="img"
                                 src={
@@ -37,11 +37,12 @@ export default function Header(props) {
                                 alt="logo"
                                 sx={{
                                     width: { xs: '110px', md: 'auto' },
+                                    paddingTop: { xs: '6px', md: 'initial' }
                                 }}
                             ></Box>
                             {/* <SearchBox /> */}
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={7}>
                             <Stack direction="row" spacing={2} alignItems="center" justifyContent="flex-end">
                                 <Stack spacing={2} direction="row" sx={{ display: { xs: 'none', md: 'initial' } }}>
                                     <IconButton>
@@ -67,24 +68,22 @@ export default function Header(props) {
                                         {drawerOpen ? <CloseIcon /> : <MenuIcon />}
                                     </IconButton>
                                 </Box>
-
                             </Stack>
                         </Grid>
                     </Grid>
                 </Toolbar>
                 <Divider
                     sx={{
-                        display: { xs: 'none', sm: 'block' },
+                        display: { xs: 'none', sm: 'none', md: 'block' },
+                        marginTop: '12px'
                     }}
                 />
                 <DesktopNav />
-
                 <Fade direction="down" in={drawerOpen} mountOnEnter unmountOnExit>
                     <Box sx={{ paddingBottom: '20px', paddingX: '32px', zIndex: 100 }}>
                         <MobileNav closeNav={() => { setDrawerOpen(false) }} />
                     </Box>
                 </Fade>
-
             </AppBar>
         </>
     );

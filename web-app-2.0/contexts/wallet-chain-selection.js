@@ -3,15 +3,17 @@ import {
     Dialog,
     DialogContent,
     Stack,
+    Typography,
     useTheme
 } from '@mui/material';
 import { forwardRef, useContext, useImperativeHandle, useState, useEffect } from 'react';
+import { AppContext } from './app-context';
 
 const WalletChainSelection = (props, ref) => {
-    const { connectEthereum, connectCardano } = props;
     const [open, setOpen] = useState(false);
     const theme = useTheme();
     const wallet = useContext(WalletContext);
+    const app = useContext(AppContext);
 
     useEffect(() => {
         if (wallet.address) setOpen(false);
@@ -32,13 +34,14 @@ const WalletChainSelection = (props, ref) => {
     };
 
     const chainItemSx = {
-        padding: 2,
+        padding: { xs: 2, md: '2rem 4rem' },
+        backgroundColor: theme.palette.primary.main,
+        color: 'black',
         '&:hover': {
-            backgroundColor: theme.palette.secondary.main,
-            color: theme.palette.primary.main
+            backgroundColor: theme.palette.primary.light,
         },
         cursor: 'pointer',
-        borderRadius: '5px'
+        borderRadius: '5px',
     };
 
     return (
@@ -51,19 +54,27 @@ const WalletChainSelection = (props, ref) => {
                         direction="row"
                         spacing={2}
                         alignItems="center"
+                        justifyContent="center"
                         sx={chainItemSx}
                         onClick={() => {
                             handleClose();
+                            wallet.setWeb3ModalTheme(app.mode)
                             wallet.connectEthereum();
                         }}
                     >
                         <img
                             src="/images/ethereum-eth-logo.svg"
-                            width={64}
-                            height={64}
+                            width={32}
+                            height={32}
                         />
 
-                        <h1>Connect using Ethereum</h1>
+                        <h2 style={{
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
+                            overflowX: 'hidden'
+                        }}>
+                            Connect on Ethereum
+                        </h2>
                     </Stack>
 
                     {/* <Stack

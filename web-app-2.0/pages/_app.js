@@ -3,6 +3,7 @@ import { SnackbarProvider } from 'notistack';
 import { useContext } from 'react';
 import Layout from '../components/layout';
 import { AppContext, AppProvider } from '../contexts/app-context';
+import { ProjectsProvider } from '../contexts/projects-context';
 import { WalletProvider } from '../contexts/wallet-context';
 import '../styles/globals.css';
 
@@ -11,9 +12,11 @@ function App({ Component, pageProps }) {
         <SnackbarProvider maxSnack={7} preventDuplicate>
             <AppProvider>
                 <WalletProvider>
-                    <Layout>
-                        <Component {...pageProps} />
-                    </Layout>
+                    <ProjectsProvider>
+                        <Layout>
+                            <Component {...pageProps} />
+                        </Layout>
+                    </ProjectsProvider>
                 </WalletProvider>
             </AppProvider>
         </SnackbarProvider>

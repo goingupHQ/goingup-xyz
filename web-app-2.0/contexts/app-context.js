@@ -46,6 +46,8 @@ const userGoals = [
     { id: 5, text: 'Contribute to a community' },
 ]
 
+const maxReputationScore = 140;
+
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
@@ -81,6 +83,7 @@ export const AppProvider = ({ children }) => {
         userGoals,
         setDarkMode,
         setLightMode,
+        maxReputationScore,
         mode
     };
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
