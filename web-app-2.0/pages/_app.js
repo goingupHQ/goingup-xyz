@@ -13,10 +13,7 @@ import { WalletProvider } from "../contexts/wallet-context";
 import "../styles/globals.css";
 import { WagmiConfig, createClient, configureChains } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import {
-  RainbowKitProvider,
-} from "@rainbow-me/rainbowkit";
+import { alchemyProvider } from "wagmi/providers/alchemy";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import { getDefaultWallets } from "@rainbow-me/rainbowkit";
@@ -55,8 +52,10 @@ const polygon = {
 
 export const { chains, provider, webSocketProvider } = configureChains(
   [polygonMumbai, polygon],
-  [ alchemyProvider({ apiKey: "QoyYGyWecbDsHBaaDFapJeqKEFgFyRMM" }),
-    publicProvider()]
+  [
+    alchemyProvider({ apiKey: "QoyYGyWecbDsHBaaDFapJeqKEFgFyRMM" }),
+    publicProvider(),
+  ]
 );
 
 const { connectors } = getDefaultWallets({
@@ -74,21 +73,17 @@ const wagmiClient = createClient({
 function App({ Component, pageProps }) {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider 
-      chains={chains}
-      >
-        <SnackbarProvider maxSnack={7} preventDuplicate>
-          <AppProvider>
-            <WalletProvider>
-              <ProjectsProvider>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </ProjectsProvider>
-            </WalletProvider>
-          </AppProvider>
-        </SnackbarProvider>
-      </RainbowKitProvider>
+      <SnackbarProvider maxSnack={7} preventDuplicate>
+        <AppProvider>
+          <WalletProvider>
+            <ProjectsProvider>
+              <Layout chains={chains}>
+                <Component {...pageProps} />
+              </Layout>
+            </ProjectsProvider>
+          </WalletProvider>
+        </AppProvider>
+      </SnackbarProvider>
     </WagmiConfig>
   );
 }
