@@ -256,7 +256,7 @@ const ProfileSection = (props) => {
                         </Grid>
                         <Typography
                             variant='sh1'
-                            sx={{ marginX: { md: "30px" } }}
+                            sx={{ margin: { md: "30px" } }}
                         >
                             Lorem ipsum dolor sit amet, consectetur adipiscing
                             elit, sed do eiusmod tempor incididunt ut labore et
