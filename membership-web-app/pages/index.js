@@ -94,6 +94,7 @@ export default function Home() {
                 const merkleProof = await response.json();
                 try {
                     setMintStep(3);
+                    await sleep(1000);
                     const signerContract = new ethers.Contract(contractAddress, abi, signer);
                     const tx = await signerContract.mint(merkleProof, { value: ethers.utils.parseEther('2.22') });
                     // const tx = await signerContract.mint(merkleProof, { value: 1000000 });

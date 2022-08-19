@@ -38,7 +38,7 @@ function WebApp({ Component, pageProps }) {
 
     return (
         <ThemeProvider theme={theme}>
-            <SnackbarProvider autoHideDuration={10000} preventDuplicate style={{ fontSize: '15pt' }}>
+            <SnackbarProvider autoHideDuration={7500} preventDuplicate style={{ fontSize: '15pt' }}>
                 <Layout>
                     <Component {...pageProps} />
                 </Layout>
