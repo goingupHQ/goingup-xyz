@@ -1,10 +1,10 @@
-import { Box, Grid, Slide, Stack } from '@mui/material';
+import { Box, Fade, Grid, Slide, Stack } from '@mui/material';
 import Footer from './footer';
 
 export default function Layout({ children }) {
     return (
         <>
-            <Slide direction="up" in timeout={1500}>
+            <Fade in timeout={1500}>
                 <Stack
                     spacing={4}
                     sx={{
@@ -29,7 +29,7 @@ export default function Layout({ children }) {
 
                     <Footer />
                 </Stack>
-            </Slide>
+            </Fade>
         </>
     );
 }
