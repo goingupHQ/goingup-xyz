@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 import Layout from '../components/layout';
 import { createTheme, ThemeProvider } from '@mui/material';
+import { SnackbarProvider } from 'notistack';
 
 function WebApp({ Component, pageProps }) {
     const theme = createTheme({
@@ -8,30 +9,40 @@ function WebApp({ Component, pageProps }) {
             mode: 'dark',
             primary: {
                 main: '#F4CE00',
-            }
+            },
         },
         typography: {
             fontFamily: 'Syne',
             allVariants: {
-                color: '#fff'
-            }
+                color: '#fff',
+            },
         },
         components: {
             MuiButton: {
                 styleOverrides: {
                     root: {
-                        textTransform: 'capitalize'
-                    }
-                }
-            }
-        }
+                        textTransform: 'capitalize',
+                    },
+                },
+            },
+            MuiLink: {
+                styleOverrides: {
+                    root: {
+                        color: '#fff',
+                        textDecoration: 'none',
+                    },
+                },
+            },
+        },
     });
 
     return (
         <ThemeProvider theme={theme}>
-            <Layout>
-                <Component {...pageProps} />
-            </Layout>
+            <SnackbarProvider preventDuplicate>
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
+            </SnackbarProvider>
         </ThemeProvider>
     );
 }
