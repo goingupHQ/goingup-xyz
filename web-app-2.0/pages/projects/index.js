@@ -13,6 +13,7 @@ export default function Projects() {
   const account = useAccount();
   const { chain, chains } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
+  
   return (
     <>
       <Head>
