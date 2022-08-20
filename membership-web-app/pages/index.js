@@ -197,7 +197,7 @@ export default function Mint() {
                     <Typography variant="body1" sx={{ textAlign: 'center', color: '#AAADB3' }}>
                         {!fetchedAvailableSupply
                             ? `Fetching available supply...`
-                            : availableSupply.eq(0)
+                            : availableSupply === 0
                             ? `Sold Out`
                             : `${availableSupply} out of 222 available`}
                     </Typography>
