@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { dbClient } from './_get-db-client';
+import { getDb } from './_get-db-client';
 import { validateSignature } from './_validate-signature';
 import { renderInviteFriendEmail } from '@/templates/email/render-mail';
 import { sendEmail } from './services/_sendinblue';
@@ -13,8 +13,7 @@ export default async function handler(req, res) {
     const isSignatureValid = validateSignature(body.address, 'create-account', body.signature);
 
     if (isSignatureValid) {
-        await dbClient.connect();
-        const db = dbClient.db('main');
+        const db = await getDb();
         const accounts = db.collection('accounts');
 
         const { account, email1, email2, email3, email4, inviteMessage } = body;

@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { dbClient } from './_get-db-client';
+import { getDb } from './_get-db-client';
 import { validateSignature } from './_validate-signature';
 
 export default async function handler(req, res) {
@@ -11,8 +11,7 @@ export default async function handler(req, res) {
     const isSignatureValid = validateSignature(body.address, 'update-account', body.signature);
 
     if (isSignatureValid) {
-        await dbClient.connect();
-        const db = dbClient.db('main');
+        const db = await getDb();
         const accounts = db.collection('accounts');
         const account = body.account;
         const payload: any = { $set: account }
