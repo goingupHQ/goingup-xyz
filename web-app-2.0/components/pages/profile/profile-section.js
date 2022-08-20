@@ -29,6 +29,7 @@ const ProfileSection = (props) => {
             <Fade in={true} timeout={1000}>
                 <Card>
                     <Grid
+                    padding={0}
                         container
                         direction={{
                             xs: "column",
@@ -60,15 +61,16 @@ const ProfileSection = (props) => {
                                                 sx={{
                                                     position: "relative",
                                                     display: "inline-flex",
-                                                    backgroundColor:
-                                                        app.mode === "dark"
-                                                            ? "#121E28"
-                                                            : "#FFFFFF",
+                                                    backgroundColor: { xs: 'none', md: 
+                                                    app.mode === "dark"
+                                                        ? "#121E28"
+                                                        : "#FFFFFF"},
                                                     borderRadius: "50%",
                                                     padding: "3px",
                                                 }}
                                             >
                                                 <CircularProgress
+                                                    size={50}
                                                     variant='determinate'
                                                     sx={{
                                                         position: "absolute",
@@ -76,14 +78,14 @@ const ProfileSection = (props) => {
                                                             app.mode === "dark"
                                                                 ? "#1D3042"
                                                                 : "#CFCFCF",
+                                                                padding: { xs: 1, sm: 1, md: 0}
                                                     }}
-                                                    size={50}
                                                     thickness={7}
                                                     value={100}
                                                 />
                                                 <CircularProgress
-                                                    thickness={7}
                                                     size={50}
+                                                    thickness={7}
                                                     variant='determinate'
                                                     color='success'
                                                     value={
@@ -95,6 +97,7 @@ const ProfileSection = (props) => {
                                                         color: "#3AB795",
                                                         position: "relative",
                                                         display: "inline-flex",
+                                                        padding: { xs: 1, sm: 1, md: 0}
                                                     }}
                                                 />
                                                 <Box
@@ -112,7 +115,7 @@ const ProfileSection = (props) => {
                                                 >
                                                     <Typography
                                                         color={"#3AB795"}
-                                                        variant='caption'
+                                                        variant='rep'
                                                     >
                                                         {" "}
                                                         {Math.round(
@@ -129,8 +132,8 @@ const ProfileSection = (props) => {
                                         <Avatar
                                             src={account.profilePhoto}
                                             sx={{
-                                                width: 114,
-                                                height: 114,
+                                                width: { xs: 60, md: 114 },
+                                                height: { xs: 60, md: 114 },
                                             }}
                                         />
                                     </Badge>
@@ -251,7 +254,10 @@ const ProfileSection = (props) => {
                                 </Typography>
                             </Stack>
                         </Grid>
-                        <Typography variant='sh1' sx={{ marginX: { md: "30px" } }}>
+                        <Typography
+                            variant='sh1'
+                            sx={{ margin: { md: "30px" } }}
+                        >
                             Lorem ipsum dolor sit amet, consectetur adipiscing
                             elit, sed do eiusmod tempor incididunt ut labore et
                             dolore magna aliqua. Ut enim ad minim veniam, quis

@@ -36,7 +36,7 @@ export default function Header(props) {
                                 }
                                 alt="logo"
                                 sx={{
-                                    width: { xs: '110px', md: 'auto' },
+                                    width: { xs: '105px', md: '173px' },
                                     paddingTop: { xs: '6px', md: 'initial' }
                                 }}
                             ></Box>

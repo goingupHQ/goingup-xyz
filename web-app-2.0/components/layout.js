@@ -102,7 +102,7 @@ export default function Layout({ children }) {
                     fontFamily: "Questrial",
                     h1: {
                         fontSize: "32px",
-                        "@media (max-width:600px)": {
+                        "@media (max-width:900px)": {
                             fontSize: "16px",
                         },
                         fontWeight: "bold",
@@ -117,14 +117,14 @@ export default function Layout({ children }) {
                     },
                     sh1: {
                         fontSize: "16px",
-                        "@media (max-width:600px)": {
+                        "@media (max-width:900px)": {
                             fontSize: "12px",
                         },
                         fontWeight: "500",
                     },
                     sh2: {
                         fontSize: "14px",
-                        "@media (max-width:600px)": {
+                        "@media (max-width:900px)": {
                             fontSize: "10px",
                         },
                         fontWeight: "500",
@@ -146,14 +146,14 @@ export default function Layout({ children }) {
                     },
                     rep: {
                         fontSize: "15px",
-                        "@media (max-width:600px)": {
+                        "@media (max-width:900px)": {
                             fontSize: "7px",
                         },
                         fontWeight: "500",
                     },
                     walletText: {
                         fontSize: "12px",
-                        "@media (max-width:600px)": {
+                        "@media (max-width:900px)": {
                             fontSize: "10px",
                         },
                         fontWeight: "500",
