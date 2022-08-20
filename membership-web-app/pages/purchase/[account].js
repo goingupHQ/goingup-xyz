@@ -121,7 +121,9 @@ export default function Purchase() {
             const { chainId } = await provider.getNetwork();
 
             if (chainId !== requiredNetwork) {
-                throw `Wrong network. Please switch to ${requiredNetwork === 1 ? 'Ethereum Mainnet' : 'Goerli Testnet'}.`;
+                throw `Wrong network. Please switch to ${
+                    requiredNetwork === 1 ? 'Ethereum Mainnet' : 'Goerli Testnet'
+                }.`;
             }
 
             setMintStep(2);
@@ -134,19 +136,32 @@ export default function Purchase() {
             await sleep(1000);
             const tx = await signer.sendTransaction({
                 to: accountAddress,
-                value: ethers.utils.parseEther('2.2')
+                value: ethers.utils.parseEther('2.2'),
             });
 
             setMintStep(4);
             await sleep(1000);
             const receipt = await tx.wait();
 
-            console.log(receipt);
+            setMintStep(5);
+            await sleep(1000);
+            const claimResponse = await fetch(
+                `https://goingup-xyz-v2.vercel.app/api/admin/membership-nft/purchase?account=${account}&txhash=${tx.hash}`
+            );
+
+            if (claimResponse.status !== 200) throw 'Something went wrong. Please contact GoingUP support.';
+            const result = await claimResponse.json();
+            const claimTx = await provider.getTransaction(result.hash);
+
+            setMintStep(6);
+            await sleep(1000);
+            const claimReceipt = await claimTx.wait();
+
+            setMintStep(7);
         } catch (err) {
             if (typeof err === 'string') enqueueSnackbar(err, { variant: 'error' });
             else if (typeof err.message === 'string') enqueueSnackbar(err.message, { variant: 'error' });
             console.log(err);
-        } finally {
             setMinting(false);
         }
     };
@@ -233,7 +248,7 @@ export default function Purchase() {
 
             <Backdrop open={minting}>
                 <Paper sx={{ padding: 6 }}>
-                    <Stack direction="column" spacing={3}>
+                    <Stack direction="column" spacing={3} alignItems="center">
                         <Typography variant="h5" sx={{ color: mintStep >= 0 ? stepActiveColor : stepInactiveColor }}>
                             1. Connect User Wallet
                             {userAddress ? ` (${truncateEthAddress(userAddress)})` : ''}
@@ -277,9 +292,28 @@ export default function Purchase() {
                             {mintStep > 6 && checkmark}
                         </Typography>
 
-                        <Typography variant="body1" sx={{ color: 'gold' }}>
-                            <strong>Please do not close this tab</strong>
-                        </Typography>
+                        {mintStep < 7 && (
+                            <Typography variant="body1" sx={{ color: 'gold' }}>
+                                <strong>Please do not close this tab</strong>
+                            </Typography>
+                        )}
+
+                        {mintStep === 7 && (
+                            <>
+                                <Typography variant="h6" sx={{ color: 'gold' }}>
+                                    <strong>Your membership NFT has been transferred to your wallet!</strong>
+                                </Typography>
+
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="medium"
+                                    onClick={() => setMinting(false)}
+                                >
+                                    <strong>Close</strong>
+                                </Button>
+                            </>
+                        )}
                     </Stack>
                 </Paper>
             </Backdrop>
