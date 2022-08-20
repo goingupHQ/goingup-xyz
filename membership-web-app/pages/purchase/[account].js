@@ -9,38 +9,77 @@ import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import Web3Modal from 'web3modal';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import truncateEthAddress from 'truncate-eth-address';
+import { useRouter } from 'next/dist/client/router';
 
-export default function Mint() {
-    const { enqueueSnackbar } = useSnackbar();
+export default function Purchase() {
+    const router = useRouter();
+    const { account } = router.query;
+
+    const accounts = {
+        main: {
+            address: '0xff188235879FA2dB8438802e399Ed31CaB0F61E4',
+        },
+        emmanuel: {
+            address: '0xa96e945fd471C67B16D138b59Cc8abA4E8171b00',
+        },
+        anbessa: {
+            address: '0xD8A1330988e89e20b9FFa1739E3F85c9cBa8eF51',
+        },
+        ebae: {
+            address: '0xfCdFa41fA58AA9c5E4ef76FDd709c8E10dd3Bb42',
+        },
+    };
+
+    const accountAddress = accounts[account]?.address;
+
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const [availableSupply, setAvailableSupply] = useState(0);
     const [fetchedAvailableSupply, setFetchedAvailableSupply] = useState(false);
 
-    const contractAddress = '0x9337051505436D20FDCf7E2CE5a733b49d1042bc';
-    const abi = ['function totalSupply() view returns (uint256)', 'function mint(bytes32[] memory proof) payable'];
-    const defaultProvider = ethers.providers.getDefaultProvider('homestead');
+    // mainnet
+    // const contractAddress = '0x9337051505436D20FDCf7E2CE5a733b49d1042bc';
+    // const defaultProvider = ethers.providers.getDefaultProvider('homestead');
+    // const requiredNetwork = 1;
+
+    // goerli
+    const contractAddress = '0x492a13A2624140c75025be03CD1e46ecF15450F5';
+    const requiredNetwork = 5;
+    const defaultProvider = ethers.providers.getDefaultProvider(requiredNetwork);
+
+    const abi = [
+        'function totalSupply() view returns (uint256)',
+        'function mint(bytes32[] memory proof) payable',
+        'function balanceOf(address) view returns (uint256)',
+    ];
 
     const loadSupplyCounter = async () => {
-        const contract = new ethers.Contract(contractAddress, abi, defaultProvider);
-        const supply = await contract.totalSupply();
-        const available = 222 - supply.toNumber();
-        setAvailableSupply(available);
-        setFetchedAvailableSupply(true);
+        if (contractAddress && accountAddress) {
+            const contract = new ethers.Contract(contractAddress, abi, defaultProvider);
+            const available = await contract.balanceOf(accountAddress);
+            setAvailableSupply(available);
+            setFetchedAvailableSupply(true);
+        }
     };
 
     const modelRef = React.useRef();
 
+    let supplyCounterInterval = null;
     useEffect(() => {
-        setInterval(async () => {
-            loadSupplyCounter();
-        }, 2000);
-    }, []);
+        if (contractAddress && accountAddress) {
+            if (supplyCounterInterval) clearInterval(supplyCounterInterval);
+            supplyCounterInterval = setInterval(async () => {
+                loadSupplyCounter();
+            }, 2000);
+        }
+    }, [contractAddress, accountAddress]);
 
     const [minting, setMinting] = useState(false);
     const [mintStep, setMintStep] = useState(0);
     const [userAddress, setUserAddress] = useState(null);
 
     const mint = async () => {
+        closeSnackbar();
         setMinting(true);
         setMintStep(0);
 
@@ -74,50 +113,35 @@ export default function Mint() {
             const provider = new ethers.providers.Web3Provider(web3ModalProvider);
             const signer = provider.getSigner();
             const address = await signer.getAddress();
+            const contract = new ethers.Contract(contractAddress, abi, signer);
 
             setUserAddress(address);
             setMintStep(1);
             await sleep(1000);
             const { chainId } = await provider.getNetwork();
 
-            if (chainId !== 1) {
-                throw 'Please switch to Ethereum Mainnet';
+            if (chainId !== requiredNetwork) {
+                throw `Wrong network. Please switch to ${requiredNetwork === 1 ? 'Ethereum Mainnet' : 'Goerli Testnet'}.`;
             }
 
             setMintStep(2);
             await sleep(1000);
-            const response = await fetch(
-                `https://goingup-xyz-dev.vercel.app/api/admin/membership-nft/get-merkle-proof?address=${address}`
-            );
+            const latestAvailable = await contract.balanceOf(accountAddress);
 
-            if (response.status === 200) {
-                const merkleProof = await response.json();
-                try {
-                    setMintStep(3);
-                    await sleep(1000);
-                    const signerContract = new ethers.Contract(contractAddress, abi, signer);
-                    const tx = await signerContract.mint(merkleProof, { value: ethers.utils.parseEther('2.22') });
-                    // const tx = await signerContract.mint(merkleProof, { value: 1000000 });
-                    enqueueSnackbar(
-                        `Mint transaction submitted to the blockchain. Please monitor your wallet for transaction result.`,
-                        { variant: 'success' }
-                    );
-                } catch (err) {
-                    const message = err.message;
-                    console.log('error message', message);
-                    if (message.includes('execution reverted: not whitelisted')) {
-                        throw 'You are not whitelisted to mint';
-                    } else if (message.includes('insufficient funds')) {
-                        throw 'You do not have enough ether to mint';
-                    } else if (message.includes('Modal closed by user')) {
-                        console.log('Modal closed by user');
-                    } else {
-                        throw 'Something went wrong. Please contact GoingUP support.';
-                    }
-                }
-            } else {
-                throw 'Could not fetch whitelist proof';
-            }
+            if (latestAvailable.eq(0)) throw 'This sale has sold out.';
+
+            setMintStep(3);
+            await sleep(1000);
+            const tx = await signer.sendTransaction({
+                to: accountAddress,
+                value: ethers.utils.parseEther('2.2')
+            });
+
+            setMintStep(4);
+            await sleep(1000);
+            const receipt = await tx.wait();
+
+            console.log(receipt);
         } catch (err) {
             if (typeof err === 'string') enqueueSnackbar(err, { variant: 'error' });
             else if (typeof err.message === 'string') enqueueSnackbar(err.message, { variant: 'error' });
@@ -131,6 +155,9 @@ export default function Mint() {
 
     const checkmark = <CheckCircleOutlinedIcon sx={{ color: 'lightgreen', marginX: 1, fontSize: '18pt' }} />;
     const progress = <CircularProgress size="18px" sx={{ marginX: 1 }} />;
+
+    const stepActiveColor = '#FFFFFF';
+    const stepInactiveColor = 'gray';
 
     return (
         <>
@@ -191,7 +218,7 @@ export default function Mint() {
                         disabled={minting}
                         onClick={mint}
                     >
-                        <strong>Mint Now</strong>
+                        <strong>Purchase NFT</strong>
                     </Button>
 
                     <Typography variant="body1" sx={{ textAlign: 'center', color: '#AAADB3' }}>
@@ -207,26 +234,51 @@ export default function Mint() {
             <Backdrop open={minting}>
                 <Paper sx={{ padding: 6 }}>
                     <Stack direction="column" spacing={3}>
-                        <Typography variant="h5">
+                        <Typography variant="h5" sx={{ color: mintStep >= 0 ? stepActiveColor : stepInactiveColor }}>
                             1. Connect User Wallet
                             {userAddress ? ` (${truncateEthAddress(userAddress)})` : ''}
                             {mintStep === 0 && progress}
                             {mintStep > 0 && checkmark}
                         </Typography>
-                        <Typography variant="h5">
+
+                        <Typography variant="h5" sx={{ color: mintStep >= 1 ? stepActiveColor : stepInactiveColor }}>
                             2. Check Network
                             {mintStep === 1 && progress}
                             {mintStep > 1 && checkmark}
                         </Typography>
-                        <Typography variant="h5">
-                            3. Get Whitelist Merkle Proof
+
+                        <Typography variant="h5" sx={{ color: mintStep >= 2 ? stepActiveColor : stepInactiveColor }}>
+                            3. Check Available Tokens
                             {mintStep === 2 && progress}
                             {mintStep > 2 && checkmark}
                         </Typography>
-                        <Typography variant="h5">
-                            4. Minting
+
+                        <Typography variant="h5" sx={{ color: mintStep >= 3 ? stepActiveColor : stepInactiveColor }}>
+                            4. Send 2.2 ETH Payment
                             {mintStep === 3 && progress}
                             {mintStep > 3 && checkmark}
+                        </Typography>
+
+                        <Typography variant="h5" sx={{ color: mintStep >= 4 ? stepActiveColor : stepInactiveColor }}>
+                            5. Wait For Payment Confirmation
+                            {mintStep === 4 && progress}
+                            {mintStep > 4 && checkmark}
+                        </Typography>
+
+                        <Typography variant="h5" sx={{ color: mintStep >= 5 ? stepActiveColor : stepInactiveColor }}>
+                            6. Claim Membership NFT
+                            {mintStep === 5 && progress}
+                            {mintStep > 5 && checkmark}
+                        </Typography>
+
+                        <Typography variant="h5" sx={{ color: mintStep >= 6 ? stepActiveColor : stepInactiveColor }}>
+                            7. Wait For NFT Transfer Confirmation
+                            {mintStep === 6 && progress}
+                            {mintStep > 6 && checkmark}
+                        </Typography>
+
+                        <Typography variant="body1" sx={{ color: 'gold' }}>
+                            <strong>Please do not close this tab</strong>
                         </Typography>
                     </Stack>
                 </Paper>
