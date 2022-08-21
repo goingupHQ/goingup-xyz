@@ -25,7 +25,7 @@ function DatePicker({
 				<Input
 					placeholder={placeholder}
 					// value={value}
-					// onChange={onChange}
+					onChange={onChange}
 					type="date"
 					// max={started && new Date().toString()}
                     // min={ended}

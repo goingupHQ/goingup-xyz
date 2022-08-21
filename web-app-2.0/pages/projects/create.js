@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Grid,
@@ -41,6 +42,8 @@ export default function CreateProject(props) {
     boxShadow: 24,
     p: 4,
   };
+
+  console.log(started, ended)
 
   return (
     <>
@@ -100,7 +103,7 @@ export default function CreateProject(props) {
               </Grid>
             </Box>
           </Modal>
-          <Grid spacing={{ xs: 2, md: 3 }}>
+          <Grid spacing="16px">
             {" "}
             {tags.map((tag, id) => (
               <Button
@@ -108,20 +111,42 @@ export default function CreateProject(props) {
                 p="0.5rem"
                 variant="outlined"
                 onClick={() =>      setTags(tags.filter(item => item !== tag))}
+                marginLeft="8px"
               >
                 <Typography variant="h3">{tag}</Typography>
               </Button>
             ))}
           </Grid>
 
-          
-      <DatePicker
+      <Stack
+        p={1}
+        border={new Date(ended) <= new Date(started) ? "2px solid red" : "none"}
+        borderRadius="1rem"
+        spacing="16px"
+      >
+          <DatePicker
         label={`Started`}
         value={started}
-        // onChange={(e) => setStarted(e)}
+        onChange={(e) => setStarted(e.target.value)}
         placeholder={'YYYY-MM-DD'}
       />
 
+      <DatePicker
+        label={`Ended`}
+        value={ended}
+        onChange={(e) => setEnded(e.target.value)}
+        placeholder={'YYYY-MM-DD'}
+      />
+         {new Date(ended) <= new Date(started) && (
+        <Alert variant="filled" severity="error">
+          End date must be after start date
+      </Alert>
+      )}
+
+      </Stack> 
+    
+
+   
         </Stack>
       </Stack>
     </>

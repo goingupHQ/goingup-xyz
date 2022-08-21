@@ -71,7 +71,7 @@ export default function Header(props) {
                                 </Box>
                                 <Box sx={{ marginLeft: '16px !important' }}>
                                 <ConnectButton
-                                chainStatus={"none"}
+                                chainStatus={"icon"}
                                 showBalance={{
                                     smallScreen: false,
                                     largeScreen: true,
