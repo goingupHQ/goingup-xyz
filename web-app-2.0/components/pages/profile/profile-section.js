@@ -69,6 +69,17 @@ const ProfileSection = (props) => {
                                                     padding: "3px",
                                                 }}
                                             >
+                                                <Box 
+                                                    sx={{
+                                                        backgroundColor: app.mode === "dark"
+                                                        ? "#121E28"
+                                                        : "#FFFFFF",
+                                                        borderRadius: '50%',
+                                                        padding: { xs: '17px', md: 'none'},
+                                                        position: "absolute",
+                                                        marginTop: '8px',
+                                                        marginLeft: '8px'
+                                                    }}/>
                                                 <CircularProgress
                                                     size={50}
                                                     variant='determinate'
