@@ -12,7 +12,8 @@ import React, { useState, useContext } from "react";
 import { useAccount, useNetwork, useContract, useSigner } from "wagmi";
 import { mumbaiAddress } from "../../contexts/projects-context";
 import { AppContext } from "../../contexts/app-context";
-import { TagFacesSharp } from "@mui/icons-material";
+import DatePicker from "../../components/ui/datepicker";
+
 
 export default function CreateProject(props) {
   const app = useContext(AppContext);
@@ -47,7 +48,7 @@ export default function CreateProject(props) {
         <title>Going UP - Create A Project</title>
       </Head>
 
-      <Stack spacing="2rem">
+      <Stack spacing="2rem" justify="center">
         <Typography variant="h1">Create A Project</Typography>
 
         <Stack width={{xs: "100%", md: "50%"}} spacing="0.75rem">
@@ -67,6 +68,8 @@ export default function CreateProject(props) {
             id="outlined-basic"
             label="Description"
             variant="outlined"
+            multiline
+          rows={4}
           />
         </Stack>
 
@@ -85,10 +88,7 @@ export default function CreateProject(props) {
                   <Button
                     key={occupation.id}
                     p="0.5rem"
-                    sx={{
-                        border: "1px solid",
-                        borderColor: "black"
-                      }}
+                    variant="contained"
                     onClick={() => !tags.includes(occupation.text) && setTags([...tags, occupation.text])}
                     margin={1}
                   >
@@ -106,16 +106,22 @@ export default function CreateProject(props) {
               <Button
                 key={id}
                 p="0.5rem"
-                sx={{
-                  border: "1px solid",
-                  borderColor: app.mode === "light" ? "black" : "white",
-                }}
+                variant="outlined"
                 onClick={() =>      setTags(tags.filter(item => item !== tag))}
               >
                 <Typography variant="h3">{tag}</Typography>
               </Button>
             ))}
           </Grid>
+
+          
+      <DatePicker
+        label={`Started`}
+        value={started}
+        // onChange={(e) => setStarted(e)}
+        placeholder={'YYYY-MM-DD'}
+      />
+
         </Stack>
       </Stack>
     </>

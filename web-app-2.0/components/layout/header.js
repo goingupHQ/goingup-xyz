@@ -69,7 +69,7 @@ export default function Header(props) {
                                         {drawerOpen ? <CloseIcon /> : <MenuIcon />}
                                     </IconButton>
                                 </Box>
-                                <Box sx={{ display: { xs: 'initial', md: 'none' }, marginLeft: '0px !important' }}>
+                                <Box sx={{ marginLeft: '16px !important' }}>
                                 <ConnectButton
                                 chainStatus={"none"}
                                 showBalance={{

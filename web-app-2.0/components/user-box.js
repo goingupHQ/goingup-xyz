@@ -165,6 +165,17 @@ export default function UserBox () {
                     </UserBoxText>
                 </Box>
             </UserBoxButton> */}
+                         <ConnectButton
+                                chainStatus={"none"}
+                                showBalance={{
+                                    smallScreen: false,
+                                    largeScreen: true,
+                                }}
+                                accountStatus={{
+                                    smallScreen: "avatar",
+                                    largeScreen: "full",
+                                }}
+                                />
             <Popover
                 disableScrollLock
                 anchorEl={ref.current}
