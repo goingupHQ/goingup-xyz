@@ -143,6 +143,7 @@ const ProfileSection = (props) => {
                                         <Avatar
                                             src={account.profilePhoto}
                                             sx={{
+                                                marginLeft: '-15px',
                                                 width: { xs: 60, md: 114 },
                                                 height: { xs: 60, md: 114 },
                                             }}
@@ -215,6 +216,7 @@ const ProfileSection = (props) => {
                                     md: "flex-end",
                                 }}
                                 marginY={"15px"}
+                                marginLeft={'-8px'}
                             >
                                 <ContactsAndIntegrations
                                     account={account}
@@ -252,15 +254,16 @@ const ProfileSection = (props) => {
                                         borderRadius: "4px",
 
                                         paddingY: { md: "5px" },
+                                        paddingBottom: '3px'
                                     }}
                                 >
-                                    <Typography variant='sh2' paddingX={3}>
+                                    <Typography variant='sh2'sx={{marginX: { xs: '20px', md: '42px'}}}>
                                         {account.name
                                             .toLowerCase()
                                             .replace(/\s/g, "") + ".eth"}
                                     </Typography>
                                 </Box>
-                                <Typography variant='sh2' paddingX={4}>
+                                <Typography variant='sh2' sx={{marginX: { xs: '27px', md: '42px'}}}>
                                     {truncateEthAddress(account.address)}
                                 </Typography>
                             </Stack>
