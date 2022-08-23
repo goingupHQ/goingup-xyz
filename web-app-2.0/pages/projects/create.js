@@ -13,16 +13,13 @@ import {
 import Head from "next/head";
 import React, { useState, useContext } from "react";
 import {
-  useContractWrite,
-  usePrepareContractWrite,
   useContract,
   useSigner
 } from "wagmi";
 import { mumbaiAddress, projectsAbi } from "../../contexts/projects-context";
 import { AppContext } from "../../contexts/app-context";
 import DatePicker from "../../components/ui/datepicker";
-import {BigNumber, parseUnits} from 'ethers';
-import { formatUnits } from "ethers/lib/utils";
+import {BigNumber} from 'ethers';
 
 export default function CreateProject(props) {
   const app = useContext(AppContext);
@@ -52,16 +49,6 @@ export default function CreateProject(props) {
     p: 4,
   };
 
-  // const createProject = useContractWrite({
-  //   addressOrName: mumbaiAddress,
-  //   contractInterface: projectsAbi,
-  //   functionName: "create",
-  //   chainId: 80001,
-  //   args: [name, description, started, ended, primaryUrl, tags, isPrivate],
-  //   mode: 'recklesslyUnprepared',
-  //   watch: true,
-  // });
-
   const { data: signer } = useSigner();
 
   const contract = useContract({
@@ -73,9 +60,6 @@ export default function CreateProject(props) {
     watch: true,
   });
 
-  // const { data, isLoading, isSuccess, write } = useContractWrite(config);
-
-  console.log(started && BigNumber.from(parseInt(started)).toString());
   return (
     <>
       <Head>
