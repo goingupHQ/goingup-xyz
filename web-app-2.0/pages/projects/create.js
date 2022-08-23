@@ -202,7 +202,7 @@ export default function CreateProject(props) {
         </Stack>
 
 
-        <Button variant="contained" onClick={() => contract.create(name, description, started, ended, primaryUrl, tags, isPrivate)}>
+        <Button variant="contained" onClick={() => contract.create(name, description, started, ended, primaryUrl, JSON.stringify(tags), isPrivate)}>
           Create Project
         </Button>
         {/* {error && (
