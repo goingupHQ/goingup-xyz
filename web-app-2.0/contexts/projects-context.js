@@ -6,6 +6,7 @@ console.log('Projects ABI', artifact.abi);
 export const ProjectsContext = createContext();
 
 export const mumbaiAddress = '0xe0b5f0c73754347E1d2E3c84382970D7A70d666B';
+export const projectsAbi = artifact.abi;
 
 export const ProjectsProvider = ({ children }) => {
     const wallet = useContext(WalletContext);
