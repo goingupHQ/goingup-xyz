@@ -118,7 +118,7 @@ export default function UserBox () {
                 startIcon={
                     <>
                         {wallet.address === null &&
-                        <Box sx={{ paddingLeft: '4px', paddingTop: '10px'}}>
+                        <Box sx={{ paddingLeft: '4px', paddingTop: '10px', display: {xs: 'none', md: 'initial'}}}>
                         <CollaboratorsIcon color={theme.palette.text.main} />
                         {/* <Avatar variant="rounded" /> */}
                         </Box>
