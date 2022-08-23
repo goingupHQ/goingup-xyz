@@ -15,8 +15,9 @@ import { WagmiConfig, createClient, configureChains } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import "@rainbow-me/rainbowkit/styles.css";
-
 import { getDefaultWallets } from "@rainbow-me/rainbowkit";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 const polygonMumbai = {
   id: 80001,
@@ -72,19 +73,21 @@ const wagmiClient = createClient({
 
 function App({ Component, pageProps }) {
   return (
-    <WagmiConfig client={wagmiClient}>
-      <SnackbarProvider maxSnack={7} preventDuplicate>
-        <AppProvider>
-          <WalletProvider>
-            <ProjectsProvider>
-              <Layout chains={chains}>
-                <Component {...pageProps} />
-              </Layout>
-            </ProjectsProvider>
-          </WalletProvider>
-        </AppProvider>
-      </SnackbarProvider>
-    </WagmiConfig>
+    <LocalizationProvider dateAdapter={AdapterMoment}>
+      <WagmiConfig client={wagmiClient}>
+        <SnackbarProvider maxSnack={7} preventDuplicate>
+          <AppProvider>
+            <WalletProvider>
+              <ProjectsProvider>
+                <Layout chains={chains}>
+                  <Component {...pageProps} />
+                </Layout>
+              </ProjectsProvider>
+            </WalletProvider>
+          </AppProvider>
+        </SnackbarProvider>
+      </WagmiConfig>
+    </LocalizationProvider>
   );
 }
 
