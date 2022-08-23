@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { WalletContext } from './wallet-context';
 import artifact from '../artifacts/GoingUpProjects.json';
-console.log('Projects ABI', artifact.abi);
+import { ethers } from 'ethers';
+import moment from 'moment';
 
 export const ProjectsContext = createContext();
 
@@ -67,11 +68,11 @@ export const ProjectsProvider = ({ children }) => {
         setIsCorrectNetwork(wallet.network == contractNetwork);
     }, [wallet]);
 
-    console.log(wallet.network, contractNetwork);
     const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network == contractNetwork);
 
     const getContract = () => {
         const contract = new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
+        return contract;
     }
 
     const getProjects = async () => {
@@ -79,14 +80,22 @@ export const ProjectsProvider = ({ children }) => {
     }
 
     const createProject = async (name, description, started, ended, primaryUrl, tags, isPrivate) => {
-        const contract = get
+        const contract = getContract();
+
+        const createPrice = await contract.price();
+        const startedUnix = started ? moment(started).unix() : 0;
+        const endedUnix = ended ? moment(ended).unix() : 0;
+        const tx = await contract.create(name, description, startedUnix, endedUnix, primaryUrl, tags?.join(', '), isPrivate, { value: createPrice });
+
+        return tx;
     }
 
     const value = {
         networkParams,
         isCorrectNetwork,
         switchToCorrectNetwork,
-        getProjects
+        getProjects,
+        createProject
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };
