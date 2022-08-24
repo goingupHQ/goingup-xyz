@@ -60,9 +60,11 @@ export default function CreateProject(props) {
 
         try {
             enqueueSnackbar('Creating transactions, please approve on your wallet', { variant: 'info', persist: true });
+
             const createTx = await projectsCtx.createProject(
                 form
             );
+            console.log(form)
 
             closeSnackbar();
 
@@ -173,7 +175,7 @@ export default function CreateProject(props) {
                             // id="tags-filled"
                             options={[]}
                             // defaultValue={[top100Films[13].title]}
-                            onChange={(newValue) => {setForm({...form, tags: newValue}), console.log(newValue)}}
+                            onChange={(e, value) => {setForm({...form, tags: value}), console.log(value)}}
                             freeSolo
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (
@@ -187,7 +189,7 @@ export default function CreateProject(props) {
                     <Grid item xs={12}>
                         <FormControlLabel
                             label="Is this a private project?"
-                            control={<Checkbox checked={isPrivate} onChange={(e) => setForm({...form, isPrivate: e.target.checked})} />}
+                            control={<Checkbox checked={form.isPrivate} onChange={(e) => setForm({...form, isPrivate: e.target.checked})} />}
                         />
                     </Grid>
 
