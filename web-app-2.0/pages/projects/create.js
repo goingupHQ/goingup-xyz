@@ -64,7 +64,6 @@ export default function CreateProject(props) {
             const createTx = await projectsCtx.createProject(
                 form
             );
-            console.log(form)
 
             closeSnackbar();
 
@@ -106,7 +105,7 @@ export default function CreateProject(props) {
                 <title>Going UP - Create A Project</title>
             </Head>
 
-            <Stack spacing={1} sx={{ width: { xs: '100%', md: '60%', lg: '50%', xl: '40%' } }}>
+            <Stack mt="4rem"spacing={1} sx={{ width: { xs: '100%', md: '60%', lg: '50%', xl: '40%' } }}>
                 <Typography variant="h1" sx={{ paddingLeft: 2 }}>
                     Create A Project
                 </Typography>

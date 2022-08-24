@@ -1,10 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { WalletContext } from "./wallet-context";
 import artifact from "../artifacts/GoingUpProjects.json";
-import moment from "moment";
-import { useSigner, useContract, useContractEvent } from "wagmi";
+import { useSigner, useContract, useProvider } from "wagmi";
 import { createProjectData } from "../components/validation-tools/validateProjectData";
-import { BigNumber } from "ethers";
 
 export const ProjectsContext = createContext();
 
@@ -77,26 +75,28 @@ export const ProjectsProvider = ({ children }) => {
     contractInterface: artifact.abi,
     signerOrProvider: signer,
   });
+  const provider = useProvider();
 
   const getProjects = async () => {
-    const projects = await contract.filters.Create("0x68D99e952cF3D4faAa6411C1953979F54552A8F7", null);
-    console.log(projects);
+
+    const projects = await contract.filters.Create("0x68D99e952cF3D4faAa6411C1953979F54552A8F7");
+    console.log(await provider.getLogs(projects.topics[1]));
+
+    // console.log(projects);
 
     // return [];
   };
 
   const createProject = async (form) => {
-    // console.log(form);
-    getProjects();
+// getProjects()
+    const createPrice = await contract.price();
+    // console.log(createPrice);
 
-    // const createPrice = await contract.price();
-    // const startedUnix = started ? moment(started).unix() : 0;
-    // const endedUnix = ended ? moment(ended).unix() : 0;
+    const {name, description, started, ended, tags, primaryUrl, isPrivate} = await createProjectData(form);
 
-    const data = await createProjectData(form);
-    console.log(data);
+    console.log(form);
 
-    // const tx = await contract.create(data, { value: createPrice });
+    // const tx = await contract.create(name, description, started, ended, tags, primaryUrl, isPrivate, { value: createPrice });
 
     // return tx;
   };
@@ -107,7 +107,7 @@ export const ProjectsProvider = ({ children }) => {
     switchToCorrectNetwork,
     getProjects,
     createProject,
-    getProjects,
+    getProjects
   };
   return (
     <ProjectsContext.Provider value={value}>

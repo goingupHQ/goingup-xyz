@@ -29,13 +29,13 @@ export default function CreateProject(props) {
     const app = useContext(AppContext);
     const projectsCtx = useContext(ProjectsContext);
 
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [started, setStarted] = useState(null);
-    const [ended, setEnded] = useState(null);
-    const [primaryUrl, setPrimaryUrl] = useState('');
-    const [tags, setTags] = useState([]);
-    const [isPrivate, setIsPrivate] = useState('');
+    // const [name, setName] = useState('');
+    // const [description, setDescription] = useState('');
+    // const [started, setStarted] = useState(null);
+    // const [ended, setEnded] = useState(null);
+    // const [primaryUrl, setPrimaryUrl] = useState('');
+    // const [tags, setTags] = useState([]);
+    // const [isPrivate, setIsPrivate] = useState('');
 
     const [form, setForm] = useState({
         name: '',
