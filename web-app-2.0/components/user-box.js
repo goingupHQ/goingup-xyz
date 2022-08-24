@@ -121,7 +121,7 @@ export default function UserBox () {
                         {wallet.address === null &&
                         <Box sx={{ paddingLeft: '4px', paddingTop: '10px', display: {xs: 'none', md: 'initial'}}}>
                         <CollaboratorsIcon color={theme.palette.text.main} />
-                        {/* <Avatar variant="rounded" /> */}
+                        {/* <Avatar variant="rounded" /> 
                         </Box>
                         }
 
@@ -131,11 +131,9 @@ export default function UserBox () {
                             </Box>
                         }
                     </>
-                }
                 endIcon={
                     <ChevronDownIcon color={theme.palette.text.main} />
-                }
-            >
+                                
                 <Box
                     display="flex"
                     flex={1}
