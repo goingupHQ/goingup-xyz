@@ -249,44 +249,44 @@ export default function Purchase() {
             <Backdrop open={minting}>
                 <Paper sx={{ padding: 6 }}>
                     <Stack direction="column" spacing={3} alignItems="center">
-                        <Typography variant="h5" sx={{ color: mintStep >= 0 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 0 ? stepActiveColor : stepInactiveColor }}>
                             1. Connect User Wallet
                             {userAddress ? ` (${truncateEthAddress(userAddress)})` : ''}
                             {mintStep === 0 && progress}
                             {mintStep > 0 && checkmark}
                         </Typography>
 
-                        <Typography variant="h5" sx={{ color: mintStep >= 1 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 1 ? stepActiveColor : stepInactiveColor }}>
                             2. Check Network
                             {mintStep === 1 && progress}
                             {mintStep > 1 && checkmark}
                         </Typography>
 
-                        <Typography variant="h5" sx={{ color: mintStep >= 2 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 2 ? stepActiveColor : stepInactiveColor }}>
                             3. Check Available Tokens
                             {mintStep === 2 && progress}
                             {mintStep > 2 && checkmark}
                         </Typography>
 
-                        <Typography variant="h5" sx={{ color: mintStep >= 3 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 3 ? stepActiveColor : stepInactiveColor }}>
                             4. Send 2.2 ETH Payment
                             {mintStep === 3 && progress}
                             {mintStep > 3 && checkmark}
                         </Typography>
 
-                        <Typography variant="h5" sx={{ color: mintStep >= 4 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 4 ? stepActiveColor : stepInactiveColor }}>
                             5. Wait For Payment Confirmation
                             {mintStep === 4 && progress}
                             {mintStep > 4 && checkmark}
                         </Typography>
 
-                        <Typography variant="h5" sx={{ color: mintStep >= 5 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 5 ? stepActiveColor : stepInactiveColor }}>
                             6. Claim Membership NFT
                             {mintStep === 5 && progress}
                             {mintStep > 5 && checkmark}
                         </Typography>
 
-                        <Typography variant="h5" sx={{ color: mintStep >= 6 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 6 ? stepActiveColor : stepInactiveColor }}>
                             7. Wait For NFT Transfer Confirmation
                             {mintStep === 6 && progress}
                             {mintStep > 6 && checkmark}
