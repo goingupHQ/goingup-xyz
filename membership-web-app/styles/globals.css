@@ -1,0 +1,29 @@
+@font-face {
+    font-family: 'Syne';
+    src: url('/font/Syne-Regular.otf') format('opentype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Syne';
+    src: url('/font/Syne-Bold.otf') format('opentype');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Syne';
+    src: url('/font/Syne-Extra.otf') format('opentype');
+    font-weight: 900;
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Syne;
+    background-color: #111921;
+}
+
+.uYscM, .web3modal-modal-lightbox {
+    z-index: 10000 !important;
+}

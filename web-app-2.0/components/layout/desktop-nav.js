@@ -35,7 +35,7 @@ export default function DesktopNav(props) {
 
     return (
         <>
-            <Stack direction="row" spacing={3} sx={{ display: { xs: 'none', md: 'initial' }, margin: '10px 25px' }}>
+            <Stack direction="row" spacing={3} sx={{ display: { xs: 'none', md: 'initial' }, margin: { xs: '10px 25px', lg: '10px 105px' } }}>
                 <Link href="/">
                     <Button
                         sx={pathname === '/' ? activeButtonStyle : inactiveButtonStyle}

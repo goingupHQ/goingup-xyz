@@ -1,13 +1,12 @@
 import {ethers} from 'ethers';
-import { dbClient } from './_get-db-client';
+import { getDb } from './_get-db-client';
 
 export default async function handler(req, res) {
     let address = req.query.address;
 
     if (ethers.utils.isAddress(address)) address = ethers.utils.getAddress(address);
 
-    await dbClient.connect();
-    const db = dbClient.db('main');
+    const db = await getDb();
     const accounts = db.collection('accounts');
     const account = await accounts.findOne({ address });
 
