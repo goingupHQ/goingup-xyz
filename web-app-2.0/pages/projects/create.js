@@ -174,7 +174,7 @@ export default function CreateProject(props) {
                             // id="tags-filled"
                             options={[]}
                             // defaultValue={[top100Films[13].title]}
-                            onChange={(e, value) => {setForm({...form, tags: value}), console.log(value)}}
+                            onChange={(e, value) => {setForm({...form, tags: value})}}
                             freeSolo
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (

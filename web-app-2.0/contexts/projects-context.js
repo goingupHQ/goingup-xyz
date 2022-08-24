@@ -88,17 +88,12 @@ export const ProjectsProvider = ({ children }) => {
   };
 
   const createProject = async (form) => {
-// getProjects()
     const createPrice = await contract.price();
-    // console.log(createPrice);
-
     const {name, description, started, ended, tags, primaryUrl, isPrivate} = await createProjectData(form);
 
-    console.log(form);
+    const tx = await contract.create(name, description, started, ended, tags, primaryUrl, isPrivate, { value: createPrice });
 
-    // const tx = await contract.create(name, description, started, ended, tags, primaryUrl, isPrivate, { value: createPrice });
-
-    // return tx;
+    return tx;
   };
 
   const value = {
