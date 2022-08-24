@@ -38,13 +38,13 @@ export default function Purchase() {
     const [fetchedAvailableSupply, setFetchedAvailableSupply] = useState(false);
 
     // mainnet
-    // const contractAddress = '0x9337051505436D20FDCf7E2CE5a733b49d1042bc';
-    // const defaultProvider = ethers.providers.getDefaultProvider('homestead');
-    // const requiredNetwork = 1;
+    const contractAddress = '0x9337051505436D20FDCf7E2CE5a733b49d1042bc';
+    const requiredNetwork = 1;
 
     // goerli
-    const contractAddress = '0x492a13A2624140c75025be03CD1e46ecF15450F5';
-    const requiredNetwork = 5;
+    // const contractAddress = '0x492a13A2624140c75025be03CD1e46ecF15450F5';
+    // const requiredNetwork = 5;
+
     const defaultProvider = ethers.providers.getDefaultProvider(requiredNetwork);
 
     const abi = [
