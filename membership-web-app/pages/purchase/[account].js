@@ -141,7 +141,7 @@ export default function Purchase() {
 
             setMintStep(4);
             await sleep(1000);
-            const receipt = await tx.wait();
+            const receipt = await provider.waitForTransaction(tx.hash);
 
             setMintStep(5);
             await sleep(1000);
@@ -150,12 +150,13 @@ export default function Purchase() {
             );
 
             if (claimResponse.status !== 200) throw 'Something went wrong. Please contact GoingUP support.';
-            const result = await claimResponse.json();
+            const result = await claimResponse.json(); console.log(result)
             const claimTx = await provider.getTransaction(result.hash);
 
             setMintStep(6);
             await sleep(1000);
-            const claimReceipt = await claimTx.wait();
+            // const claimReceipt = await claimTx.wait();
+            const claimReceipt = await provider.waitForTransaction(result.hash);
 
             setMintStep(7);
         } catch (err) {
