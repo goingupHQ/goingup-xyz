@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ProjectsContext } from '../../../contexts/projects-context';
 import { Backdrop, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import {useSnackbar} from 'notistack';
 
 export default function ProjectsList(props) {
     const router = useRouter();
     const projectsContext = useContext(ProjectsContext);
     const [loading, setLoading] = useState(true);
     const [projects, setProjects] = useState([]);
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const load = async () => {
         setLoading(true);

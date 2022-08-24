@@ -19,12 +19,8 @@ import {
 import { LoadingButton } from '@mui/lab';
 import Head from 'next/head';
 import React, { useState, useContext } from 'react';
-import { useContract, useSigner } from 'wagmi';
-import { mumbaiAddress, projectsAbi, ProjectsContext } from '../../contexts/projects-context';
+import { ProjectsContext } from '../../contexts/projects-context';
 import { AppContext } from '../../contexts/app-context';
-import DatePicker from '../../components/ui/datepicker';
-import { BigNumber } from 'ethers';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { useSnackbar } from 'notistack';
 import { useRouter } from 'next/router';
@@ -41,6 +37,16 @@ export default function CreateProject(props) {
     const [tags, setTags] = useState([]);
     const [isPrivate, setIsPrivate] = useState('');
 
+    const [form, setForm] = useState({
+        name: '',
+        description: '',
+        started: null,
+        ended: null,
+        primaryUrl: '',
+        tags: [],
+        isPrivate: false,
+    })
+
     const [creating, setCreating] = useState(false);
     const [tx, setTx] = useState(null);
 
@@ -55,14 +61,9 @@ export default function CreateProject(props) {
         try {
             enqueueSnackbar('Creating transactions, please approve on your wallet', { variant: 'info', persist: true });
             const createTx = await projectsCtx.createProject(
-                name,
-                description,
-                started,
-                ended,
-                primaryUrl,
-                tags,
-                isPrivate
+                form
             );
+
             closeSnackbar();
 
             enqueueSnackbar('Waiting for transaction confirmations', {
@@ -111,19 +112,19 @@ export default function CreateProject(props) {
                 <Grid container columnSpacing={2} rowSpacing={2} sx={{ padding: 0 }}>
                     <Grid item xs={12}>
                         <TextField
-                            onChange={(e) => setName(e.target.value)}
+                            onChange={(e) => setForm({...form, name: e.target.value})}
                             id="outlined-basic"
                             label="Project Name"
                             variant="outlined"
-                            value={name}
+                            value={form.name}
                             fullWidth
                         />
                     </Grid>
 
                     <Grid item xs={12}>
                         <TextField
-                            onChange={(e) => setDescription(e.target.value)}
-                            value={description}
+                            onChange={(e) => setForm({...form, description: e.target.value})}
+                            value={form.description}
                             id="outlined-basic"
                             label="Project Description"
                             variant="outlined"
@@ -138,8 +139,8 @@ export default function CreateProject(props) {
                         <DesktopDatePicker
                             label="Started"
                             inputFormat="MM/DD/yyyy"
-                            value={started}
-                            onChange={(newValue) => setStarted(newValue)}
+                            value={form.started}
+                            onChange={(e) => setForm({...form, started: e})}
                             renderInput={(params) => <TextField {...params} autoComplete={false} fullWidth />}
                         />
                     </Grid>
@@ -148,16 +149,16 @@ export default function CreateProject(props) {
                         <DesktopDatePicker
                             label="Ended"
                             inputFormat="MM/DD/yyyy"
-                            value={ended}
-                            onChange={(newValue) => setEnded(newValue)}
+                            value={form.ended}
+                            onChange={(e) => setForm({...form, ended: e})}
                             renderInput={(params) => <TextField {...params} autoComplete={false} fullWidth />}
                         />
                     </Grid>
 
                     <Grid item xs={12}>
                         <TextField
-                            onChange={(e) => setPrimaryUrl(e.target.value)}
-                            value={primaryUrl}
+                            onChange={(e) => setForm({...form, primaryUrl: e.target.value})}
+                            value={form.primaryUrl}
                             id="outlined-basic"
                             label="Primary URL"
                             variant="outlined"
@@ -172,7 +173,7 @@ export default function CreateProject(props) {
                             // id="tags-filled"
                             options={[]}
                             // defaultValue={[top100Films[13].title]}
-                            onChange={(e, value) => setTags(value)}
+                            onChange={(newValue) => {setForm({...form, tags: newValue}), console.log(newValue)}}
                             freeSolo
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (
@@ -186,12 +187,12 @@ export default function CreateProject(props) {
                     <Grid item xs={12}>
                         <FormControlLabel
                             label="Is this a private project?"
-                            control={<Checkbox checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} />}
+                            control={<Checkbox checked={isPrivate} onChange={(e) => setForm({...form, isPrivate: e.target.checked})} />}
                         />
                     </Grid>
 
                     <Grid item xs={12}>
-                        <LoadingButton variant="contained" onClick={createProject}>
+                        <LoadingButton variant="contained" onClick={() => createProject()}>
                             Create Project
                         </LoadingButton>
                     </Grid>

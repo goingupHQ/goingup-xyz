@@ -1,17 +1,16 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { WalletContext } from './wallet-context';
 import artifact from '../artifacts/GoingUpProjects.json';
-import { ethers } from 'ethers';
 import moment from 'moment';
+import { useSigner, useContract} from 'wagmi'
+import {createProjectData} from '../components/validation-tools/validateProjectData';
 
 export const ProjectsContext = createContext();
-
-export const mumbaiAddress = '0xe0b5f0c73754347E1d2E3c84382970D7A70d666B';
-export const projectsAbi = artifact.abi;
 
 export const ProjectsProvider = ({ children }) => {
     const wallet = useContext(WalletContext);
 
+    const {data: signer} = useSigner()
     // polygon mumbai testnet
     const contractAddress = '0xe0b5f0c73754347E1d2E3c84382970D7A70d666B';
     const contractNetwork = 80001;
@@ -70,22 +69,28 @@ export const ProjectsProvider = ({ children }) => {
 
     const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network == contractNetwork);
 
-    const getContract = () => {
-        const contract = new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
-        return contract;
-    }
+    const contract = useContract({addressOrName: contractAddress, contractInterface: artifact.abi, signerOrProvider: signer});
 
     const getProjects = async () => {
-        return [];
+        console.log(contract)
+        const projects = await contract.projects(0x0c9ccbada1411687f6ffa7df317af35b16b1fe0c);
+        // return [];
     }
 
-    const createProject = async (name, description, started, ended, primaryUrl, tags, isPrivate) => {
-        const contract = getContract();
+    const createProject = async (form) => {
+        console.log(form);
 
-        const createPrice = await contract.price();
-        const startedUnix = started ? moment(started).unix() : 0;
-        const endedUnix = ended ? moment(ended).unix() : 0;
-        const tx = await contract.create(name, description, startedUnix, endedUnix, primaryUrl, tags?.join(', '), isPrivate, { value: createPrice });
+        // const createPrice = await contract.price();
+        // const startedUnix = started ? moment(started).unix() : 0;
+        // const endedUnix = ended ? moment(ended).unix() : 0;
+
+        const data = await createProjectData(
+		    form
+		);
+        console.log(data);
+
+
+        const tx = await contract.create(data, { value: createPrice });
 
         return tx;
     }
@@ -95,7 +100,8 @@ export const ProjectsProvider = ({ children }) => {
         isCorrectNetwork,
         switchToCorrectNetwork,
         getProjects,
-        createProject
+        createProject,
+        getProjects
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };
