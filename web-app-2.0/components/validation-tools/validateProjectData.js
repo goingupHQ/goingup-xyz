@@ -7,7 +7,7 @@ export const createProjectData = async (form) => {
     started: null,
     ended: null,
     primaryUrl: '',
-    tags: [],
+    tags: '',
     isPrivate: false,
 }];
 
@@ -19,33 +19,42 @@ export const createProjectData = async (form) => {
     req.description = form.description;
   }
 
-  if (new Date(form.startedUnix).getTime() > 0) {
-    req.startedUnix = form.startedUnix;
-  }
-
-  if (new Date(form.startedUnix).getTime() > 0) {
-    req.endedUnix = form.endedUnix;
-  }
-
-  if (form.tags.length !== 0) {
-    let newTags = form.tags?.join(", ");
-
-    req.tags = newTags;
+  if (moment(form.started, "MM/DD/YYYY", true).isValid()) {
+	const startedUnix = moment(form.started).unix();
+    req.started = startedUnix;
   } else {
-    req.tags = null;
+	req.ended = 0;
   }
+
+  if (moment(form.ended, "MM/DD/YYYY", true).isValid()) {
+	const endedUnix = moment(form.ended).unix();
+    req.ended = endedUnix;
+  } else {
+	req.ended = 0;
+  }
+
+  if (form.tags.length > 0) {
+    let newTags = form.tags?.join(", ");
+    req.tags = newTags;
+  } 
+
+  if (typeof form.primaryUrl === "string") {
+	const urlPattern = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+
+	req.primaryUrl = form.primaryUrl;
+  } 
 
   req.isPrivate = form.isPrivate;
 
-  return (
-    req.name,
-    req.description,
-    req.started,
-    req.ended,
-    req.primaryUrl,
-    req.tags,
-    req.isPrivate
-  );
+  return {
+    name: req.name,
+    description: req.description,
+    started: req.started,
+    ended: req.ended,
+	tags: req.tags,
+    primaryUrl: req.primaryUrl,
+    isPrivate: req.isPrivate
+  }
 };
 
 export const updateProjectData = async (newForm, oldForm) => {
