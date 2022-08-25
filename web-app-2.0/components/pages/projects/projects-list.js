@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ProjectsContext } from '../../../contexts/projects-context';
-import { Backdrop, Button, CircularProgress, Stack, Typography } from '@mui/material';
+import { Backdrop, Button, CircularProgress, Stack, Typography, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import {useSnackbar} from 'notistack';
 import { useAccount } from 'wagmi';
@@ -34,8 +34,8 @@ export default function ProjectsList(props) {
         <>
             {!loading && (
                 <>
-                    {projects.length === 0 && (
-                        <Stack justifyContent="center" alignItems="center" direction="column" spacing={4}>
+                    {projects.length === 0 ? (
+                        <Stack mt={5} justifyContent="center" alignItems="center" direction="column" spacing={4}>
                             <Typography variant="h2">
                                 You have not created a project yet
                             </Typography>
@@ -55,9 +55,23 @@ export default function ProjectsList(props) {
                                 Create your first Project
                             </Button>
                         </Stack>
+                    ) : (
+                        <>
+                        {projects.map((project) => {
+                           const tags = project.tags.split(", ")
+                        return (
+                            <Grid item mt={5} py={5} backgroundColor="#19222C" borderRadius="8px" w="285px" h="111px">
+                                <Typography variant="h3" color="#FFFFFF">{project.name}</Typography>
+                                {tags.map((tag) => (
+                                    <Typography variant="body1" color="#FFFFFF">{tag}</Typography>
+                                ))}
+                            </Grid>
+                        )})}
+                        </>
                     )}
                 </>
             )}
+
             <Backdrop open={loading}>
                 <CircularProgress />
             </Backdrop>

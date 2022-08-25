@@ -81,8 +81,7 @@ export const ProjectsProvider = ({ children }) => {
   const getProjects = async () => {
     // this api endpoint just returns project ids owned by the user address
     const response = await fetch(`/api/projects/account/${account.address}`);
-    const projectIds = await response.json(); console.log(projectIds);
-
+    const projectIds = await response.json(); 
     const projects = [];
 
     // for each project id, get the project data
@@ -90,8 +89,6 @@ export const ProjectsProvider = ({ children }) => {
       const project = await contract.projects(projectId); // does not work with wagmi
       projects.push(project);
     }
-
-    console.log(projects);
     return projects;
   };
 
