@@ -40,8 +40,7 @@ export const createProjectData = async (form) => {
 
   if (typeof form.primaryUrl === "string") {
 	const urlPattern = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-
-	req.primaryUrl = form.primaryUrl;
+	urlPattern.test(form.primaryUrl) ? req.primaryUrl = form.primaryUrl : req.primaryUrl = null;
   } 
 
   req.isPrivate = form.isPrivate;
