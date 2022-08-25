@@ -15,6 +15,7 @@ import Projects from "../projects";
 import Poaps from "../../components/pages/profile/poaps";
 import AppreciationTokens from "../../components/pages/profile/appreciation-tokens";
 import ProfileSection from "../../components/pages/profile/profile-section";
+import TokensAndPoaps from "../../components/pages/profile/tokens-poaps";
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -53,9 +54,12 @@ function ProfilePage() {
                     <Box
                         justifyContent='center'
                         alignItems='center'
-                        sx={{ marginBottom: '20px', display: { xs: 'flex', md: 'none'} }}
+                        sx={{
+                            marginBottom: "20px",
+                            display: { xs: "flex", md: "none" },
+                        }}
                     >
-                        <Typography variant='h2'>{(account?.name)}</Typography>
+                        <Typography variant='h2'>{account?.name}</Typography>
                     </Box>
                     <Fade in={true} timeout={1000}>
                         <Box fullWidth>
@@ -63,16 +67,21 @@ function ProfilePage() {
                                 account={account}
                                 refresh={getAccount}
                             />
+                            <TokensAndPoaps
+                                account={account}
+                                refresh={getAccount}
+                            />
                             {/* <TopSection
                                 account={account}
                                 refresh={getAccount}
                             /> */}
-                            <Projects account={account} />
-                            <AppreciationTokens
+                            {/* <Projects account={account} /> */}
+                            
+                            {/* <AppreciationTokens
                                 account={account}
                                 refresh={getAccount}
-                            />
-                            <Poaps account={account} refresh={getAccount} />
+                            /> */}
+                            {/* <Poaps account={account} refresh={getAccount} /> */}
                         </Box>
                     </Fade>
                 </>
