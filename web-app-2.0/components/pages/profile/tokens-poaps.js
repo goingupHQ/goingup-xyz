@@ -134,7 +134,7 @@ const TokensAndPoaps = (props) => {
                         }}
                         title={
                             <>
-                                <Typography variant='h1' paddingTop={"30px"} paddingLeft={"30px"}>
+                                <Typography variant='h1' paddingTop={"14px"} paddingLeft={"14px"}>
                                     Tokens &amp; POAPS
                                 </Typography>
                             </>
@@ -148,7 +148,7 @@ const TokensAndPoaps = (props) => {
                         )}
 
                         {!loading && (
-                            <Grid container paddingX={"30px"} wrap='nowrap'>
+                            <Grid container paddingX={"14px"} wrap='nowrap'>
                                 <Grid
                                     xs={12}
                                     md={4}
