@@ -41,9 +41,6 @@ export default function Layout({ children }) {
                     text1: {
                         main: "#FFFFFF",
                     },
-                    text1: {
-                        main: "#4D5F72",
-                    },
                     background1: {
                         main: "#0F151C",
                     },
