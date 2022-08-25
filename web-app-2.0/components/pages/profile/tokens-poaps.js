@@ -134,7 +134,7 @@ const TokensAndPoaps = (props) => {
                         }}
                         title={
                             <>
-                                <Typography variant='h1' padding={"30px"}>
+                                <Typography variant='h1' paddingTop={"30px"} paddingLeft={"30px"}>
                                     Tokens &amp; POAPS
                                 </Typography>
                             </>
