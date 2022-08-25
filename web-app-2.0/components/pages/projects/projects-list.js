@@ -3,6 +3,7 @@ import { ProjectsContext } from '../../../contexts/projects-context';
 import { Backdrop, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import {useSnackbar} from 'notistack';
+import { useAccount } from 'wagmi';
 
 export default function ProjectsList(props) {
     const router = useRouter();
@@ -11,11 +12,14 @@ export default function ProjectsList(props) {
     const [projects, setProjects] = useState([]);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
+    const account = useAccount();
+
     const load = async () => {
         setLoading(true);
         try {
             setProjects(await projectsContext.getProjects());
         } catch (err) {
+            console.log(err);
             enqueueSnackbar('There was an error loading your projects', { variant: 'error' });
         } finally {
             setLoading(false);
@@ -23,8 +27,8 @@ export default function ProjectsList(props) {
     };
 
     useEffect(() => {
-        load();
-    }, []);
+        if (account.isConnected) load();
+    }, [account.isConnected]);
 
     return (
         <>

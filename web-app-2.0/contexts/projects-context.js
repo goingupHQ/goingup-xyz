@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { WalletContext } from "./wallet-context";
 import artifact from "../artifacts/GoingUpProjects.json";
-import { useSigner, useContract, useProvider } from "wagmi";
+import { useSigner, useContract, useProvider, useAccount } from "wagmi";
 import { createProjectData } from "../components/validation-tools/validateProjectData";
+import { constants, ethers } from "ethers";
 
 export const ProjectsContext = createContext();
 
@@ -75,16 +76,23 @@ export const ProjectsProvider = ({ children }) => {
     contractInterface: artifact.abi,
     signerOrProvider: signer,
   });
-  const provider = useProvider();
 
+  const account = useAccount();
   const getProjects = async () => {
+    // this api endpoint just returns project ids owned by the user address
+    const response = await fetch(`/api/projects/account/${account.address}`);
+    const projectIds = await response.json(); console.log(projectIds);
 
-    const projects = await contract.filters.Create("0x68D99e952cF3D4faAa6411C1953979F54552A8F7");
-    console.log(await provider.getLogs(projects.topics[1]));
+    const projects = [];
 
-    // console.log(projects);
+    // for each project id, get the project data
+    for (const projectId of projectIds) {
+      const project = await contract.projects(projectId); // does not work with wagmi
+      projects.push(project);
+    }
 
-    // return [];
+    console.log(projects);
+    return projects;
   };
 
   const createProject = async (form) => {
