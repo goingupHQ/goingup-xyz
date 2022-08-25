@@ -38,13 +38,13 @@ export default function Purchase() {
     const [fetchedAvailableSupply, setFetchedAvailableSupply] = useState(false);
 
     // mainnet
-    // const contractAddress = '0x9337051505436D20FDCf7E2CE5a733b49d1042bc';
-    // const defaultProvider = ethers.providers.getDefaultProvider('homestead');
-    // const requiredNetwork = 1;
+    const contractAddress = '0x9337051505436D20FDCf7E2CE5a733b49d1042bc';
+    const requiredNetwork = 1;
 
     // goerli
-    const contractAddress = '0x492a13A2624140c75025be03CD1e46ecF15450F5';
-    const requiredNetwork = 5;
+    // const contractAddress = '0x492a13A2624140c75025be03CD1e46ecF15450F5';
+    // const requiredNetwork = 5;
+
     const defaultProvider = ethers.providers.getDefaultProvider(requiredNetwork);
 
     const abi = [
@@ -141,7 +141,7 @@ export default function Purchase() {
 
             setMintStep(4);
             await sleep(1000);
-            const receipt = await tx.wait();
+            const receipt = await provider.waitForTransaction(tx.hash);
 
             setMintStep(5);
             await sleep(1000);
@@ -150,12 +150,13 @@ export default function Purchase() {
             );
 
             if (claimResponse.status !== 200) throw 'Something went wrong. Please contact GoingUP support.';
-            const result = await claimResponse.json();
+            const result = await claimResponse.json(); console.log(result)
             const claimTx = await provider.getTransaction(result.hash);
 
             setMintStep(6);
             await sleep(1000);
-            const claimReceipt = await claimTx.wait();
+            // const claimReceipt = await claimTx.wait();
+            const claimReceipt = await provider.waitForTransaction(result.hash);
 
             setMintStep(7);
         } catch (err) {
@@ -249,44 +250,44 @@ export default function Purchase() {
             <Backdrop open={minting}>
                 <Paper sx={{ padding: 6 }}>
                     <Stack direction="column" spacing={3} alignItems="center">
-                        <Typography variant="h5" sx={{ color: mintStep >= 0 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 0 ? stepActiveColor : stepInactiveColor }}>
                             1. Connect User Wallet
                             {userAddress ? ` (${truncateEthAddress(userAddress)})` : ''}
                             {mintStep === 0 && progress}
                             {mintStep > 0 && checkmark}
                         </Typography>
 
-                        <Typography variant="h5" sx={{ color: mintStep >= 1 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 1 ? stepActiveColor : stepInactiveColor }}>
                             2. Check Network
                             {mintStep === 1 && progress}
                             {mintStep > 1 && checkmark}
                         </Typography>
 
-                        <Typography variant="h5" sx={{ color: mintStep >= 2 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 2 ? stepActiveColor : stepInactiveColor }}>
                             3. Check Available Tokens
                             {mintStep === 2 && progress}
                             {mintStep > 2 && checkmark}
                         </Typography>
 
-                        <Typography variant="h5" sx={{ color: mintStep >= 3 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 3 ? stepActiveColor : stepInactiveColor }}>
                             4. Send 2.2 ETH Payment
                             {mintStep === 3 && progress}
                             {mintStep > 3 && checkmark}
                         </Typography>
 
-                        <Typography variant="h5" sx={{ color: mintStep >= 4 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 4 ? stepActiveColor : stepInactiveColor }}>
                             5. Wait For Payment Confirmation
                             {mintStep === 4 && progress}
                             {mintStep > 4 && checkmark}
                         </Typography>
 
-                        <Typography variant="h5" sx={{ color: mintStep >= 5 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 5 ? stepActiveColor : stepInactiveColor }}>
                             6. Claim Membership NFT
                             {mintStep === 5 && progress}
                             {mintStep > 5 && checkmark}
                         </Typography>
 
-                        <Typography variant="h5" sx={{ color: mintStep >= 6 ? stepActiveColor : stepInactiveColor }}>
+                        <Typography variant="h6" sx={{ color: mintStep >= 6 ? stepActiveColor : stepInactiveColor }}>
                             7. Wait For NFT Transfer Confirmation
                             {mintStep === 6 && progress}
                             {mintStep > 6 && checkmark}
