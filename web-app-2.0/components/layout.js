@@ -154,6 +154,13 @@ export default function Layout({ children }) {
                             fontSize: "10px",
                         },
                         fontWeight: "500",
+                    },
+                    mobileh1: {
+                        fontSize: "32px",
+                        "@media (max-width:900px)": {
+                            fontSize: "18px",
+                        },
+                        fontWeight: "bold",
                     }
                 },
                 shape: {
