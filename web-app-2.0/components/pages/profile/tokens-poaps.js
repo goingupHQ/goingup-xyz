@@ -133,11 +133,12 @@ const TokensAndPoaps = (props) => {
                             alignItems: "flex-start",
                         }}
                         title={
-                            <>
-                                <Typography variant='h1' paddingTop={"14px"} paddingLeft={"14px"}>
+                            <Stack direction='row' justifyContent="space-between"  paddingTop={"14px"} paddingX={"14px"}>
+                                <Typography variant='h1'>
                                     Tokens &amp; POAPS
                                 </Typography>
-                            </>
+                                <Button color="primary">View All</Button>
+                            </Stack>
                         }
                     />
                     <CardContentWrapper>
@@ -148,7 +149,7 @@ const TokensAndPoaps = (props) => {
                         )}
 
                         {!loading && (
-                            <Grid container paddingX={"14px"} wrap='nowrap'>
+                            <Grid container paddingX={"14px"} wrap='nowrap' direction={{ xs: 'column', md: 'row' }}>
                                 <Grid
                                     xs={12}
                                     md={4}
