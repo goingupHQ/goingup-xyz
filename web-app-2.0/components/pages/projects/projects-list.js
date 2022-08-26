@@ -75,17 +75,10 @@ export default function ProjectsList(props) {
             </Stack>
           ) : (
             <>
-              <Stack
-                mt={2}
-                direction="column"
-                spacing={4}
-                px={3}
-                sx={{ width: { xs: '100%', md: '60%', lg: '50%', xl: '40%' } }}              >
-                <Typography variant="h2">Projects List</Typography>
                 <Stack
                 mt={5}
-                justifyContent="center"
-                alignItems="center"
+                px={3}
+                alignItems="start"
                 direction="row"
                 spacing={4}
               >
@@ -104,7 +97,7 @@ export default function ProjectsList(props) {
                         {project.name}
                       </Typography>
                       <Stack item flexDirection="row">
-                        {tags.map((tag) => (
+                        {tags.slice(0, 3).map((tag) => (
                           <Stack
                             item
                             flexDirection="row"
@@ -130,7 +123,6 @@ export default function ProjectsList(props) {
                   );
                 })}
                 </Stack>
-              </Stack>
             </>
           )}
         </>
