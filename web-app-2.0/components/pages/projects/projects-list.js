@@ -1,80 +1,144 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ProjectsContext } from '../../../contexts/projects-context';
-import { Backdrop, Button, CircularProgress, Stack, Typography, Grid } from '@mui/material';
-import { useRouter } from 'next/router';
-import {useSnackbar} from 'notistack';
-import { useAccount } from 'wagmi';
+import React, { useContext, useEffect, useState } from "react";
+import { ProjectsContext } from "../../../contexts/projects-context";
+import { AppContext } from "../../../contexts/app-context";
+import {
+  Box,
+  Backdrop,
+  Button,
+  CircularProgress,
+  Stack,
+  Typography,
+  Grid,
+} from "@mui/material";
+import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+import { useAccount } from "wagmi";
 
 export default function ProjectsList(props) {
-    const router = useRouter();
-    const projectsContext = useContext(ProjectsContext);
-    const [loading, setLoading] = useState(true);
-    const [projects, setProjects] = useState([]);
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const router = useRouter();
+  const projectsContext = useContext(ProjectsContext);
+  const app = useContext(AppContext);
+  const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState([]);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-    const account = useAccount();
+  const account = useAccount();
 
-    const load = async () => {
-        setLoading(true);
-        try {
-            setProjects(await projectsContext.getProjects());
-        } catch (err) {
-            console.log(err);
-            enqueueSnackbar('There was an error loading your projects', { variant: 'error' });
-        } finally {
-            setLoading(false);
-        }
-    };
+  const load = async () => {
+    setLoading(true);
+    try {
+      setProjects(await projectsContext.getProjects());
+    } catch (err) {
+      console.log(err);
+      enqueueSnackbar("There was an error loading your projects", {
+        variant: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    useEffect(() => {
-        if (account.isConnected) load();
-    }, [account.isConnected]);
+  useEffect(() => {
+    if (account.isConnected) load();
+  }, [account.isConnected]);
 
-    return (
+  return (
+    <>
+      {!loading && (
         <>
-            {!loading && (
-                <>
-                    {projects.length === 0 ? (
-                        <Stack mt={5} justifyContent="center" alignItems="center" direction="column" spacing={4}>
-                            <Typography variant="h2">
-                                You have not created a project yet
+          {projects.length === 0 ? (
+            <Stack
+              mt={5}
+              justifyContent="center"
+              alignItems="center"
+              direction="column"
+              spacing={4}
+            >
+              <Typography variant="h2">
+                You have not created a project yet
+              </Typography>
+
+              <img
+                src="/images/illustrations/empty-box.svg"
+                alt="connection-lost"
+                style={{ width: "100%", maxWidth: "500px" }}
+              />
+
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={() => router.push("/projects/create")}
+              >
+                Create your first Project
+              </Button>
+            </Stack>
+          ) : (
+            <>
+              <Stack
+                mt={2}
+                direction="column"
+                spacing={4}
+                px={3}
+                sx={{ width: { xs: '100%', md: '60%', lg: '50%', xl: '40%' } }}              >
+                <Typography variant="h2">Projects List</Typography>
+                <Stack
+                mt={5}
+                justifyContent="center"
+                alignItems="center"
+                direction="row"
+                spacing={4}
+              >
+                {projects.map((project) => {
+                  const tags = project.tags.split(", ");
+                  return (
+                    <Stack
+                      p="15px"
+                      backgroundColor={app.mode === 'dark' ? "#19222C" : '#FFFFFF'}
+                      sx={{ borderRadius: "8px" }}
+                      width="285px"
+                      height="111px"
+                      spacing={2}
+                    >
+                      <Typography variant="h3" color={app.mode === 'dark' ? "#FFFFFF": "#081724" }>
+                        {project.name}
+                      </Typography>
+                      <Stack item flexDirection="row">
+                        {tags.map((tag) => (
+                          <Stack
+                            item
+                            flexDirection="row"
+                            backgroundColor={app.mode === 'dark' ?"#253340" : "#F5F5F5"}
+                            sx={{ width: { xs: '100%', md: '60%', lg: '50%', xl: '40%'}, borderRadius: "8px" }}
+                            justifyContent="center"
+                            py={1}
+                            m={'0.25rem'}
+                          >
+                            <Typography sx={{
+                                fontFamily: 'Gilroy',
+                                fontStyle: 'normal',
+                                fontWeight: '600',
+                                fontSize: '14px',
+                                lineHeight: '12px'
+                            }} color={app.mode === 'dark' ? "#FFFFFF": "#081724" }>
+                              {tag}
                             </Typography>
-
-                            <img
-                                src="/images/illustrations/empty-box.svg"
-                                alt="connection-lost"
-                                style={{ width: '100%', maxWidth: '500px' }}
-                            />
-
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                                onClick={() => router.push('/projects/create')}
-                            >
-                                Create your first Project
-                            </Button>
-                        </Stack>
-                    ) : (
-                        <>
-                        {projects.map((project) => {
-                           const tags = project.tags.split(", ")
-                        return (
-                            <Grid item mt={5} py={5} backgroundColor="#19222C" borderRadius="8px" w="285px" h="111px">
-                                <Typography variant="h3" color="#FFFFFF">{project.name}</Typography>
-                                {tags.map((tag) => (
-                                    <Typography variant="body1" color="#FFFFFF">{tag}</Typography>
-                                ))}
-                            </Grid>
-                        )})}
-                        </>
-                    )}
-                </>
-            )}
-
-            <Backdrop open={loading}>
-                <CircularProgress />
-            </Backdrop>
+                          </Stack>
+                        ))}
+                      </Stack>
+                    </Stack>
+                  );
+                })}
+                </Stack>
+              </Stack>
+            </>
+          )}
         </>
-    );
+      )}
+
+      <Backdrop open={loading}>
+        <CircularProgress />
+      </Backdrop>
+    </>
+  );
 }

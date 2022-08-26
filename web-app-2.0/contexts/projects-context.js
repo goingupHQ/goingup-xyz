@@ -6,6 +6,7 @@ import { createProjectData } from "../components/validation-tools/validateProjec
 import { constants, ethers } from "ethers";
 
 export const ProjectsContext = createContext();
+export const mumbaiAddress = "0xe0b5f0c73754347E1d2E3c84382970D7A70d666B";
 
 export const ProjectsProvider = ({ children }) => {
   const wallet = useContext(WalletContext);
@@ -81,21 +82,32 @@ export const ProjectsProvider = ({ children }) => {
   const getProjects = async () => {
     // this api endpoint just returns project ids owned by the user address
     const response = await fetch(`/api/projects/account/${account.address}`);
-    const projectIds = await response.json(); 
+    const projectIds = await response.json();
     const projects = [];
 
     // for each project id, get the project data
     for (const projectId of projectIds) {
-      const project = await contract.projects(projectId); // does not work with wagmi
+      const project = await contract?.projects(projectId); // does not work with wagmi
       projects.push(project);
     }
+
     return projects;
   };
 
   const createProject = async (form) => {
     const contractValue = await contract.price();
-    const {name, description, started, ended, tags, primaryUrl, isPrivate} = await createProjectData(form);
-    const tx = await contract.create(name, description, started, ended, tags, primaryUrl, isPrivate, {value: contractValue} );
+    const { name, description, started, ended, tags, primaryUrl, isPrivate } =
+      await createProjectData(form);
+    const tx = await contract.create(
+      name,
+      description,
+      started,
+      ended,
+      tags,
+      primaryUrl,
+      isPrivate,
+      { value: contractValue }
+    );
     return tx;
   };
 
@@ -105,7 +117,7 @@ export const ProjectsProvider = ({ children }) => {
     switchToCorrectNetwork,
     getProjects,
     createProject,
-    getProjects
+    getProjects,
   };
   return (
     <ProjectsContext.Provider value={value}>
