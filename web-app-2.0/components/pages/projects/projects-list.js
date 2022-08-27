@@ -13,6 +13,7 @@ import {
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useAccount } from "wagmi";
+import Link from 'next/link';
 
 export default function ProjectsList(props) {
   const router = useRouter();
@@ -74,7 +75,6 @@ export default function ProjectsList(props) {
               </Button>
             </Stack>
           ) : (
-            <>
                 <Stack
                 mt={5}
                 px={3}
@@ -85,6 +85,9 @@ export default function ProjectsList(props) {
                 {projects.map((project) => {
                   const tags = project.tags.split(", ");
                   return (
+                    <Link
+                    href={`/projects/${project.id}`}
+                     >
                     <Stack
                       p="15px"
                       backgroundColor={app.mode === 'dark' ? "#19222C" : '#FFFFFF'}
@@ -120,10 +123,10 @@ export default function ProjectsList(props) {
                         ))}
                       </Stack>
                     </Stack>
+                    </Link>
                   );
                 })}
                 </Stack>
-            </>
           )}
         </>
       )}

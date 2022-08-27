@@ -94,6 +94,11 @@ export const ProjectsProvider = ({ children }) => {
     return projects;
   };
 
+  const getProject = async (id) => {
+     const project = await contract?.projects(id);
+    return project;
+  };
+
   const createProject = async (form) => {
     const contractValue = await contract.price();
     const { name, description, started, ended, tags, primaryUrl, isPrivate } =
@@ -118,6 +123,7 @@ export const ProjectsProvider = ({ children }) => {
     getProjects,
     createProject,
     getProjects,
+    getProject
   };
   return (
     <ProjectsContext.Provider value={value}>
