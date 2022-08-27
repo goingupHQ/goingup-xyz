@@ -19,6 +19,7 @@ import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import moment from "moment";
 import artifact from "../../../../artifacts/GoingUpUtilityToken.json";
+import ChevronRightIcon from "../../icons/ChevronRightIcon";
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -114,8 +115,8 @@ const TokensAndPoaps = (props) => {
 
     const buttonStyle = {
         width: "63px",
-        height: "24px"
-    }
+        height: "24px",
+    };
 
     return (
         <>
@@ -133,11 +134,25 @@ const TokensAndPoaps = (props) => {
                             alignItems: "flex-start",
                         }}
                         title={
-                            <Stack direction='row' justifyContent="space-between" paddingTop={"14px"} paddingX={"14px"}>
+                            <Stack
+                                direction='row'
+                                justifyContent='space-between'
+                                paddingTop={"14px"}
+                                paddingX={"14px"}
+                            >
                                 <Typography variant='mobileh1'>
                                     Tokens &amp; POAPS
                                 </Typography>
-                                <Button color="primary">View All</Button>
+                                    <Button
+                                        color='primary'
+                                        endIcon={
+                                            <ChevronRightIcon
+                                                color={"primary"}
+                                            />
+                                        }
+                                    >
+                                        View All{" "}
+                                    </Button>
                             </Stack>
                         }
                     />
@@ -149,7 +164,12 @@ const TokensAndPoaps = (props) => {
                         )}
 
                         {!loading && (
-                            <Grid container paddingX={"14px"} wrap='nowrap' direction={{ xs: 'column', md: 'row' }}>
+                            <Grid
+                                container
+                                paddingX={"14px"}
+                                wrap='nowrap'
+                                direction={{ xs: "column", md: "row" }}
+                            >
                                 <Grid
                                     xs={12}
                                     md={4}
@@ -188,7 +208,14 @@ const TokensAndPoaps = (props) => {
                                                     >
                                                         from
                                                     </Typography>
-                                                    <Typography variant='sh1' sx={{ paddingBottom: '20px', paddingTop: '5px'}}>
+                                                    <Typography
+                                                        variant='sh1'
+                                                        sx={{
+                                                            paddingBottom:
+                                                                "20px",
+                                                            paddingTop: "5px",
+                                                        }}
+                                                    >
                                                         {account.name
                                                             .toLowerCase()
                                                             .replace(
@@ -219,7 +246,7 @@ const TokensAndPoaps = (props) => {
                                         borderRadius: "8px",
                                         padding: "15px",
                                         marginX: { md: "20px" },
-                                        marginY: { xs: '10px', md: '0px'}
+                                        marginY: { xs: "10px", md: "0px" },
                                     }}
                                 >
                                     {balances[1] > 0 && (
@@ -246,7 +273,14 @@ const TokensAndPoaps = (props) => {
                                                     >
                                                         from
                                                     </Typography>
-                                                    <Typography variant='sh1' sx={{ paddingBottom: '20px', paddingTop: '5px'}}>
+                                                    <Typography
+                                                        variant='sh1'
+                                                        sx={{
+                                                            paddingBottom:
+                                                                "20px",
+                                                            paddingTop: "5px",
+                                                        }}
+                                                    >
                                                         {account.name
                                                             .toLowerCase()
                                                             .replace(
@@ -302,7 +336,14 @@ const TokensAndPoaps = (props) => {
                                                     >
                                                         from
                                                     </Typography>
-                                                    <Typography variant='sh1' sx={{ paddingBottom: '20px', paddingTop: '5px'}}>
+                                                    <Typography
+                                                        variant='sh1'
+                                                        sx={{
+                                                            paddingBottom:
+                                                                "20px",
+                                                            paddingTop: "5px",
+                                                        }}
+                                                    >
                                                         {account.name
                                                             .toLowerCase()
                                                             .replace(
