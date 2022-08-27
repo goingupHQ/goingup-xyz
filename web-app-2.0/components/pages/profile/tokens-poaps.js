@@ -107,6 +107,7 @@ const TokensAndPoaps = (props) => {
     };
 
     const { account } = props;
+    console.log(account)
     const myAccount = wallet.address === account.address;
 
     const tokenImageStyle = {
@@ -217,7 +218,6 @@ const TokensAndPoaps = (props) => {
                                                         }}
                                                     >
                                                         {account.name
-                                                            .toLowerCase()
                                                             .replace(
                                                                 /\s/g,
                                                                 ""
@@ -282,7 +282,6 @@ const TokensAndPoaps = (props) => {
                                                         }}
                                                     >
                                                         {account.name
-                                                            .toLowerCase()
                                                             .replace(
                                                                 /\s/g,
                                                                 ""
@@ -345,7 +344,6 @@ const TokensAndPoaps = (props) => {
                                                         }}
                                                     >
                                                         {account.name
-                                                            .toLowerCase()
                                                             .replace(
                                                                 /\s/g,
                                                                 ""
