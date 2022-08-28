@@ -124,15 +124,21 @@ const TokensAndPoaps = (props) => {
             <Fade in={true} timeout={1000}>
                 <Card
                     sx={{
+                        marginX: { xs: "-16px", md: "0px" },
                         height: "100%",
                         display: "flex",
                         flexDirection: "column",
                         marginTop: "30px",
+                        backgroundColor: {
+                            xs: app.mode === "dark" ? "#0F151C" : "#FFFFFF",
+                            md: app.mode === "dark" ? "#111921" : "#F5F5F5",
+                        },
                     }}
                 >
                     <CardHeader
                         sx={{
                             alignItems: "flex-start",
+                            paddingBottom: "4px",
                         }}
                         title={
                             <Stack
@@ -175,7 +181,7 @@ const TokensAndPoaps = (props) => {
                         {!loading && (
                             <Grid
                                 container
-                                paddingX={"14px"}
+                                paddingX={{ xs: "0px", md: "14px" }}
                                 wrap='nowrap'
                                 direction={{ xs: "column", md: "row" }}
                             >
@@ -183,10 +189,16 @@ const TokensAndPoaps = (props) => {
                                     xs={12}
                                     md={4}
                                     sx={{
-                                        backgroundColor:
-                                            app.mode === "dark"
-                                                ? "#19222C"
-                                                : "#FFFFFF",
+                                        backgroundColor: {
+                                            xs:
+                                                app.mode === "dark"
+                                                    ? "#111921"
+                                                    : "#F5F5F5",
+                                            md:
+                                                app.mode === "dark"
+                                                    ? "#19222C"
+                                                    : "#FFFFFF",
+                                        },
                                         borderRadius: "8px",
                                         padding: "15px",
                                     }}
@@ -252,10 +264,16 @@ const TokensAndPoaps = (props) => {
                                     xs={12}
                                     md={4}
                                     sx={{
-                                        backgroundColor:
-                                            app.mode === "dark"
-                                                ? "#19222C"
-                                                : "#FFFFFF",
+                                        backgroundColor: {
+                                            xs:
+                                                app.mode === "dark"
+                                                    ? "#111921"
+                                                    : "#F5F5F5",
+                                            md:
+                                                app.mode === "dark"
+                                                    ? "#19222C"
+                                                    : "#FFFFFF",
+                                        },
                                         borderRadius: "8px",
                                         padding: "15px",
                                         marginX: { md: "20px" },
@@ -321,10 +339,16 @@ const TokensAndPoaps = (props) => {
                                     xs={12}
                                     md={4}
                                     sx={{
-                                        backgroundColor:
-                                            app.mode === "dark"
-                                                ? "#19222C"
-                                                : "#FFFFFF",
+                                        backgroundColor: {
+                                            xs:
+                                                app.mode === "dark"
+                                                    ? "#111921"
+                                                    : "#F5F5F5",
+                                            md:
+                                                app.mode === "dark"
+                                                    ? "#19222C"
+                                                    : "#FFFFFF",
+                                        },
                                         borderRadius: "8px",
                                         padding: "15px",
                                     }}
