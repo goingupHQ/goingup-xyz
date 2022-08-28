@@ -107,7 +107,6 @@ const TokensAndPoaps = (props) => {
     };
 
     const { account } = props;
-    console.log(account)
     const myAccount = wallet.address === account.address;
 
     const tokenImageStyle = {
@@ -117,6 +116,7 @@ const TokensAndPoaps = (props) => {
     const buttonStyle = {
         width: "63px",
         height: "24px",
+        backgroundColor: app.mode === "dark" ? "#253340" : "#F5F5F5",
     };
 
     return (
@@ -144,16 +144,24 @@ const TokensAndPoaps = (props) => {
                                 <Typography variant='mobileh1'>
                                     Tokens &amp; POAPS
                                 </Typography>
-                                    <Button
-                                        color='primary'
-                                        endIcon={
-                                            <ChevronRightIcon
-                                                color={"primary"}
-                                            />
-                                        }
-                                    >
-                                        View All{" "}
-                                    </Button>
+                                <Button
+                                    color={
+                                        app.mode === "dark"
+                                            ? "primary"
+                                            : "secondary"
+                                    }
+                                    endIcon={
+                                        <ChevronRightIcon
+                                            color={
+                                                app.mode === "dark"
+                                                    ? "primary"
+                                                    : "secondary"
+                                            }
+                                        />
+                                    }
+                                >
+                                    View All{" "}
+                                </Button>
                             </Stack>
                         }
                     />
@@ -210,22 +218,27 @@ const TokensAndPoaps = (props) => {
                                                         from
                                                     </Typography>
                                                     <Typography
-                                                        variant='sh1'
+                                                        variant='mobileh2'
                                                         sx={{
                                                             paddingBottom:
                                                                 "20px",
                                                             paddingTop: "5px",
                                                         }}
                                                     >
-                                                        {account.name
-                                                            .replace(
-                                                                /\s/g,
-                                                                ""
-                                                            ) + ".eth"}
+                                                        {account.name.replace(
+                                                            /\s/g,
+                                                            ""
+                                                        ) + ".eth"}
                                                     </Typography>
                                                     <Button
-                                                        color='text1'
-                                                        variant='outlined'
+                                                        sx={{
+                                                            color:
+                                                                app.mode ===
+                                                                "dark"
+                                                                    ? "#FFFFFF"
+                                                                    : "#22272F",
+                                                        }}
+                                                        size='small'
                                                         style={buttonStyle}
                                                     >
                                                         Creative
@@ -274,22 +287,27 @@ const TokensAndPoaps = (props) => {
                                                         from
                                                     </Typography>
                                                     <Typography
-                                                        variant='sh1'
+                                                        variant='mobileh2'
                                                         sx={{
                                                             paddingBottom:
                                                                 "20px",
                                                             paddingTop: "5px",
                                                         }}
                                                     >
-                                                        {account.name
-                                                            .replace(
-                                                                /\s/g,
-                                                                ""
-                                                            ) + ".eth"}
+                                                        {account.name.replace(
+                                                            /\s/g,
+                                                            ""
+                                                        ) + ".eth"}
                                                     </Typography>
                                                     <Button
-                                                        color='text1'
-                                                        variant='outlined'
+                                                        sx={{
+                                                            color:
+                                                                app.mode ===
+                                                                "dark"
+                                                                    ? "#FFFFFF"
+                                                                    : "#22272F",
+                                                        }}
+                                                        size='small'
                                                         style={buttonStyle}
                                                     >
                                                         Creative
@@ -336,22 +354,27 @@ const TokensAndPoaps = (props) => {
                                                         from
                                                     </Typography>
                                                     <Typography
-                                                        variant='sh1'
+                                                        variant='mobileh2'
                                                         sx={{
                                                             paddingBottom:
                                                                 "20px",
                                                             paddingTop: "5px",
                                                         }}
                                                     >
-                                                        {account.name
-                                                            .replace(
-                                                                /\s/g,
-                                                                ""
-                                                            ) + ".eth"}
+                                                        {account.name.replace(
+                                                            /\s/g,
+                                                            ""
+                                                        ) + ".eth"}
                                                     </Typography>
                                                     <Button
-                                                        color='text1'
-                                                        variant='outlined'
+                                                        sx={{
+                                                            color:
+                                                                app.mode ===
+                                                                "dark"
+                                                                    ? "#FFFFFF"
+                                                                    : "#22272F",
+                                                        }}
+                                                        size='small'
                                                         style={buttonStyle}
                                                     >
                                                         Creative
