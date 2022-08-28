@@ -86,7 +86,9 @@ export default function ProjectsList(props) {
                   const tags = project.tags.split(", ");
                   return (
                     <Link
+                    key={index}
                     href={`/projects/${project.id}`}
+                    _hover={{ cursor: "pointer" }}
                      >
                     <Stack
                       p="15px"
@@ -100,8 +102,9 @@ export default function ProjectsList(props) {
                         {project.name}
                       </Typography>
                       <Stack item flexDirection="row">
-                        {tags.slice(0, 3).map((tag) => (
+                        {tags.slice(0, 3).map((tag, index) => (
                           <Stack
+                            key={index}
                             item
                             flexDirection="row"
                             backgroundColor={app.mode === 'dark' ?"#253340" : "#F5F5F5"}

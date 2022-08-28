@@ -239,6 +239,7 @@ export default function ProjectForm(projectData) {
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
                   <Chip
+                    key={index}
                     variant="outlined"
                     label={option}
                     {...getTagProps({ index })}
