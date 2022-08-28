@@ -9,13 +9,16 @@ export default function EditProject() {
     const [data, setData] = useState(null);
     const router = useRouter();
 
+    const getProject = async () => {
+          setData(await projectsCtx.getProject(router.query.id));
+    };
+
     useEffect(() => {
         if (!data) {
-            setData(projectsCtx.getProject(router.query.id));
+            getProject();
         }
     }, [data, projectsCtx]);
 
-    
     return (
         <>
             <Head>

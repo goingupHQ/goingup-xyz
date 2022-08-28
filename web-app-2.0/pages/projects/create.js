@@ -16,7 +16,7 @@ export default function CreateProject(props) {
 
             
             <ProjectForm 
-
+    projectData={null}
             />
         </>
     );

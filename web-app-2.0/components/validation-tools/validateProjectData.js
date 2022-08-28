@@ -23,7 +23,7 @@ export const createProjectData = async (form) => {
 	const startedUnix = moment(form.started).unix();
     req.started = startedUnix;
   } else {
-	req.ended = 0;
+	req.started = 0;
   }
 
   if (moment(form.ended, "MM/DD/YYYY", true).isValid()) {

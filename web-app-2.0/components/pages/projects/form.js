@@ -18,16 +18,14 @@ import { AppContext } from "../../../contexts/app-context";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
+import moment from "moment";
 
 export default function ProjectForm(projectData) {
-
   const projectsCtx = useContext(ProjectsContext);
   const app = useContext(AppContext);
   const router = useRouter();
 
   const isCreate = router.pathname === "/projects/create";
-
-  console.log(isCreate);
 
   const [form, setForm] = useState({
     name: "",
@@ -39,19 +37,27 @@ export default function ProjectForm(projectData) {
     isPrivate: false,
   });
 
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
-    if (projectData) {
-      setForm(projectData);
+    if (projectData.projectData) {
+      setForm({...form, 
+        name: projectData.projectData.name,
+        description: projectData.projectData.description,
+        started: moment(projectData.projectData.started.toNumber()).format("MM/DD/YYYY"),
+        ended: moment(projectData.projectData.ended.toNumber()).format("MM/DD/YYYY"),
+        primaryUrl: projectData.projectData.primaryUrl,
+        tags: projectData.projectData.tags.split(", "),
+        isPrivate: projectData.projectData.isPrivate,
+    });
       setLoading(false);
     } else {
         setLoading(false)
     }
   }, [projectData]);
 
-  const createProject = async () => {
+  const sendProject = async () => {
     closeSnackbar();
     setLoading(true);
 
@@ -204,9 +210,7 @@ export default function ProjectForm(projectData) {
           <Grid item xs={12}>
             <Autocomplete
               multiple
-              // id="tags-filled"
-              options={form.tags?.length === 0 ? [] : form.tags}
-              // defaultValue={[top100Films[13].title]}
+              value={form.tags?.length === 0 ? [] : form.tags}
               onChange={(e, value) => {
                 setForm({ ...form, tags: value });
               }}
@@ -241,8 +245,8 @@ export default function ProjectForm(projectData) {
           </Grid>
 
           <Grid item xs={12}>
-            <LoadingButton variant="contained" onClick={() => createProject()}>
-              Create Project
+            <LoadingButton variant="contained" onClick={() => sendProject()}>
+              {isCreate ? "Create Project" : "Update Project"}
             </LoadingButton>
           </Grid>
         </Grid>
