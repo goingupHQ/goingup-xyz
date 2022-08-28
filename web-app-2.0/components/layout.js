@@ -162,7 +162,14 @@ export default function Layout({ children, chains }) {
                             fontSize: "18px",
                         },
                         fontWeight: "bold",
-                    }
+                    },
+                    mobileh2: {
+                        fontSize: "16px",
+                        "@media (max-width:900px)": {
+                            fontSize: "14px",
+                        },
+                        fontWeight: "bold",
+                    },
                 },
                 shape: {
                     borderRadius: "8px",

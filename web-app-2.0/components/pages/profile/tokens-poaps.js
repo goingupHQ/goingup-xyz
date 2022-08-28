@@ -107,7 +107,6 @@ const TokensAndPoaps = (props) => {
     };
 
     const { account } = props;
-    console.log(account)
     const myAccount = wallet.address === account.address;
 
     const tokenImageStyle = {
@@ -117,6 +116,7 @@ const TokensAndPoaps = (props) => {
     const buttonStyle = {
         width: "63px",
         height: "24px",
+        backgroundColor: app.mode === "dark" ? "#253340" : "#CFCFCF",
     };
 
     return (
@@ -124,15 +124,21 @@ const TokensAndPoaps = (props) => {
             <Fade in={true} timeout={1000}>
                 <Card
                     sx={{
+                        marginX: { xs: "-16px", md: "0px" },
                         height: "100%",
                         display: "flex",
                         flexDirection: "column",
                         marginTop: "30px",
+                        backgroundColor: {
+                            xs: app.mode === "dark" ? "#0F151C" : "#FFFFFF",
+                            md: app.mode === "dark" ? "#111921" : "#F5F5F5",
+                        },
                     }}
                 >
                     <CardHeader
                         sx={{
                             alignItems: "flex-start",
+                            paddingBottom: "4px",
                         }}
                         title={
                             <Stack
@@ -144,16 +150,24 @@ const TokensAndPoaps = (props) => {
                                 <Typography variant='mobileh1'>
                                     Tokens &amp; POAPS
                                 </Typography>
-                                    <Button
-                                        color='primary'
-                                        endIcon={
-                                            <ChevronRightIcon
-                                                color={"primary"}
-                                            />
-                                        }
-                                    >
-                                        View All{" "}
-                                    </Button>
+                                <Button
+                                    color={
+                                        app.mode === "dark"
+                                            ? "primary"
+                                            : "secondary"
+                                    }
+                                    endIcon={
+                                        <ChevronRightIcon
+                                            color={
+                                                app.mode === "dark"
+                                                    ? "primary"
+                                                    : "secondary"
+                                            }
+                                        />
+                                    }
+                                >
+                                    View All{" "}
+                                </Button>
                             </Stack>
                         }
                     />
@@ -167,7 +181,7 @@ const TokensAndPoaps = (props) => {
                         {!loading && (
                             <Grid
                                 container
-                                paddingX={"14px"}
+                                paddingX={{ xs: "0px", md: "14px" }}
                                 wrap='nowrap'
                                 direction={{ xs: "column", md: "row" }}
                             >
@@ -175,10 +189,16 @@ const TokensAndPoaps = (props) => {
                                     xs={12}
                                     md={4}
                                     sx={{
-                                        backgroundColor:
-                                            app.mode === "dark"
-                                                ? "#19222C"
-                                                : "#FFFFFF",
+                                        backgroundColor: {
+                                            xs:
+                                                app.mode === "dark"
+                                                    ? "#111921"
+                                                    : "#F5F5F5",
+                                            md:
+                                                app.mode === "dark"
+                                                    ? "#19222C"
+                                                    : "#FFFFFF",
+                                        },
                                         borderRadius: "8px",
                                         padding: "15px",
                                     }}
@@ -210,22 +230,27 @@ const TokensAndPoaps = (props) => {
                                                         from
                                                     </Typography>
                                                     <Typography
-                                                        variant='sh1'
+                                                        variant='mobileh2'
                                                         sx={{
                                                             paddingBottom:
                                                                 "20px",
                                                             paddingTop: "5px",
                                                         }}
                                                     >
-                                                        {account.name
-                                                            .replace(
-                                                                /\s/g,
-                                                                ""
-                                                            ) + ".eth"}
+                                                        {account.name.replace(
+                                                            /\s/g,
+                                                            ""
+                                                        ) + ".eth"}
                                                     </Typography>
                                                     <Button
-                                                        color='text1'
-                                                        variant='outlined'
+                                                        sx={{
+                                                            color:
+                                                                app.mode ===
+                                                                "dark"
+                                                                    ? "#FFFFFF"
+                                                                    : "#22272F",
+                                                        }}
+                                                        size='small'
                                                         style={buttonStyle}
                                                     >
                                                         Creative
@@ -239,10 +264,16 @@ const TokensAndPoaps = (props) => {
                                     xs={12}
                                     md={4}
                                     sx={{
-                                        backgroundColor:
-                                            app.mode === "dark"
-                                                ? "#19222C"
-                                                : "#FFFFFF",
+                                        backgroundColor: {
+                                            xs:
+                                                app.mode === "dark"
+                                                    ? "#111921"
+                                                    : "#F5F5F5",
+                                            md:
+                                                app.mode === "dark"
+                                                    ? "#19222C"
+                                                    : "#FFFFFF",
+                                        },
                                         borderRadius: "8px",
                                         padding: "15px",
                                         marginX: { md: "20px" },
@@ -274,22 +305,27 @@ const TokensAndPoaps = (props) => {
                                                         from
                                                     </Typography>
                                                     <Typography
-                                                        variant='sh1'
+                                                        variant='mobileh2'
                                                         sx={{
                                                             paddingBottom:
                                                                 "20px",
                                                             paddingTop: "5px",
                                                         }}
                                                     >
-                                                        {account.name
-                                                            .replace(
-                                                                /\s/g,
-                                                                ""
-                                                            ) + ".eth"}
+                                                        {account.name.replace(
+                                                            /\s/g,
+                                                            ""
+                                                        ) + ".eth"}
                                                     </Typography>
                                                     <Button
-                                                        color='text1'
-                                                        variant='outlined'
+                                                        sx={{
+                                                            color:
+                                                                app.mode ===
+                                                                "dark"
+                                                                    ? "#FFFFFF"
+                                                                    : "#22272F",
+                                                        }}
+                                                        size='small'
                                                         style={buttonStyle}
                                                     >
                                                         Creative
@@ -303,10 +339,16 @@ const TokensAndPoaps = (props) => {
                                     xs={12}
                                     md={4}
                                     sx={{
-                                        backgroundColor:
-                                            app.mode === "dark"
-                                                ? "#19222C"
-                                                : "#FFFFFF",
+                                        backgroundColor: {
+                                            xs:
+                                                app.mode === "dark"
+                                                    ? "#111921"
+                                                    : "#F5F5F5",
+                                            md:
+                                                app.mode === "dark"
+                                                    ? "#19222C"
+                                                    : "#FFFFFF",
+                                        },
                                         borderRadius: "8px",
                                         padding: "15px",
                                     }}
@@ -336,22 +378,27 @@ const TokensAndPoaps = (props) => {
                                                         from
                                                     </Typography>
                                                     <Typography
-                                                        variant='sh1'
+                                                        variant='mobileh2'
                                                         sx={{
                                                             paddingBottom:
                                                                 "20px",
                                                             paddingTop: "5px",
                                                         }}
                                                     >
-                                                        {account.name
-                                                            .replace(
-                                                                /\s/g,
-                                                                ""
-                                                            ) + ".eth"}
+                                                        {account.name.replace(
+                                                            /\s/g,
+                                                            ""
+                                                        ) + ".eth"}
                                                     </Typography>
                                                     <Button
-                                                        color='text1'
-                                                        variant='outlined'
+                                                        sx={{
+                                                            color:
+                                                                app.mode ===
+                                                                "dark"
+                                                                    ? "#FFFFFF"
+                                                                    : "#22272F",
+                                                        }}
+                                                        size='small'
                                                         style={buttonStyle}
                                                     >
                                                         Creative
