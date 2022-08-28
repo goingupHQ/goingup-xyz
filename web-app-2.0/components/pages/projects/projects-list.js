@@ -82,7 +82,7 @@ export default function ProjectsList(props) {
                 direction="row"
                 spacing={4}
               >
-                {projects.map((project) => {
+                {projects.map((project, index) => {
                   const tags = project.tags.split(", ");
                   return (
                     <Link
