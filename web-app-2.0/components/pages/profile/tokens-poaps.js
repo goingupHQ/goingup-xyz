@@ -116,7 +116,7 @@ const TokensAndPoaps = (props) => {
     const buttonStyle = {
         width: "63px",
         height: "24px",
-        backgroundColor: app.mode === "dark" ? "#253340" : "#F5F5F5",
+        backgroundColor: app.mode === "dark" ? "#253340" : "#CFCFCF",
     };
 
     return (
