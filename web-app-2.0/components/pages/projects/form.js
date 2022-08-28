@@ -37,10 +37,18 @@ export default function ProjectForm(projectData) {
     isPrivate: false,
   });
 
+  const [oldForm, setOldForm] = useState({
+    name: "",
+    description: "",
+    started: null,
+    ended: null,
+    primaryUrl: "",
+    tags: [],
+    isPrivate: false,
+  });
+
   const [loading, setLoading] = useState(true);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-//   console.log(projectData && projectData.projectData.ended.toNumber());
 
   useEffect(() => {
     if (projectData.projectData) {
@@ -53,9 +61,19 @@ export default function ProjectForm(projectData) {
         tags: projectData.projectData.tags.split(", "),
         isPrivate: projectData.projectData.isPrivate,
     });
+
+    setOldForm({...oldForm, 
+        name: projectData.projectData.name,
+        description: projectData.projectData.description,
+        started: projectData.projectData.started.toNumber() !== 0 ? new Date(projectData.projectData.started.toNumber() * 1000) : null,
+        ended: projectData.projectData.ended.toNumber() !== 0 ? new Date(projectData.projectData.ended.toNumber() * 1000) : null,
+        primaryUrl: projectData.projectData.primaryUrl,
+        tags: projectData.projectData.tags.split(", "),
+        isPrivate: projectData.projectData.isPrivate,
+    });
       setLoading(false);
     } else {
-        setLoading(false)
+      setLoading(false)
     }
   }, [projectData]);
 
@@ -94,7 +112,7 @@ export default function ProjectForm(projectData) {
         enqueueSnackbar("Project created", { variant: "success" });
         router.push("/projects");
       } else {
-        const updateTx = await projectsCtx.updateProject(form);
+        const updateTx = await projectsCtx.updateProject(form, oldForm, router.query.id);
 
         closeSnackbar();
 
@@ -127,6 +145,8 @@ export default function ProjectForm(projectData) {
           variant: "error",
         });
       }
+      console.log(e)
+
     } finally {
       setLoading(false);
     }

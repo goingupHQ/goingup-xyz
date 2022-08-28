@@ -2,8 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { WalletContext } from "./wallet-context";
 import artifact from "../artifacts/GoingUpProjects.json";
 import { useSigner, useContract, useProvider, useAccount } from "wagmi";
-import { createProjectData } from "../components/validation-tools/validateProjectData";
-import { constants, ethers } from "ethers";
+import { createProjectData, updateProjectData } from "../components/validation-tools/validateProjectData";
 
 export const ProjectsContext = createContext();
 export const mumbaiAddress = "0xe0b5f0c73754347E1d2E3c84382970D7A70d666B";
@@ -116,6 +115,24 @@ export const ProjectsProvider = ({ children }) => {
     return tx;
   };
 
+  const updateProject = async (form, oldForm, id) => {
+    const contractValue = await contract.price();
+    const { name, description, started, ended, tags, primaryUrl, isPrivate } =
+      await updateProjectData(form, oldForm);
+    const tx = await contract.update(
+      id,
+      name,
+      description,
+      started,
+      ended,
+      primaryUrl,
+      tags,
+      isPrivate,
+      { value: contractValue }
+    );
+    return tx;
+  };
+
   const value = {
     networkParams,
     isCorrectNetwork,
@@ -123,7 +140,8 @@ export const ProjectsProvider = ({ children }) => {
     getProjects,
     createProject,
     getProjects,
-    getProject
+    getProject,
+    updateProject
   };
   return (
     <ProjectsContext.Provider value={value}>
