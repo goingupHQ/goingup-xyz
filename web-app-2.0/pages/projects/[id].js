@@ -14,6 +14,7 @@ import {
 import { useRouter } from "next/router";
 import { ProjectsContext } from "../../contexts/projects-context";
 import Link from "next/link";
+import Head from 'next/head';
 
 export default function ProjectPage() {
   const [project, setProject] = useState(null);
@@ -36,6 +37,10 @@ export default function ProjectPage() {
   console.log(project);
   return (
     <>
+    <Head>
+        <title>Going UP - Project</title>
+    </Head>
+
       <Stack
         mt="4rem"
         spacing={1}

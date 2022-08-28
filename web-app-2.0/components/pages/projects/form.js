@@ -40,13 +40,15 @@ export default function ProjectForm(projectData) {
   const [loading, setLoading] = useState(true);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
+//   console.log(projectData && projectData.projectData.ended.toNumber());
+
   useEffect(() => {
     if (projectData.projectData) {
       setForm({...form, 
         name: projectData.projectData.name,
         description: projectData.projectData.description,
-        started: moment(projectData.projectData.started.toNumber()).format("MM/DD/YYYY"),
-        ended: moment(projectData.projectData.ended.toNumber()).format("MM/DD/YYYY"),
+        started: projectData.projectData.started.toNumber() !== 0 ? new Date(projectData.projectData.started.toNumber() * 1000) : null,
+        ended: projectData.projectData.ended.toNumber() !== 0 ? new Date(projectData.projectData.ended.toNumber() * 1000) : null,
         primaryUrl: projectData.projectData.primaryUrl,
         tags: projectData.projectData.tags.split(", "),
         isPrivate: projectData.projectData.isPrivate,
@@ -130,8 +132,6 @@ export default function ProjectForm(projectData) {
     }
   };
 
-  console.log(form)
-
   return (
     <>
       <Stack
@@ -211,6 +211,7 @@ export default function ProjectForm(projectData) {
             <Autocomplete
               multiple
               value={form.tags?.length === 0 ? [] : form.tags}
+              options={[]}
               onChange={(e, value) => {
                 setForm({ ...form, tags: value });
               }}
