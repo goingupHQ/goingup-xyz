@@ -11,12 +11,16 @@ export const createProjectData = async (form) => {
     isPrivate: false,
 }];
 
-  if (typeof form.name === "string") {
+  if (form.name !== "") {
     req.name = form.name;
+  } else if (form.name === "") {
+    throw new Error('You need to provide a name for the project');
   }
 
-  if (typeof form.description === "string") {
+  if (!form.description === "") {
     req.description = form.description;
+  } else if (form.description.isEmpty()) {
+    throw new Error('You need to provide a description for the project');
   }
 
   if (moment(form.started, "MM/DD/YYYY", true).isValid()) {
@@ -36,12 +40,14 @@ export const createProjectData = async (form) => {
   if (form.tags.length > 0) {
     let newTags = form.tags?.join(", ");
     req.tags = newTags;
-  } 
+  } else {
+    req.tags = "";
+  }
 
   if (typeof form.primaryUrl === "string") {
 	const urlPattern = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
 	urlPattern.test(form.primaryUrl) ? req.primaryUrl = form.primaryUrl : req.primaryUrl = 'https://' + form.primaryUrl;
-  } 
+  }
 
   req.isPrivate = form.isPrivate;
 

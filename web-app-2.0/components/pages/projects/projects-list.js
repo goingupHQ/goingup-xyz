@@ -13,7 +13,7 @@ import {
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useAccount } from "wagmi";
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function ProjectsList(props) {
   const router = useRouter();
@@ -30,7 +30,6 @@ export default function ProjectsList(props) {
     try {
       setProjects(await projectsContext.getProjects());
     } catch (err) {
-      console.log(err);
       enqueueSnackbar("There was an error loading your projects", {
         variant: "error",
       });
@@ -75,7 +74,16 @@ export default function ProjectsList(props) {
               </Button>
             </Stack>
           ) : (
-                <Stack
+            <Stack mt={5} mx={3} alignItems="start" direction="column">
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={() => router.push("/projects/create")}
+              >
+                + Create Another Project
+              </Button>
+              <Stack
                 mt={5}
                 px={3}
                 alignItems="start"
@@ -85,51 +93,73 @@ export default function ProjectsList(props) {
                 {projects.map((project, index) => {
                   const tags = project.tags.split(", ");
                   return (
-                    <Link
-                    key={index}
-                    href={`/projects/${project.id}`}
-                    _hover={{ cursor: "pointer" }}
-                     >
-                    <Stack
-                      p="15px"
-                      backgroundColor={app.mode === 'dark' ? "#19222C" : '#FFFFFF'}
-                      sx={{ borderRadius: "8px" }}
-                      width="285px"
-                      height="111px"
-                      spacing={2}
-                    >
-                      <Typography variant="h3" color={app.mode === 'dark' ? "#FFFFFF": "#081724" }>
-                        {project.name}
-                      </Typography>
-                      <Stack item flexDirection="row">
-                        {tags.slice(0, 3).map((tag, index) => (
-                          <Stack
-                            key={index}
-                            item
-                            flexDirection="row"
-                            backgroundColor={app.mode === 'dark' ?"#253340" : "#F5F5F5"}
-                            sx={{ width: { xs: '100%', md: '60%', lg: '50%', xl: '40%'}, borderRadius: "8px" }}
-                            justifyContent="center"
-                            py={1}
-                            m={'0.25rem'}
-                          >
-                            <Typography sx={{
-                                fontFamily: 'Gilroy',
-                                fontStyle: 'normal',
-                                fontWeight: '600',
-                                fontSize: '14px',
-                                lineHeight: '12px'
-                            }} color={app.mode === 'dark' ? "#FFFFFF": "#081724" }>
-                              {tag}
-                            </Typography>
-                          </Stack>
-                        ))}
+                    <Link key={index} href={`/projects/${project.id}`}>
+                      <Stack
+                        p="15px"
+                        backgroundColor={
+                          app.mode === "dark" ? "#19222C" : "#FFFFFF"
+                        }
+                        sx={{
+                          borderRadius: "8px",
+                          "&:hover": {
+                            cursor: "pointer",
+                          },
+                        }}
+                        width="285px"
+                        height="111px"
+                        spacing={2}
+                      >
+                        <Typography
+                          variant="h3"
+                          color={app.mode === "dark" ? "#FFFFFF" : "#081724"}
+                        >
+                          {project.name}
+                        </Typography>
+                        <Stack item flexDirection="row">
+                          {tags.slice(0, 3).map((tag, index) => (
+                            <Stack
+                              key={index}
+                              item
+                              flexDirection="row"
+                              backgroundColor={
+                                app.mode === "dark" ? "#253340" : "#F5F5F5"
+                              }
+                              sx={{
+                                width: {
+                                  xs: "100%",
+                                  md: "60%",
+                                  lg: "50%",
+                                  xl: "40%",
+                                },
+                                borderRadius: "8px",
+                              }}
+                              justifyContent="center"
+                              py={1}
+                              m={"0.25rem"}
+                            >
+                              <Typography
+                                sx={{
+                                  fontFamily: "Gilroy",
+                                  fontStyle: "normal",
+                                  fontWeight: "600",
+                                  fontSize: "14px",
+                                  lineHeight: "12px",
+                                }}
+                                color={
+                                  app.mode === "dark" ? "#FFFFFF" : "#081724"
+                                }
+                              >
+                                {tag}
+                              </Typography>
+                            </Stack>
+                          ))}
+                        </Stack>
                       </Stack>
-                    </Stack>
                     </Link>
                   );
                 })}
-                </Stack>
+              </Stack>
+            </Stack>
           )}
         </>
       )}

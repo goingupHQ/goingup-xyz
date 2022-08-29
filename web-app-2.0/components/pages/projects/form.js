@@ -160,7 +160,7 @@ export default function ProjectForm(projectData) {
         sx={{ width: { xs: "100%", md: "60%", lg: "50%", xl: "40%" } }}
       >
         <Typography variant="h1" sx={{ paddingLeft: 2 }}>
-          Create A Project
+         {isCreate ? "Create A Project" : "Edit a Project"}
         </Typography>
 
         <Grid container columnSpacing={2} rowSpacing={2} sx={{ padding: 0 }}>

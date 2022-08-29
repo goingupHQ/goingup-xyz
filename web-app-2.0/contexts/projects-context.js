@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { WalletContext } from "./wallet-context";
 import artifact from "../artifacts/GoingUpProjects.json";
-import { useSigner, useContract, useProvider, useAccount } from "wagmi";
+import { useSigner, useContract, useProvider, useAccount, useContractRead } from "wagmi";
 import { createProjectData, updateProjectData } from "../components/validation-tools/validateProjectData";
 
 export const ProjectsContext = createContext();
@@ -139,7 +139,7 @@ export const ProjectsProvider = ({ children }) => {
     switchToCorrectNetwork,
     getProjects,
     createProject,
-    getProjects,
+    contract,
     getProject,
     updateProject
   };
