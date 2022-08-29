@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Typography } from '@mui/material'
+import { Button, Card, CardActions, CardContent, CardHeader, Link, Typography } from '@mui/material'
 import { useRouter } from 'next/router';
 import React from 'react'
 
@@ -14,6 +14,11 @@ export default function ProjectCard(props) {
                     <Typography variant="body1">
                         {project.description}
                     </Typography>
+                    <Link href={project.primaryUrl} target="_blank">
+                        <Typography variant="body1" sx={{ textDecoration: 'underline' }}>
+                            {project.primaryUrl}
+                        </Typography>
+                    </Link>
                 </CardContent>
 
                 <CardActions>
