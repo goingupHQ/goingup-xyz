@@ -71,7 +71,24 @@ export const ProjectsProvider = ({ children }) => {
     };
 
     const getProjects = async () => {
-        return [];
+        const contract = getContract();
+        const projects = [];
+
+        const response = await fetch(`/api/projects/account/${wallet.address}`);
+        const projectIds = await response.json();
+
+        for (const projectId of projectIds) {
+            const project = await contract.projects(projectId);
+            projects.push(project);
+        }
+
+        return projects;
+    };
+
+    const getProject = async (projectId) => {
+        const contract = getContract();
+        const project = await contract.projects(projectId);
+        return project;
     };
 
     const createProject = async (name, description, started, ended, primaryUrl, tags, isPrivate) => {
@@ -95,12 +112,33 @@ export const ProjectsProvider = ({ children }) => {
         return tx;
     };
 
+    const updateProject = async (projectId, name, description, started, ended, primaryUrl, tags, isPrivate) => {
+        const contract = getContract();
+
+        if (!isCorrectNetwork) throw 'Wrong network';
+        if (!wallet.ethersSigner) throw 'No wallet';
+
+        const tx = await contract.update(
+            projectId,
+            name,
+            description || '',
+            started ? moment(started).unix() : 0,
+            ended ? moment(ended).unix() : 0,
+            primaryUrl || '',
+            tags ? tags.join(',') : '',
+            isPrivate
+        );
+        return tx;
+    };
+
     const value = {
         networkParams,
         isCorrectNetwork,
         switchToCorrectNetwork,
         getProjects,
+        getProject,
         createProject,
+        updateProject,
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };

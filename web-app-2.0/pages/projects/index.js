@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { AppContext } from '../../contexts/app-context';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { WalletContext } from '../../contexts/wallet-context';
 import { ProjectsContext } from '../../contexts/projects-context';
 import ProjectsList from '../../components/pages/projects/projects-list';

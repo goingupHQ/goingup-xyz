@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ProjectsContext } from '../../../contexts/projects-context';
-import { Backdrop, Button, CircularProgress, Stack, Typography } from '@mui/material';
+import { Backdrop, Button, CircularProgress, Grid, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import ProjectCard from './project-card';
 
 export default function ProjectsList(props) {
     const router = useRouter();
@@ -50,9 +51,19 @@ export default function ProjectsList(props) {
                             </Button>
                         </Stack>
                     )}
+
+                    {projects.length > 0 &&
+                    <Grid container spacing={2}>
+                        {projects.map(project => (
+                            <Grid item xs={12} sm={6} md={4} key={project.id}>
+                                <ProjectCard project={project} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                    }
                 </>
             )}
-            <Backdrop open={loading}>
+            <Backdrop open={loading} sx={{ zIndex: 1200 }}>
                 <CircularProgress />
             </Backdrop>
         </>
