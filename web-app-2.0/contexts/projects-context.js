@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { WalletContext } from './wallet-context';
 import artifact from '../artifacts/GoingUpProjects.json';
-console.log('Projects ABI', artifact.abi);
+import { ethers } from 'ethers';
+import moment from 'moment';
 
 export const ProjectsContext = createContext();
 
@@ -51,9 +52,7 @@ export const ProjectsProvider = ({ children }) => {
                 if (switchError.code === 4902) {
                     await ethereum.request({
                         method: 'wallet_addEthereumChain',
-                        params: [
-                            networkParams
-                        ],
+                        params: [networkParams],
                     });
                 }
             }
@@ -68,22 +67,40 @@ export const ProjectsProvider = ({ children }) => {
     const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network == contractNetwork);
 
     const getContract = () => {
-        const contract = new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
-    }
+        return new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
+    };
 
     const getProjects = async () => {
         return [];
-    }
+    };
 
     const createProject = async (name, description, started, ended, primaryUrl, tags, isPrivate) => {
-        const contract = get
-    }
+        const contract = getContract();
+
+        if (!isCorrectNetwork) throw 'Wrong network';
+        if (!wallet.ethersSigner) throw 'No wallet';
+
+        const price = await contract.price();
+
+        const tx = await contract.create(
+            name,
+            description || '',
+            started ? moment(started).unix() : 0,
+            ended ? moment(ended).unix() : 0,
+            primaryUrl || '',
+            tags ? tags.join(',') : '',
+            isPrivate,
+            { value: price }
+        );
+        return tx;
+    };
 
     const value = {
         networkParams,
         isCorrectNetwork,
         switchToCorrectNetwork,
-        getProjects
+        getProjects,
+        createProject,
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };

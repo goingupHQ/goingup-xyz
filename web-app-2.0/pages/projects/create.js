@@ -1,16 +1,15 @@
-import { Typography } from '@mui/material'
-import Head from 'next/head'
-import React from 'react'
+import Head from 'next/head';
+import React, { useContext } from 'react';
+import ProjectForm from '../../components/pages/projects/project-form';
 
 export default function CreateProject(props) {
-
-
     return (
         <>
             <Head>
                 <title>Going UP - Create A Project</title>
             </Head>
-            <Typography variant="h1">Create A Project</Typography>
+
+            <ProjectForm projectData={null} />
         </>
-    )
+    );
 }
