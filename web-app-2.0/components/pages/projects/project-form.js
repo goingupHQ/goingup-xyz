@@ -21,10 +21,11 @@ import { useRouter } from 'next/router';
 import moment from 'moment';
 import { isURL } from 'validator';
 
-export default function ProjectForm(projectData) {
+export default function ProjectForm(props) {
     const projectsCtx = useContext(ProjectsContext);
     const app = useContext(AppContext);
     const router = useRouter();
+    const { projectData } = props;
 
     const isCreate = router.pathname === '/projects/create';
 
@@ -52,39 +53,27 @@ export default function ProjectForm(projectData) {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     useEffect(() => {
-        if (projectData.projectData) {
+        if (projectData) {
             setForm({
                 ...form,
-                name: projectData.projectData.name,
-                description: projectData.projectData.description,
-                started:
-                    projectData.projectData.started.toNumber() !== 0
-                        ? new Date(projectData.projectData.started.toNumber() * 1000)
-                        : null,
-                ended:
-                    projectData.projectData.ended.toNumber() !== 0
-                        ? new Date(projectData.projectData.ended.toNumber() * 1000)
-                        : null,
-                primaryUrl: projectData.projectData.primaryUrl,
-                tags: projectData.projectData.tags.split(', '),
-                isPrivate: projectData.projectData.isPrivate,
+                name: projectData.name,
+                description: projectData.description,
+                started: projectData.started.toNumber() !== 0 ? new Date(projectData.started.toNumber() * 1000) : null,
+                ended: projectData.ended.toNumber() !== 0 ? new Date(projectData.ended.toNumber() * 1000) : null,
+                primaryUrl: projectData.primaryUrl,
+                tags: projectData.tags.split(', '),
+                isPrivate: projectData.isPrivate,
             });
 
             setOldForm({
                 ...oldForm,
-                name: projectData.projectData.name,
-                description: projectData.projectData.description,
-                started:
-                    projectData.projectData.started.toNumber() !== 0
-                        ? new Date(projectData.projectData.started.toNumber() * 1000)
-                        : null,
-                ended:
-                    projectData.projectData.ended.toNumber() !== 0
-                        ? new Date(projectData.projectData.ended.toNumber() * 1000)
-                        : null,
-                primaryUrl: projectData.projectData.primaryUrl,
-                tags: projectData.projectData.tags.split(', '),
-                isPrivate: projectData.projectData.isPrivate,
+                name: projectData.name,
+                description: projectData.description,
+                started: projectData.started.toNumber() !== 0 ? new Date(projectData.started.toNumber() * 1000) : null,
+                ended: projectData.ended.toNumber() !== 0 ? new Date(projectData.ended.toNumber() * 1000) : null,
+                primaryUrl: projectData.primaryUrl,
+                tags: projectData.tags.split(', '),
+                isPrivate: projectData.isPrivate,
             });
             setLoading(false);
         } else {
@@ -114,7 +103,7 @@ export default function ProjectForm(projectData) {
                     form.started,
                     form.ended,
                     form.primaryUrl,
-                    form.tags,
+                    form.tags
                 );
 
                 closeSnackbar();
@@ -139,7 +128,16 @@ export default function ProjectForm(projectData) {
                 enqueueSnackbar('Project created', { variant: 'success' });
                 router.push('/projects');
             } else {
-                const updateTx = await projectsCtx.updateProject(form, oldForm, router.query.id);
+                const updateTx = await projectsCtx.updateProject(
+                    projectData.id,
+                    form.name,
+                    form.description,
+                    form.started,
+                    form.ended,
+                    form.primaryUrl,
+                    form.tags,
+                    form.isPrivate
+                );
 
                 closeSnackbar();
 
@@ -182,7 +180,7 @@ export default function ProjectForm(projectData) {
         <>
             <Stack spacing={1} sx={{ width: { xs: '100%', md: '60%', lg: '50%', xl: '40%' } }}>
                 <Typography variant="h1" sx={{ paddingLeft: 2 }}>
-                    Create A Project
+                    {isCreate ? 'Create Project' : `Edit ${form.name || 'Project'}`}
                 </Typography>
 
                 <Grid container columnSpacing={2} rowSpacing={2} sx={{ padding: 0 }}>

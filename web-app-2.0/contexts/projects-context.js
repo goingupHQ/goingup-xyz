@@ -118,6 +118,8 @@ export const ProjectsProvider = ({ children }) => {
         if (!isCorrectNetwork) throw 'Wrong network';
         if (!wallet.ethersSigner) throw 'No wallet';
 
+        const price = await contract.price();
+
         const tx = await contract.update(
             projectId,
             name,
@@ -126,7 +128,7 @@ export const ProjectsProvider = ({ children }) => {
             ended ? moment(ended).unix() : 0,
             primaryUrl || '',
             tags ? tags.join(',') : '',
-            isPrivate
+            isPrivate, { value: price }
         );
         return tx;
     };
