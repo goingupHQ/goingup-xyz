@@ -14,13 +14,13 @@ export const createProjectData = async (form) => {
   if (form.name !== "") {
     req.name = form.name;
   } else if (form.name === "") {
-    throw new Error('You need to provide a name for the project');
+    throw new Error('You need to provide a PROJECT NAME');
   }
 
-  if (!form.description === "") {
+  if (form.description !== "") {
     req.description = form.description;
-  } else if (form.description.isEmpty()) {
-    throw new Error('You need to provide a description for the project');
+  } else if (form.description === "") {
+    throw new Error('You need to provide a PROJECT DESCRIPTION');
   }
 
   if (moment(form.started, "MM/DD/YYYY", true).isValid()) {

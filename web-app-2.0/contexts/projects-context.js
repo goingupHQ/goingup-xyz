@@ -1,8 +1,20 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { WalletContext } from "./wallet-context";
 import artifact from "../artifacts/GoingUpProjects.json";
-import { useSigner, useContract, useProvider, useAccount, useContractRead } from "wagmi";
-import { createProjectData, updateProjectData } from "../components/validation-tools/validateProjectData";
+import {
+  useSigner,
+  useContract,
+  useProvider,
+  useAccount,
+  useContractRead,
+} from "wagmi";
+import {
+  createProjectData,
+  updateProjectData,
+} from "../components/validation-tools/validateProjectData";
+
+import { provider, contractAddress } from '../pages/api/projects/_provider';
+import { ethers } from 'ethers';
 
 export const ProjectsContext = createContext();
 export const mumbaiAddress = "0xe0b5f0c73754347E1d2E3c84382970D7A70d666B";
@@ -71,11 +83,7 @@ export const ProjectsProvider = ({ children }) => {
     wallet.network == contractNetwork
   );
 
-  const contract = useContract({
-    addressOrName: contractAddress,
-    contractInterface: artifact.abi,
-    signerOrProvider: signer,
-  });
+  const contract = new ethers.Contract(contractAddress, artifact.abi, provider);
 
   const account = useAccount();
   const getProjects = async () => {
@@ -94,7 +102,7 @@ export const ProjectsProvider = ({ children }) => {
   };
 
   const getProject = async (id) => {
-     const project = await contract?.projects(id);
+    const project = await contract?.projects(id);
     return project;
   };
 
@@ -138,10 +146,9 @@ export const ProjectsProvider = ({ children }) => {
     isCorrectNetwork,
     switchToCorrectNetwork,
     getProjects,
-    createProject,
-    contract,
     getProject,
-    updateProject
+    createProject,
+    updateProject,
   };
   return (
     <ProjectsContext.Provider value={value}>

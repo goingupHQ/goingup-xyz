@@ -34,7 +34,6 @@ export default function ProjectPage() {
   useEffect(() => {
     getProject();
   }, [router, project]);
-  console.log(project);
   return (
     <>
     <Head>
