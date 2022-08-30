@@ -18,7 +18,6 @@ import { AppContext } from "../../../contexts/app-context";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
-import {BigNumber} from "ethers";
 
 export default function ProjectForm(projectData) {
   const projectsCtx = useContext(ProjectsContext);
@@ -30,8 +29,8 @@ export default function ProjectForm(projectData) {
   const [form, setForm] = useState({
     name: "",
     description: "",
-    started: null,
-    ended: null,
+    started: 0,
+    ended: 0,
     primaryUrl: "",
     tags: [],
     isPrivate: false,
@@ -112,7 +111,7 @@ export default function ProjectForm(projectData) {
         enqueueSnackbar("Project created", { variant: "success" });
         router.push("/projects");
       } else {
-          const updateTx = await projectsCtx.updateProject(form, oldForm, BigNumber.from(router.query.id));
+          const updateTx = await projectsCtx.updateProject(form, oldForm, router.query.id);
 
           closeSnackbar();
   
@@ -153,9 +152,12 @@ export default function ProjectForm(projectData) {
   };
 
   return (
-    <>
+    <Stack
+    alignItems="center"
+    m="auto"
+    mt={6}
+    >
       <Stack
-        mt="4rem"
         spacing={1}
         sx={{ width: { xs: "100%", md: "60%", lg: "50%", xl: "40%" } }}
       >
@@ -277,6 +279,6 @@ export default function ProjectForm(projectData) {
       <Backdrop open={loading} sx={{ opacity: 1 }}>
         <CircularProgress />
       </Backdrop>
-    </>
+    </Stack>
   );
 }

@@ -1,40 +1,42 @@
 import moment from "moment";
 
 export const createProjectData = async (form) => {
-  const req = [{
-    name: '',
-    description:'',
-    started: null,
-    ended: null,
-    primaryUrl: '',
-    tags: '',
-    isPrivate: false,
-}];
+  const req = [
+    {
+      name: "",
+      description: "",
+      started: 0,
+      ended: 0,
+      primaryUrl: "",
+      tags: "",
+      isPrivate: false,
+    },
+  ];
 
   if (form.name !== "") {
     req.name = form.name;
   } else if (form.name === "") {
-    throw new Error('You need to provide a PROJECT NAME');
+    throw new Error("You need to provide a PROJECT NAME");
   }
 
   if (form.description !== "") {
     req.description = form.description;
   } else if (form.description === "") {
-    throw new Error('You need to provide a PROJECT DESCRIPTION');
+    throw new Error("You need to provide a PROJECT DESCRIPTION");
   }
 
   if (moment(form.started, "MM/DD/YYYY", true).isValid()) {
-	const startedUnix = moment(form.started).unix();
+    const startedUnix = moment(form.started).unix();
     req.started = startedUnix;
   } else {
-	req.started = 0;
+    req.started = 0;
   }
 
   if (moment(form.ended, "MM/DD/YYYY", true).isValid()) {
-	const endedUnix = moment(form.ended).unix();
+    const endedUnix = moment(form.ended).unix();
     req.ended = endedUnix;
   } else {
-	req.ended = 0;
+    req.ended = 0;
   }
 
   if (form.tags.length > 0) {
@@ -45,8 +47,11 @@ export const createProjectData = async (form) => {
   }
 
   if (typeof form.primaryUrl === "string") {
-	const urlPattern = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-	urlPattern.test(form.primaryUrl) ? req.primaryUrl = form.primaryUrl : req.primaryUrl = 'https://' + form.primaryUrl;
+    const urlPattern =
+      /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+    urlPattern.test(form.primaryUrl)
+      ? (req.primaryUrl = form.primaryUrl)
+      : (req.primaryUrl = "https://" + form.primaryUrl);
   }
 
   req.isPrivate = form.isPrivate;
@@ -56,22 +61,24 @@ export const createProjectData = async (form) => {
     description: req.description,
     started: req.started,
     ended: req.ended,
-	tags: req.tags,
+    tags: req.tags,
     primaryUrl: req.primaryUrl,
-    isPrivate: req.isPrivate
-  }
+    isPrivate: req.isPrivate,
+  };
 };
 
 export const updateProjectData = async (newForm, oldForm) => {
-  const req = [{
-    name: '',
-    description:'',
-    started: null,
-    ended: null,
-    primaryUrl: '',
-    tags: '',
-    isPrivate: false,
-}];
+  const req = [
+    {
+      name: "",
+      description: "",
+      started: 0,
+      ended: 0,
+      primaryUrl: "",
+      tags: "",
+      isPrivate: false,
+    },
+  ];
 
   if (newForm.name !== oldForm.name) {
     req.name = newForm.name;
@@ -86,17 +93,17 @@ export const updateProjectData = async (newForm, oldForm) => {
   }
 
   if (newForm.started !== oldForm.started) {
-	const startedUnix = newForm.started ? moment(newForm.started).unix() : 0;
+    const startedUnix = moment(newForm.started).unix();
     req.started = startedUnix;
   } else {
-    req.started = oldForm.started;
+    req.started = !oldForm.started ? 0 : oldForm.started;
   }
 
   if (newForm.ended !== oldForm.ended) {
-      const endedUnix = newForm.ended ? moment(newForm.ended).unix() : 0;
-      req.ended = endedUnix;
+    const endedUnix = moment(newForm.ended).unix();
+    req.ended = endedUnix;
   } else {
-    req.ended = oldForm.ended;
+    req.ended = !oldForm.ended ? 0 : oldForm.ended;
   }
 
   if (newForm.tags !== oldForm.tags) {
@@ -127,14 +134,17 @@ export const updateProjectData = async (newForm, oldForm) => {
     // tags have changed
     if (changedTags) {
       req.tags = newForm.tags?.join(", ");
+    } else {
+      req.tags = oldForm.tags?.join(", ");
     }
-  } else {
-    req.tags = oldForm.tags?.join(", ");
   }
 
   if (newForm.primaryUrl !== oldForm.primaryUrl) {
-    const urlPattern = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-    urlPattern.test(newForm.primaryUrl) ? req.primaryUrl = newForm.primaryUrl : req.primaryUrl = 'https://' + newForm.primaryUrl;
+    const urlPattern =
+      /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+    urlPattern.test(newForm.primaryUrl)
+      ? (req.primaryUrl = newForm.primaryUrl)
+      : (req.primaryUrl = "https://" + newForm.primaryUrl);
   } else {
     req.primaryUrl = oldForm.primaryUrl;
   }
@@ -150,8 +160,8 @@ export const updateProjectData = async (newForm, oldForm) => {
     description: req.description,
     started: req.started,
     ended: req.ended,
-	tags: req.tags,
+    tags: req.tags,
     primaryUrl: req.primaryUrl,
-    isPrivate: req.isPrivate
-  }
+    isPrivate: req.isPrivate,
+  };
 };

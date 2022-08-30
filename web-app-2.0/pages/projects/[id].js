@@ -36,7 +36,6 @@ export default function ProjectPage() {
     getProject();
   }, [router, project]);
 
-  console.log(project);
   return (
     <>
       <Head>
@@ -46,8 +45,10 @@ export default function ProjectPage() {
         sx={{ width: { xs: "100%", md: "80%", lg: "70%", xl: "60%" }}}
         alignItems="center"
         m="auto"
+        pt={4}
       >
-        <Stack mt="4rem" spacing={1} alignSelf="end">
+        {project?.owner === account?.address && (
+          <Stack spacing={1} alignSelf="end">
           {" "}
           <Link href={`/projects/edit/${router.query.id}`}>
             <Button variant="outlined" color="primary" size="medium">
@@ -55,6 +56,8 @@ export default function ProjectPage() {
             </Button>
           </Link>
         </Stack>
+        )}
+
 
         <Stack
           borderRadius={1.5}
@@ -139,7 +142,7 @@ export default function ProjectPage() {
 
             <Stack justifyContent="space-between" direction="row" sx={{width: "100%"}}>
               <Typography
-              textAlign="center"
+              textAlign="justify"
               fontSize="14px"
               color="white"
               sx={{ fontFamily: "Gilroy", fontWeight: "500", lineHeight: "24px" }}

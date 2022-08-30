@@ -120,8 +120,8 @@ export const ProjectsProvider = ({ children }) => {
       description,
       started,
       ended,
-      tags,
       primaryUrl,
+      tags,
       isPrivate,
       { value: contractValue }
     );
@@ -133,17 +133,19 @@ export const ProjectsProvider = ({ children }) => {
     const { name, description, started, ended, tags, primaryUrl, isPrivate } =
       await updateProjectData(form, oldForm);
 
-    const tx = await contractWagmi.update(
-      id,
-      name,
-      description,
-      started,
-      ended,
-      primaryUrl,
-      tags,
-      isPrivate,
-      { value: contractValue }
-    );
+      console.log(name, description, started, ended, tags, primaryUrl, isPrivate)
+
+      const tx = await contractWagmi.update(
+        id,
+        name,
+        description,
+        started,
+        ended,
+        primaryUrl,
+        tags,
+        isPrivate,
+        { value: contractValue }
+      );
     return tx;
   };
 
