@@ -133,8 +133,6 @@ export const ProjectsProvider = ({ children }) => {
     const { name, description, started, ended, tags, primaryUrl, isPrivate } =
       await updateProjectData(form, oldForm);
 
-      console.log(name, description, started, ended, tags, primaryUrl, isPrivate)
-
       const tx = await contractWagmi.update(
         id,
         name,

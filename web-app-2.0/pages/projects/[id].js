@@ -102,16 +102,16 @@ export default function ProjectPage() {
                 height={4}
                 width="320px"
                 direction="row"
-                sx={{ spacing: "0px", height:"28px" }}
+                sx={{ spacing: "0px", height:"28px"}}
               >
                 <Stack
                   sx={{
                     backgroundColor: "#111921",
-                    borderLeftRadius: "12px",
                     border: "2px solid #253340",
                     width: "50%",
                     py: "2px",
                   }}
+                                  borderRadius="6px 0px 0px 6px" 
                 >
                   <Typography textAlign="center" fontSize="14px">
                     owner.eth
@@ -120,10 +120,10 @@ export default function ProjectPage() {
                 <Stack
                   sx={{
                     backgroundColor: "#253340",
-                    borderRightRadius: "12px",
                     width: "50%",
                     py: "4px"
                   }}
+                  borderRadius="0px 6px 6px 0px" 
                 >
                   <Typography
                     textAlign="center"
