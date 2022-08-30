@@ -39,11 +39,15 @@ export default function ProjectsList(props) {
   };
 
   useEffect(() => {
-    if (account.isConnected) load();
+    if (account.isConnected) {
+      load();
+    } 
   }, [account.isConnected]);
 
   return (
     <>
+
+
       {!loading && (
         <>
           {projects.length === 0 ? (

@@ -22,12 +22,13 @@ export default function Projects() {
       </Head>
 
       <Box sx={{ paddingTop: "20px" }}>
-        {account.address === null && (
+        {!account.isConnected && (
           <Stack
             justifyContent="center"
             alignItems="center"
             direction="column"
             spacing={4}
+            mt={4}
           >
             <Typography variant="h2">
               You need a connected wallet with a GoingUP account to access
@@ -74,7 +75,7 @@ export default function Projects() {
               </Stack>
             )}
 
-            {!chain?.unsupported && (
+            {!chain?.unsupported && account.isConnected && (
               <>
                 <ProjectsList />
               </>
