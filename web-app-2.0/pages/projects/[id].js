@@ -68,7 +68,7 @@ export default function ProjectPage() {
           p={4}
           my={2}
           direction="column"
-          spacing={6}
+          spacing={5}
         >
           <Stack justifyContent="space-between" direction="row" sx={{width: "100%"}}>
 
@@ -143,7 +143,12 @@ export default function ProjectPage() {
           </Stack>
 
             <Stack justifyContent="space-between" direction="row" sx={{width: "100%"}}>
-              <Typography>{project ? project?.description : "Project description"}</Typography>
+              <Typography
+              textAlign="center"
+              fontSize="14px"
+              color="white"
+              sx={{ fontFamily: "Gilroy", fontWeight: "500", lineHeight: "24px" }}
+              >{project ? project?.description : "Project description"}</Typography>
             </Stack>
         </Stack>
       </Stack>

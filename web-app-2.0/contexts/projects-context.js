@@ -13,8 +13,8 @@ import {
   updateProjectData,
 } from "../components/validation-tools/validateProjectData";
 
-import { provider, contractAddress } from '../pages/api/projects/_provider';
-import { ethers } from 'ethers';
+import { provider, contractAddress } from "../pages/api/projects/_provider";
+import { ethers } from "ethers";
 
 export const ProjectsContext = createContext();
 export const mumbaiAddress = "0xe0b5f0c73754347E1d2E3c84382970D7A70d666B";
@@ -84,6 +84,11 @@ export const ProjectsProvider = ({ children }) => {
   );
 
   const contract = new ethers.Contract(contractAddress, artifact.abi, provider);
+  const contractWagmi = useContract({
+    addressOrName: contractAddress,
+    contractInterface: artifact.abi,
+    signerOrProvider: signer,
+  });
 
   const account = useAccount();
   const getProjects = async () => {
@@ -110,7 +115,7 @@ export const ProjectsProvider = ({ children }) => {
     const contractValue = await contract.price();
     const { name, description, started, ended, tags, primaryUrl, isPrivate } =
       await createProjectData(form);
-    const tx = await contract.create(
+    const tx = await contractWagmi.create(
       name,
       description,
       started,
@@ -124,10 +129,11 @@ export const ProjectsProvider = ({ children }) => {
   };
 
   const updateProject = async (form, oldForm, id) => {
-    const contractValue = await contract.price();
+    const contractValue = await contractWagmi.price();
     const { name, description, started, ended, tags, primaryUrl, isPrivate } =
       await updateProjectData(form, oldForm);
-    const tx = await contract.update(
+
+    const tx = await contractWagmi.update(
       id,
       name,
       description,

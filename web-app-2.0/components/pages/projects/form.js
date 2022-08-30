@@ -18,7 +18,7 @@ import { AppContext } from "../../../contexts/app-context";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
-import moment from "moment";
+import {BigNumber} from "ethers";
 
 export default function ProjectForm(projectData) {
   const projectsCtx = useContext(ProjectsContext);
@@ -112,29 +112,29 @@ export default function ProjectForm(projectData) {
         enqueueSnackbar("Project created", { variant: "success" });
         router.push("/projects");
       } else {
-        const updateTx = await projectsCtx.updateProject(form, oldForm, router.query.id);
+          const updateTx = await projectsCtx.updateProject(form, oldForm, BigNumber.from(router.query.id));
 
-        closeSnackbar();
-
-        enqueueSnackbar("Waiting for transaction confirmations", {
-          variant: "info",
-          persist: true,
-          action: (key) => {
-            <Button
-              onClick={() => {
-                const baseUrl = projectsCtx.networkParams.blockExplorers[0];
-                window.open(`${baseUrl}tx/${createTx.hash}`);
-              }}
-            >
-              Show Transaction
-            </Button>;
-          },
-        });
-        await updateTx.wait();
-        closeSnackbar();
-
-        enqueueSnackbar("Project updated", { variant: "success" });
-        router.push("/projects");
+          closeSnackbar();
+  
+          enqueueSnackbar("Waiting for transaction confirmations", {
+            variant: "info",
+            persist: true,
+            action: (key) => {
+              <Button
+                onClick={() => {
+                  const baseUrl = projectsCtx.networkParams.blockExplorers[0];
+                  window.open(`${baseUrl}tx/${createTx.hash}`);
+                }}
+              >
+                Show Transaction
+              </Button>;
+            },
+          });
+          await updateTx.wait();
+          closeSnackbar();
+  
+          enqueueSnackbar("Project updated", { variant: "success" });
+          router.push("/projects");
       }
     } catch (e) {
       closeSnackbar();
