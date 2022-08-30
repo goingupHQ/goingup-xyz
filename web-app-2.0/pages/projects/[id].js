@@ -61,7 +61,7 @@ export default function ProjectPage() {
           </Link>
         </Stack>
 
-        <Stack
+        {/* <Stack
           borderRadius={1.5}
           sx={{ backgroundColor: "#111921", borderRadius: "12px" }}
           width="100%"
@@ -150,7 +150,7 @@ export default function ProjectPage() {
               sx={{ fontFamily: "Gilroy", fontWeight: "500", lineHeight: "24px" }}
               >{project ? project?.description : "Project description"}</Typography>
             </Stack>
-        </Stack>
+        </Stack> */}
       </Stack>
 
       <Backdrop open={loading} sx={{ opacity: 1 }}>
