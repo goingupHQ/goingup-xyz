@@ -26,7 +26,7 @@ export default function TeamMember() {
                     width: "50px",
                     }}
                     borderRadius="360px"
-                    alt="Project owner."
+                    alt="project member"
                     src="https://th-thumbnailer.cdn-si-edu.com/bBoKmhmRwKgjpcq3pMMV9VldIsc=/fit-in/1600x0/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/38/ee/38ee7aaa-abbb-4c60-b959-4b1c5c8c6989/axgpay.jpg"
                 />
                 <Stack direction="column" spacing="20px">

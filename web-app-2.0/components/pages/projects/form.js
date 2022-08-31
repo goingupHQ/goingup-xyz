@@ -159,7 +159,6 @@ export default function ProjectForm(projectData) {
   return (
     <Stack
     alignItems="center"
-    m="auto"
     mt={6}
     >
       <Stack
@@ -171,7 +170,7 @@ export default function ProjectForm(projectData) {
         </Typography>
 
         <Grid container columnSpacing={2} rowSpacing={2} sx={{ padding: 0 }}>
-          <Grid item xs={12}>
+          <Grid item xs={11.5}>
             <TextField
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               id="outlined-basic"
@@ -182,7 +181,7 @@ export default function ProjectForm(projectData) {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={11.5}>
             <TextField
               onChange={(e) =>
                 setForm({ ...form, description: e.target.value })
@@ -198,7 +197,7 @@ export default function ProjectForm(projectData) {
             />
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid item xs={11.5} md={6}>
             <DesktopDatePicker
               label="Started"
               inputFormat="MM/DD/yyyy"
@@ -210,7 +209,7 @@ export default function ProjectForm(projectData) {
             />
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid item xs={11.5} md={5.5}>
             <DesktopDatePicker
               label="Ended"
               inputFormat="MM/DD/yyyy"
@@ -222,7 +221,7 @@ export default function ProjectForm(projectData) {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={11.5}>
             <TextField
               onChange={(e) => setForm({ ...form, primaryUrl: e.target.value })}
               value={form.primaryUrl}
@@ -234,7 +233,7 @@ export default function ProjectForm(projectData) {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={11.5}>
             <Autocomplete
               multiple
               value={form.tags?.length === 0 ? [] : form.tags}
@@ -259,7 +258,7 @@ export default function ProjectForm(projectData) {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={11.5}>
             <FormControlLabel
               label="Is this a private project?"
               control={
@@ -273,7 +272,7 @@ export default function ProjectForm(projectData) {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={11.5}>
             <LoadingButton variant="contained" onClick={() => sendProject()}>
               {isCreate ? "Create Project" : "Update Project"}
             </LoadingButton>
