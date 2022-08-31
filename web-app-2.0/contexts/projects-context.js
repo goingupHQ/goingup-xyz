@@ -91,19 +91,20 @@ export const ProjectsProvider = ({ children }) => {
   });
 
   const account = useAccount();
-  const getProjects = async () => {
+  const getProjects = async (address) => {
+
     // this api endpoint just returns project ids owned by the user address
-    const response = account.address !== undefined && await fetch(`/api/projects/account/${account?.address}`)
-    const projectIds = await response.json();
-    const projects = [];
-
-    // for each project id, get the project data
-    for (const projectId of projectIds) {
-      const project = await contract?.projects(projectId); // does not work with wagmi
-      projects.push(project);
-    }
-
-    return projects;
+      const response = await fetch(`/api/projects/account/${address}`)
+      const projectIds = await response.json();
+      const projects = [];
+  
+      // for each project id, get the project data
+      for (const projectId of projectIds) {
+        const project = await contract?.projects(projectId); // does not work with wagmi
+        projects.push(project);
+      }
+  
+      return projects;
   };
 
   const getProject = async (id) => {

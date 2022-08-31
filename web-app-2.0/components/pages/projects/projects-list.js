@@ -20,7 +20,7 @@ export default function ProjectsList(props) {
   const projectsContext = useContext(ProjectsContext);
   const app = useContext(AppContext);
   const [loading, setLoading] = useState(true);
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState(undefined);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const account = useAccount();
@@ -28,27 +28,31 @@ export default function ProjectsList(props) {
   const load = async () => {
     setLoading(true);
     try {
-      setProjects(await projectsContext.getProjects());
+      if (account.address) {
+        const projects = await projectsContext.getProjects(account?.address);
+        setProjects(projects);
+      }
     } catch (err) {
       enqueueSnackbar("There was an error loading your projects", {
         variant: "error",
       });
     } finally {
-      setLoading(false);
+     setLoading(false)
     }
   };
 
   useEffect(() => {
-    if (account.isConnected) {
+    if (account.isConnected && loading) {
       load();
     }
-  }, [account.isConnected]);
+  }, [account.isConnected, loading]);
+
 
   return (
     <>
       {!loading && (
         <>
-          {projects.length === 0 ? (
+          {!loading && projects.length === 0 ? (
             <Stack
               mt={5}
               justifyContent="center"
@@ -196,7 +200,7 @@ export default function ProjectsList(props) {
         </>
       )}
 
-      <Backdrop open={loading}>
+      <Backdrop open={loading || projects === []}>
         <CircularProgress />
       </Backdrop>
     </>
