@@ -14,6 +14,8 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useAccount } from "wagmi";
 import Link from "next/link";
+import { useRouter } from 'next/router';
+import ProjectCard from './project-card';
 
 export default function ProjectsList(props) {
   const router = useRouter();

@@ -6,6 +6,7 @@ import { WalletContext } from "../../contexts/wallet-context";
 import { ProjectsContext } from "../../contexts/projects-context";
 import ProjectsList from "../../components/pages/projects/projects-list";
 import { useAccount, useNetwork, useSwitchNetwork} from "wagmi";
+
 export default function Projects() {
   const app = useContext(AppContext);
   const wallet = useContext(WalletContext);

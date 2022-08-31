@@ -34,6 +34,7 @@ const TokensAndPoaps = (props) => {
     const [tier2Messages, setTier2Messages] = useState([]);
     const [tier3Messages, setTier3Messages] = useState([]);
     const [tier4Messages, setTier4Messages] = useState([]);
+    const [accountFromSender, setAccountFromSender] = useState(null);
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
@@ -47,6 +48,23 @@ const TokensAndPoaps = (props) => {
         artifact.abi,
         provider
     );
+
+    const getAccountFromSender = async () => {
+        if (address) {
+            const response = await fetch(
+                `/api/get-account?address=0x36b1936738E0D1Ed044Ac8e4EF34bb3bF668F143`
+            );
+            setAccountFromSender(await response.json());
+        }
+    };
+
+    useEffect(() => {
+        // do some
+        getAccountFromSender();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [address]);
+
+    console.log(accountFromSender);
 
     useEffect(() => {
         // do some
@@ -237,11 +255,37 @@ const TokensAndPoaps = (props) => {
                                                             paddingTop: "5px",
                                                         }}
                                                     >
-                                                        {account.name.replace(
+                                                        {accountFromSender.name.replace(
                                                             /\s/g,
                                                             ""
                                                         ) + ".eth"}
                                                     </Typography>
+                                                    {/* {tier1Messages.map((m) => (
+                                                        <div
+                                                            key={m}
+                                                            style={{
+                                                                display:
+                                                                    "block",
+                                                                marginTop:
+                                                                    "15px",
+                                                            }}
+                                                        >
+                                                            <Typography variant='p'>
+                                                                &quot;
+                                                                {m.args.data}
+                                                                &quot;
+                                                            </Typography>
+                                                            <Typography variant='body1'>
+                                                                {`Sent ${moment(
+                                                                    m.block
+                                                                        ?.timestamp *
+                                                                        1000
+                                                                ).fromNow()} by ${
+                                                                    m.args.from
+                                                                }`}
+                                                            </Typography>
+                                                        </div>
+                                                    ))} */}
                                                     <Button
                                                         sx={{
                                                             color:
@@ -308,15 +352,39 @@ const TokensAndPoaps = (props) => {
                                                         variant='mobileh2'
                                                         sx={{
                                                             paddingBottom:
-                                                                "20px",
+                                                                "10px",
                                                             paddingTop: "5px",
                                                         }}
                                                     >
-                                                        {account.name.replace(
+                                                        {accountFromSender.name.replace(
                                                             /\s/g,
                                                             ""
                                                         ) + ".eth"}
                                                     </Typography>
+                                                    {tier2Messages.map((m) => (
+                                                        <div
+                                                            key={m.number}
+                                                            style={{
+                                                                display:
+                                                                    "block",
+                                                            }}
+                                                        >
+                                                            <Typography variant='sh3'>
+                                                                &quot;
+                                                                {m.args.data}
+                                                                &quot;
+                                                            </Typography>
+                                                            {/* <Typography variant='body1'>
+                                                                {`Sent ${moment(
+                                                                    m.block
+                                                                        ?.timestamp *
+                                                                        1000
+                                                                ).fromNow()} by ${
+                                                                    m.args.from
+                                                                }`}
+                                                            </Typography> */}
+                                                        </div>
+                                                    ))}
                                                     <Button
                                                         sx={{
                                                             color:
@@ -381,15 +449,39 @@ const TokensAndPoaps = (props) => {
                                                         variant='mobileh2'
                                                         sx={{
                                                             paddingBottom:
-                                                                "20px",
+                                                                "10px",
                                                             paddingTop: "5px",
                                                         }}
                                                     >
-                                                        {account.name.replace(
+                                                        {accountFromSender.name.replace(
                                                             /\s/g,
                                                             ""
                                                         ) + ".eth"}
                                                     </Typography>
+                                                    {tier3Messages.map((m) => (
+                                                        <div
+                                                            key={m.number}
+                                                            style={{
+                                                                display:
+                                                                    "block",
+                                                            }}
+                                                        >
+                                                            <Typography variant='sh3'>
+                                                                &quot;
+                                                                {m.args.data}
+                                                                &quot;
+                                                            </Typography>
+                                                            {/* <Typography variant='body1'>
+                                                                {`Sent ${moment(
+                                                                    m.block
+                                                                        ?.timestamp *
+                                                                        1000
+                                                                ).fromNow()} by ${
+                                                                    m.args.from
+                                                                }`}
+                                                            </Typography> */}
+                                                        </div>
+                                                    ))}
                                                     <Button
                                                         sx={{
                                                             color:

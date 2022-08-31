@@ -16,6 +16,7 @@ import {
 import { provider, contractAddress } from "../pages/api/projects/_provider";
 import { ethers } from "ethers";
 
+
 export const ProjectsContext = createContext();
 export const mumbaiAddress = "0xe0b5f0c73754347E1d2E3c84382970D7A70d666B";
 
@@ -111,6 +112,7 @@ export const ProjectsProvider = ({ children }) => {
     return project;
   };
 
+
   const createProject = async (form) => {
     const contractValue = await contract.price();
     const { name, description, started, ended, tags, primaryUrl, isPrivate } =
@@ -161,4 +163,4 @@ export const ProjectsProvider = ({ children }) => {
       {children}
     </ProjectsContext.Provider>
   );
-};
+}
