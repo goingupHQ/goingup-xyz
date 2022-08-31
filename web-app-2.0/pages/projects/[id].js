@@ -15,6 +15,7 @@ import { useAccount, useEnsName } from "wagmi";
 import { ProjectsContext } from "../../contexts/projects-context";
 import Link from "next/link";
 import Head from "next/head";
+import ProjectCard from "../../components/common/project-card";
 
 import TeamMember from "../../components/pages/projects/team-member";
 import AddressBar from "../../components/common/addressBar";
@@ -39,6 +40,8 @@ export default function ProjectPage() {
   useEffect(() => {
     getProject();
   }, [router, project]);
+
+  const tags = ["NFTs", "POAP"];
 
   return (
     <>
@@ -151,7 +154,7 @@ export default function ProjectPage() {
           my={2}
           direction="column"
           pb={2}
-          sx={{ backgroundColor: "#111921", borderRadius: "0px 0px 12px 12px" }}
+          sx={{ backgroundColor: "#111921", borderRadius: "12px" }}
         >
           <Stack
             px={4}
@@ -169,7 +172,36 @@ export default function ProjectPage() {
           <Divider backgroundColor="#1F3244" />
           <TeamMember />
         </Stack>
+
+        <Stack
+          width="100%"
+          my={2}
+          direction="column"
+          pb={2}
+          px={4}
+          sx={{ backgroundColor: "#111921", borderRadius: "12px" }}
+        >
+          <Stack
+            pt={4}
+            pb={2}
+            sx={{
+              backgroundColor: "#111921",
+              borderRadius: "12px 12px 0px 0px",
+            }}
+          >
+            <Typography variant="h1">Tokens {"&"} POAPs</Typography>
+          </Stack>
+            
+          <ProjectCard 
+            name={"Bored Ape"}
+            topText={"from"}
+            link={`https://www.boredapeyachtclub.com/`}
+            tags={tags}
+          />
       </Stack>
+      </Stack>
+
+
 
       <Backdrop open={loading} sx={{ opacity: 1 }}>
         <CircularProgress />
