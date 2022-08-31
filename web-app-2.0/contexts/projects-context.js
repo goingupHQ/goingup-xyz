@@ -16,7 +16,6 @@ import {
 import { provider, contractAddress } from "../pages/api/projects/_provider";
 import { ethers } from "ethers";
 
-
 export const ProjectsContext = createContext();
 export const mumbaiAddress = "0xe0b5f0c73754347E1d2E3c84382970D7A70d666B";
 
@@ -94,7 +93,7 @@ export const ProjectsProvider = ({ children }) => {
   const account = useAccount();
   const getProjects = async () => {
     // this api endpoint just returns project ids owned by the user address
-    const response = await fetch(`/api/projects/account/${account.address}`);
+    const response = account.address !== undefined && await fetch(`/api/projects/account/${account?.address}`)
     const projectIds = await response.json();
     const projects = [];
 
