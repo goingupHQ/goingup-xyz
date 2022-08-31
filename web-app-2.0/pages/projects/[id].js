@@ -18,6 +18,7 @@ import Head from "next/head";
 
 import TeamMember from "../../components/pages/projects/team-member";
 import AddressBar from "../../components/common/addressBar";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function ProjectPage() {
   const [project, setProject] = useState(null);
@@ -44,6 +45,12 @@ export default function ProjectPage() {
       <Head>
         <title>Going UP - Project</title>
       </Head>
+      <Stack onClick={() => router.back()}  position="absolute" pt={6} px={6} justifyContent="center">
+        <ArrowBackIcon sx={{ ':hover': {
+                    cursor: "pointer",
+                }, color: "#4D5F72" }} />
+      </Stack>
+
       <Stack
         sx={{ width: { xs: "100%", md: "80%", lg: "70%", xl: "60%" } }}
         alignItems="center"
@@ -140,27 +147,27 @@ export default function ProjectPage() {
         </Stack>
 
         <Stack
-            width="100%"
-            my={2}
-            direction="column"
+          width="100%"
+          my={2}
+          direction="column"
+          pb={2}
+          sx={{ backgroundColor: "#111921", borderRadius: "0px 0px 12px 12px" }}
+        >
+          <Stack
+            px={4}
+            pt={4}
             pb={2}
-            sx={{ backgroundColor: "#111921", borderRadius: "0px 0px 12px 12px" }}
-            >
-            <Stack
-                px={4}
-                pt={4}
-                pb={2}
-                sx={{
-                backgroundColor: "#111921",
-                borderRadius: "12px 12px 0px 0px",
-                }}
-            >
-                <Typography variant="h1">Team</Typography>
-            </Stack>
+            sx={{
+              backgroundColor: "#111921",
+              borderRadius: "12px 12px 0px 0px",
+            }}
+          >
+            <Typography variant="h1">Team</Typography>
+          </Stack>
 
-        <TeamMember/>
-        <Divider backgroundColor="#1F3244" />
-        <TeamMember/>
+          <TeamMember />
+          <Divider backgroundColor="#1F3244" />
+          <TeamMember />
         </Stack>
       </Stack>
 
