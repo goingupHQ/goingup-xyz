@@ -29,8 +29,8 @@ export default function ProjectForm(projectData) {
   const [form, setForm] = useState({
     name: "",
     description: "",
-    started: 0,
-    ended: 0,
+    started: null,
+    ended: null,
     primaryUrl: "",
     tags: [],
     isPrivate: false,
@@ -87,6 +87,11 @@ export default function ProjectForm(projectData) {
       });
 
       if (isCreate) {
+        if (!form.name) throw 'Project name is required';
+        if (!form.description) throw 'Project description is required';
+        if (form.primaryUrl && !isURL(form.primaryUrl)) throw 'Project primary URL is invalid';
+        if (!projectsCtx.isCorrectNetwork) throw 'You are not on the correct network';
+        
         const createTx = await projectsCtx.createProject(form);
 
         closeSnackbar();
