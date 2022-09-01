@@ -24,7 +24,6 @@ import ChevronDownIcon from './icons/ChevronDownIcon';
 import { AppContext } from '../contexts/app-context';
 import ProjectsIcon from './icons/ProjectsIcon';
 import ProfileIcon from './icons/ProfileIcon';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const UserBoxButton = styled(Button)(
     ({ theme }) => `
@@ -112,7 +111,7 @@ export default function UserBox () {
 
     return (
         <>
-            {/* <UserBoxButton
+            <UserBoxButton
                 color="secondary"
                 ref={ref}
                 onClick={handleOpen}
@@ -121,7 +120,7 @@ export default function UserBox () {
                         {wallet.address === null &&
                         <Box sx={{ paddingLeft: '4px', paddingTop: '10px', display: {xs: 'none', md: 'initial'}}}>
                         <CollaboratorsIcon color={theme.palette.text.main} />
-                        {/* <Avatar variant="rounded" /> 
+                        {/* <Avatar variant="rounded" /> */}
                         </Box>
                         }
 
@@ -131,9 +130,11 @@ export default function UserBox () {
                             </Box>
                         }
                     </>
+                }
                 endIcon={
                     <ChevronDownIcon color={theme.palette.text.main} />
-                                
+                }
+            >
                 <Box
                     display="flex"
                     flex={1}
@@ -155,27 +156,16 @@ export default function UserBox () {
                                 truncateEthAddress(wallet.address)
                             }
                         </UserBoxLabelMain>
-                        {wallet.address &&
+                        {/* {wallet.address &&
                             <UserBoxDescriptionMain
                                 variant="body2"
                             >
                                 {wallet.walletTypes[wallet.walletType]?.display} {wallet.networks[wallet.network]?.name}
                             </UserBoxDescriptionMain>
-                        } 
+                        } */}
                     </UserBoxText>
                 </Box>
-            </UserBoxButton> */}
-                         <ConnectButton
-                                chainStatus={"none"}
-                                showBalance={{
-                                    smallScreen: false,
-                                    largeScreen: true,
-                                }}
-                                accountStatus={{
-                                    smallScreen: "avatar",
-                                    largeScreen: "full",
-                                }}
-                                />
+            </UserBoxButton>
             <Popover
                 disableScrollLock
                 anchorEl={ref.current}

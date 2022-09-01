@@ -1,12 +1,11 @@
-import { Box, createTheme, ThemeProvider } from '@mui/material';
-import { useContext, useEffect, useMemo } from 'react';
-import { AppContext } from '../contexts/app-context';
-import { WalletContext } from '../contexts/wallet-context';
-import Header from './layout/header';
-import { darkTheme, lightTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { Padding } from "@mui/icons-material";
+import { Box, createTheme, ThemeProvider } from "@mui/material";
+import { useContext, useEffect, useMemo } from "react";
+import { AppContext } from "../contexts/app-context";
+import { WalletContext } from "../contexts/wallet-context";
+import Header from "./layout/header";
 
-export default function Layout({ children, chains }) {
+export default function Layout({ children }) {
     const app = useContext(AppContext);
     const wallet = useContext(WalletContext);
 
@@ -93,7 +92,7 @@ export default function Layout({ children, chains }) {
                         main: "#4D5F72",
                     },
                     sidebar: {
-                        main: '#394859',
+                        main: "#394859",
                     },
                 },
                 typography: {
@@ -140,7 +139,7 @@ export default function Layout({ children, chains }) {
                         fontWeight: "bold",
                     },
                     allVariants: {
-                        color: app.mode === 'dark' ? '#FFFFFF' : '#010101',
+                        color: app.mode === "dark" ? "#FFFFFF" : "#010101",
                     },
                     rep: {
                         fontSize: "15px",
@@ -246,29 +245,17 @@ export default function Layout({ children, chains }) {
 
     return (
         <>
-            <RainbowKitProvider
-                theme={
-                    app.mode === 'light'
-                        ? lightTheme({
-                            accentColor: '#F4CE00',
-                            accentColorForeground: '#000000',
-                            borderRadius: 'small',
-                            fontStack: 'rounded',
-                        })
-                        : darkTheme({
-                            accentColor: '#F4CE00',
-                            accentColorForeground: '#000000',
-                            borderRadius: 'small',
-                            fontStack: 'rounded',
-                        })
-                }
-                chains={chains}
-            >
-                <ThemeProvider theme={theme}>
-                    <Header />
-                    <Box sx={{ paddingTop: { xs: '42px', md: '120px' } }}>{children}</Box>
-                </ThemeProvider>
-            </RainbowKitProvider>
+            <ThemeProvider theme={theme}>
+                <Header />
+                <Box
+                    sx={{
+                        paddingTop: { xs: "74px", md: "150px" },
+                        paddingX: { xs: "15px", lg: "105px" },
+                    }}
+                >
+                    {children}
+                </Box>
+            </ThemeProvider>
         </>
     );
 }

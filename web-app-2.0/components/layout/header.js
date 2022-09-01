@@ -16,7 +16,6 @@ import UserBox from '../user-box';
 import DesktopNav from './desktop-nav';
 import MoonIcon from '../icons/MoonIcon';
 import SunIcon from '../icons/SunIcon';
-import {ConnectButton} from "@rainbow-me/rainbowkit"
 
 export default function Header(props) {
     const app = useContext(AppContext);
@@ -63,24 +62,11 @@ export default function Header(props) {
                                         {app.mode === 'dark' && <MoonIcon />}
                                     </IconButton>
                                 </Stack>
-                                {/* <UserBox /> */}
+                                <UserBox />
                                 <Box sx={{ display: { xs: 'initial', md: 'none' }, marginLeft: '0px !important' }}>
                                     <IconButton onClick={() => setDrawerOpen(!drawerOpen)}>
                                         {drawerOpen ? <CloseIcon /> : <MenuIcon />}
                                     </IconButton>
-                                </Box>
-                                <Box sx={{ marginLeft: '16px !important' }}>
-                                <ConnectButton
-                                chainStatus={"icon"}
-                                showBalance={{
-                                    smallScreen: false,
-                                    largeScreen: true,
-                                }}
-                                accountStatus={{
-                                    smallScreen: "avatar",
-                                    largeScreen: "full",
-                                }}
-                                />
                                 </Box>
                             </Stack>
                         </Grid>
