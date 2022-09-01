@@ -84,7 +84,6 @@ export default function AppreciationTokenCard(props) {
     };
 
     const showRandomMessage = async () => {
-        console.log('showRandomMessage', messages.length);
         if (messages.length === 1) {
             setShownMessage(messages[0]);
             setShowMessage(true);
