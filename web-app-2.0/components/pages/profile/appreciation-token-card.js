@@ -1,9 +1,11 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Fade, Stack, Typography } from '@mui/material';
 import { ethers } from 'ethers';
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../../contexts/app-context';
 import { WalletContext } from '../../../contexts/wallet-context';
+import sleep from 'sleep-promise';
 import artifact from '../../../../artifacts/GoingUpUtilityToken.json';
+import truncateEthAddress from 'truncate-eth-address';
 
 export default function AppreciationTokenCard(props) {
     const { tier, balance } = props;
@@ -12,6 +14,8 @@ export default function AppreciationTokenCard(props) {
 
     const [loading, setLoading] = useState(true);
     const [messages, setMessages] = useState([]);
+    const [showMessage, setShowMessage] = useState(false);
+    const [shownMessage, setShownMessage] = useState({});
 
     useEffect(() => {
         const load = async () => {
@@ -24,10 +28,18 @@ export default function AppreciationTokenCard(props) {
             } finally {
                 setLoading(false);
             }
+
+            showRandomMessage();
         };
 
         load();
+        let intervalId = setInterval(showRandomMessage, 7000);
+        return () => clearInterval(intervalId);
     }, []);
+
+    const contractAddress = wallet.utilityToken.address;
+    const provider = wallet.utilityToken.provider;
+    const contract = new ethers.Contract(contractAddress, artifact.abi, provider);
 
     const getMessages = async (tokenID, address) => {
         const _interface = new ethers.utils.Interface(artifact.abi);
@@ -35,21 +47,49 @@ export default function AppreciationTokenCard(props) {
         filter.fromBlock = 0;
         filter.toBlock = 'latest';
         const writeMintLogs = await await contract.provider.getLogs(filter);
-        const messages = writeMintLogs.map((log) => {
+        const messagesResult = writeMintLogs.map((log) => {
             const parsedLog = _interface.parseLog(log);
-            const message = { ...parsedLog, ...log };
+            const message = { ...parsedLog.args };
             return message;
         });
 
-        for (const m of messages) m.block = await contract.provider.getBlock(m.blockNumber);
+        // for (const m of messages) m.block = await contract.provider.getBlock(m.blockNumber);
 
-        return messages;
+        for (const m of messagesResult) {
+            console.log(m);
+            const fromAccount = await getSenderAccount(m.from);
+            if (fromAccount) {
+                m.fromAccount = fromAccount;
+            }
+        }
+
+        return messagesResult;
     };
 
-    const getAccountFromSender = async () => {
+    const getSenderAccount = async (address) => {
         if (address) {
-            const response = await fetch(`/api/get-account?address=0x36b1936738E0D1Ed044Ac8e4EF34bb3bF668F143`);
-            setAccountFromSender(await response.json());
+            const response = await fetch(`/api/get-account?address=${address}`);
+            if (response.status === 200) {
+                const data = await response.json();
+                return data;
+            } else {
+                return null;
+            }
+        }
+    };
+
+    const showRandomMessage = async () => {
+        if (messages.length === 1) {
+            setShownMessage(messages[0]);
+            setShowMessage(true);
+        }
+
+        if (messages.length > 1) {
+            setShowMessage(false);
+            await sleep(1000);
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            setShownMessage(messages[randomIndex]);
+            setShowMessage(true);
         }
     };
 
@@ -69,7 +109,7 @@ export default function AppreciationTokenCard(props) {
                 <Box
                     component="img"
                     src={`/images/appreciation-token-t${tier}-display.png`}
-                    sx={{ width: '80px' }}
+                    sx={{ width: '140px', height: '140px' }}
                     alt={`appreciation-token-t${tier}`}
                 />
 
@@ -77,33 +117,57 @@ export default function AppreciationTokenCard(props) {
                     direction="column"
                     justifyContent="center"
                     alignItems="flex-start"
-                    spacing={0.5}
+                    spacing={1}
                     sx={{ paddingX: '15px' }}
                 >
-                    <Typography color={'#6E8094'} variant="sh3">
-                        from
+                    <Typography variant="h6" color="textPrimary">
+                        <strong>{balance} T{tier} Token{balance !== 1 ? 's' : ''}</strong>
                     </Typography>
-                    <Typography
-                        variant="mobileh2"
-                        sx={{
-                            paddingBottom: '20px',
-                            paddingTop: '5px',
-                        }}
-                    >
-                        From
-                    </Typography>
+                    {!loading &&
+                    <>
+                        <Fade in={showMessage}>
+                            <Box>
+                                <Typography variant="h6">
+                                    {shownMessage.data}
+                                </Typography>
+                                <Typography variant="body1">
+                                    { `- `}
+                                    {shownMessage.fromAccount &&
+                                    <>
+                                        {`${shownMessage.fromAccount?.name} (${truncateEthAddress(shownMessage.from)})`}
+                                    </>
+                                    }
+                                    {!shownMessage.fromAccount &&
+                                    <>
+                                        truncateEthAddress(shownMessage.from)
+                                    </>
+                                    }
+                                </Typography>
 
-                    <Button
-                        size="small"
-                        sx={{
-                            color: app.mode === 'dark' ? '#FFFFFF' : '#22272F',
-                            width: '63px',
-                            height: '24px',
-                            backgroundColor: app.mode === 'dark' ? '#253340' : '#CFCFCF',
-                        }}
-                    >
-                        See all
-                    </Button>
+                            </Box>
+                        </Fade>
+
+                        <Button
+                            size="medium"
+                            sx={{
+                                color: app.mode === 'dark' ? '#FFFFFF' : '#22272F',
+                                width: 'auto',
+                                height: '24px',
+                                backgroundColor: app.mode === 'dark' ? '#253340' : '#CFCFCF',
+                            }}
+                        >
+                            See all messages
+                        </Button>
+                    </>
+                    }
+
+                    {loading &&
+                    <>
+                        <Typography variant="h6" color="textPrimary">
+                            <strong>Loading messages...</strong>
+                        </Typography>
+                    </>
+                    }
                 </Stack>
             </Stack>
         </>

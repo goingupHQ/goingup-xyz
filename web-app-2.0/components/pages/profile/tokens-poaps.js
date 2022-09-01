@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../../contexts/app-context';
 import { WalletContext } from '../../../contexts/wallet-context';
@@ -16,8 +15,6 @@ import {
     Box,
 } from '@mui/material';
 import { ethers } from 'ethers';
-import { useRouter } from 'next/router';
-import moment from 'moment';
 import artifact from '../../../../artifacts/GoingUpUtilityToken.json';
 import ChevronRightIcon from '../../icons/ChevronRightIcon';
 import AppreciationTokenCard from './appreciation-token-card';
@@ -27,11 +24,9 @@ const CardContentWrapper = styled(CardContent)( () => ``);
 const TokensAndPoaps = (props) => {
     const [loading, setLoading] = useState(true);
     const [balances, setBalances] = useState([0, 0, 0, 0]);
-    const [accountFromSender, setAccountFromSender] = useState(null);
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
-    const router = useRouter();
     const { address } = props.account;
 
     const contractAddress = wallet.utilityToken.address;
@@ -39,7 +34,6 @@ const TokensAndPoaps = (props) => {
     const contract = new ethers.Contract(contractAddress, artifact.abi, provider);
 
     useEffect(() => {
-        // do some
         const load = async () => {
             setLoading(true);
             try {
@@ -85,7 +79,7 @@ const TokensAndPoaps = (props) => {
                         }}
                         title={
                             <Stack direction="row" justifyContent="space-between" paddingTop={'14px'} paddingX={'14px'}>
-                                <Typography variant="mobileh1">Tokens &amp; POAPS</Typography>
+                                <Typography variant="mobileh1">Appreciation Tokens</Typography>
                                 <Button
                                     color={app.mode === 'dark' ? 'primary' : 'secondary'}
                                     endIcon={<ChevronRightIcon color={app.mode === 'dark' ? 'primary' : 'secondary'} />}
@@ -95,10 +89,10 @@ const TokensAndPoaps = (props) => {
                             </Stack>
                         }
                     />
-                    <Box sx={{ padding: 2 }}>
+                    <Box sx={{ padding: 4 }}>
                         {loading && (
-                            <Typography variant="h3">
-                                <CircularProgress size="2rem" />
+                            <Typography variant="h4" sx={{ padding: 2 }}>
+                                Retrieving <CircularProgress size="12pt" />
                             </Typography>
                         )}
 
