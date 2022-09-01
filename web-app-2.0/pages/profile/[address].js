@@ -62,7 +62,7 @@ function ProfilePage() {
                         <Typography variant='h2'>{account?.name}</Typography>
                     </Box>
                     <Fade in={true} timeout={1000}>
-                        <Box fullWidth>
+                        <Box>
                             <ProfileSection
                                 account={account}
                                 refresh={getAccount}
@@ -76,7 +76,7 @@ function ProfilePage() {
                                 refresh={getAccount}
                             /> */}
                             {/* <Projects account={account} /> */}
-                            
+
                             {/* <AppreciationTokens
                                 account={account}
                                 refresh={getAccount}

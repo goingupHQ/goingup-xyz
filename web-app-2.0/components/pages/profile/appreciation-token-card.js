@@ -14,28 +14,34 @@ export default function AppreciationTokenCard(props) {
 
     const [loading, setLoading] = useState(true);
     const [messages, setMessages] = useState([]);
-    const [showMessage, setShowMessage] = useState(false);
+    const [showMessage, setShowMessage] = useState(true);
     const [shownMessage, setShownMessage] = useState({});
 
     useEffect(() => {
         const load = async () => {
             setLoading(true);
             try {
-                const result = await getMessages(tier, wallet.address); console.log(result);
+                const result = await getMessages(tier, wallet.address);
                 setMessages(result);
             } catch (err) {
                 console.log(err);
             } finally {
                 setLoading(false);
             }
-
-            showRandomMessage();
         };
 
         load();
-        let intervalId = setInterval(showRandomMessage, 7000);
-        return () => clearInterval(intervalId);
     }, []);
+
+    let intervalId;
+    useEffect(() => {
+        if (messages.length > 0) {
+            showRandomMessage();
+            intervalId = setInterval(showRandomMessage, 7000);
+        }
+
+        return () => clearInterval(intervalId);
+    }, [messages])
 
     const contractAddress = wallet.utilityToken.address;
     const provider = wallet.utilityToken.provider;
@@ -56,7 +62,6 @@ export default function AppreciationTokenCard(props) {
         // for (const m of messages) m.block = await contract.provider.getBlock(m.blockNumber);
 
         for (const m of messagesResult) {
-            console.log(m);
             const fromAccount = await getSenderAccount(m.from);
             if (fromAccount) {
                 m.fromAccount = fromAccount;
@@ -79,6 +84,7 @@ export default function AppreciationTokenCard(props) {
     };
 
     const showRandomMessage = async () => {
+        console.log('showRandomMessage', messages.length);
         if (messages.length === 1) {
             setShownMessage(messages[0]);
             setShowMessage(true);
@@ -86,7 +92,7 @@ export default function AppreciationTokenCard(props) {
 
         if (messages.length > 1) {
             setShowMessage(false);
-            await sleep(1000);
+            await sleep(500);
             const randomIndex = Math.floor(Math.random() * messages.length);
             setShownMessage(messages[randomIndex]);
             setShowMessage(true);
@@ -139,7 +145,7 @@ export default function AppreciationTokenCard(props) {
                                     }
                                     {!shownMessage.fromAccount &&
                                     <>
-                                        truncateEthAddress(shownMessage.from)
+                                        {truncateEthAddress(shownMessage?.from || '')}
                                     </>
                                     }
                                 </Typography>

@@ -171,7 +171,7 @@ export default function Layout({ children }) {
                     },
                 },
                 shape: {
-                    borderRadius: "8px",
+                    borderRadius: 8,
                 },
                 components: {
                     MuiButtonBase: {

@@ -105,6 +105,7 @@ const TokensAndPoaps = (props) => {
                                                 item
                                                 xs={12}
                                                 md={6}
+                                                key={index}
                                             >
                                                 {balances[index] > 0 && <AppreciationTokenCard tier={index + 1} balance={balance} />}
                                             </Grid>
