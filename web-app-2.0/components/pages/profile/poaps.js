@@ -38,7 +38,13 @@ const Poaps = (props) => {
             .then(async (response) => {
                 if (response.status === 200) {
                     const result = await response.json();
-                    console.log("poaps", result);
+                    // console.log("poaps", result);
+                    // const clones = [];
+                    // for (let i = 0; i < 25; i++) {
+                    //     clones.push(...result);
+                    // }
+                    // console.log("clones", clones);
+                    // setPoaps(clones.slice(0, 10));
                     setPoaps(result);
                 }
             })
@@ -126,35 +132,37 @@ const Poaps = (props) => {
                         <Grid
                             container
                             paddingX={{ xs: "0px", md: "14px" }}
-                            wrap='nowrap'
-                            direction={{ xs: "column", md: "row" }}
+                            columnSpacing={3}
+                            rowSpacing={3}
+
                         >
                             {!loading &&
                                 poaps.map((p) => {
                                     return (
                                         <Grid
+                                            item
                                             key={p}
                                             xs={12}
                                             md={4}
-                                            sx={{
-                                                backgroundColor: {
-                                                    xs:
-                                                        app.mode === "dark"
-                                                            ? "#111921"
-                                                            : "#F5F5F5",
-                                                    md:
-                                                        app.mode === "dark"
-                                                            ? "#19222C"
-                                                            : "#FFFFFF",
-                                                },
-                                                borderRadius: "8px",
-                                                padding: "15px",
-                                            }}
                                         >
                                             <Stack
                                                 direction='row'
                                                 justifyContent='flex-start'
-                                                alignItems='flex-start'
+                                                alignItems='center'
+                                                sx={{
+                                                    backgroundColor: {
+                                                        xs:
+                                                            app.mode === "dark"
+                                                                ? "#111921"
+                                                                : "#F5F5F5",
+                                                        md:
+                                                            app.mode === "dark"
+                                                                ? "#19222C"
+                                                                : "#FFFFFF",
+                                                    },
+                                                    borderRadius: "8px",
+                                                    padding: '15px',
+                                                }}
                                             >
                                                 <a
                                                     href={p.event.event_url}
@@ -165,7 +173,8 @@ const Poaps = (props) => {
                                                         src={p.event.image_url}
                                                         alt=''
                                                         style={{
-                                                            width: "80px",
+                                                            width: "120px",
+                                                            height: "120px",
                                                         }}
                                                     />
                                                 </a>
