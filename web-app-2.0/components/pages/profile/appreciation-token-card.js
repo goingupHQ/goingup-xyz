@@ -118,7 +118,7 @@ export default function AppreciationTokenCard(props) {
                 <Box
                     component="img"
                     src={`/images/appreciation-token-t${tier}-display.png`}
-                    sx={{ width: '140px', height: '140px' }}
+                    sx={{ width: '120px', height: '120px' }}
                     alt={`appreciation-token-t${tier}`}
                 />
 
@@ -129,14 +129,14 @@ export default function AppreciationTokenCard(props) {
                     spacing={1}
                     sx={{ paddingX: '15px' }}
                 >
-                    <Typography variant="h6" color="textPrimary">
+                    <Typography variant="body1" color="textPrimary">
                         <strong>{balance} T{tier} Token{balance !== 1 ? 's' : ''}</strong>
                     </Typography>
                     {!loading &&
                     <>
                         <Fade in={showMessage}>
                             <Box>
-                                <Typography variant="h6">
+                                <Typography variant="body1">
                                     {shownMessage.data}
                                 </Typography>
                                 <Typography variant="body1">
