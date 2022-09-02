@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { AppContext } from '../../../contexts/app-context';
-import { WalletContext } from '../../../contexts/wallet-context';
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../../../contexts/app-context";
+import { WalletContext } from "../../../contexts/wallet-context";
 import {
     Grid,
     Card,
@@ -10,10 +10,13 @@ import {
     styled,
     Fade,
     CircularProgress,
-    Box
-} from '@mui/material';
-import { useRouter } from 'next/router';
-import moment from 'moment';
+    Box,
+    Stack,
+    Button,
+} from "@mui/material";
+import ChevronRightIcon from "../../icons/ChevronRightIcon";
+import { useRouter } from "next/router";
+import moment from "moment";
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -30,12 +33,12 @@ const Poaps = (props) => {
     useEffect(() => {
         // do some
         setLoading(true);
-        const url = `https://frontend.poap.tech/actions/scan/${account.address}`
+        const url = `https://frontend.poap.tech/actions/scan/${account.address}`;
         fetch(url)
-            .then(async response => {
+            .then(async (response) => {
                 if (response.status === 200) {
                     const result = await response.json();
-                    console.log('poaps', result);
+                    console.log("poaps", result);
                     setPoaps(result);
                 }
             })
@@ -44,9 +47,9 @@ const Poaps = (props) => {
             })
             .finally(() => {
                 setLoading(false);
-            })
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [address])
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [address]);
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
@@ -55,61 +58,166 @@ const Poaps = (props) => {
     const { account } = props;
     const myAccount = wallet.address === account.address;
 
+    const buttonStyle = {
+        width: "63px",
+        height: "24px",
+        backgroundColor: app.mode === "dark" ? "#253340" : "#CFCFCF",
+    };
+
     return (
         <>
-            <Grid item xs={12}>
-                <Fade in={true} timeout={1000}>
-                    <Card
+            <Fade in={true} timeout={1000}>
+                <Card
+                    sx={{
+                        marginX: { xs: "-16px", md: "0px" },
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        marginTop: "30px",
+                        backgroundColor: {
+                            xs: app.mode === "dark" ? "#0F151C" : "#FFFFFF",
+                            md: app.mode === "dark" ? "#111921" : "#F5F5F5",
+                        },
+                    }}
+                >
+                    <CardHeader
                         sx={{
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            marginTop: { xs: '2rem', md: '3rem' }
+                            alignItems: "flex-start",
+                            paddingBottom: "4px",
                         }}
-                    >
-                        <CardHeader
-                            sx={{
-                                px: 3,
-                                pt: 3,
-                                alignItems: 'flex-start'
-                            }}
-                            title={
-                                <>
-                                    <Typography variant="h1">
-                                        POAPs
-                                    </Typography>
-                                </>
-                            }
-                        />
-                        <CardContentWrapper
-                            sx={{
-                                px: 3,
-                                pt: 0
-                            }}
-                        >
-                            {loading &&
-                                <Typography variant="h3">
-                                    <CircularProgress size="2rem" />
+                        title={
+                            <Stack
+                                direction='row'
+                                justifyContent='space-between'
+                                paddingTop={"14px"}
+                                paddingX={"14px"}
+                            >
+                                <Typography variant='mobileh1'>
+                                    POAPs
                                 </Typography>
-                            }
+                                <Button
+                                    color={
+                                        app.mode === "dark"
+                                            ? "primary"
+                                            : "secondary"
+                                    }
+                                    endIcon={
+                                        <ChevronRightIcon
+                                            color={
+                                                app.mode === "dark"
+                                                    ? "primary"
+                                                    : "secondary"
+                                            }
+                                        />
+                                    }
+                                >
+                                    View All{" "}
+                                </Button>
+                            </Stack>
+                        }
+                    />
+                    <CardContentWrapper>
+                        {loading && (
+                            <Typography variant='h3'>
+                                <CircularProgress size='2rem' />
+                            </Typography>
+                        )}
 
-                            <Grid container spacing={2} sx={{ marginTop: 1 }}>
-                            {!loading && poaps.map(p => { return (
-                                <Grid item xs={12} md={6} lg={3} key={p.event.id} sx={{ textAlign: 'center' }}>
-                                    <a href={p.event.event_url} target="_blank" rel="noopener noreferrer">
-                                        <img src={p.event.image_url} alt='' style={{ width: '200px' }} />
-                                            <Typography variant="h3">{p.event.name}</Typography>
-                                        <Typography variant="h4">{moment(p.event.start_date).format('LL')}</Typography>
-                                    </a>
-                                </Grid>
-                            )})}
-                            </Grid>
-                        </CardContentWrapper>
-                    </Card>
-                </Fade>
-            </Grid>
+                        <Grid
+                            container
+                            paddingX={{ xs: "0px", md: "14px" }}
+                            wrap='nowrap'
+                            direction={{ xs: "column", md: "row" }}
+                        >
+                            {!loading &&
+                                poaps.map((p) => {
+                                    return (
+                                        <Grid
+                                            key={p}
+                                            xs={12}
+                                            md={4}
+                                            sx={{
+                                                backgroundColor: {
+                                                    xs:
+                                                        app.mode === "dark"
+                                                            ? "#111921"
+                                                            : "#F5F5F5",
+                                                    md:
+                                                        app.mode === "dark"
+                                                            ? "#19222C"
+                                                            : "#FFFFFF",
+                                                },
+                                                borderRadius: "8px",
+                                                padding: "15px",
+                                            }}
+                                        >
+                                            <Stack
+                                                direction='row'
+                                                justifyContent='flex-start'
+                                                alignItems='flex-start'
+                                            >
+                                                <a
+                                                    href={p.event.event_url}
+                                                    target='_blank'
+                                                    rel='noopener noreferrer'
+                                                >
+                                                    <img
+                                                        src={p.event.image_url}
+                                                        alt=''
+                                                        style={{
+                                                            width: "80px",
+                                                        }}
+                                                    />
+                                                </a>
+                                                <Stack
+                                                    direction='column'
+                                                    justifyContent='center'
+                                                    alignItems='flex-start'
+                                                    spacing={0.5}
+                                                    sx={{
+                                                        paddingX: "15px",
+                                                    }}
+                                                >
+                                                    <Typography
+                                                        variant='mobileh2'
+                                                        sx={{
+                                                            paddingBottom:
+                                                                "20px",
+                                                            paddingTop: "5px",
+                                                        }}
+                                                    >
+                                                        {p.event.name}
+                                                    </Typography>
+                                                    <Typography variant='sh3'>
+                                                        {moment(
+                                                            p.event.start_date
+                                                        ).format("LL")}
+                                                    </Typography>
+
+                                                    <Button
+                                                        sx={{
+                                                            color:
+                                                                app.mode ===
+                                                                "dark"
+                                                                    ? "#FFFFFF"
+                                                                    : "#22272F",
+                                                        }}
+                                                        size='small'
+                                                        style={buttonStyle}
+                                                    >
+                                                        Creative
+                                                    </Button>
+                                                </Stack>
+                                            </Stack>
+                                        </Grid>
+                                    );
+                                })}
+                        </Grid>
+                    </CardContentWrapper>
+                </Card>
+            </Fade>
         </>
-    )
-}
+    );
+};
 
 export default Poaps;

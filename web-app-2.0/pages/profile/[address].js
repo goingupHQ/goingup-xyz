@@ -15,7 +15,6 @@ import Projects from "../projects";
 import Poaps from "../../components/pages/profile/poaps";
 import AppreciationTokens from "../../components/pages/profile/appreciation-tokens";
 import ProfileSection from "../../components/pages/profile/profile-section";
-import TokensAndPoaps from "../../components/pages/profile/tokens-poaps";
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -67,21 +66,17 @@ function ProfilePage() {
                                 account={account}
                                 refresh={getAccount}
                             />
-                            <TokensAndPoaps
-                                account={account}
-                                refresh={getAccount}
-                            />
                             {/* <TopSection
                                 account={account}
                                 refresh={getAccount}
                             /> */}
                             {/* <Projects account={account} /> */}
 
-                            {/* <AppreciationTokens
+                            <AppreciationTokens
                                 account={account}
                                 refresh={getAccount}
-                            /> */}
-                            {/* <Poaps account={account} refresh={getAccount} /> */}
+                            />
+                            <Poaps account={account} refresh={getAccount} />
                         </Box>
                     </Fade>
                 </>

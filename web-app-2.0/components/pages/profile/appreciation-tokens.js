@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../../contexts/app-context';
 import { WalletContext } from '../../../contexts/wallet-context';
@@ -12,63 +11,37 @@ import {
     Fade,
     Stack,
     CircularProgress,
+    Button,
+    Box,
 } from '@mui/material';
 import { ethers } from 'ethers';
-import { useRouter } from 'next/router';
-import moment from 'moment';
 import artifact from '../../../../artifacts/GoingUpUtilityToken.json';
+import ChevronRightIcon from '../../icons/ChevronRightIcon';
+import AppreciationTokenCard from './appreciation-token-card';
 
-const CardContentWrapper = styled(CardContent)(
-    () => `
-        position: relative;
-  `
-);
+const CardContentWrapper = styled(CardContent)( () => ``);
 
 const AppreciationTokens = (props) => {
     const [loading, setLoading] = useState(true);
     const [balances, setBalances] = useState([0, 0, 0, 0]);
-    const [tier1Messages, setTier1Messages] = useState([]);
-    const [tier2Messages, setTier2Messages] = useState([]);
-    const [tier3Messages, setTier3Messages] = useState([]);
-    const [tier4Messages, setTier4Messages] = useState([]);
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
-    const router = useRouter();
     const { address } = props.account;
 
     const contractAddress = wallet.utilityToken.address;
     const provider = wallet.utilityToken.provider;
-    const contract = new ethers.Contract(
-        contractAddress,
-        artifact.abi,
-        provider
-    );
+    const contract = new ethers.Contract(contractAddress, artifact.abi, provider);
 
     useEffect(() => {
-        // do some
         const load = async () => {
             setLoading(true);
             try {
                 const addresses = [address, address, address, address];
                 const tokenIDs = [1, 2, 3, 4];
 
-                const result = await contract.balanceOfBatch(
-                    addresses,
-                    tokenIDs
-                );
-                setBalances([
-                    result[0].toNumber(),
-                    result[1].toNumber(),
-                    result[2].toNumber(),
-                    result[3].toNumber()
-                ]);
-
-
-                if (result[0].toNumber() > 0) setTier1Messages(await getMessages(1, address));
-                if (result[1].toNumber() > 0) setTier2Messages(await getMessages(2, address));
-                if (result[2].toNumber() > 0) setTier3Messages(await getMessages(3, address));
-                if (result[3].toNumber() > 0) setTier4Messages(await getMessages(4, address));
+                const result = await contract.balanceOfBatch(addresses, tokenIDs);
+                setBalances([result[0].toNumber(), result[1].toNumber(), result[2].toNumber(), result[3].toNumber()]);
             } catch (err) {
                 console.log(err);
             } finally {
@@ -79,285 +52,71 @@ const AppreciationTokens = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address]);
 
-    const getMessages = async (tokenID, address) => {
-        const _interface = new ethers.utils.Interface(artifact.abi);
-        const filter = contract.filters.WriteMintData(tokenID, address);
-        // @ts-ignore
-        filter.fromBlock = 0;
-        // @ts-ignore
-        filter.toBlock = 'latest';
-        const writeMintLogs = await await contract.provider.getLogs(filter);
-        const messages = writeMintLogs.map(
-            (log) => {
-                const parsedLog = _interface.parseLog(log);
-                const message = {...parsedLog, ...log };
-                return message;
-            }
-        );
-
-        // @ts-ignore
-        for (const m of messages) m.block = await contract.provider.getBlock(m.blockNumber);
-
-        return messages;
-    };
 
     const { account } = props;
     const myAccount = wallet.address === account.address;
 
-    const tokenGridStyle = {
-        textAlign: 'center'
-    };
-
-    const tokenImageStyle = {
-        width: '200px'
-    };
-
     return (
         <>
-            <Grid item xs={12}>
-                <Fade in={true} timeout={1000}>
-                    <Card
+            <Fade in={true} timeout={1000}>
+                <Card
+                    sx={{
+                        marginX: { xs: '-16px', md: '0px' },
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        marginTop: '30px',
+                        backgroundColor: {
+                            xs: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
+                            md: app.mode === 'dark' ? '#111921' : '#F5F5F5',
+                        },
+                    }}
+                >
+                    <CardHeader
                         sx={{
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            marginTop: { xs: '2rem', md: '3rem' }
+                            alignItems: 'flex-start',
+                            paddingBottom: '4px',
                         }}
-                    >
-                        <CardHeader
-                            sx={{
-                                px: 3,
-                                pt: 3,
-                                alignItems: 'flex-start'
-                            }}
-                            title={
-                                <>
-                                    <Typography variant="h1">
-                                        Tokens of Appreciation
-                                    </Typography>
-                                </>
-                            }
-                        />
-                        <CardContentWrapper
-                            sx={{
-                                px: 3,
-                                pt: 0
-                            }}
-                        >
-                            {loading && (
-                                <Typography variant="h3">
-                                    <CircularProgress size="2rem" />
-                                </Typography>
-                            )}
-
-                            {!loading && (
-                                <Grid
-                                    container
-                                    rowSpacing={5}
-                                    columnSpacing={1}
-                                    sx={{ marginTop: 1 }}
+                        title={
+                            <Stack direction="row" justifyContent="space-between" paddingTop={'14px'} paddingX={'14px'}>
+                                <Typography variant="mobileh1">Appreciation Tokens</Typography>
+                                <Button
+                                    color={app.mode === 'dark' ? 'primary' : 'secondary'}
+                                    endIcon={<ChevronRightIcon color={app.mode === 'dark' ? 'primary' : 'secondary'} />}
                                 >
-                                    {balances[0] > 0 && (
-                                    <>
-                                        <Grid
-                                            item
-                                            xs={12}
-                                            md={4}
-                                            lg={3}
-                                            // @ts-ignore
-                                            sx={tokenGridStyle}
-                                        >
-                                            <img
-                                                src="/images/appreciation-token-t1-display.png"
-                                                style={tokenImageStyle}
-                                                alt='appreciation-token-t1'
-                                            />
-                                            <Typography variant="h3">
-                                                {balances[0]} Token
-                                                {balances[0] !== 1 ? 's' : ''}
-                                            </Typography>
-                                            <Typography variant="h4">
-                                                Tier 1 Appreciation
-                                            </Typography>
-                                        </Grid>
+                                    View All{' '}
+                                </Button>
+                            </Stack>
+                        }
+                    />
+                    <Box sx={{ padding: 4 }}>
+                        {loading && (
+                            <Typography variant="h4" sx={{ padding: 2 }}>
+                                Retrieving <CircularProgress size="12pt" />
+                            </Typography>
+                        )}
 
-                                        <Grid
-                                            item
-                                            xs={12}
-                                            md={8}
-                                            lg={9}
-                                            // @ts-ignore
-                                            sx={tokenGridStyle}
-                                        >
-                                            <Typography variant="h3">Messages in your Tier 1 Tokens</Typography>
-                                            <Stack direction="column">
-                                                {tier1Messages.map((m) => (
-                                                <div key={m.number} style={{ display: 'block', marginTop: '15px' }}>
-                                                    <Typography variant="h4">
-                                                        &quot;{m.args.data}&quot;
-                                                    </Typography>
-                                                    <Typography variant="body1">
-                                                        {`Sent ${moment(m.block?.timestamp * 1000).fromNow()} by ${m.args.from}`}
-                                                    </Typography>
-                                                </div>
-                                                ))}
-                                            </Stack>
-                                        </Grid>
-                                    </>
-                                    )}
-
-                                    {balances[1] > 0 && (
-                                    <>
-                                        <Grid
-                                            item
-                                            xs={12}
-                                            md={4}
-                                            lg={3}
-                                            // @ts-ignore
-                                            sx={tokenGridStyle}
-                                        >
-                                            <img
-                                                src="/images/appreciation-token-t2-display.png"
-                                                style={tokenImageStyle}
-                                                alt='appreciation-token-t2'
-                                            />
-                                            <Typography variant="h3">
-                                                {balances[1]} Token
-                                                {balances[1] !== 1 ? 's' : ''}
-                                            </Typography>
-                                            <Typography variant="h4">
-                                                Tier 2 Appreciation
-                                            </Typography>
-                                        </Grid>
-
-                                        <Grid
-                                            item
-                                            xs={12}
-                                            md={8}
-                                            lg={9}
-                                            // @ts-ignore
-                                            sx={tokenGridStyle}
-                                        >
-                                            <Typography variant="h3">Messages in your Tier 2 Tokens</Typography>
-                                            <Stack direction="column">
-                                                {tier2Messages.map((m) => (
-                                                <div key={m.number} style={{ display: 'block', marginTop: '15px' }}>
-                                                    <Typography variant="h4">
-                                                        &quot;{m.args.data}&quot;
-                                                    </Typography>
-                                                    <Typography variant="body1">
-                                                        {`Sent ${moment(m.block?.timestamp * 1000).fromNow()} by ${m.args.from}`}
-                                                    </Typography>
-                                                </div>
-                                                ))}
-                                            </Stack>
-                                        </Grid>
-                                    </>
-                                    )}
-
-                                    {balances[2] > 0 && (
-                                    <>
-                                        <Grid
-                                            item
-                                            xs={12}
-                                            md={4}
-                                            lg={3}
-                                            // @ts-ignore
-                                            sx={tokenGridStyle}
-                                        >
-                                            <img
-                                                src="/images/appreciation-token-t3-display.png"
-                                                style={tokenImageStyle}
-                                                alt='appreciation-token-t3'
-                                            />
-                                            <Typography variant="h3">
-                                                {balances[2]} Token
-                                                {balances[2] !== 1 ? 's' : ''}
-                                            </Typography>
-                                            <Typography variant="h4">
-                                                Tier 3 Appreciation
-                                            </Typography>
-                                        </Grid>
-
-                                        <Grid
-                                            item
-                                            xs={12}
-                                            md={8}
-                                            lg={9}
-                                            // @ts-ignore
-                                            sx={tokenGridStyle}
-                                        >
-                                            <Typography variant="h3">Messages in your Tier 3 Tokens</Typography>
-                                            <Stack direction="column">
-                                                {tier3Messages.map((m) => (
-                                                <div key={m.number} style={{ display: 'block', marginTop: '15px' }}>
-                                                    <Typography variant="h4">
-                                                        &quot;{m.args.data}&quot;
-                                                    </Typography>
-                                                    <Typography variant="body1">
-                                                        {`Sent ${moment(m.block?.timestamp * 1000).fromNow()} by ${m.args.from}`}
-                                                    </Typography>
-                                                </div>
-                                                ))}
-                                            </Stack>
-                                        </Grid>
-                                    </>
-                                    )}
-
-                                    {balances[3] > 0 && (
-                                    <>
-                                        <Grid
-                                            item
-                                            xs={12}
-                                            md={4}
-                                            lg={3}
-                                            // @ts-ignore
-                                            sx={tokenGridStyle}
-                                        >
-                                            <img
-                                                src="/images/appreciation-token-t4-display.png"
-                                                style={tokenImageStyle}
-                                                alt='appreciation-token-t4'
-                                            />
-                                            <Typography variant="h3">
-                                                {balances[3]} Token
-                                                {balances[4] !== 1 ? 's' : ''}
-                                            </Typography>
-                                            <Typography variant="h4">
-                                                Tier 4 Appreciation
-                                            </Typography>
-                                        </Grid>
-
-                                        <Grid
-                                            item
-                                            xs={12}
-                                            md={8}
-                                            lg={9}
-                                            // @ts-ignore
-                                            sx={tokenGridStyle}
-                                        >
-                                            <Typography variant="h3">Messages in your Tier 3 Tokens</Typography>
-                                            <Stack direction="column">
-                                                {tier4Messages.map((m) => (
-                                                <div key={m.number} style={{ display: 'block', marginTop: '15px' }}>
-                                                    <Typography variant="h4">
-                                                        &quot;{m.args.data}&quot;
-                                                    </Typography>
-                                                    <Typography variant="body1">
-                                                        {`Sent ${moment(m.block?.timestamp * 1000).fromNow()} by ${m.args.from}`}
-                                                    </Typography>
-                                                </div>
-                                                ))}
-                                            </Stack>
-                                        </Grid>
-                                    </>
-                                    )}
-                                </Grid>
-                            )}
-                        </CardContentWrapper>
-                    </Card>
-                </Fade>
-            </Grid>
+                        {!loading && (
+                            <Grid container columnSpacing={3} rowSpacing={3}>
+                                {balances.map((balance, index) => {
+                                    return (
+                                        balance > 0 && (
+                                            <Grid
+                                                item
+                                                xs={12}
+                                                md={6}
+                                                key={index}
+                                            >
+                                                {balances[index] > 0 && <AppreciationTokenCard tier={index + 1} balance={balance} />}
+                                            </Grid>
+                                        )
+                                    );
+                                })}
+                            </Grid>
+                        )}
+                    </Box>
+                </Card>
+            </Fade>
         </>
     );
 };

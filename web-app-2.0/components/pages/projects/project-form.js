@@ -53,6 +53,7 @@ export default function ProjectForm(props) {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     useEffect(() => {
+        //
         if (projectData) {
             setForm({
                 ...form,
@@ -79,6 +80,7 @@ export default function ProjectForm(props) {
         } else {
             setLoading(false);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectData]);
 
     const sendProject = async () => {

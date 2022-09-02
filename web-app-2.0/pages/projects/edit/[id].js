@@ -25,9 +25,11 @@ export default function EditProject() {
     };
 
     useEffect(() => {
+        //
         if (router.isReady) {
             getProject();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [router.isReady]);
 
     return (
@@ -35,7 +37,7 @@ export default function EditProject() {
             <Head>
                 <title>Going UP - Edit A Project</title>
             </Head>
-
+            
             <ProjectForm projectData={data} />
 
             <Backdrop open={loading} sx={{ zIndex: 1200 }}>

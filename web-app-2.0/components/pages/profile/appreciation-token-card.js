@@ -18,6 +18,7 @@ export default function AppreciationTokenCard(props) {
     const [shownMessage, setShownMessage] = useState({});
 
     useEffect(() => {
+        //
         const load = async () => {
             setLoading(true);
             try {
@@ -31,12 +32,15 @@ export default function AppreciationTokenCard(props) {
         };
 
         load();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     let intervalId;
     useEffect(() => {
+        //
         if (messages.length > 0) {
             showRandomMessage();
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             intervalId = setInterval(showRandomMessage, 7000);
         }
 

@@ -241,6 +241,7 @@ export default function Layout({ children }) {
     useEffect(() => {
         // connect wallet if cached
         if (localStorage.getItem("wallet-context-cache")) wallet.connect();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
