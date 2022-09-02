@@ -10,9 +10,10 @@ import {
     styled,
     Fade,
     CircularProgress,
-    // Box,
+    Box,
     Stack,
     Button,
+    Modal,
 } from "@mui/material";
 import ChevronRightIcon from "../../icons/ChevronRightIcon";
 import { useRouter } from "next/router";
@@ -28,6 +29,7 @@ const CardContentWrapper = styled(CardContent)(
 const Poaps = (props) => {
     const [loading, setLoading] = useState(true);
     const [poaps, setPoaps] = useState([]);
+    const [open, setOpen] = useState(false);
 
     const { address } = props.account;
 
@@ -39,14 +41,12 @@ const Poaps = (props) => {
             .then(async (response) => {
                 if (response.status === 200) {
                     const result = await response.json();
-                    // console.log("poaps", result);
-                    // const clones = [];
-                    // for (let i = 0; i < 25; i++) {
-                    //     clones.push(...result);
-                    // }
-                    // console.log("clones", clones);
-                    // setPoaps(clones.slice(0, 10));
-                    setPoaps(result);
+                    const clones = [];
+                    for (let i = 0; i < 60; i++) {
+                        clones.push(...result);
+                    }
+                    setPoaps(clones);
+                    // setPoaps(result);
                 }
             })
             .catch((err) => {
@@ -97,6 +97,7 @@ const Poaps = (props) => {
                                     POAPs
                                 </Typography>
                                 <Button
+                                    onClick={() => setOpen(true)}
                                     color={
                                         app.mode === "dark"
                                             ? "primary"
@@ -114,6 +115,55 @@ const Poaps = (props) => {
                                 >
                                     View All{" "}
                                 </Button>
+                                <Modal
+                                    open={open}
+                                    onClose={() => setOpen(false)}
+                                >
+                                    <Box
+                                        sx={{
+                                            height: "100%",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            margin: "25px",
+                                            padding: "30px",
+                                            overflow: "hidden",
+                                            overflowY: "scroll",
+                                            backgroundColor: {
+                                                xs:
+                                                    app.mode === "dark"
+                                                        ? "#0F151C"
+                                                        : "#FFFFFF",
+                                                md:
+                                                    app.mode === "dark"
+                                                        ? "#111921"
+                                                        : "#F5F5F5",
+                                            },
+                                        }}
+                                    >
+                                        <Typography marginBottom={3} align="center" variant="h1">All POAPs</Typography>
+                                        <Grid
+                                            container
+                                            columnSpacing={3}
+                                            rowSpacing={3}
+                                        >
+                                            {!loading &&
+                                                poaps.map((p) => {
+                                                    return (
+                                                        <Grid
+                                                            item
+                                                            key={p.tokenId}
+                                                            xs={12}
+                                                            md={4}
+                                                        >
+                                                            <PoapCard
+                                                                poap={p}
+                                                            />
+                                                        </Grid>
+                                                    );
+                                                })}
+                                        </Grid>
+                                    </Box>
+                                </Modal>
                             </Stack>
                         }
                     />
@@ -129,10 +179,9 @@ const Poaps = (props) => {
                             paddingX={{ xs: "0px", md: "14px" }}
                             columnSpacing={3}
                             rowSpacing={3}
-
                         >
                             {!loading &&
-                                poaps.map((p) => {
+                                poaps.slice(0, 9).map((p) => {
                                     return (
                                         <Grid
                                             item
