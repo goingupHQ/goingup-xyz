@@ -10,13 +10,14 @@ import {
     styled,
     Fade,
     CircularProgress,
-    Box,
+    // Box,
     Stack,
     Button,
 } from "@mui/material";
 import ChevronRightIcon from "../../icons/ChevronRightIcon";
 import { useRouter } from "next/router";
-import moment from "moment";
+// import moment from "moment";
+import PoapCard from "./poap-card";
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -59,16 +60,10 @@ const Poaps = (props) => {
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
-    const router = useRouter();
+    // const router = useRouter();
 
     const { account } = props;
-    const myAccount = wallet.address === account.address;
-
-    const buttonStyle = {
-        width: "63px",
-        height: "24px",
-        backgroundColor: app.mode === "dark" ? "#253340" : "#CFCFCF",
-    };
+    // const myAccount = wallet.address === account.address;
 
     return (
         <>
@@ -141,83 +136,11 @@ const Poaps = (props) => {
                                     return (
                                         <Grid
                                             item
-                                            key={p}
+                                            key={p.tokenId}
                                             xs={12}
                                             md={4}
                                         >
-                                            <Stack
-                                                direction='row'
-                                                justifyContent='flex-start'
-                                                alignItems='center'
-                                                sx={{
-                                                    backgroundColor: {
-                                                        xs:
-                                                            app.mode === "dark"
-                                                                ? "#111921"
-                                                                : "#F5F5F5",
-                                                        md:
-                                                            app.mode === "dark"
-                                                                ? "#19222C"
-                                                                : "#FFFFFF",
-                                                    },
-                                                    borderRadius: "8px",
-                                                    padding: '15px',
-                                                }}
-                                            >
-                                                <a
-                                                    href={p.event.event_url}
-                                                    target='_blank'
-                                                    rel='noopener noreferrer'
-                                                >
-                                                    <img
-                                                        src={p.event.image_url}
-                                                        alt=''
-                                                        style={{
-                                                            width: "120px",
-                                                            height: "120px",
-                                                        }}
-                                                    />
-                                                </a>
-                                                <Stack
-                                                    direction='column'
-                                                    justifyContent='center'
-                                                    alignItems='flex-start'
-                                                    spacing={0.5}
-                                                    sx={{
-                                                        paddingX: "15px",
-                                                    }}
-                                                >
-                                                    <Typography
-                                                        variant='mobileh2'
-                                                        sx={{
-                                                            paddingBottom:
-                                                                "20px",
-                                                            paddingTop: "5px",
-                                                        }}
-                                                    >
-                                                        {p.event.name}
-                                                    </Typography>
-                                                    <Typography variant='sh3'>
-                                                        {moment(
-                                                            p.event.start_date
-                                                        ).format("LL")}
-                                                    </Typography>
-
-                                                    <Button
-                                                        sx={{
-                                                            color:
-                                                                app.mode ===
-                                                                "dark"
-                                                                    ? "#FFFFFF"
-                                                                    : "#22272F",
-                                                        }}
-                                                        size='small'
-                                                        style={buttonStyle}
-                                                    >
-                                                        Creative
-                                                    </Button>
-                                                </Stack>
-                                            </Stack>
+                                            <PoapCard poap={p} />
                                         </Grid>
                                     );
                                 })}
