@@ -118,14 +118,14 @@ export default function UserBox () {
                 startIcon={
                     <>
                         {wallet.address === null &&
-                        <Box sx={{ paddingLeft: '4px', paddingTop: '10px', display: {xs: 'none', md: 'initial'}}}>
+                        <Box sx={{ paddingLeft: '4px', paddingTop: '10px'}}>
                         <CollaboratorsIcon color={theme.palette.text.main} />
                         {/* <Avatar variant="rounded" /> */}
                         </Box>
                         }
 
                         {wallet.address !== null &&
-                            <Box sx={{ paddingLeft: '8px', paddingTop: '7px', display: {xs: 'none', md: 'initial'} }}>
+                            <Box sx={{ paddingLeft: '8px', paddingTop: '7px' }}>
                                 <Identicon address={wallet.address} size={19}/>
                             </Box>
                         }
