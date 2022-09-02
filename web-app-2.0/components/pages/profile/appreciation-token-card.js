@@ -66,20 +66,20 @@ export default function AppreciationTokenCard(props) {
         // for (const m of messages) m.block = await contract.provider.getBlock(m.blockNumber);
 
         for (const m of messagesResult) {
-            const fromAccount = await getSenderAccount(m.from);
-            if (fromAccount) {
-                m.fromAccount = fromAccount;
+            const fromName = await getSenderAccountName(m.from); console.log(fromName)
+            if (fromName) {
+                m.fromName = fromName;
             }
         }
 
         return messagesResult;
     };
 
-    const getSenderAccount = async (address) => {
+    const getSenderAccountName = async (address) => {
         if (address) {
-            const response = await fetch(`/api/get-account?address=${address}`);
+            const response = await fetch(`/api/get-account-name?address=${address}`);
             if (response.status === 200) {
-                const data = await response.json();
+                const data = await response.text();
                 return data;
             } else {
                 return null;
@@ -141,12 +141,12 @@ export default function AppreciationTokenCard(props) {
                                 </Typography>
                                 <Typography variant="body1">
                                     { `- `}
-                                    {shownMessage.fromAccount &&
+                                    {shownMessage.fromName &&
                                     <>
-                                        {`${shownMessage.fromAccount?.name} (${truncateEthAddress(shownMessage.from)})`}
+                                        {`${shownMessage.fromName} (${truncateEthAddress(shownMessage.from)})`}
                                     </>
                                     }
-                                    {!shownMessage.fromAccount &&
+                                    {!shownMessage.fromName &&
                                     <>
                                         {truncateEthAddress(shownMessage?.from || '')}
                                     </>
