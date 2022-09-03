@@ -23,7 +23,7 @@ export default function ProjectCard(props) {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => router.push(`/projects/details/${project?.id.toNumber()}`)}
+                        onClick={() => router.push(`/projects/page/${project?.id.toNumber()}`)}
                     >
                         Go to Project Page
                     </Button>
