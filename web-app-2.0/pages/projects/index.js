@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { WalletContext } from '../../contexts/wallet-context';
 import { ProjectsContext } from '../../contexts/projects-context';
 import ProjectsList from '../../components/pages/projects/projects-list';
+import NextLink from 'next/link';
 
 export default function Projects() {
     const app = useContext(AppContext);
@@ -46,7 +47,12 @@ export default function Projects() {
                                     style={{ width: '100%', maxWidth: '500px' }}
                                 />
 
-                                <Button variant="contained" color="primary" size="large" onClick={projectsContext.switchToCorrectNetwork}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    onClick={projectsContext.switchToCorrectNetwork}
+                                >
                                     Switch to {projectsContext.networkParams.chainName}
                                 </Button>
                             </Stack>
@@ -54,6 +60,12 @@ export default function Projects() {
 
                         {projectsContext.isCorrectNetwork && (
                             <>
+                                <NextLink href="/projects/create" passHref>
+                                    <Button variant="contained" color="primary" size="large" sx={{ mb: 3 }}>
+                                        Create a Project
+                                    </Button>
+                                </NextLink>
+
                                 <ProjectsList />
                             </>
                         )}
