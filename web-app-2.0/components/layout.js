@@ -99,9 +99,6 @@ export default function Layout({ children }) {
                     fontFamily: "Questrial",
                     h1: {
                         fontSize: "32px",
-                        "@media (max-width:900px)": {
-                            fontSize: "16px",
-                        },
                         fontWeight: "bold",
                     },
                     h2: {
