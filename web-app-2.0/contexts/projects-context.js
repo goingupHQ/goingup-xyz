@@ -85,6 +85,21 @@ export const ProjectsProvider = ({ children }) => {
         return projects;
     };
 
+    const getProjectsAfterBlock = async (block) => {
+        const contract = getContract();
+        const projects = [];
+
+        const response = await fetch(`/api/projects/after-block/${wallet.address}?block=${block}`);
+        const projectIds = await response.json();
+
+        for (const projectId of projectIds) {
+            const project = await contract.projects(projectId);
+            projects.push(project);
+        }
+
+        return projects;
+    }
+
     const getProject = async (projectId) => {
         const contract = getContract();
         const project = await contract.projects(projectId);
@@ -138,6 +153,7 @@ export const ProjectsProvider = ({ children }) => {
         isCorrectNetwork,
         switchToCorrectNetwork,
         getProjects,
+        getProjectsAfterBlock,
         getProject,
         createProject,
         updateProject,
