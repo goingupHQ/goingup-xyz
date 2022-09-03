@@ -161,7 +161,7 @@ export default function ProjectForm(props) {
                 closeSnackbar();
 
                 enqueueSnackbar('Project updated', { variant: 'success' });
-                router.push('/projects');
+                router.push(`/projects/page/${projectData.id}`);
             }
         } catch (e) {
             closeSnackbar();
