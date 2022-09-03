@@ -19,7 +19,7 @@ export default function Projects() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <Box sx={{ paddingTop: '20px' }}>
+            <Box>
                 <Grid container sx={{ mb: 3 }} rowSpacing={2}>
                     <Grid item xs={12} md={6}>
                         <Typography variant="h1">Projects</Typography>
