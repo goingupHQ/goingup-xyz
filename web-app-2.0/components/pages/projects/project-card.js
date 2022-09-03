@@ -8,7 +8,7 @@ export default function ProjectCard(props) {
 
     return (
         <>
-            <Card>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <CardHeader title={project.name} />
                 <CardContent>
                     <Typography variant="body1">{project.description}</Typography>
