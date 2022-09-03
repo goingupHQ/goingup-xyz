@@ -20,10 +20,11 @@ import { useSnackbar } from 'notistack';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import { isURL } from 'validator';
+import { WalletContext } from '../../../contexts/wallet-context';
 
 export default function ProjectForm(props) {
     const projectsCtx = useContext(ProjectsContext);
-    const app = useContext(AppContext);
+    const wallet = useContext(WalletContext);
     const router = useRouter();
     const { projectData } = props;
 
@@ -99,6 +100,8 @@ export default function ProjectForm(props) {
             });
 
             if (isCreate) {
+                const currentBlock = await wallet.ethersProvider.getBlockNumber();
+
                 const createTx = await projectsCtx.createProject(
                     form.name,
                     form.description,
@@ -125,10 +128,14 @@ export default function ProjectForm(props) {
                     },
                 });
                 await createTx.wait();
+
+                const projectsAfterBlock = await projectsCtx.getProjectsAfterBlock(currentBlock);
+                const createdProject = projectsAfterBlock.slice(-1)[0];
+
                 closeSnackbar();
 
                 enqueueSnackbar('Project created', { variant: 'success' });
-                router.push('/projects');
+                router.push(`/projects/page/${createdProject.id.toNumber()}`);
             } else {
                 const updateTx = await projectsCtx.updateProject(
                     projectData.id,
