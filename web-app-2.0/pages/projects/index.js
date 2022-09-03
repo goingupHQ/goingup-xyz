@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import { AppContext } from '../../contexts/app-context';
 import { useContext, useEffect, useState } from 'react';
 import { WalletContext } from '../../contexts/wallet-context';
@@ -20,6 +20,20 @@ export default function Projects() {
             </Head>
 
             <Box sx={{ paddingTop: '20px' }}>
+                <Grid container sx={{ mb: 3 }} rowSpacing={2}>
+                    <Grid item xs={12} md={6}>
+                        <Typography variant="h1">Projects</Typography>
+                    </Grid>
+
+                    <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'initial', md: 'right' } }}>
+                        <NextLink href="/projects/create" passHref>
+                            <Button variant="contained" color="primary" size="large">
+                                Create A Project
+                            </Button>
+                        </NextLink>
+                    </Grid>
+                </Grid>
+
                 {wallet.address === null && (
                     <Stack justifyContent="center" alignItems="center" direction="column" spacing={4}>
                         <Typography variant="h2">
@@ -58,17 +72,7 @@ export default function Projects() {
                             </Stack>
                         )}
 
-                        {projectsContext.isCorrectNetwork && (
-                            <>
-                                <NextLink href="/projects/create" passHref>
-                                    <Button variant="contained" color="primary" size="large" sx={{ mb: 3 }}>
-                                        Create a Project
-                                    </Button>
-                                </NextLink>
-
-                                <ProjectsList />
-                            </>
-                        )}
+                        {projectsContext.isCorrectNetwork && <ProjectsList />}
                     </>
                 )}
             </Box>
