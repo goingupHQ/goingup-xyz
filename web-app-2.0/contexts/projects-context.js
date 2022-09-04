@@ -148,6 +148,18 @@ export const ProjectsProvider = ({ children }) => {
         return tx;
     };
 
+    const transferProjectOwnership = async (projectId, newOwner) => {
+        const contract = getContract();
+
+        if (!isCorrectNetwork) throw 'Wrong network';
+        if (!wallet.ethersSigner) throw 'No wallet';
+
+        const price = await contract.price();
+
+        const tx = await contract.transferProjectOwnership(projectId, newOwner, { value: price });
+        return tx;
+    };
+
     const value = {
         networkParams,
         isCorrectNetwork,
@@ -157,6 +169,7 @@ export const ProjectsProvider = ({ children }) => {
         getProject,
         createProject,
         updateProject,
+        transferProjectOwnership
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };
