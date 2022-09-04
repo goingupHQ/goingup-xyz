@@ -63,7 +63,7 @@ export default function ProjectForm(props) {
                 started: projectData.started.toNumber() !== 0 ? new Date(projectData.started.toNumber() * 1000) : null,
                 ended: projectData.ended.toNumber() !== 0 ? new Date(projectData.ended.toNumber() * 1000) : null,
                 primaryUrl: projectData.primaryUrl,
-                tags: projectData.tags.split(', '),
+                tags: projectData.tags.split(',').map((tag) => tag.trim()),
                 isPrivate: projectData.isPrivate,
             });
 
@@ -74,7 +74,7 @@ export default function ProjectForm(props) {
                 started: projectData.started.toNumber() !== 0 ? new Date(projectData.started.toNumber() * 1000) : null,
                 ended: projectData.ended.toNumber() !== 0 ? new Date(projectData.ended.toNumber() * 1000) : null,
                 primaryUrl: projectData.primaryUrl,
-                tags: projectData.tags.split(', '),
+                tags: projectData.tags.split(',').map((tag) => tag.trim()),
                 isPrivate: projectData.isPrivate,
             });
             setLoading(false);
