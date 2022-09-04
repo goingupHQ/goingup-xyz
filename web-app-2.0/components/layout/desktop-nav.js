@@ -47,7 +47,7 @@ export default function DesktopNav(props) {
 
                 <Link href="/projects">
                     <Button
-                        sx={pathname === '/projects' ? activeButtonStyle : inactiveButtonStyle}
+                        sx={pathname.startsWith('/projects') ? activeButtonStyle : inactiveButtonStyle}
                         startIcon={<ProjectsIcon />}
                     >
                         Projects
@@ -56,7 +56,7 @@ export default function DesktopNav(props) {
 
                 <Link href="/profile">
                     <Button
-                        sx={pathname === '/profile' ? activeButtonStyle : inactiveButtonStyle}
+                        sx={pathname.startsWith('/profile') ? activeButtonStyle : inactiveButtonStyle}
                         startIcon={<ProfileIcon />}
                     >
                         Profile
@@ -65,7 +65,7 @@ export default function DesktopNav(props) {
 
                 <Link href="/collaborators">
                     <Button
-                        sx={pathname === '/collaborators' ? activeButtonStyle : inactiveButtonStyle}
+                        sx={pathname.startsWith('/collaborators') ? activeButtonStyle : inactiveButtonStyle}
                         startIcon={<CollaboratorsIcon />}
                     >
                         Collaborators
