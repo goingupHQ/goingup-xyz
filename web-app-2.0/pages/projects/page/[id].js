@@ -1,10 +1,11 @@
-import { Backdrop, Button, CircularProgress, Fade, Grid, Link, Paper, Typography } from '@mui/material';
+import { Backdrop, Button, Chip, CircularProgress, Fade, Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import React from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { ProjectsContext } from '../../../contexts/projects-context';
 import { Box } from '@mui/system';
 import Head from 'next/head';
+import moment from 'moment';
 
 export default function ProjectPage(props) {
     const router = useRouter();
@@ -78,6 +79,35 @@ export default function ProjectPage(props) {
                                     {project?.primaryUrl}
                                 </Typography>
                             </Link>
+                        </Grid>
+
+                        <Grid item xs={12} md={6} lg={4}>
+                            <Typography variant="body1" color="GrayText">
+                                Started
+                            </Typography>
+                            <Typography variant="body1">
+                                {project?.started?.toNumber() ? moment(project?.started.toNumber() * 1000).format('LL') : 'None'}
+                            </Typography>
+                        </Grid>
+
+                        <Grid item xs={12} md={6} lg={4}>
+                            <Typography variant="body1" color="GrayText">
+                                Ended
+                            </Typography>
+                            <Typography variant="body1">
+                                {project?.ended?.toNumber() ? moment(project?.ended.toNumber() * 1000).format('LL') : 'None'}
+                            </Typography>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Typography variant="body1" color="GrayText">
+                                Tags
+                            </Typography>
+                            <Stack direction="row" spacing={1}>
+                                {project?.tags?.split(',').map((tag) => (
+                                    <Chip label={tag.trim()} />
+                                ))}
+                            </Stack>
                         </Grid>
                     </Grid>
                 </Paper>
