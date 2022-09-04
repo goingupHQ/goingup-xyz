@@ -282,6 +282,8 @@ export function WalletProvider({ children }) {
         console.log(web3ModalOptions);
     };
 
+    const mainnetENSProvider = ethers.getDefaultProvider('homestead');
+
     return (
         <WalletContext.Provider
             value={{
@@ -300,6 +302,7 @@ export function WalletProvider({ children }) {
                 signMessage,
                 utilityToken,
                 setWeb3ModalTheme,
+                mainnetENSProvider
             }}
         >
             {children}
