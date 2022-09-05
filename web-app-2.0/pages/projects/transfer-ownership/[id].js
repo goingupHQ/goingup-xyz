@@ -23,6 +23,7 @@ export default function TransferOwnership(props) {
     const [transferring, setTransferring] = React.useState(false);
 
     React.useEffect(() => {
+        //
         if (router.isReady) {
             setLoading(true);
             projectsContext
@@ -38,6 +39,7 @@ export default function TransferOwnership(props) {
                     setLoading(false);
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     const handleTransferOwnership = async () => {
@@ -162,7 +164,7 @@ export default function TransferOwnership(props) {
                                 Tags
                             </Typography>
                             {project?.tags?.split(',').map((tag) => (
-                                <Chip label={tag.trim()} sx={{ mr: '2px' }} />
+                                <Chip key={p.id} label={tag.trim()} sx={{ mr: '2px' }} />
                             ))}
                         </Grid>
 

@@ -16,6 +16,7 @@ export default function ProjectPage(props) {
     const [project, setProject] = React.useState(null);
 
     React.useEffect(() => {
+        //
         if (router.isReady) {
             setLoading(true);
             projectsContext
@@ -31,6 +32,7 @@ export default function ProjectPage(props) {
                     setLoading(false);
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     return (
@@ -105,7 +107,7 @@ export default function ProjectPage(props) {
                             </Typography>
                             <Stack direction="row" spacing={1}>
                                 {project?.tags?.split(',').map((tag) => (
-                                    <Chip label={tag.trim()} />
+                                    <Chip key={p.id} label={tag.trim()} />
                                 ))}
                             </Stack>
                         </Grid>

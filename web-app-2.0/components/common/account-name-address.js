@@ -13,6 +13,7 @@ export default function AccountNameAddress(props) {
     const displayAddress = ethers.utils.isAddress(address) ? truncateEthAddress(address) : 'Invalid Address';
 
     React.useEffect(() => {
+        //
         if (address) {
             fetch(`/api/get-account-name?address=${address}`).then(async (res) => {
                 const result = await res.text();
@@ -20,6 +21,7 @@ export default function AccountNameAddress(props) {
                 setEnsName(await wallet.mainnetENSProvider.lookupAddress(address));
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address]);
 
     return (
