@@ -12,6 +12,7 @@ export default function Profile() {
     const router = useRouter();
 
     useEffect(() => {
+        //
         if (wallet.address) {
             fetch(`/api/has-account?address=${wallet.address}`)
                 .then(async (res) => {
@@ -23,6 +24,7 @@ export default function Profile() {
                     }
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wallet.address]);
 
     return (
