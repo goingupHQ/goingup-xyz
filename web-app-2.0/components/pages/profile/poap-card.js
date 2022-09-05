@@ -48,7 +48,7 @@ export default function PoapCard(props) {
                     }}
                 >
                     <Typography
-                        variant="mobileh2"
+                        variant="h3"
                         sx={{
                             paddingBottom: '20px',
                             paddingTop: '5px',
@@ -56,7 +56,7 @@ export default function PoapCard(props) {
                     >
                         {poap.event.name}
                     </Typography>
-                    <Typography variant="sh3">{moment(poap.event.start_date).format('LL')}</Typography>
+                    <Typography variant="h3">{moment(poap.event.start_date).format('LL')}</Typography>
 
                     <Button
                         sx={{
