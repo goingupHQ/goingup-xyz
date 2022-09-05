@@ -7,7 +7,7 @@ import { QrReader } from 'react-qr-reader';
 import QrCodeScannerOutlinedIcon from '@mui/icons-material/QrCodeScannerOutlined';
 
 export default function AddressInput(props) {
-    const { sx, label, value, onChange, setValue } = props;
+    const { sx, label, value, onChange, setValue, size } = props;
     const wallet = React.useContext(WalletContext);
 
     const [invalidAddress, setInvalidAddress] = React.useState(false);
@@ -28,6 +28,7 @@ export default function AddressInput(props) {
                 label={label || 'Address'}
                 variant="outlined"
                 sx={sx}
+                size={size}
                 placeholder="markibanez.eth or 0x68D99e952cF3D4faAa6411C1953979F54552A8F7"
                 color={invalidAddress ? 'error' : 'primary'}
                 value={value}
