@@ -6,6 +6,8 @@ import { ProjectsContext } from '../../../contexts/projects-context';
 import { Box } from '@mui/system';
 import Head from 'next/head';
 import moment from 'moment';
+import ProjectInformation from '../../../components/pages/projects/project-information';
+import { WalletContext } from '../../../contexts/wallet-context';
 
 export default function ProjectPage(props) {
     const router = useRouter();
@@ -15,8 +17,10 @@ export default function ProjectPage(props) {
     const [loading, setLoading] = React.useState(true);
     const [project, setProject] = React.useState(null);
 
+    const wallet = React.useContext(WalletContext);
+
     React.useEffect(() => {
-        if (router.isReady) {
+        if (router.isReady && wallet.address) {
             setLoading(true);
             projectsContext
                 .getProject(id)
@@ -31,7 +35,7 @@ export default function ProjectPage(props) {
                     setLoading(false);
                 });
         }
-    }, [id]);
+    }, [id, wallet.address]);
 
     return (
         <>
@@ -46,71 +50,9 @@ export default function ProjectPage(props) {
             </Grid>
 
             <Fade in={!loading}>
-                <Paper sx={{ padding: 3 }}>
-                    <Grid container rowSpacing={3}>
-                        <Grid item xs={12}>
-                            <Grid container>
-                                <Grid item xs={12} md={6}>
-                                    <Typography variant="h2">Project Information</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'initial', md: 'right' } }}>
-                                    <NextLink href={`/projects/edit/${id}`} passHref>
-                                        <Button variant="contained" color="primary" size="large">
-                                            Edit this Project
-                                        </Button>
-                                    </NextLink>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Typography variant="body1" color="GrayText">
-                                Description
-                            </Typography>
-                            <Typography variant="body1">{project?.description}</Typography>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Typography variant="body1" color="GrayText">
-                                Project URL
-                            </Typography>
-                            <Link href={project?.primaryUrl} target="_blank">
-                                <Typography variant="body1" sx={{ textDecoration: 'underline' }}>
-                                    {project?.primaryUrl}
-                                </Typography>
-                            </Link>
-                        </Grid>
-
-                        <Grid item xs={12} md={6} lg={4}>
-                            <Typography variant="body1" color="GrayText">
-                                Started
-                            </Typography>
-                            <Typography variant="body1">
-                                {project?.started?.toNumber() ? moment(project?.started.toNumber() * 1000).format('LL') : 'None'}
-                            </Typography>
-                        </Grid>
-
-                        <Grid item xs={12} md={6} lg={4}>
-                            <Typography variant="body1" color="GrayText">
-                                Ended
-                            </Typography>
-                            <Typography variant="body1">
-                                {project?.ended?.toNumber() ? moment(project?.ended.toNumber() * 1000).format('LL') : 'None'}
-                            </Typography>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Typography variant="body1" color="GrayText">
-                                Tags
-                            </Typography>
-                            <Stack direction="row" spacing={1}>
-                                {project?.tags?.split(',').map((tag) => (
-                                    <Chip label={tag.trim()} />
-                                ))}
-                            </Stack>
-                        </Grid>
-                    </Grid>
-                </Paper>
+                <Box>
+                    <ProjectInformation id={id} project={project} />
+                </Box>
             </Fade>
 
             <Backdrop open={loading} sx={{ zIndex: 1200 }}>

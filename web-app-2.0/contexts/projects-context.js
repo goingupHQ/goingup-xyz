@@ -101,6 +101,7 @@ export const ProjectsProvider = ({ children }) => {
     }
 
     const getProject = async (projectId) => {
+        if (!wallet.address) throw `no wallet connected`;
         const contract = getContract();
         const project = await contract.projects(projectId);
         return project;
