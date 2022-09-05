@@ -67,7 +67,7 @@ export default function ProjectInformation(props) {
                     </Typography>
                     <Stack direction="row" spacing={1}>
                         {project?.tags?.split(',').map((tag) => (
-                            <Chip label={tag.trim()} />
+                            <Chip key={p.id} label={tag.trim()} />
                         ))}
                     </Stack>
                 </Grid>

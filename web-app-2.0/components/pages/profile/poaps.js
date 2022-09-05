@@ -19,6 +19,7 @@ import ChevronRightIcon from "../../icons/ChevronRightIcon";
 import { useRouter } from "next/router";
 // import moment from "moment";
 import PoapCard from "./poap-card";
+import sleep from "sleep-promise";
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -30,6 +31,7 @@ const Poaps = (props) => {
     const [loading, setLoading] = useState(true);
     const [poaps, setPoaps] = useState([]);
     const [open, setOpen] = useState(false);
+    const [randomPoap, setRandomPoap] = useState([]);
 
     const { address } = props.account;
 
@@ -55,8 +57,27 @@ const Poaps = (props) => {
             .finally(() => {
                 setLoading(false);
             });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+            // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address]);
+
+    let intervalId;
+    useEffect(() => {
+        if (poaps.length > 9) {
+            showRandomPoap();
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            intervalId = setInterval(setRandomPoap, 7000);
+        }
+
+        return () => clearInterval(intervalId);
+    }, [randomPoap]);
+
+    const showRandomPoap = async () => {
+        if (poaps.length > 9) {
+            await sleep(500);
+            const randomIndex = Math.floor(Math.random() * poaps.length);
+            setRandomPoap(poaps[randomIndex]);
+        }
+    };
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
@@ -140,7 +161,13 @@ const Poaps = (props) => {
                                             },
                                         }}
                                     >
-                                        <Typography marginBottom={3} align="center" variant="h1">All POAPs</Typography>
+                                        <Typography
+                                            marginBottom={3}
+                                            align='center'
+                                            variant='h1'
+                                        >
+                                            All POAPs
+                                        </Typography>
                                         <Grid
                                             container
                                             columnSpacing={3}
@@ -183,14 +210,16 @@ const Poaps = (props) => {
                             {!loading &&
                                 poaps.slice(0, 9).map((p) => {
                                     return (
-                                        <Grid
-                                            item
-                                            key={p.tokenId}
-                                            xs={12}
-                                            md={4}
-                                        >
-                                            <PoapCard poap={p} />
-                                        </Grid>
+                                        <Fade in={randomPoap} timeout={500} key={p.tokenId}>
+                                            <Grid
+                                                item
+                                                key={p.tokenId}
+                                                xs={12}
+                                                md={4}
+                                            >
+                                                <PoapCard poap={p} />
+                                            </Grid>
+                                        </Fade>
                                     );
                                 })}
                         </Grid>

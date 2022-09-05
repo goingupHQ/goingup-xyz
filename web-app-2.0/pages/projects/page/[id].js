@@ -21,6 +21,7 @@ export default function ProjectPage(props) {
     const wallet = React.useContext(WalletContext);
 
     React.useEffect(() => {
+        //
         if (router.isReady && wallet.address) {
             setLoading(true);
             projectsContext
@@ -36,6 +37,7 @@ export default function ProjectPage(props) {
                     setLoading(false);
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, wallet.address]);
 
     return (
