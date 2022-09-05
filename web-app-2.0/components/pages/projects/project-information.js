@@ -32,7 +32,7 @@ export default function ProjectInformation(props) {
                     <Typography variant="body1">{project?.description}</Typography>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={12} md={6}>
                     <Typography variant="body1" color="GrayText">
                         Project URL
                     </Typography>
@@ -41,6 +41,17 @@ export default function ProjectInformation(props) {
                             {project?.primaryUrl}
                         </Typography>
                     </Link>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                    <Typography variant="body1" color="GrayText">
+                        Tags
+                    </Typography>
+                    <Stack direction="row" spacing={1}>
+                        {project?.tags?.split(',').map((tag, index) => (
+                            <Chip key={index} label={tag.trim()} />
+                        ))}
+                    </Stack>
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={4}>
@@ -61,17 +72,6 @@ export default function ProjectInformation(props) {
                     <Typography variant="body1">
                         {project?.ended?.toNumber() ? moment(project?.ended.toNumber() * 1000).format('LL') : 'None'}
                     </Typography>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <Typography variant="body1" color="GrayText">
-                        Tags
-                    </Typography>
-                    <Stack direction="row" spacing={1}>
-                        {project?.tags?.split(',').map((tag, index) => (
-                            <Chip key={index} label={tag.trim()} />
-                        ))}
-                    </Stack>
                 </Grid>
             </Grid>
         </Paper>
