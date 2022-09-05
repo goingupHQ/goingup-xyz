@@ -53,11 +53,11 @@ export default function ProjectPage(props) {
             </Grid>
 
             <Fade in={!loading}>
-                <Box>
+                <Stack direction="column" spacing={3}>
                     <ProjectInformation id={id} project={project} />
 
                     <ProjectMembers id={id} />
-                </Box>
+                </Stack>
             </Fade>
 
             <Backdrop open={loading} sx={{ zIndex: 1200 }}>
