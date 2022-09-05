@@ -9,11 +9,14 @@ import moment from 'moment';
 import AccountNameAddress from '../../../components/common/account-name-address';
 import AddressInput from '../../../components/common/address-input';
 import { useSnackbar } from 'notistack';
+import { WalletContext } from '../../../contexts/wallet-context';
+import SectionHeader from '../../../components/common/section-header';
 
 export default function TransferOwnership(props) {
     const router = useRouter();
     const { id } = router.query;
     const projectsContext = React.useContext(ProjectsContext);
+    const wallet = React.useContext(WalletContext);
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -23,8 +26,7 @@ export default function TransferOwnership(props) {
     const [transferring, setTransferring] = React.useState(false);
 
     React.useEffect(() => {
-        //
-        if (router.isReady) {
+        if (router.isReady && wallet.address) {
             setLoading(true);
             projectsContext
                 .getProject(id)
@@ -39,8 +41,7 @@ export default function TransferOwnership(props) {
                     setLoading(false);
                 });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id]);
+    }, [id, wallet.address, router.isReady]);
 
     const handleTransferOwnership = async () => {
         closeSnackbar();
@@ -105,18 +106,13 @@ export default function TransferOwnership(props) {
                 <Paper sx={{ padding: 3 }}>
                     <Grid container rowSpacing={3}>
                         <Grid item xs={12}>
-                            <Grid container>
-                                <Grid item xs={12} md={6}>
-                                    <Typography variant="h2">Project Information</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'initial', md: 'right' } }}>
-                                    <NextLink href={`/projects/page/${id}`} passHref>
+                            <SectionHeader title="Project Details">
+                            <NextLink href={`/projects/page/${id}`} passHref>
                                         <Button variant="contained" color="secondary" size="large">
                                             Go Back to Project Page
                                         </Button>
                                     </NextLink>
-                                </Grid>
-                            </Grid>
+                            </SectionHeader>
                         </Grid>
 
                         <Grid item xs={12}>
@@ -163,8 +159,8 @@ export default function TransferOwnership(props) {
                             <Typography variant="body1" color="GrayText">
                                 Tags
                             </Typography>
-                            {project?.tags?.split(',').map((tag) => (
-                                <Chip key={p.id} label={tag.trim()} sx={{ mr: '2px' }} />
+                            {project?.tags?.split(',').map((tag, index) => (
+                                <Chip key={index} label={tag.trim()} sx={{ mr: '2px' }} />
                             ))}
                         </Grid>
 
