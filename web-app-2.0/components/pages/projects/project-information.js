@@ -2,6 +2,7 @@ import { Button, Chip, Grid, Link, Paper, Stack, Typography } from '@mui/materia
 import moment from 'moment';
 import NextLink from 'next/link';
 import React from 'react';
+import SectionHeader from '../../common/section-header';
 
 export default function ProjectInformation(props) {
     const { id, project } = props;
@@ -9,18 +10,19 @@ export default function ProjectInformation(props) {
         <Paper sx={{ padding: 3 }}>
             <Grid container rowSpacing={3}>
                 <Grid item xs={12}>
-                    <Grid container>
-                        <Grid item xs={12} md={6}>
-                            <Typography variant="h2">Project Information</Typography>
-                        </Grid>
-                        <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'initial', md: 'right' } }}>
-                            <NextLink href={`/projects/edit/${id}`} passHref>
-                                <Button variant="contained" color="primary" size="large">
-                                    Edit this Project
-                                </Button>
-                            </NextLink>
-                        </Grid>
-                    </Grid>
+                    <SectionHeader title="Project Information">
+                        <NextLink href={`/projects/edit/${id}`} passHref>
+                            <Button variant="contained" color="primary" size="large">
+                                Edit this Project
+                            </Button>
+                        </NextLink>
+
+                        <NextLink href={`/projects/transfer-ownership/${id}`} passHref>
+                            <Button variant="contained" color="secondary" size="large">
+                                Transfer Ownership
+                            </Button>
+                        </NextLink>
+                    </SectionHeader>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -66,8 +68,8 @@ export default function ProjectInformation(props) {
                         Tags
                     </Typography>
                     <Stack direction="row" spacing={1}>
-                        {project?.tags?.split(',').map((tag) => (
-                            <Chip key={p.id} label={tag.trim()} />
+                        {project?.tags?.split(',').map((tag, index) => (
+                            <Chip key={index} label={tag.trim()} />
                         ))}
                     </Stack>
                 </Grid>
