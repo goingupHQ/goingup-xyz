@@ -161,6 +161,12 @@ export const ProjectsProvider = ({ children }) => {
         return tx;
     };
 
+    const getProjectMembers = async (projectId) => {
+        const contract = getContract();
+        const members = await contract.getProjectMembers(projectId);
+        return members;
+    };
+
     const value = {
         networkParams,
         isCorrectNetwork,
@@ -170,7 +176,8 @@ export const ProjectsProvider = ({ children }) => {
         getProject,
         createProject,
         updateProject,
-        transferProjectOwnership
+        transferProjectOwnership,
+        getProjectMembers,
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };
