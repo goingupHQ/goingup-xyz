@@ -49,14 +49,13 @@ export default function ProjectPage(props) {
                 <Grid item xs={12} md={6}>
                     <Typography variant="h1">{project === null ? 'Loading Project...' : project.name}</Typography>
                 </Grid>
-                <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'initial', md: 'right' } }}></Grid>
             </Grid>
 
             <Fade in={!loading}>
                 <Stack direction="column" spacing={3}>
                     <ProjectInformation id={id} project={project} />
 
-                    <ProjectMembers id={id} />
+                    <ProjectMembers id={id} project={project} />
                 </Stack>
             </Fade>
 
