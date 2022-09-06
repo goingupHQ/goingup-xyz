@@ -48,6 +48,7 @@ const Poaps = (props) => {
                         clones.push(...result);
                     }
                     setPoaps(clones);
+                    setRandomPoap([clones])
                     // setPoaps(result);
                 }
             })
@@ -70,13 +71,13 @@ const Poaps = (props) => {
 
         return () => clearInterval(intervalId);
     }, [randomPoap]);
-
     const showRandomPoap = async () => {
         if (poaps.length > 9) {
             await sleep(500);
             const randomIndex = Math.floor(Math.random() * poaps.length);
             setRandomPoap(poaps[randomIndex]);
         }
+        console.log("randomPoap", randomPoap)
     };
 
     const wallet = useContext(WalletContext);
@@ -210,7 +211,7 @@ const Poaps = (props) => {
                             {!loading &&
                                 poaps.slice(0, 9).map((p) => {
                                     return (
-                                        <Fade in={randomPoap} timeout={500} key={p.tokenId}>
+                                        <Fade in={true} timeout={500} key={p.tokenId}>
                                             <Grid
                                                 item
                                                 key={p.tokenId}
