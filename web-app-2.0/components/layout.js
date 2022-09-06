@@ -26,6 +26,9 @@ export default function Layout({ children }) {
                         searchBar: app.mode === 'dark' ? '#19222C' : '#F5F5F5',
                         userBox: app.mode === 'dark' ? '#19222C' : '#EDEFED',
                     },
+                    profileButton: {
+                        main: app.mode === 'dark' ? '#253340' : '#4D5F72',
+                    },
                     hoverPrimary: {
                         main: '#FFE555',
                     },
