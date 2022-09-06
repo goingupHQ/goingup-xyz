@@ -32,7 +32,7 @@ export default function ProjectInformation(props) {
                     <Typography variant="body1">{project?.description}</Typography>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={5}>
                     <Typography variant="body1" color="GrayText">
                         Project URL
                     </Typography>
@@ -43,7 +43,7 @@ export default function ProjectInformation(props) {
                     </Link>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={7}>
                     <Typography variant="body1" color="GrayText">
                         Tags
                     </Typography>
@@ -54,7 +54,7 @@ export default function ProjectInformation(props) {
                     </Stack>
                 </Grid>
 
-                <Grid item xs={12} md={6} lg={4}>
+                <Grid item xs={12} md={6} lg={5}>
                     <Typography variant="body1" color="GrayText">
                         Started
                     </Typography>
@@ -65,7 +65,7 @@ export default function ProjectInformation(props) {
                     </Typography>
                 </Grid>
 
-                <Grid item xs={12} md={6} lg={4}>
+                <Grid item xs={12} md={6} lg={7}>
                     <Typography variant="body1" color="GrayText">
                         Ended
                     </Typography>
