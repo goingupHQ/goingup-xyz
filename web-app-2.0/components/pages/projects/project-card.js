@@ -8,12 +8,24 @@ export default function ProjectCard(props) {
 
     return (
         <>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <Card
+                sx={{
+                    height: '100%',
+                    padding: { xs: 'initial', md: 3 },
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                }}
+            >
                 <CardHeader title={project.name} />
                 <CardContent>
                     <Typography variant="body1">{project.description}</Typography>
+                    <br />
                     <Link href={project.primaryUrl} target="_blank">
-                        <Typography variant="body1" sx={{ textDecoration: 'underline' }}>
+                        <Typography
+                            variant="body1"
+                            sx={{ textDecoration: 'underline', overflowX: 'hidden', textOverflow: 'ellipsis' }}
+                        >
                             {project.primaryUrl}
                         </Typography>
                     </Link>
