@@ -167,6 +167,11 @@ export const ProjectsProvider = ({ children }) => {
         return members;
     };
 
+    const inviteProjectMember = async (projectId, member) => {
+        const contract = getContract();
+
+    };
+
     const value = {
         networkParams,
         isCorrectNetwork,
