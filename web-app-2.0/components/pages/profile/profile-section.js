@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../contexts/app-context";
+import { WalletContext } from "../../../contexts/wallet-context";
 import {
     Grid,
     Card,
@@ -17,19 +18,104 @@ import {
 } from "@mui/material";
 import ContactsAndIntegrations from "./contacts-and-integrations";
 import truncateEthAddress from "truncate-eth-address";
+import { useSnackbar } from "notistack";
 import { useTheme } from "@mui/material";
+import SendAppreciationToken from "../../common/SendAppreciationToken";
 
 const ProfileSection = (props) => {
+    const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
     const { account } = props;
+    const { enqueueSnackbar } = useSnackbar();
+    const myAccount = wallet.address === account.address;
     const theme = useTheme();
+
+    const sendAppreciationRef = useRef(null);
+    const followersListRef = useRef(null);
+    const followingListRef = useRef(null);
+    const [following, setFollowing] = useState(false);
+    const [checkingRel, setCheckingRel] = useState(true);
+    const [gettingFollowStats, setGettingFollowStats] = useState(true);
+    const [followersCount, setFollowersCount] = useState(0);
+    const [followingCount, setFollowingCount] = useState(0);
+
+    useEffect(() => {
+        if (wallet.address) {
+            setCheckingRel(true);
+            fetch(
+                `/api/get-rel?address=${wallet.address}&target=${account.address}`
+            )
+                .then(async (response) => {
+                    const result = await response.json();
+                    setFollowing(result.following);
+                })
+                .finally(() => setCheckingRel(false));
+
+            setGettingFollowStats(true);
+            fetch(`/api/get-follow-stats?address=${account.address}`)
+                .then(async (response) => {
+                    const result = await response.json();
+                    setFollowersCount(result.followers);
+                    setFollowingCount(result.following);
+                })
+                .finally(() => setGettingFollowStats(false));
+        }
+    }, [wallet.address, account.address]);
+
+    const follow = async () => {
+        if (!wallet.address) {
+            enqueueSnackbar(`Connect your wallet to follow ${account.name}`, {
+                variant: "info",
+            });
+            return;
+        }
+
+        const { address } = wallet;
+        const signature = await wallet.signMessage("follow");
+
+        const response = await fetch(
+            `/api/follow?address=${address}&follows=${account.address}&signature=${signature}`
+        );
+
+        if (response.status === 200) {
+            enqueueSnackbar(`You are now following ${account.name}`, {
+                variant: "success",
+            });
+            setFollowing(true);
+        } else {
+            enqueueSnackbar(`Could not follow ${account.name}`, {
+                variant: "error",
+            });
+        }
+    };
+
+    const unfollow = async () => {
+        const { address, ethersSigner } = wallet;
+        const message = "unfollow";
+        const signature = await wallet.signMessage(message);
+
+        const response = await fetch(
+            `/api/unfollow?address=${address}&follows=${account.address}&signature=${signature}`
+        );
+
+        if (response.status === 200) {
+            enqueueSnackbar(`You have unfollowed ${account.name}`, {
+                variant: "success",
+            });
+            setFollowing(false);
+        } else {
+            enqueueSnackbar(`Could not unfollow ${account.name}`, {
+                variant: "error",
+            });
+        }
+    };
 
     return (
         <>
             <Fade in={true} timeout={1000}>
                 <Card>
                     <Grid
-                    padding={0}
+                        padding={0}
                         container
                         direction={{
                             xs: "column",
@@ -61,25 +147,33 @@ const ProfileSection = (props) => {
                                                 sx={{
                                                     position: "relative",
                                                     display: "inline-flex",
-                                                    backgroundColor: { xs: 'none', md: 
-                                                    app.mode === "dark"
-                                                        ? "#121E28"
-                                                        : "#FFFFFF"},
+                                                    backgroundColor: {
+                                                        xs: "none",
+                                                        md:
+                                                            app.mode === "dark"
+                                                                ? "#121E28"
+                                                                : "#FFFFFF",
+                                                    },
                                                     borderRadius: "50%",
                                                     padding: "3px",
                                                 }}
                                             >
-                                                <Box 
+                                                <Box
                                                     sx={{
-                                                        backgroundColor: app.mode === "dark"
-                                                        ? "#121E28"
-                                                        : "#FFFFFF",
-                                                        borderRadius: '50%',
-                                                        padding: { xs: '17px', md: 'none'},
+                                                        backgroundColor:
+                                                            app.mode === "dark"
+                                                                ? "#121E28"
+                                                                : "#FFFFFF",
+                                                        borderRadius: "50%",
+                                                        padding: {
+                                                            xs: "17px",
+                                                            md: "none",
+                                                        },
                                                         position: "absolute",
-                                                        marginTop: '8px',
-                                                        marginLeft: '8px'
-                                                    }}/>
+                                                        marginTop: "8px",
+                                                        marginLeft: "8px",
+                                                    }}
+                                                />
                                                 <CircularProgress
                                                     size={50}
                                                     variant='determinate'
@@ -89,7 +183,11 @@ const ProfileSection = (props) => {
                                                             app.mode === "dark"
                                                                 ? "#1D3042"
                                                                 : "#CFCFCF",
-                                                                padding: { xs: 1, sm: 1, md: 0}
+                                                        padding: {
+                                                            xs: 1,
+                                                            sm: 1,
+                                                            md: 0,
+                                                        },
                                                     }}
                                                     thickness={7}
                                                     value={100}
@@ -108,7 +206,11 @@ const ProfileSection = (props) => {
                                                         color: "#3AB795",
                                                         position: "relative",
                                                         display: "inline-flex",
-                                                        padding: { xs: 1, sm: 1, md: 0}
+                                                        padding: {
+                                                            xs: 1,
+                                                            sm: 1,
+                                                            md: 0,
+                                                        },
                                                     }}
                                                 />
                                                 <Box
@@ -143,7 +245,7 @@ const ProfileSection = (props) => {
                                         <Avatar
                                             src={account.profilePhoto}
                                             sx={{
-                                                marginLeft: '-15px',
+                                                marginLeft: "-15px",
                                                 width: { xs: 60, md: 114 },
                                                 height: { xs: 60, md: 114 },
                                             }}
@@ -215,14 +317,14 @@ const ProfileSection = (props) => {
                                     xs: "none",
                                     md: "flex-end",
                                 }}
-                                marginY={"15px"}
-                                marginLeft={'-8px'}
+                                marginLeft={"-8px"}
                             >
                                 <ContactsAndIntegrations
                                     account={account}
                                     refresh={props.refresh}
                                 />
                             </Stack>
+
                             <Stack
                                 sx={{
                                     border: 3,
@@ -243,7 +345,7 @@ const ProfileSection = (props) => {
                                     xs: "center",
                                     md: "space-evenly",
                                 }}
-                                marginBottom={"30px"}
+                                marginBottom={"10px"}
                             >
                                 <Box
                                     sx={{
@@ -254,19 +356,108 @@ const ProfileSection = (props) => {
                                         borderRadius: "4px",
 
                                         paddingY: { md: "5px" },
-                                        paddingBottom: '3px'
+                                        paddingBottom: "3px",
                                     }}
                                 >
-                                    <Typography variant='sh2'sx={{marginX: { xs: '20px', md: '42px'}}}>
+                                    <Typography
+                                        variant='sh2'
+                                        sx={{
+                                            marginX: { xs: "20px", md: "42px" },
+                                        }}
+                                    >
                                         {account.name
                                             .toLowerCase()
                                             .replace(/\s/g, "") + ".eth"}
                                     </Typography>
                                 </Box>
-                                <Typography variant='sh2' sx={{marginX: { xs: '27px', md: '42px'}}}>
+                                <Typography
+                                    variant='sh2'
+                                    sx={{ marginX: { xs: "27px", md: "42px" } }}
+                                >
                                     {truncateEthAddress(account.address)}
                                 </Typography>
                             </Stack>
+                            {!myAccount && (
+                                <>
+                                    {checkingRel && <CircularProgress />}
+
+                                    {!checkingRel && (
+                                        <>
+                                            <Stack
+                                                spacing={1}
+                                                direction='row'
+                                                alignItems='center'
+                                                justifyContent={{
+                                                    xs: "none",
+                                                    md: "flex-end",
+                                                }}
+                                                sx={{
+                                                    borderRadius: "4px",
+                                                    paddingY: { md: "5px" },
+                                                    paddingBottom: "3px",
+                                                }}
+                                            >
+                                                {!following && (
+                                                    <Button
+                                                        variant='outlined'
+                                                        color='profileButton'
+                                                        sx={{
+                                                            border: '2px solid gray',
+                                                            color:
+                                                                app.mode ===
+                                                                "dark"
+                                                                    ? "#FFFFFF"
+                                                                    : "#22272F",
+                                                        }}
+                                                        onClick={follow}
+                                                    >
+                                                        <Typography variant='sh3'>
+                                                            Follow
+                                                        </Typography>
+                                                    </Button>
+                                                )}
+                                                {following && (
+                                                    <Button
+                                                        variant='outlined'
+                                                        color='profileButton'
+                                                        sx={{
+                                                            border: '2px solid gray',
+                                                            color:
+                                                                app.mode ===
+                                                                "dark"
+                                                                    ? "#FFFFFF"
+                                                                    : "#22272F",
+                                                        }}
+                                                        onClick={unfollow}
+                                                    >
+                                                        <Typography variant='sh3'>
+                                                            Unfollow
+                                                        </Typography>
+                                                    </Button>
+                                                )}
+                                                <Button
+                                                    variant='outlined'
+                                                    color='profileButton'
+                                                    onClick={() => {
+                                                        sendAppreciationRef.current.showModal();
+                                                    }}
+                                                    sx={{
+                                                        border: '2px solid gray',
+                                                        color:
+                                                            app.mode === "dark"
+                                                                ? "#FFFFFF"
+                                                                : "#22272F",
+                                                    }}
+                                                >
+                                                    <Typography variant='sh3'>
+                                                        Send Appreciation Token
+                                                    </Typography>
+                                                </Button>
+                                            </Stack>
+                                        </>
+                                    )}
+                                </>
+                            )}
                         </Grid>
                         <Typography
                             variant='sh1'
@@ -285,6 +476,11 @@ const ProfileSection = (props) => {
                     </Grid>
                 </Card>
             </Fade>
+            <SendAppreciationToken
+                ref={sendAppreciationRef}
+                sendToName={account.name}
+                sendToAddress={account.address}
+            />
         </>
     );
 };
