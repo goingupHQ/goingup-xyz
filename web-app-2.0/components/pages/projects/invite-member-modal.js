@@ -9,12 +9,14 @@ import {
 import { forwardRef, useContext, useImperativeHandle, useState, useEffect } from 'react';
 import { WalletContext } from '../../../contexts/wallet-context';
 import { AppContext } from '../../../contexts/app-context';
+import AddressInput from '../../common/address-input';
 
 const InviteMemberModal = (props, ref) => {
     const [open, setOpen] = useState(false);
     const theme = useTheme();
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
+    const [address, setAddress] = useState('');
 
     const { project } = props;
 
@@ -52,11 +54,11 @@ const InviteMemberModal = (props, ref) => {
             <DialogTitle>
                 <Typography variant="h1">Invite Member To {project?.name}</Typography>
             </DialogTitle>
-            <DialogContent sx={{ paddingY: 5 }}>
+            <DialogContent sx={{ paddingY: 10 }}>
                 <Stack
                     direction="column"
                 >
-                    <Typography variant="h2">Coming Soon</Typography>
+                    <AddressInput value={address} onChange={setAddress} />
                 </Stack>
             </DialogContent>
         </Dialog>
