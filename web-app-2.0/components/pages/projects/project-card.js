@@ -17,7 +17,7 @@ export default function ProjectCard(props) {
                     justifyContent: 'space-between',
                 }}
             >
-                <CardHeader title={project.name} />
+                <CardHeader title={project.name} sx={{ cursor: 'pointer' }} onClick={() => router.push(`/projects/page/${project.id}`)} />
                 <CardContent>
                     <Typography variant="body1">{project.description}</Typography>
                     <br />
