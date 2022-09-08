@@ -4,8 +4,8 @@ export const UtilityTokensContext = createContext();
 
 const getUtilityTokens = async () => {
     const response = await fetch("/api/utility-tokens");
-    const utilityTokens = await response.json();
-    return utilityTokens;
+    const result = await response.json();
+    return result;
 };
 
 export const UtilityTokensProvider = ({ children }) => {
