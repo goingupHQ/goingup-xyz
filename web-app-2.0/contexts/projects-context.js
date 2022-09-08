@@ -12,32 +12,12 @@ export const ProjectsProvider = ({ children }) => {
     // polygon mumbai testnet
     const contractAddress = '0xe0b5f0c73754347E1d2E3c84382970D7A70d666B';
     const contractNetwork = 80001;
-    const networkParams = {
-        chainId: '0x13881',
-        chainName: 'Polygon Testnet',
-        nativeCurrency: {
-            name: 'MATIC',
-            symbol: 'MATIC',
-            decimals: 18,
-        },
-        rpcUrls: ['https://matic-mumbai.chainstacklabs.com'],
-        blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
-    };
 
     // polygon mainnet
     // const contractAddress = 'NOT_YET_DEPLOYED';
     // const contractNetwork = 137;
-    // const networkParams = {
-    //     chainId: '0x89',
-    //     chainName: 'Matic Mainnet',
-    //     nativeCurrency: {
-    //         name: 'MATIC',
-    //         symbol: 'MATIC',
-    //         decimals: 18,
-    //     },
-    //     rpcUrls: ['https://polygon-rpc.com/'],
-    //     blockExplorerUrls: ['https://polygonscan.com/'],
-    // };
+
+    const { networkParams } = wallet.networks[contractNetwork];
 
     async function switchToCorrectNetwork() {
         if (wallet.walletType === 'walletconnect') {

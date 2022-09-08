@@ -32,9 +32,33 @@ const networks = {
     },
     137: {
         name: 'Polygon Mainnet',
+        group: 'polygon',
+        networkParams: {
+            chainId: '0x89',
+            chainName: 'Matic Mainnet',
+            nativeCurrency: {
+                name: 'MATIC',
+                symbol: 'MATIC',
+                decimals: 18,
+            },
+            rpcUrls: ['https://polygon-rpc.com/'],
+            blockExplorerUrls: ['https://polygonscan.com/'],
+        },
     },
     80001: {
         name: 'Polygon Mumbai Testnet',
+        group: 'polygon',
+        networkParams: {
+            chainId: '0x13881',
+            chainName: 'Polygon Testnet',
+            nativeCurrency: {
+                name: 'MATIC',
+                symbol: 'MATIC',
+                decimals: 18,
+            },
+            rpcUrls: ['https://matic-mumbai.chainstacklabs.com'],
+            blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
+        },
     },
     'CARDANO-0': {
         name: 'Cardano Testnet',
@@ -287,6 +311,7 @@ export function WalletProvider({ children }) {
     return (
         <WalletContext.Provider
             value={{
+                networks,
                 chain,
                 connectEthereum,
                 disconnectEthereum,
