@@ -214,6 +214,11 @@ export default function Layout({ children }) {
                             },
                         },
                     },
+                    MuiTextField: {
+                        defaultProps: {
+                            autoComplete: 'off'
+                        }
+                    }
                 },
                 spacing: [0, 10, 15, 20, 30, 60, 80],
                 icons: {
