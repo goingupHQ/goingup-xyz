@@ -6,26 +6,32 @@ export const abi = artifact.abi;
 export const provider = new ethers.providers.AlchemyProvider(137, process.env.ALCHEMY_POLYGON_MAINNET);
 export const contract = new ethers.Contract(contractAddress, abi, provider);
 
+const getToken = async (tokenId) => {
+    const token = await contract.tokenSettings(tokenId);
+    return {
+        id: tokenId,
+        description: token.description,
+        metadataURI: token.metadataURI,
+        category: token.category,
+        tier: token.tier,
+        price: token.price,
+    };
+};
+
+const tokens = [
+    {
+        categoryId: 1,
+        categoryName: 'GoingUP Appreciation Tokens',
+        tokenIds: [1, 2, 3, 4],
+        tokenSettings: []
+    }
+];
+
 export default async function handler(req, res) {
-    const tokens = [];
-
-    let tokenId = 1;
-    while (true) {
-        const token = await contract.tokenSettings(tokenId);
-        if (!token.description || !token.metadataURI) {
-            break;
+    for (const token of tokens) {
+        for (const tokenId of token.tokenIds) {
+            token.tokenSettings.push(await getToken(tokenId));
         }
-
-        tokens.push({
-            id: tokenId,
-            description: token.description,
-            metadataURI: token.metadataURI,
-            category: token.category,
-            tier: token.tier,
-            price: token.price,
-        });
-
-        tokenId++;
     }
 
     res.send(tokens);
