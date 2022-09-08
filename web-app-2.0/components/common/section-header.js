@@ -10,7 +10,7 @@ export default function SectionHeader(props) {
             </Grid>
             <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'initial', md: 'right' } }}>
                 <Stack
-                    direction="row"
+                    direction={{ xs: 'column', md: 'row' }}
                     justifyContent={{ xs: 'initial', md: 'flex-end' }}
                     spacing={1}
                     sx={{ mt: { xs: 1, md: 'initial' }, mr: { xs: 'initial', md: 'initial' } }}

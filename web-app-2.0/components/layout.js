@@ -176,9 +176,9 @@ export default function Layout({ children }) {
                     MuiButtonBase: {
                         defaultProps: {
                             style: {
-                                // // padding: '10px 40px',
-                                // width: 155,
-                                // height: 44
+                                whiteSpace: 'nowrap',
+                                overflowX: 'hidden',
+                                textOverflow: 'ellipsis',
                             },
                         },
                     },
