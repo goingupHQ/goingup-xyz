@@ -1,19 +1,25 @@
 import { Backdrop, Paper, TextField, Tooltip, Typography } from '@mui/material';
-import React from 'react';
+import React, { forwardRef, useImperativeHandle } from 'react';
 import { WalletContext } from '../../contexts/wallet-context';
 import debounce from 'lodash.debounce';
 import { ethers } from 'ethers';
 import { QrReader } from 'react-qr-reader';
 import QrCodeScannerOutlinedIcon from '@mui/icons-material/QrCodeScannerOutlined';
 
-export default function AddressInput(props) {
-    const { sx, label, value, onChange, setValue, size } = props;
+function AddressInput(props, ref) {
+    const { sx, label, value, onChange, setValue, size, autoFocus } = props;
     const wallet = React.useContext(WalletContext);
 
     const [invalidAddress, setInvalidAddress] = React.useState(false);
     const [scanningQr, setScanningQr] = React.useState(false);
 
     const inputRef = React.useRef(null);
+
+    useImperativeHandle(ref, () => ({
+        focus() {
+            inputRef.current.focus();
+        }
+    }));
 
     const addressChangeHandler = (event) => {
         const address = event.target.value;
@@ -27,6 +33,8 @@ export default function AddressInput(props) {
                 ref={inputRef}
                 label={label || 'Address'}
                 variant="outlined"
+                autoFocus={autoFocus}
+                autoComplete="off"
                 sx={sx}
                 size={size}
                 placeholder="markibanez.eth or 0x68D99e952cF3D4faAa6411C1953979F54552A8F7"
@@ -92,3 +100,5 @@ export default function AddressInput(props) {
         </>
     );
 }
+
+export default forwardRef(AddressInput);
