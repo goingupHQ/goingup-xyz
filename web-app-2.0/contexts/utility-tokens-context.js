@@ -1,6 +1,6 @@
-import { createContext } from "react";
+import { createContext, useEffect, useState } from "react";
 
-export const utilityTokensContext = createContext();
+export const UtilityTokensContext = createContext();
 
 const getUtilityTokens = async () => {
     const response = await fetch("/api/utility-tokens");
@@ -8,12 +8,21 @@ const getUtilityTokens = async () => {
     return utilityTokens;
 };
 
-export const utilityTokensProvider = ({ children }) => {
+export const UtilityTokensProvider = ({ children }) => {
+    const [utilityTokens, setUtilityTokens] = useState([]);
+
+    useEffect(() => {
+        getUtilityTokens().then((utilityTokens) => {
+            setUtilityTokens(utilityTokens);
+        });
+    }, []);
+
     return (
-        <utilityTokensContext.Provider value={{
+        <UtilityTokensContext.Provider value={{
+            utilityTokens,
             getUtilityTokens,
         }}>
             {children}
-        </utilityTokensContext.Provider>
+        </UtilityTokensContext.Provider>
     );
 }
