@@ -13,7 +13,7 @@ export default function SectionHeader(props) {
                     direction="row"
                     justifyContent={{ xs: 'initial', md: 'flex-end' }}
                     spacing={1}
-                    sx={{ mt: { xs: 1, md: -1 }, mr: { xs: 'initial', md: -1 } }}
+                    sx={{ mt: { xs: 1, md: 'initial' }, mr: { xs: 'initial', md: 'initial' } }}
                 >
                     {children}
                 </Stack>
