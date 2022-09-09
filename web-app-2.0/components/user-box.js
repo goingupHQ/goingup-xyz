@@ -14,9 +14,7 @@ import {
     Stack
 } from '@mui/material';
 import truncateEthAddress from 'truncate-eth-address';
-import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenIcon from './../components/icons/LockOpenIcon';
-import WorkTwoToneIcon from '@mui/icons-material/WorkTwoTone';
 import Identicon from './../components/common/Identicon';
 import WalletChainSelection from '../contexts/wallet-chain-selection';
 import CollaboratorsIcon from './icons/CollaboratorsIcon';
@@ -38,6 +36,7 @@ const UserBoxButton = styled(Button)(
       .MuiSvgIcon-root {
       }
     }
+    overflow: hidden;
 
     .MuiButton-label {
       justify-content: flex-start;
