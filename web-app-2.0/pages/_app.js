@@ -13,7 +13,7 @@ import '../styles/globals.css';
 function App({ Component, pageProps }) {
     return (
         <LocalizationProvider dateAdapter={AdapterMoment}>
-            <SnackbarProvider maxSnack={7} preventDuplicate>
+            <SnackbarProvider maxSnack={20} preventDuplicate>
                 <AppProvider>
                     <WalletProvider>
                         <UtilityTokensProvider>

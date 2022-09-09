@@ -14,16 +14,21 @@ import {
     Typography,
     useTheme,
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { forwardRef, useContext, useImperativeHandle, useState, useEffect, useRef } from 'react';
 import { WalletContext } from '../../../contexts/wallet-context';
 import { AppContext } from '../../../contexts/app-context';
 import AddressInput from '../../common/address-input';
 import { UtilityTokensContext } from '../../../contexts/utility-tokens-context';
+import { useSnackbar } from 'notistack';
+import { ethers } from 'ethers';
+import { ProjectsContext } from '../../../contexts/projects-context';
 
 const InviteMemberModal = (props, ref) => {
     const [open, setOpen] = useState(false);
     const wallet = useContext(WalletContext);
     const utilityTokensCtx = useContext(UtilityTokensContext);
+    const projectsCtx = useContext(ProjectsContext);
 
     const utilityTokens = utilityTokensCtx.utilityTokens;
 
@@ -37,6 +42,8 @@ const InviteMemberModal = (props, ref) => {
     const [selectedToken, setSelectedToken] = useState('');
     const [rewardAmount, setRewardAmount] = useState('');
 
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
     const { project } = props;
 
     useEffect(() => {
@@ -45,6 +52,13 @@ const InviteMemberModal = (props, ref) => {
 
     useImperativeHandle(ref, () => ({
         showModal() {
+            setAddress('');
+            setRole('');
+            setGoal('');
+            setSelectedTokenCategory('');
+            setTokens([]);
+            setSelectedToken('');
+            setRewardAmount('');
             setOpen(true);
             setTimeout(() => {
                 addressInputRef.current.focus();
@@ -64,6 +78,63 @@ const InviteMemberModal = (props, ref) => {
         setTokens(selectedToken.tokenSettings);
     };
 
+    const [inviting, setInviting] = useState(false);
+    const inviteMember = async () => {
+        try {
+            if (!address) throw 'Please enter an address';
+            if (!ethers.utils.isAddress(address)) throw 'Please enter a valid address';
+            if (!role) throw 'Please select a role';
+            if (!goal) throw 'Please enter a goal';
+            if (!selectedTokenCategory) throw 'Please select a token category';
+            if (!selectedToken) throw 'Please select a token';
+            if (!rewardAmount) throw 'Please enter a reward amount';
+            if (isNaN(parseInt(rewardAmount))) throw 'Please enter a valid reward amount';
+
+            const rewards = {
+                chain: 'polygon',
+                type: 'goingup-utility',
+                categoryId: parseInt(selectedTokenCategory),
+                tokenId: parseInt(selectedToken),
+                amount: parseInt(rewardAmount),
+            }
+
+            setInviting(true);
+
+            const tx = await projectsCtx.inviteProjectMember(project.id, address, role, goal, rewards);
+
+            enqueueSnackbar('Member invite transaction submitted', {
+                variant: 'info',
+                action: (key) => (
+                    <Button variant="contained" color="primary">Open in Block Explorer</Button>
+                ),
+                persist: true,
+            });
+
+            setOpen(false);
+
+            const key = enqueueSnackbar('Member invite transaction submitted', {
+                variant: 'info',
+                action: (key) => (
+                    <Button variant="contained" color="primary" onClick={() => {
+                        console.log('hello');
+                        window.open(`${projectsCtx.networkParams.blockExplorerUrls[0]}tx/${tx.hash}`, '_blank');
+                        closeSnackbar(key);
+                    }}>Open in Block Explorer</Button>
+                ),
+                persist: true,
+            });
+
+            const receipt = await tx.wait();
+            closeSnackbar(key);
+
+        } catch (err) {
+            if (typeof err === 'string') enqueueSnackbar(err, { variant: 'error' });
+            else enqueueSnackbar(err.message, { variant: 'error' });
+        } finally {
+            setInviting(false);
+        }
+    };
+
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="md">
             <DialogTitle>
@@ -77,7 +148,7 @@ const InviteMemberModal = (props, ref) => {
                             ref={addressInputRef}
                             label="Member Address"
                             value={address}
-                            onChange={setAddress}
+                            setValue={setAddress}
                             autoFocus={true}
                             fullWidth
                         />
@@ -148,14 +219,16 @@ const InviteMemberModal = (props, ref) => {
                             label="Reward Amount"
                             inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                             fullWidth
+                            value={rewardAmount}
+                            onChange={(e) => setRewardAmount(e.target.value)}
                         />
                     </Grid>
 
                     <Grid item xs={12}>
                         <Stack direction="row" spacing={2} justifyContent="flex-start">
-                            <Button variant="contained" color="primary">
+                            <LoadingButton loading={inviting} variant="contained" color="primary" onClick={inviteMember}>
                                 Invite Member
-                            </Button>
+                            </LoadingButton>
                         </Stack>
                     </Grid>
                 </Grid>
