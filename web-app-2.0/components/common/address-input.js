@@ -26,6 +26,7 @@ function AddressInput(props, ref) {
     };
 
     const debouncedChangeHandler = React.useMemo(() => debounce(addressChangeHandler, 500), []);
+    const mainnetProvider = ethers.getDefaultProvider('homestead');
 
     return (
         <>
@@ -41,13 +42,17 @@ function AddressInput(props, ref) {
                 placeholder="markibanez.eth or 0x68D99e952cF3D4faAa6411C1953979F54552A8F7"
                 color={invalidAddress ? 'error' : 'primary'}
                 value={value}
-                onChange={onChange}
+                onChange={e => {
+                    setValue(e.target.value)
+                }}
                 onBlur={async () => {
                     setInvalidAddress(false);
                     if (value) {
                         if (!ethers.utils.isAddress(value)) {
                             const address = await wallet.mainnetENSProvider.resolveName(value);
+                            console.log(address);
                             if (!address) setInvalidAddress(true);
+                            else setValue(address);
                         }
                     }
                 }}
