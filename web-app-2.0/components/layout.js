@@ -177,7 +177,7 @@ export default function Layout({ children }) {
                         defaultProps: {
                             style: {
                                 whiteSpace: 'nowrap',
-                                overflowX: 'hidden',
+                                overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                             },
                         },
