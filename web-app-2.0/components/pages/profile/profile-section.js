@@ -456,15 +456,6 @@ const ProfileSection = (props) => {
                                         </>
                                     )}
                                     <Stack
-                                        // direction={{ xs: "column", md: "row" }}
-                                        // spacing={1}
-                                        // alignItems='flex-end'
-                                        // sx={{
-                                        //     marginBottom: {
-                                        //         xs: "24px",
-                                        //         md: "8px",
-                                        //     },
-                                        // }}
                                         spacing={1}
                                         direction='row'
                                         alignItems='center'
@@ -475,7 +466,7 @@ const ProfileSection = (props) => {
                                         sx={{
                                             borderRadius: "4px",
                                             paddingY: { md: "5px" },
-                                            paddingBottom: "3px",
+                                            paddingY: "10px",
                                         }}
                                     >
                                         {gettingFollowStats && (
@@ -487,7 +478,7 @@ const ProfileSection = (props) => {
 
                                         {!gettingFollowStats && (
                                             <>
-                                                <Typography variant='h3'>
+                                                <Typography variant='sh3'>
                                                     <span
                                                         style={{
                                                             cursor: "pointer",
