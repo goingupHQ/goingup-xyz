@@ -26,7 +26,9 @@ export default function ProjectMembers(props) {
     };
 
     React.useEffect(() => {
+        //
         load();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     return (

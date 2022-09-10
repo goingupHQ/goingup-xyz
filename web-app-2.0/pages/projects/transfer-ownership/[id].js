@@ -26,6 +26,7 @@ export default function TransferOwnership(props) {
     const [transferring, setTransferring] = React.useState(false);
 
     React.useEffect(() => {
+        //
         if (router.isReady && wallet.address) {
             setLoading(true);
             projectsContext
@@ -41,6 +42,7 @@ export default function TransferOwnership(props) {
                     setLoading(false);
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, wallet.address, router.isReady]);
 
     const handleTransferOwnership = async () => {
