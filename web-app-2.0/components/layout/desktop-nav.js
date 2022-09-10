@@ -10,8 +10,8 @@ import ProjectsIcon from '../icons/ProjectsIcon';
 export default function DesktopNav(props) {
     const commonButtonStyle = {
         fontSize: '1rem',
-        padding: '10px 25px'
-    }
+        padding: '10px 25px',
+    };
 
     const activeButtonStyle = {
         ...commonButtonStyle,
@@ -19,8 +19,8 @@ export default function DesktopNav(props) {
         color: 'primary.contrastText',
         ':hover': {
             backgroundColor: 'hoverPrimary.main',
-        }
-    }
+        },
+    };
 
     const inactiveButtonStyle = {
         ...commonButtonStyle,
@@ -28,14 +28,18 @@ export default function DesktopNav(props) {
         ':hover': {
             color: 'hoverTab.main',
         },
-    }
+    };
 
     const router = useRouter();
     const { pathname } = router;
 
     return (
         <>
-            <Stack direction="row" spacing={3} sx={{ display: { xs: 'none', md: 'initial' }, margin: { xs: '10px 25px', lg: '10px 105px' } }}>
+            <Stack
+                direction="row"
+                spacing={3}
+                sx={{ display: { xs: 'none', md: 'initial' }, margin: { xs: '10px 25px', lg: '10px 105px' } }}
+            >
                 <Link href="/">
                     <Button
                         sx={pathname === '/' ? activeButtonStyle : inactiveButtonStyle}

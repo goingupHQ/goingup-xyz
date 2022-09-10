@@ -251,9 +251,10 @@ export default function Layout({ children }) {
                 <Header />
                 <Box
                     sx={{
-                        paddingTop: { xs: '74px', md: '150px' },
+                        paddingTop: { xs: '74px', md: '160px' },
                         paddingBottom: 5,
                         paddingX: { xs: '15px', lg: '105px' },
+                        maskImage
                     }}
                 >
                     {children}
