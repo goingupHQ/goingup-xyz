@@ -201,11 +201,6 @@ export default function Layout({ children }) {
                             color: app.mode === 'dark' ? '#25303C' : '#E7E7E7',
                         },
                     },
-                    MuiChip: {
-                        defaultProps: {
-                            borderRadius: 0,
-                        },
-                    },
                     MuiToolbar: {
                         defaultProps: {
                             sx: {
