@@ -36,7 +36,7 @@ export default function ProjectMembers(props) {
     }, [id]);
 
     return (
-        <Paper sx={{ padding: 3 }}>
+        <Paper variant="outlined" sx={{ padding: 3 }}>
             <Grid container rowSpacing={3}>
                 <Grid item xs={12}>
                     <SectionHeader title="Project Membership">

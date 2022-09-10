@@ -186,15 +186,20 @@ export default function Layout({ children }) {
                         defaultProps: {
                             sx: {
                                 backgroundColor: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
-                                // height: '80px',
+                                border: 'none'
                             },
-                            elevation: 0,
+                            elevation: 1,
                         },
                     },
                     MuiCard: {
                         defaultProps: {
-                            elevation: 0,
+                            variant: 'outlined'
                         },
+                    },
+                    MuiPaper: {
+                        defaultProps: {
+                            variant: 'outlined'
+                        }
                     },
                     MuiDivider: {
                         defaultProps: {
