@@ -364,7 +364,7 @@ const ProfileSection = (props) => {
                                     <Typography
                                         variant='sh2'
                                         sx={{
-                                            marginX: { xs: "20px", md: "42px" },
+                                            marginX: "42px",
                                         }}
                                     >
                                         {account.name
@@ -404,7 +404,6 @@ const ProfileSection = (props) => {
                                                         variant='outlined'
                                                         color='profileButton'
                                                         sx={{
-                                                            border: "2px solid gray",
                                                             color:
                                                                 app.mode ===
                                                                 "dark"
@@ -423,7 +422,6 @@ const ProfileSection = (props) => {
                                                         variant='outlined'
                                                         color='profileButton'
                                                         sx={{
-                                                            border: "2px solid gray",
                                                             color:
                                                                 app.mode ===
                                                                 "dark"
@@ -444,7 +442,6 @@ const ProfileSection = (props) => {
                                                         sendAppreciationRef.current.showModal();
                                                     }}
                                                     sx={{
-                                                        border: "2px solid gray",
                                                         color:
                                                             app.mode === "dark"
                                                                 ? "#FFFFFF"
