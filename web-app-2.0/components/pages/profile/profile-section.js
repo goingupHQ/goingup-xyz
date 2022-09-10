@@ -21,6 +21,8 @@ import truncateEthAddress from "truncate-eth-address";
 import { useSnackbar } from "notistack";
 import { useTheme } from "@mui/material";
 import SendAppreciationToken from "../../common/SendAppreciationToken";
+import FollowersList from "./followers-list";
+import FollowingList from "./following-list";
 
 const ProfileSection = (props) => {
     const wallet = useContext(WalletContext);
@@ -402,7 +404,7 @@ const ProfileSection = (props) => {
                                                         variant='outlined'
                                                         color='profileButton'
                                                         sx={{
-                                                            border: '2px solid gray',
+                                                            border: "2px solid gray",
                                                             color:
                                                                 app.mode ===
                                                                 "dark"
@@ -421,7 +423,7 @@ const ProfileSection = (props) => {
                                                         variant='outlined'
                                                         color='profileButton'
                                                         sx={{
-                                                            border: '2px solid gray',
+                                                            border: "2px solid gray",
                                                             color:
                                                                 app.mode ===
                                                                 "dark"
@@ -442,7 +444,7 @@ const ProfileSection = (props) => {
                                                         sendAppreciationRef.current.showModal();
                                                     }}
                                                     sx={{
-                                                        border: '2px solid gray',
+                                                        border: "2px solid gray",
                                                         color:
                                                             app.mode === "dark"
                                                                 ? "#FFFFFF"
@@ -456,6 +458,69 @@ const ProfileSection = (props) => {
                                             </Stack>
                                         </>
                                     )}
+                                    <Stack
+                                        // direction={{ xs: "column", md: "row" }}
+                                        // spacing={1}
+                                        // alignItems='flex-end'
+                                        // sx={{
+                                        //     marginBottom: {
+                                        //         xs: "24px",
+                                        //         md: "8px",
+                                        //     },
+                                        // }}
+                                        spacing={1}
+                                        direction='row'
+                                        alignItems='center'
+                                        justifyContent={{
+                                            xs: "none",
+                                            md: "flex-end",
+                                        }}
+                                        sx={{
+                                            borderRadius: "4px",
+                                            paddingY: { md: "5px" },
+                                            paddingBottom: "3px",
+                                        }}
+                                    >
+                                        {gettingFollowStats && (
+                                            <Typography variant='h4'>
+                                                Getting follow stats{" "}
+                                                <CircularProgress size='14px' />
+                                            </Typography>
+                                        )}
+
+                                        {!gettingFollowStats && (
+                                            <>
+                                                <Typography variant='h3'>
+                                                    <span
+                                                        style={{
+                                                            cursor: "pointer",
+                                                        }}
+                                                        onClick={() =>
+                                                            followersListRef.current.showModal()
+                                                        }
+                                                    >
+                                                        {followersCount}{" "}
+                                                        Follower
+                                                        {followersCount > 1
+                                                            ? "s"
+                                                            : ""}
+                                                    </span>
+                                                    {" | "}
+                                                    <span
+                                                        style={{
+                                                            cursor: "pointer",
+                                                        }}
+                                                        onClick={() =>
+                                                            followingListRef.current.showModal()
+                                                        }
+                                                    >
+                                                        {followingCount}{" "}
+                                                        Following
+                                                    </span>
+                                                </Typography>
+                                            </>
+                                        )}
+                                    </Stack>
                                 </>
                             )}
                         </Grid>
@@ -481,6 +546,8 @@ const ProfileSection = (props) => {
                 sendToName={account.name}
                 sendToAddress={account.address}
             />
+            <FollowersList ref={followersListRef} account={account} />
+            <FollowingList ref={followingListRef} account={account} />
         </>
     );
 };
