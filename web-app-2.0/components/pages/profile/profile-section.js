@@ -306,6 +306,51 @@ const ProfileSection = (props) => {
                                                     </>
                                                 )}
                                             </Typography>
+                                            <Stack
+                                                sx={{
+                                                    borderRadius: "4px",
+                                                }}
+                                            >
+                                                {gettingFollowStats && (
+                                                    <Typography variant='h4'>
+                                                        Getting follow stats{" "}
+                                                        <CircularProgress size='14px' />
+                                                    </Typography>
+                                                )}
+                                                {!gettingFollowStats && (
+                                                    <>
+                                                        <Typography variant='sh1'>
+                                                            <span
+                                                                style={{
+                                                                    cursor: "pointer",
+                                                                }}
+                                                                onClick={() =>
+                                                                    followersListRef.current.showModal()
+                                                                }
+                                                            >
+                                                                {followersCount}{" "}
+                                                                Follower
+                                                                {followersCount >
+                                                                1
+                                                                    ? "s"
+                                                                    : ""}
+                                                            </span>
+                                                            {" | "}
+                                                            <span
+                                                                style={{
+                                                                    cursor: "pointer",
+                                                                }}
+                                                                onClick={() =>
+                                                                    followingListRef.current.showModal()
+                                                                }
+                                                            >
+                                                                {followingCount}{" "}
+                                                                Following
+                                                            </span>
+                                                        </Typography>
+                                                    </>
+                                                )}
+                                            </Stack>
                                         </Box>
                                     </>
                                 }
@@ -395,7 +440,6 @@ const ProfileSection = (props) => {
                                                 }}
                                                 sx={{
                                                     borderRadius: "4px",
-                                                    paddingY: { md: "5px" },
                                                     paddingBottom: "3px",
                                                 }}
                                             >
@@ -455,60 +499,6 @@ const ProfileSection = (props) => {
                                             </Stack>
                                         </>
                                     )}
-                                    <Stack
-                                        spacing={1}
-                                        direction='row'
-                                        alignItems='center'
-                                        justifyContent={{
-                                            xs: "none",
-                                            md: "flex-end",
-                                        }}
-                                        sx={{
-                                            borderRadius: "4px",
-                                            paddingY: { md: "5px" },
-                                            paddingY: "10px",
-                                        }}
-                                    >
-                                        {gettingFollowStats && (
-                                            <Typography variant='h4'>
-                                                Getting follow stats{" "}
-                                                <CircularProgress size='14px' />
-                                            </Typography>
-                                        )}
-
-                                        {!gettingFollowStats && (
-                                            <>
-                                                <Typography variant='sh3'>
-                                                    <span
-                                                        style={{
-                                                            cursor: "pointer",
-                                                        }}
-                                                        onClick={() =>
-                                                            followersListRef.current.showModal()
-                                                        }
-                                                    >
-                                                        {followersCount}{" "}
-                                                        Follower
-                                                        {followersCount > 1
-                                                            ? "s"
-                                                            : ""}
-                                                    </span>
-                                                    {" | "}
-                                                    <span
-                                                        style={{
-                                                            cursor: "pointer",
-                                                        }}
-                                                        onClick={() =>
-                                                            followingListRef.current.showModal()
-                                                        }
-                                                    >
-                                                        {followingCount}{" "}
-                                                        Following
-                                                    </span>
-                                                </Typography>
-                                            </>
-                                        )}
-                                    </Stack>
                                 </>
                             )}
                         </Grid>
