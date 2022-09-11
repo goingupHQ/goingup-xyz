@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../contexts/app-context";
 import { WalletContext } from "../../../contexts/wallet-context";
+import { v4 as uuid } from 'uuid';
 import {
     Grid,
     Card,
@@ -15,7 +16,9 @@ import {
     Button,
     Divider,
     Paper,
+    IconButton,
 } from "@mui/material";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 import ContactsAndIntegrations from "./contacts-and-integrations";
 import truncateEthAddress from "truncate-eth-address";
 import { useSnackbar } from "notistack";
@@ -23,6 +26,7 @@ import { useTheme } from "@mui/material";
 import SendAppreciationToken from "../../common/SendAppreciationToken";
 import FollowersList from "./followers-list";
 import FollowingList from "./following-list";
+import EditProfile from './edit-profile';
 
 const ProfileSection = (props) => {
     const wallet = useContext(WalletContext);
@@ -32,6 +36,9 @@ const ProfileSection = (props) => {
     const myAccount = wallet.address === account.address;
     const theme = useTheme();
 
+    const [uploadingProfile, setUploadingProfile] = useState(false);
+    const editProfileRef = useRef(null);
+    const uploadProfileInputRef = useRef(null);
     const sendAppreciationRef = useRef(null);
     const followersListRef = useRef(null);
     const followingListRef = useRef(null);
@@ -40,6 +47,88 @@ const ProfileSection = (props) => {
     const [gettingFollowStats, setGettingFollowStats] = useState(true);
     const [followersCount, setFollowersCount] = useState(0);
     const [followingCount, setFollowingCount] = useState(0);
+
+    const uploadPhoto = async (e, photoType) => {
+        if (photoType === 'cover-photo') setUploadingCover(true);
+        if (photoType === 'profile-photo') setUploadingProfile(true);
+
+        try {
+            const file = e.target.files[0];
+            // const filename = encodeURIComponent(file.name);
+            const filename = uuid();
+            const res = await fetch(`/api/upload-to-gcp?file=${filename}`);
+            const { url, fields } = await res.json();
+            const formData = new FormData();
+
+            Object.entries({ ...fields, file }).forEach(([key, value]) => {
+                // @ts-ignore
+                formData.append(key, value);
+            });
+
+            const { address, ethersSigner } = wallet;
+            const message = 'update-account';
+            const signature = await wallet.signMessage(message);
+
+            const upload = await fetch(url, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (upload.ok) {
+                console.log(
+                    `Uploaded successfully to ${upload.url}${filename}`,
+                    photoType
+                );
+
+                let account = {};
+                if (photoType === 'cover-photo')
+                    account.coverPhoto = `${upload.url}${filename}`;
+                if (photoType === 'profile-photo')
+                    account.profilePhoto = `${upload.url}${filename}`;
+
+                const response = await fetch('/api/update-account', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        address,
+                        signature,
+                        account
+                    })
+                });
+
+                if (response.status === 200) {
+                    props.refresh();
+                    const msg =
+                        photoType === 'cover-photo'
+                            ? 'Cover photo uploaded'
+                            : 'Profile photo uploaded';
+                    enqueueSnackbar(msg, { variant: 'success' });
+                }
+            } else {
+                throw 'Upload failed.';
+            }
+        } catch (err) {
+            const msg = `Could not upload your ${
+                photoType === 'cover-photo' ? 'cover' : 'profile'
+            } photo`;
+            enqueueSnackbar('Could not upload your cover photo', {
+                variant: 'error'
+            });
+            console.log(err);
+        } finally {
+            if (photoType === 'cover-photo') {
+                setUploadingCover(false);
+                uploadCoverInputRef.current.value = '';
+            }
+
+            if (photoType === 'profile-photo') {
+                setUploadingProfile(false);
+                uploadProfileInputRef.current.value = '';
+            }
+        }
+    };
 
     useEffect(() => {
         if (wallet.address) {
@@ -355,6 +444,39 @@ const ProfileSection = (props) => {
                                     </>
                                 }
                             />
+                            {myAccount && (
+                                <>
+                                    <input
+                                        ref={uploadProfileInputRef}
+                                        accept='image/*'
+                                        id='contained-button-file'
+                                        type='file'
+                                        style={{ display: "none" }}
+                                        onChange={(e) => {
+                                            uploadPhoto(e, "profile-photo");
+                                        }}
+                                    />
+                                    <IconButton
+                                        disabled={uploadingProfile}
+                                        color='success'
+                                        sx={{
+                                            position: "absolute",
+                                            left: { xs: 65, md: 130, lg: 220 },
+                                            top: { xs: 160, md: 190, lg: 190 },
+                                        }}
+                                        onClick={() => {
+                                            uploadProfileInputRef.current.click();
+                                        }}
+                                    >
+                                        {uploadingProfile && (
+                                            <CircularProgress size='20px' />
+                                        )}
+                                        {!uploadingProfile && (
+                                            <FileUploadIcon />
+                                        )}
+                                    </IconButton>
+                                </>
+                            )}
                         </Grid>
                         <Grid item>
                             <Stack
@@ -424,6 +546,37 @@ const ProfileSection = (props) => {
                                     {truncateEthAddress(account.address)}
                                 </Typography>
                             </Stack>
+                            {myAccount && (
+                                <>
+                                    <Box
+                                        display='flex'
+                                        sx={{ marginBottom: 2 }}
+                                        justifyContent={{
+                                            xs: "initial",
+                                            md: "flex-end",
+                                        }}
+                                    >
+                                        <Button
+                                            color='profileButton'
+                                            variant='outlined'
+                                            sx={{
+                                                color:
+                                                    app.mode ===
+                                                    "dark"
+                                                        ? "#FFFFFF"
+                                                        : "#22272F",
+                                            }}
+                                            onClick={() => {
+                                                editProfileRef.current.showModal();
+                                            }}
+                                        >
+                                            <Typography variant='sh3'>
+                                                Edit My GoingUP Profile
+                                            </Typography>
+                                        </Button>
+                                    </Box>
+                                </>
+                            )}
                             {!myAccount && (
                                 <>
                                     {checkingRel && <CircularProgress />}
@@ -519,6 +672,11 @@ const ProfileSection = (props) => {
                     </Grid>
                 </Card>
             </Fade>
+            <EditProfile
+                ref={editProfileRef}
+                account={account}
+                refresh={props.refresh}
+            />
             <SendAppreciationToken
                 ref={sendAppreciationRef}
                 sendToName={account.name}
