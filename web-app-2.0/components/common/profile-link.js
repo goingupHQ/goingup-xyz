@@ -4,7 +4,7 @@ import React from 'react';
 import NextLink from 'next/link';
 import { WalletContext } from '../../contexts/wallet-context';
 import { Stack } from '@mui/system';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import Identicon from './Identicon';
 
 export default function AccountNameAddress(props) {
@@ -17,6 +17,7 @@ export default function AccountNameAddress(props) {
     const displayAddress = ethers.utils.isAddress(address) ? truncateEthAddress(address) : 'Invalid Address';
 
     React.useEffect(() => {
+        //
         if (address) {
             fetch(`/api/get-account-small?address=${address}`).then(async (res) => {
                 const result = await res.json(); console.log('result', result);
@@ -25,6 +26,7 @@ export default function AccountNameAddress(props) {
                 setEnsName(await wallet.mainnetENSProvider.lookupAddress(address));
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address]);
 
     return (
