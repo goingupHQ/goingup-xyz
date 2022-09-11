@@ -84,7 +84,7 @@ export default function ProjectMembers(props) {
                 )}
             </Grid>
 
-            <InviteMemberModal id={id} project={project} ref={inviteMemberModalRef} />
+            <InviteMemberModal id={id} project={project} reload={load} ref={inviteMemberModalRef} />
         </Paper>
     );
 }

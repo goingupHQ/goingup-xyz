@@ -18,20 +18,23 @@ const getToken = async (tokenId) => {
     };
 };
 
-const tokens = [
-    {
-        categoryId: 1,
-        categoryName: 'GoingUP Appreciation Tokens',
-        tokenIds: [1, 2, 3, 4],
-        tokenSettings: []
-    }
-];
-
 export default async function handler(req, res) {
-    for (const token of tokens) {
-        for (const tokenId of token.tokenIds) {
-            token.tokenSettings.push(await getToken(tokenId));
+    const tokens = [
+        {
+            categoryId: 1,
+            categoryName: 'GoingUP Appreciation Tokens',
+            tokenIds: [1, 2, 3, 4],
+            tokenSettings: []
         }
+    ];
+
+    for (const token of tokens) {
+        const tokenSettings = [];
+        for (const tokenId of token.tokenIds) {
+            tokenSettings.push(await getToken(tokenId));
+        }
+
+        token.tokenSettings = tokenSettings;
     }
 
     res.send(tokens);

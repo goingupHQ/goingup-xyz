@@ -44,7 +44,7 @@ const InviteMemberModal = (props, ref) => {
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-    const { project } = props;
+    const { project, reload } = props;
 
     useEffect(() => {
         if (wallet.address) setOpen(false);
@@ -114,18 +114,26 @@ const InviteMemberModal = (props, ref) => {
 
             const key = enqueueSnackbar('Member invite transaction submitted', {
                 variant: 'info',
-                // action: (key) => (
-                //     <Button variant="contained" color="primary" onClick={() => {
-                //         console.log('hello');
-                //         window.open(`${projectsCtx.networkParams.blockExplorerUrls[0]}tx/${tx.hash}`, '_blank');
-                //         closeSnackbar(key);
-                //     }}>Open in Block Explorer</Button>
-                // )
+                action: (key) => (
+                    <Button variant="contained" color="primary" onClick={() => {
+                        console.log('hello' + key);
+                        window.open(`${projectsCtx.networkParams.blockExplorerUrls[0]}tx/${tx.hash}`, '_blank');
+                    }}>Open in Block Explorer</Button>
+                )
             });
 
-            const receipt = await tx.wait();
-            closeSnackbar(key);
+            // const receipt = await tx.wait();
+            // closeSnackbar(key);
 
+            tx.wait().then((receipt) => {
+                closeSnackbar(key);
+                enqueueSnackbar('Member invite transaction confirmed', {
+                    variant: 'success',
+                });
+                reload();
+            });
+
+            if (reload) reload();
         } catch (err) {
             if (typeof err === 'string') enqueueSnackbar(err, { variant: 'error' });
             else enqueueSnackbar(err.message, { variant: 'error' });
