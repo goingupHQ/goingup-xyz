@@ -10,7 +10,7 @@ export const ProjectsProvider = ({ children }) => {
     const wallet = useContext(WalletContext);
 
     // polygon mumbai testnet
-    const contractAddress = '0xe0b5f0c73754347E1d2E3c84382970D7A70d666B';
+    const contractAddress = '0xF5df032832cb3c4BEf2D28B440fA57D5dAC47881';
     const contractNetwork = 80001;
 
     // polygon mainnet
@@ -147,6 +147,23 @@ export const ProjectsProvider = ({ children }) => {
         return members;
     };
 
+    const getPendingInvites = async (projectId) => {
+        const contract = getContract();
+        const invites = await contract.getPendingInvites(projectId);
+        return invites;
+    }
+
+    const getMembersAndInvites = async (projectId) => {
+        const contract = getContract();
+        const members = await getProjectMembers(projectId);
+        const pendingInvites = await getPendingInvites(projectId);
+
+        return {
+            members,
+            pendingInvites
+        };
+    };
+
     const inviteProjectMember = async (projectId, member, role, goal, rewards) => {
         const contract = getContract();
 
@@ -173,6 +190,8 @@ export const ProjectsProvider = ({ children }) => {
         updateProject,
         transferProjectOwnership,
         getProjectMembers,
+        getPendingInvites,
+        getMembersAndInvites,
         inviteProjectMember,
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;

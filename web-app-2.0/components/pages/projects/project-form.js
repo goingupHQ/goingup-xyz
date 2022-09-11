@@ -10,6 +10,7 @@ import {
     FormControlLabel,
     Backdrop,
     CircularProgress,
+    Paper,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import React, { useState, useContext, useEffect } from 'react';
@@ -192,102 +193,109 @@ export default function ProjectForm(props) {
                     {isCreate ? 'Create Project' : `Edit ${form.name || 'Project'}`}
                 </Typography>
 
-                <Grid container columnSpacing={2} rowSpacing={2} sx={{ padding: 0 }}>
-                    <Grid item xs={12}>
-                        <TextField
-                            onChange={(e) => setForm({ ...form, name: e.target.value })}
-                            id="outlined-basic"
-                            label="Project Name"
-                            variant="outlined"
-                            value={form.name}
-                            fullWidth
-                            autoComplete="off"
-                        />
-                    </Grid>
+                <Paper sx={{ padding: 2 }}>
+                    <Grid container columnSpacing={2} rowSpacing={2} sx={{ padding: 0 }}>
+                        <Grid item xs={12}>
+                            <TextField
+                                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                                id="outlined-basic"
+                                label="Project Name"
+                                variant="outlined"
+                                value={form.name}
+                                fullWidth
+                                autoComplete="off"
+                            />
+                        </Grid>
 
-                    <Grid item xs={12}>
-                        <TextField
-                            onChange={(e) => setForm({ ...form, description: e.target.value })}
-                            value={form.description}
-                            id="outlined-basic"
-                            label="Project Description"
-                            variant="outlined"
-                            multiline
-                            rows={4}
-                            placeholder="This project is about..."
-                            fullWidth
-                        />
-                    </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                                value={form.description}
+                                id="outlined-basic"
+                                label="Project Description"
+                                variant="outlined"
+                                multiline
+                                rows={4}
+                                placeholder="This project is about..."
+                                fullWidth
+                            />
+                        </Grid>
 
-                    <Grid item xs={12} md={6}>
-                        <DesktopDatePicker
-                            label="Started"
-                            inputFormat="MM/DD/yyyy"
-                            value={form.started}
-                            onChange={(e) => setForm({ ...form, started: e })}
-                            renderInput={(params) => <TextField {...params} autoComplete="off" fullWidth />}
-                        />
-                    </Grid>
+                        <Grid item xs={12} md={6}>
+                            <DesktopDatePicker
+                                label="Started"
+                                inputFormat="MM/DD/yyyy"
+                                value={form.started}
+                                onChange={(e) => setForm({ ...form, started: e })}
+                                renderInput={(params) => <TextField {...params} autoComplete="off" fullWidth />}
+                            />
+                        </Grid>
 
-                    <Grid item xs={12} md={6}>
-                        <DesktopDatePicker
-                            label="Ended"
-                            inputFormat="MM/DD/yyyy"
-                            value={form.ended}
-                            onChange={(e) => setForm({ ...form, ended: e })}
-                            renderInput={(params) => <TextField {...params} autoComplete="off" fullWidth />}
-                        />
-                    </Grid>
+                        <Grid item xs={12} md={6}>
+                            <DesktopDatePicker
+                                label="Ended"
+                                inputFormat="MM/DD/yyyy"
+                                value={form.ended}
+                                onChange={(e) => setForm({ ...form, ended: e })}
+                                renderInput={(params) => <TextField {...params} autoComplete="off" fullWidth />}
+                            />
+                        </Grid>
 
-                    <Grid item xs={12}>
-                        <TextField
-                            onChange={(e) => setForm({ ...form, primaryUrl: e.target.value })}
-                            value={form.primaryUrl}
-                            id="outlined-basic"
-                            label="Primary URL"
-                            variant="outlined"
-                            placeholder="https://www.project.com"
-                            fullWidth
-                            autoComplete="off"
-                        />
-                    </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                onChange={(e) => setForm({ ...form, primaryUrl: e.target.value })}
+                                value={form.primaryUrl}
+                                id="outlined-basic"
+                                label="Primary URL"
+                                variant="outlined"
+                                placeholder="https://www.project.com"
+                                fullWidth
+                                autoComplete="off"
+                            />
+                        </Grid>
 
-                    <Grid item xs={12}>
-                        <Autocomplete
-                            multiple
-                            value={form.tags?.length === 0 ? [] : form.tags}
-                            options={[]}
-                            onChange={(e, value) => {
-                                setForm({ ...form, tags: value });
-                            }}
-                            freeSolo
-                            renderTags={(value, getTagProps) =>
-                                value.map((option, index) => (
-                                    <Chip key={index} variant="outlined" label={option} {...getTagProps({ index })} />
-                                ))
-                            }
-                            renderInput={(params) => <TextField {...params} variant="outlined" label="Tags" />}
-                        />
-                    </Grid>
+                        <Grid item xs={12}>
+                            <Autocomplete
+                                multiple
+                                value={form.tags?.length === 0 ? [] : form.tags}
+                                options={[]}
+                                onChange={(e, value) => {
+                                    setForm({ ...form, tags: value });
+                                }}
+                                freeSolo
+                                renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                        <Chip
+                                            key={index}
+                                            variant="outlined"
+                                            label={option}
+                                            {...getTagProps({ index })}
+                                        />
+                                    ))
+                                }
+                                renderInput={(params) => <TextField {...params} variant="outlined" label="Tags" />}
+                            />
+                        </Grid>
 
-                    <Grid item xs={12}>
-                        <FormControlLabel
-                            label="Is this a private project?"
-                            control={
-                                <Checkbox
-                                    checked={form.isPrivate}
-                                    onChange={(e) => setForm({ ...form, isPrivate: e.target.checked })}
-                                />
-                            }
-                        />
-                    </Grid>
+                        <Grid item xs={12}>
+                            <FormControlLabel
+                                label="Is this a private project?"
+                                control={
+                                    <Checkbox
+                                        checked={form.isPrivate}
+                                        onChange={(e) => setForm({ ...form, isPrivate: e.target.checked })}
+                                    />
+                                }
+                            />
+                        </Grid>
 
-                    <Grid item xs={12}>
-                        <LoadingButton variant="contained" onClick={() => sendProject()}>
-                            {isCreate ? 'Create Project' : 'Update Project'}
-                        </LoadingButton>
+                        <Grid item xs={12}>
+                            <LoadingButton variant="contained" onClick={() => sendProject()}>
+                                {isCreate ? 'Create Project' : 'Update Project'}
+                            </LoadingButton>
+                        </Grid>
                     </Grid>
-                </Grid>
+                </Paper>
             </Stack>
 
             <Backdrop open={loading} sx={{ opacity: 1, zIndex: 1200 }}>

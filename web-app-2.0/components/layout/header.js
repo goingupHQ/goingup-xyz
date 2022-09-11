@@ -23,8 +23,8 @@ export default function Header(props) {
 
     return (
         <>
-            <AppBar>
-                <Toolbar>
+            <AppBar sx={{ boxShadow: 6 }}>
+                <Toolbar sx={{ paddingY: 0 }}>
                     <Grid container spacing={1} alignItems="center" justifyContent="space-between">
                         <Grid item xs={5}>
                             <Box
@@ -72,12 +72,12 @@ export default function Header(props) {
                         </Grid>
                     </Grid>
                 </Toolbar>
-                <Divider
+                {/* <Divider
                     sx={{
                         display: { xs: 'none', sm: 'none', md: 'block' },
                         marginTop: '12px'
                     }}
-                />
+                /> */}
                 <DesktopNav />
                 <Fade direction="down" in={drawerOpen} mountOnEnter unmountOnExit>
                     <Box sx={{ paddingBottom: '20px', paddingX: '32px', zIndex: 100 }}>

@@ -114,14 +114,13 @@ const InviteMemberModal = (props, ref) => {
 
             const key = enqueueSnackbar('Member invite transaction submitted', {
                 variant: 'info',
-                action: (key) => (
-                    <Button variant="contained" color="primary" onClick={() => {
-                        console.log('hello');
-                        window.open(`${projectsCtx.networkParams.blockExplorerUrls[0]}tx/${tx.hash}`, '_blank');
-                        closeSnackbar(key);
-                    }}>Open in Block Explorer</Button>
-                ),
-                persist: true,
+                // action: (key) => (
+                //     <Button variant="contained" color="primary" onClick={() => {
+                //         console.log('hello');
+                //         window.open(`${projectsCtx.networkParams.blockExplorerUrls[0]}tx/${tx.hash}`, '_blank');
+                //         closeSnackbar(key);
+                //     }}>Open in Block Explorer</Button>
+                // )
             });
 
             const receipt = await tx.wait();
