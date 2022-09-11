@@ -147,6 +147,12 @@ export const ProjectsProvider = ({ children }) => {
         return members;
     };
 
+    const getProjectMember = async (projectId, memberAddress) => {
+        const contract = getContract();
+        const member = await contract.projectMemberMapping(projectId, memberAddress);
+        return member;
+    };
+
     const getPendingInvites = async (projectId) => {
         const contract = getContract();
         const invites = await contract.getPendingInvites(projectId);
@@ -190,6 +196,7 @@ export const ProjectsProvider = ({ children }) => {
         updateProject,
         transferProjectOwnership,
         getProjectMembers,
+        getProjectMember,
         getPendingInvites,
         getMembersAndInvites,
         inviteProjectMember,
