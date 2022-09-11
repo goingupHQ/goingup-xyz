@@ -186,25 +186,25 @@ export default function Layout({ children }) {
                         defaultProps: {
                             sx: {
                                 backgroundColor: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
-                                border: 'none'
+                                border: 'none',
                             },
                             elevation: 3,
                         },
                         styleOverrides: {
                             root: {
                                 backgroundColor: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
-                            }
-                        }
+                            },
+                        },
                     },
                     MuiCard: {
                         defaultProps: {
-                            variant: 'outlined'
+                            variant: 'outlined',
                         },
                     },
                     MuiPaper: {
                         defaultProps: {
-                            variant: 'outlined'
-                        }
+                            variant: 'outlined',
+                        },
                     },
                     MuiDivider: {
                         defaultProps: {
@@ -221,9 +221,33 @@ export default function Layout({ children }) {
                     },
                     MuiTextField: {
                         defaultProps: {
-                            autoComplete: 'off'
-                        }
-                    }
+                            autoComplete: 'off',
+                            sx: {
+                                '& label.Mui-focused': {
+                                    color: app.mode === 'dark' ? 'primary.main' : 'secondary.main',
+                                },
+                                '& .MuiOutlinedInput-root': {
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: app.mode === 'dark' ? 'primary.main' : 'secondary.main',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    MuiFormControl: {
+                        defaultProps: {
+                            sx: {
+                                '& label.Mui-focused': {
+                                    color: app.mode === 'dark' ? 'primary.main' : 'secondary.main',
+                                },
+                                '& .MuiOutlinedInput-root': {
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: app.mode === 'dark' ? 'primary.main' : 'secondary.main',
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
                 spacing: [0, 10, 15, 20, 30, 60, 80],
                 icons: {
