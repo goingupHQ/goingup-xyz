@@ -2,10 +2,13 @@ import React from 'react';
 import { Button, CircularProgress, Paper, Stack, Typography } from '@mui/material';
 import ProfileLink from '../../common/profile-link';
 import { ProjectsContext } from '../../../contexts/projects-context';
+import { LoadingButton } from '@mui/lab';
+import { useSnackbar } from 'notistack';
 
 export default function InviteCard(props) {
     const { address, projectId } = props;
     const projectCtx = React.useContext(ProjectsContext);
+    const { enqueueSnackbar } = useSnackbar();
 
     const [loading, setLoading] = React.useState(true);
     const [member, setMember] = React.useState(null);
@@ -16,7 +19,7 @@ export default function InviteCard(props) {
             const memberData = await projectCtx.getProjectMember(projectId, address);
             setMember(memberData);
         } catch (err) {
-            console.error(err);
+            console.log(err);
         } finally {
             setLoading(false);
         }
@@ -27,6 +30,23 @@ export default function InviteCard(props) {
             load();
         }
     }, [address]);
+
+    const [disinviting, setDisinviting] = React.useState(false);
+    const disinvite = async () => {
+        setDisinviting(true);
+        try {
+            const tx = await projectCtx.disinviteProjectMember(projectId, address);
+            enqueueSnackbar('Disinvite transaction submitted', { variant: 'info' });
+            await tx.wait();
+            enqueueSnackbar('Member disinvited', { variant: 'success' });
+            load();
+        } catch (err) {
+            console.log(err);
+            enqueueSnackbar('Error disinviting member', { variant: 'error' });
+        } finally {
+            setDisinviting(false);
+        }
+    };
 
     return (
         <>
@@ -42,9 +62,9 @@ export default function InviteCard(props) {
                             {member?.role}
                         </Typography>
 
-                        <Button variant="contained" color="primary" size="small" onClick={() => {}}>
+                        <LoadingButton variant="contained" color="primary" size="small" loading={disinviting} loadingIndicator={<CircularProgress size={14} />} onClick={disinvite}>
                             Disinvite
-                        </Button>
+                        </LoadingButton>
                     </>
                     }
                 </Stack>

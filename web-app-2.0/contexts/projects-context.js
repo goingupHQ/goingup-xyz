@@ -185,6 +185,13 @@ export const ProjectsProvider = ({ children }) => {
         return tx;
     };
 
+    const disinviteProjectMember = async (projectId, member) => {
+        const contract = getContract();
+
+        const tx = await contract.disinviteMember(projectId, member);
+        return tx;
+    };
+
     const value = {
         networkParams,
         isCorrectNetwork,
@@ -200,6 +207,7 @@ export const ProjectsProvider = ({ children }) => {
         getPendingInvites,
         getMembersAndInvites,
         inviteProjectMember,
+        disinviteProjectMember
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };
