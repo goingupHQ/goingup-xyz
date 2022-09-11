@@ -188,8 +188,13 @@ export default function Layout({ children }) {
                                 backgroundColor: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
                                 border: 'none'
                             },
-                            elevation: 1,
+                            elevation: 3,
                         },
+                        styleOverrides: {
+                            root: {
+                                backgroundColor: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
+                            }
+                        }
                     },
                     MuiCard: {
                         defaultProps: {
@@ -254,7 +259,6 @@ export default function Layout({ children }) {
                         paddingTop: { xs: '74px', md: '160px' },
                         paddingBottom: 5,
                         paddingX: { xs: '15px', lg: '105px' },
-                        maskImage
                     }}
                 >
                     {children}
