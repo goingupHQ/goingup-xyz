@@ -461,8 +461,8 @@ const ProfileSection = (props) => {
                                         color='success'
                                         sx={{
                                             position: "absolute",
-                                            left: { xs: 65, md: 130, lg: 220 },
-                                            top: { xs: 160, md: 190, lg: 190 },
+                                            left: { xs: 70, md: 130, lg: 220 },
+                                            top: { xs: 160, md: 200, lg: 200 },
                                         }}
                                         onClick={() => {
                                             uploadProfileInputRef.current.click();
