@@ -78,7 +78,7 @@ export default function ProjectMembers(props) {
                 {!loading && tab === 1 && (
                     <>
                         <Grid item xs={12}>
-                            <InvitesList pendingInvites={pendingInvites} />
+                            <InvitesList pendingInvites={pendingInvites} projectId={id} />
                         </Grid>
                     </>
                 )}

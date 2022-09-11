@@ -1,9 +1,10 @@
 import { Grid, Paper, Stack, Typography, Box } from '@mui/material';
 import ProfileLink from '../../common/profile-link';
 import React from 'react';
+import InviteCard from './invite-card';
 
 export default function InvitesList(props) {
-    const { pendingInvites } = props;
+    const { pendingInvites, projectId } = props;
 
     return (
         <>
@@ -28,9 +29,7 @@ export default function InvitesList(props) {
                     <Grid container spacing={3}>
                         {pendingInvites.map((invite) => (
                             <Grid item xs={12} md={6} lg={4} key={invite}>
-                                <Paper variant="outlined" sx={{ padding: 3, height: '100%', alignItems: 'stretch' }}>
-                                    <ProfileLink address={invite} />
-                                </Paper>
+                                <InviteCard address={invite} projectId={projectId} />
                             </Grid>
                         ))}
                     </Grid>
