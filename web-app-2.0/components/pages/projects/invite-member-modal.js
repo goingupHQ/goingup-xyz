@@ -102,24 +102,18 @@ const InviteMemberModal = (props, ref) => {
 
             const tx = await projectsCtx.inviteProjectMember(project.id, address, role, goal, rewards);
 
-            enqueueSnackbar('Member invite transaction submitted', {
-                variant: 'info',
-                action: (key) => (
-                    <Button variant="contained" color="primary">Open in Block Explorer</Button>
-                ),
-                persist: true,
-            });
-
             setOpen(false);
 
-            const key = enqueueSnackbar('Member invite transaction submitted', {
+            const shortTxHash = tx.hash.substr(0, 6) + '...' + tx.hash.substr(tx.hash.length - 4, 4);
+            const key = enqueueSnackbar(`Member invite transaction submitted (${shortTxHash})`, {
                 variant: 'info',
                 action: (key) => (
                     <Button variant="contained" color="primary" onClick={() => {
                         console.log('hello' + key);
                         window.open(`${projectsCtx.networkParams.blockExplorerUrls[0]}tx/${tx.hash}`, '_blank');
                     }}>Open in Block Explorer</Button>
-                )
+                ),
+                persist: true,
             });
 
             // const receipt = await tx.wait();
