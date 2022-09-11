@@ -4,7 +4,7 @@ import React from 'react';
 import NextLink from 'next/link';
 import { WalletContext } from '../../contexts/wallet-context';
 import { Stack } from '@mui/system';
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, Avatar } from '@mui/material';
 import Identicon from './Identicon';
 
 export default function AccountNameAddress(props) {
@@ -32,7 +32,7 @@ export default function AccountNameAddress(props) {
     return (
         <NextLink href={`/profile/${address}`}>
             <Stack direction="row" spacing={2} sx={{ cursor: 'pointer' }} alignItems="center">
-                {profilePhoto ? <Box component="img" src={profilePhoto} /> : <Identicon address={address} />}
+                {profilePhoto ? <Avatar src={profilePhoto} variant="circular" /> : <Identicon address={address} />}
                 <Typography sx={textSx}>
                     {name === null ? ensName || displayAddress : `${name} (${ensName || displayAddress})`}
                 </Typography>
