@@ -26,26 +26,20 @@ export default function ProjectMembers(props) {
                     </SectionHeader>
                 </Grid>
 
+                <Grid item xs={12}>
                 <Tabs variant="standard" value={tab} onChange={(e, v) => setTab(v)}>
                     <Tab label="Members" sx={{ fontSize: '14pt' }} />
                     <Tab label="Pending Invites" sx={{ fontSize: '14pt' }} />
                 </Tabs>
+                </Grid>
 
-                {tab === 0 && (
-                    <>
-                        <Grid item xs={12}>
-                            <MembersList ref={membersListRef} projectId={id} project={project} />
-                        </Grid>
-                    </>
-                )}
+                <Grid item xs={12} sx={{ display: tab === 0 ? 'initial' : 'none' }}>
+                    <MembersList ref={membersListRef} projectId={id} project={project} />
+                </Grid>
 
-                {tab === 1 && (
-                    <>
-                        <Grid item xs={12}>
-                            <InvitesList projectId={id} />
-                        </Grid>
-                    </>
-                )}
+                <Grid item xs={12} sx={{ display: tab === 1 ? 'initial' : 'none' }}>
+                    <InvitesList projectId={id} />
+                </Grid>
             </Grid>
         </Paper>
     );
