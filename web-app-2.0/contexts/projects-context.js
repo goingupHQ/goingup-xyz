@@ -43,6 +43,16 @@ export const ProjectsProvider = ({ children }) => {
         setIsCorrectNetwork(wallet.network == contractNetwork);
     }, [wallet]);
 
+    // check for project invites
+    useEffect(() => {
+        if (wallet.address) {
+            getPendingInvitesByAddress(wallet.address)
+                .then((projectIDs) => {
+                    console.log('projectIDs', projectIDs);
+                });
+        }
+    }, [wallet.address]);
+
     console.log(wallet.network, contractNetwork);
     const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network == contractNetwork);
 
@@ -159,6 +169,12 @@ export const ProjectsProvider = ({ children }) => {
         return invites;
     }
 
+    const getPendingInvitesByAddress = async (address) => {
+        const contract = getContract();
+        const invites = await contract.getPendingInvitesByAddress(address);
+        return invites;
+    }
+
     const getMembersAndInvites = async (projectId) => {
         const contract = getContract();
         const members = await getProjectMembers(projectId);
@@ -205,9 +221,11 @@ export const ProjectsProvider = ({ children }) => {
         getProjectMembers,
         getProjectMember,
         getPendingInvites,
+        getPendingInvitesByAddress,
         getMembersAndInvites,
         inviteProjectMember,
-        disinviteProjectMember
+        disinviteProjectMember,
+
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };
