@@ -3,6 +3,9 @@ import { WalletContext } from './wallet-context';
 import artifact from '../artifacts/GoingUpProjects.json';
 import { ethers } from 'ethers';
 import moment from 'moment';
+import { useSnackbar } from 'notistack';
+import { Button } from '@mui/material';
+import { useRouter } from 'next/router';
 
 export const ProjectsContext = createContext();
 
@@ -18,6 +21,9 @@ export const ProjectsProvider = ({ children }) => {
     // const contractNetwork = 137;
 
     const { networkParams } = wallet.networks[contractNetwork];
+
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const router = useRouter();
 
     async function switchToCorrectNetwork() {
         if (wallet.walletType === 'walletconnect') {
@@ -46,10 +52,37 @@ export const ProjectsProvider = ({ children }) => {
     // check for project invites
     useEffect(() => {
         if (wallet.address) {
-            getPendingInvitesByAddress(wallet.address)
-                .then((projectIDs) => {
-                    console.log('projectIDs', projectIDs);
+            getPendingInvitesByAddress(wallet.address).then((projectIDs) => {
+                if (projectIDs.length === 0) return;
+                enqueueSnackbar(`You have ${projectIDs.length} pending project invites.`, {
+                    variant: 'info',
+                    persist: true,
+                    action: (key) => (
+                        <>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                sx={{ mr: 1 }}
+                                onClick={() => {
+                                    router.push(`/projects/pending-invites`);
+                                    closeSnackbar(key);
+                                }}
+                            >
+                                Review
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                size="small"
+                                onClick={() => closeSnackbar(key)}
+                            >
+                                Ignore
+                            </Button>
+                        </>
+                    ),
                 });
+            });
         }
     }, [wallet.address]);
 
@@ -88,7 +121,7 @@ export const ProjectsProvider = ({ children }) => {
         }
 
         return projects;
-    }
+    };
 
     const getProject = async (projectId) => {
         if (!wallet.address) throw `no wallet connected`;
@@ -134,7 +167,8 @@ export const ProjectsProvider = ({ children }) => {
             ended ? moment(ended).unix() : 0,
             primaryUrl || '',
             tags ? tags.join(',') : '',
-            isPrivate, { value: price }
+            isPrivate,
+            { value: price }
         );
         return tx;
     };
@@ -167,13 +201,25 @@ export const ProjectsProvider = ({ children }) => {
         const contract = getContract();
         const invites = await contract.getPendingInvites(projectId);
         return invites;
-    }
+    };
 
     const getPendingInvitesByAddress = async (address) => {
         const contract = getContract();
-        const invites = await contract.getPendingInvitesByAddress(address);
-        return invites;
-    }
+        const projectIds = await contract.getPendingInvitesByAddress(address);
+
+        const data = [];
+        for (const projectId of projectIds) {
+            const project = await getProject(projectId);
+            const memberData = await getProjectMember(projectId, address);
+            data.push({
+                projectId,
+                project,
+                memberData
+            });
+        }
+
+        return data;
+    };
 
     const getMembersAndInvites = async (projectId) => {
         const contract = getContract();
@@ -182,16 +228,19 @@ export const ProjectsProvider = ({ children }) => {
 
         return {
             members,
-            pendingInvites
+            pendingInvites,
         };
     };
 
     const inviteProjectMember = async (projectId, member, role, goal, rewards) => {
         const contract = getContract();
 
-        const freeMembers = await contract.freeMembers(); console.log('freeMembers', freeMembers);
-        const pendingInvites = await contract.getPendingInvites(projectId); console.log('freeMembers', freeMembers);
-        const members = await contract.getProjectMembers(projectId); console.log('members', members);
+        const freeMembers = await contract.freeMembers();
+        console.log('freeMembers', freeMembers);
+        const pendingInvites = await contract.getPendingInvites(projectId);
+        console.log('freeMembers', freeMembers);
+        const members = await contract.getProjectMembers(projectId);
+        console.log('members', members);
 
         const fee = ethers.BigNumber.from(0);
         if (pendingInvites.length + members.length + 1 >= freeMembers) fee = await contract.addMemberPrice();
@@ -205,6 +254,12 @@ export const ProjectsProvider = ({ children }) => {
         const contract = getContract();
 
         const tx = await contract.disinviteMember(projectId, member);
+        return tx;
+    };
+
+    const acceptProjectInvite = async (projectId) => {
+        const contract = getContract();
+        const tx = await contract.acceptProjectInvitation(projectId);
         return tx;
     };
 
@@ -225,7 +280,7 @@ export const ProjectsProvider = ({ children }) => {
         getMembersAndInvites,
         inviteProjectMember,
         disinviteProjectMember,
-
+        acceptProjectInvite,
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };
