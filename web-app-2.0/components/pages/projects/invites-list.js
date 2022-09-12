@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Stack, Typography, Box, CircularProgress } from '@mui/material';
 import InviteCard from './invite-card';
 import { ProjectsContext } from '../../../contexts/projects-context';
+import LoadingIllustration from '../../common/loading-illustration';
 
 export default function InvitesList(props) {
     const { projectId } = props;
@@ -29,7 +30,7 @@ export default function InvitesList(props) {
 
     return (
         <>
-            {loading && <CircularProgress size={18} />}
+            {loading && <LoadingIllustration /> }
 
             {!loading && (
                 <>
