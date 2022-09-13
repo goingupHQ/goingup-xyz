@@ -39,6 +39,7 @@ const InviteMemberModal = (props, ref) => {
     const [goal, setGoal] = useState('');
     const [selectedTokenCategory, setSelectedTokenCategory] = useState('');
     const [tokens, setTokens] = useState([]);
+    const [selectTokenLabel, setSelectTokenLabel] = useState('Select reward token category');;
     const [selectedToken, setSelectedToken] = useState('');
     const [rewardAmount, setRewardAmount] = useState('');
 
@@ -72,10 +73,16 @@ const InviteMemberModal = (props, ref) => {
 
     const onSelectedTokenCategoryChange = (event) => {
         setSelectedTokenCategory(event.target.value);
+        setTokens([]);
 
         const selectedToken = utilityTokens.find((token) => token.categoryId == event.target.value);
-        console.log('selectedToken', selectedToken);
-        setTokens(selectedToken.tokenSettings);
+
+        if (selectedToken) {
+            if (selectedToken.tokenSettings.length > 1) setSelectTokenLabel('Reward Token');
+            setTokens(selectedToken.tokenSettings);
+        } else {
+            setSelectTokenLabel('Reward Token Not Applicable');
+        }
     };
 
     const [inviting, setInviting] = useState(false);
@@ -86,16 +93,20 @@ const InviteMemberModal = (props, ref) => {
             if (!role) throw 'Please select a role';
             if (!goal) throw 'Please enter a goal';
             if (!selectedTokenCategory) throw 'Please select a token category';
-            if (!selectedToken) throw 'Please select a token';
-            if (!rewardAmount) throw 'Please enter a reward amount';
-            if (isNaN(parseInt(rewardAmount))) throw 'Please enter a valid reward amount';
 
             const rewards = {
-                chain: 'polygon',
-                type: 'goingup-utility',
-                categoryId: parseInt(selectedTokenCategory),
-                tokenId: parseInt(selectedToken),
-                amount: parseInt(rewardAmount),
+                categoryId: selectedTokenCategory,
+            }
+
+            if (tokens.length > 0) {
+                if (!selectedToken) throw 'Please select a token';
+                if (!rewardAmount) throw 'Please enter a reward amount';
+                if (isNaN(parseInt(rewardAmount))) throw 'Please enter a valid reward amount';
+
+                rewards.chain = 'polygon',
+                rewards.type = 'goingup-utility',
+                rewards.tokenId = parseInt(selectedToken);
+                rewards.amount = parseInt(rewardAmount);
             }
 
             setInviting(true);
@@ -191,16 +202,20 @@ const InviteMemberModal = (props, ref) => {
                                         </MenuItem>
                                     );
                                 })}
+                                <MenuItem value="pro-bono">
+                                    Pro Bono
+                                </MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
 
                     <Grid item xs={12} md={6}>
                         <FormControl fullWidth>
-                            <InputLabel>Reward Token</InputLabel>
+                            <InputLabel disabled={tokens.length === 0}>{selectTokenLabel}</InputLabel>
                             <Select
-                                label="Reward Token"
+                                label={selectTokenLabel}
                                 value={selectedToken}
+                                disabled={tokens.length === 0}
                                 onChange={(e) => setSelectedToken(e.target.value)}
                                 fullWidth
                             >
@@ -221,6 +236,7 @@ const InviteMemberModal = (props, ref) => {
                             inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                             fullWidth
                             value={rewardAmount}
+                            disabled={!Boolean(selectedToken)}
                             onChange={(e) => setRewardAmount(e.target.value)}
                         />
                     </Grid>
