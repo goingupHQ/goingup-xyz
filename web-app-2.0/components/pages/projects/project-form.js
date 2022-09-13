@@ -24,7 +24,7 @@ import { isURL } from 'validator';
 import { WalletContext } from '../../../contexts/wallet-context';
 
 export default function ProjectForm(props) {
-    const projectsCtx = useContext(ProjectsContext);
+    const projectsContext = useContext(ProjectsContext);
     const wallet = useContext(WalletContext);
     const router = useRouter();
     const { projectData } = props;
@@ -93,7 +93,7 @@ export default function ProjectForm(props) {
             if (!form.name) throw 'Project name is required';
             if (!form.description) throw 'Project description is required';
             if (form.primaryUrl && !isURL(form.primaryUrl)) throw 'Project primary URL is invalid';
-            if (!projectsCtx.isCorrectNetwork) throw 'You are not on the correct network';
+            if (!projectsContext.isCorrectNetwork) throw 'You are not on the correct network';
 
             enqueueSnackbar('Creating transactions, please approve on your wallet', {
                 variant: 'info',
@@ -103,7 +103,7 @@ export default function ProjectForm(props) {
             if (isCreate) {
                 const currentBlock = await wallet.ethersProvider.getBlockNumber();
 
-                const createTx = await projectsCtx.createProject(
+                const createTx = await projectsContext.createProject(
                     form.name,
                     form.description,
                     form.started,
@@ -120,7 +120,7 @@ export default function ProjectForm(props) {
                     action: (key) => {
                         <Button
                             onClick={() => {
-                                const baseUrl = projectsCtx.networkParams.blockExplorers[0];
+                                const baseUrl = projectsContext.networkParams.blockExplorers[0];
                                 window.open(`${baseUrl}tx/${createTx.hash}`);
                             }}
                         >
@@ -130,7 +130,7 @@ export default function ProjectForm(props) {
                 });
                 await createTx.wait();
 
-                const projectsAfterBlock = await projectsCtx.getProjectsAfterBlock(currentBlock);
+                const projectsAfterBlock = await projectsContext.getProjectsAfterBlock(currentBlock);
                 const createdProject = projectsAfterBlock.slice(-1)[0];
 
                 closeSnackbar();
@@ -138,7 +138,7 @@ export default function ProjectForm(props) {
                 enqueueSnackbar('Project created', { variant: 'success' });
                 router.push(`/projects/page/${createdProject.id.toNumber()}`);
             } else {
-                const updateTx = await projectsCtx.updateProject(
+                const updateTx = await projectsContext.updateProject(
                     projectData.id,
                     form.name,
                     form.description,
@@ -157,7 +157,7 @@ export default function ProjectForm(props) {
                     action: (key) => {
                         <Button
                             onClick={() => {
-                                const baseUrl = projectsCtx.networkParams.blockExplorers[0];
+                                const baseUrl = projectsContext.networkParams.blockExplorers[0];
                                 window.open(`${baseUrl}tx/${createTx.hash}`);
                             }}
                         >

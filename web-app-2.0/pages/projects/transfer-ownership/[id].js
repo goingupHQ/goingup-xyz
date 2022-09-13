@@ -61,7 +61,7 @@ export default function TransferOwnership(props) {
                 action: (key) => {
                     <Button
                         onClick={() => {
-                            const baseUrl = projectsCtx.networkParams.blockExplorers[0];
+                            const baseUrl = projectsContext.networkParams.blockExplorers[0];
                             window.open(`${baseUrl}tx/${createTx.hash}`);
                         }}
                     >

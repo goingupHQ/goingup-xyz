@@ -1,13 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ProjectsContext } from '../../../contexts/projects-context';
-import { Backdrop, Button, CircularProgress, Grid, Stack, Typography } from '@mui/material';
+import { Backdrop, Box, Button, CircularProgress, Grid, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import ProjectCard from './project-card';
 import { useSnackbar } from 'notistack';
+import { WalletContext } from '../../../contexts/wallet-context';
+import LoadingIllustration from '../../common/loading-illustration';
 
 export default function ProjectsList(props) {
     const router = useRouter();
     const projectsContext = useContext(ProjectsContext);
+    const wallet = useContext(WalletContext);
     const [loading, setLoading] = useState(true);
     const [projects, setProjects] = useState([]);
     const { enqueueSnackbar } = useSnackbar();
@@ -24,10 +27,8 @@ export default function ProjectsList(props) {
     };
 
     useEffect(() => {
-        //
-        load();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        if (wallet.address) load();
+    }, [wallet.address]);
 
     return (
         <>
@@ -67,9 +68,11 @@ export default function ProjectsList(props) {
                     }
                 </>
             )}
-            <Backdrop open={loading} sx={{ zIndex: 1200 }}>
-                <CircularProgress />
-            </Backdrop>
+            {loading &&
+            <Box sx={{ py: '60px' }}>
+                <LoadingIllustration />
+            </Box>
+            }
         </>
     );
 }

@@ -7,7 +7,7 @@ import { Backdrop, CircularProgress } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
 export default function EditProject() {
-    const projectsCtx = useContext(ProjectsContext);
+    const projectsContext = useContext(ProjectsContext);
     const [data, setData] = useState(null);
     const router = useRouter();
     const [loading, setLoading] = useState(true);
@@ -16,7 +16,7 @@ export default function EditProject() {
     const getProject = async () => {
         setLoading(true);
         try {
-            setData(await projectsCtx.getProject(router.query.id));
+            setData(await projectsContext.getProject(router.query.id));
         } catch (err) {
             enqueueSnackbar('There was an error loading your project', { variant: 'error' });
         } finally {
@@ -37,7 +37,7 @@ export default function EditProject() {
             <Head>
                 <title>Going UP - Edit A Project</title>
             </Head>
-            
+
             <ProjectForm projectData={data} />
 
             <Backdrop open={loading} sx={{ zIndex: 1200 }}>

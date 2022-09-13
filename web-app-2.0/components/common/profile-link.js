@@ -20,7 +20,7 @@ export default function AccountNameAddress(props) {
         //
         if (address) {
             fetch(`/api/get-account-small?address=${address}`).then(async (res) => {
-                const result = await res.json(); console.log('result', result);
+                const result = await res.json();
                 setName(result.name);
                 setProfilePhoto(result.profilePhoto);
                 setEnsName(await wallet.mainnetENSProvider.lookupAddress(address));

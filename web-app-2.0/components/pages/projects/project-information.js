@@ -54,7 +54,7 @@ export default function ProjectInformation(props) {
                     </Stack>
                 </Grid>
 
-                <Grid item xs={12} md={6} lg={5}>
+                <Grid item xs={12} md={5}>
                     <Typography variant="body1" color="GrayText">
                         Started
                     </Typography>

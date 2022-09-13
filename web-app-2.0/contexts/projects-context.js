@@ -263,6 +263,18 @@ export const ProjectsProvider = ({ children }) => {
         return tx;
     };
 
+    const removeProjectMember = async (projectId, member) => {
+        const contract = getContract();
+        const tx = await contract.removeMember(projectId, member, '');
+        return tx;
+    };
+
+    const setMemberGoalAsAchieved = async(projectId, member) => {
+        const contract = getContract();
+        const tx = await contract.setMemberGoalAsAchieved(projectId, member);
+        return tx;
+    }
+
     const value = {
         networkParams,
         isCorrectNetwork,
@@ -281,6 +293,8 @@ export const ProjectsProvider = ({ children }) => {
         inviteProjectMember,
         disinviteProjectMember,
         acceptProjectInvite,
+        removeProjectMember,
+        setMemberGoalAsAchieved,
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };

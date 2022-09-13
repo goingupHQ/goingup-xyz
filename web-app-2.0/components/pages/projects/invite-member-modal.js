@@ -28,7 +28,7 @@ const InviteMemberModal = (props, ref) => {
     const [open, setOpen] = useState(false);
     const wallet = useContext(WalletContext);
     const utilityTokensCtx = useContext(UtilityTokensContext);
-    const projectsCtx = useContext(ProjectsContext);
+    const projectsContext = useContext(ProjectsContext);
 
     const utilityTokens = utilityTokensCtx.utilityTokens;
 
@@ -100,7 +100,7 @@ const InviteMemberModal = (props, ref) => {
 
             setInviting(true);
 
-            const tx = await projectsCtx.inviteProjectMember(project.id, address, role, goal, rewards);
+            const tx = await projectsContext.inviteProjectMember(project.id, address, role, goal, rewards);
 
             setOpen(false);
 
@@ -110,7 +110,7 @@ const InviteMemberModal = (props, ref) => {
                 action: (key) => (
                     <Button variant="contained" color="primary" onClick={() => {
                         console.log('hello' + key);
-                        window.open(`${projectsCtx.networkParams.blockExplorerUrls[0]}tx/${tx.hash}`, '_blank');
+                        window.open(`${projectsContext.networkParams.blockExplorerUrls[0]}tx/${tx.hash}`, '_blank');
                     }}>Open in Block Explorer</Button>
                 ),
                 persist: true,

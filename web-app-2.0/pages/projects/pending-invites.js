@@ -42,7 +42,7 @@ export default function PendingInvites(props) {
                 action: (key) => (
                     <Button variant="contained" color="primary" onClick={() => {
                         console.log('hello' + key);
-                        window.open(`${projectsCtx.networkParams.blockExplorerUrls[0]}tx/${tx.hash}`, '_blank');
+                        window.open(`${projectsContext.networkParams.blockExplorerUrls[0]}tx/${tx.hash}`, '_blank');
                     }}>Open in Block Explorer</Button>
                 ),
                 persist: true,

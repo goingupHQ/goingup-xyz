@@ -1,9 +1,10 @@
-import { CircularProgress, Stack, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { ProjectsContext } from '../../../contexts/projects-context';
 import LoadingIllustration from '../../common/loading-illustration';
 import InviteMemberModal from './invite-member-modal';
+import MemberCard from './member-card';
 
 function MembersList(props, ref) {
     const { projectId, project } = props;
@@ -21,7 +22,7 @@ function MembersList(props, ref) {
     const load = async () => {
         setLoading(true);
         try {
-            const result = await projectsContext.getProjectMembers(projectId);
+            const result = await projectsContext.getProjectMembers(projectId); console.log('result', result);
             setMembers(result);
         } catch (err) {
             console.log(err);
@@ -54,6 +55,16 @@ function MembersList(props, ref) {
                             />
                             <Typography variant="body1">Invite members to your project</Typography>
                         </Stack>
+                    )}
+
+                    {members.length > 0 && (
+                        <Grid container spacing={2}>
+                            {members.map((member) => (
+                                <Grid item xs={12} md={6} lg={4} key={member}>
+                                    <MemberCard projectId={projectId} member={member} reload={load} />
+                                </Grid>
+                            ))}
+                        </Grid>
                     )}
                 </>
             )}
