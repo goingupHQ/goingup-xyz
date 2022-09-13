@@ -9,6 +9,7 @@ import moment from 'moment';
 import ProjectInformation from '../../../components/pages/projects/project-information';
 import { WalletContext } from '../../../contexts/wallet-context';
 import ProjectMembers from '../../../components/pages/projects/project-members';
+import LoadingIllustration from '../../../components/common/loading-illustration';
 
 export default function ProjectPage(props) {
     const router = useRouter();
@@ -21,7 +22,6 @@ export default function ProjectPage(props) {
     const wallet = React.useContext(WalletContext);
 
     React.useEffect(() => {
-        //
         if (router.isReady && wallet.address) {
             setLoading(true);
             projectsContext
@@ -37,7 +37,6 @@ export default function ProjectPage(props) {
                     setLoading(false);
                 });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, wallet.address]);
 
     return (
@@ -51,17 +50,20 @@ export default function ProjectPage(props) {
                 </Grid>
             </Grid>
 
-            <Fade in={!loading}>
+
+            {!loading && router.isReady &&
                 <Stack direction="column" spacing={3}>
                     <ProjectInformation id={id} project={project} />
 
                     <ProjectMembers id={id} project={project} />
                 </Stack>
-            </Fade>
+            }
 
-            <Backdrop open={loading} sx={{ zIndex: 1200 }}>
-                <CircularProgress />
-            </Backdrop>
+            {loading &&
+                <Box sx={{ py: '60px', textAlign: 'center' }}>
+                    <LoadingIllustration />
+                </Box>
+            }
         </>
     );
 }

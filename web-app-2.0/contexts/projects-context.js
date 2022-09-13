@@ -51,7 +51,7 @@ export const ProjectsProvider = ({ children }) => {
 
     // check for project invites
     useEffect(() => {
-        if (wallet.address) {
+        if (wallet.address && isCorrectNetwork) {
             getPendingInvitesByAddress(wallet.address).then((projectIDs) => {
                 if (projectIDs.length === 0) return;
                 enqueueSnackbar(`You have ${projectIDs.length} pending project invites.`, {
