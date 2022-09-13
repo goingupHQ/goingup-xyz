@@ -61,7 +61,6 @@ const AppreciationTokens = (props) => {
             <Fade in={true} timeout={1000}>
                 <Card
                     sx={{
-                        marginX: { xs: '-16px', md: '0px' },
                         height: '100%',
                         display: 'flex',
                         flexDirection: 'column',
