@@ -38,7 +38,7 @@ export default function DesktopNav(props) {
             <Stack
                 direction="row"
                 spacing={3}
-                sx={{ display: { xs: 'none', md: 'initial' }, margin: { xs: '10px 25px', lg: '10px 105px' } }}
+                sx={{ display: { xs: 'none', md: 'initial' } }}
             >
                 <Link href="/">
                     <Button

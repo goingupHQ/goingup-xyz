@@ -23,7 +23,7 @@ export default function Header(props) {
 
     return (
         <>
-            <AppBar sx={{ boxShadow: 6 }}>
+            <AppBar sx={{ boxShadow: 6, paddingX: { lg: '85px' } }}>
                 <Toolbar sx={{ paddingY: 0 }}>
                     <Grid container spacing={1} alignItems="center" justifyContent="space-between">
                         <Grid item xs={5}>
