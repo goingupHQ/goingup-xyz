@@ -1,78 +1,26 @@
-import React, { useContext } from "react";
-import { AppContext } from "../../contexts/app-context";
-import { WalletContext } from "../../contexts/wallet-context";
-import {
-    Card,
-    CardHeader,
-    Typography,
-    Fade,
-    Stack,
-    Button,
-    Box,
-    Grid
-} from "@mui/material";
-import ChevronRightIcon from "../../components/icons/ChevronRightIcon";
+import Head from 'next/head';
+import { Typography } from '@mui/material';
+import { AppContext } from '../../contexts/app-context';
+import { useContext, useEffect } from 'react';
+import { WalletContext } from '../../contexts/wallet-context';
+import { Box } from '@mui/system';
+import { useRouter } from 'next/router';
+import SuggestedProfilesPage from './suggested-profiles-page';
 
-const Dashboard = () => {
-    const wallet = useContext(WalletContext);
-    const app = useContext(AppContext);
+export default function Dashboard() {
 
     return (
         <>
-            <Fade in={true} timeout={1000}>
-                <Card
-                    sx={{
-                        backgroundColor: {
-                            xs: app.mode === "dark" ? "#0F151C" : "#FFFFFF",
-                            md: app.mode === "dark" ? "#111921" : "#F5F5F5",
-                        },
-                    }}
-                >
-                    <CardHeader
-                        title={
-                            <>
-                            <Typography variant='h1'>
-                                    Dashboard
-                                </Typography>
-                            <Stack
-                                direction='row'
-                                justifyContent='space-between'
-                                paddingTop={"14px"}
-                                paddingX={"14px"}
-                            >
-                                <Typography variant='mobileh1'>
-                                    Suggested Profiles
-                                </Typography>
-                                <Button
-                                    color={
-                                        app.mode === "dark"
-                                            ? "primary"
-                                            : "secondary"
-                                    }
-                                    endIcon={
-                                        <ChevronRightIcon
-                                            color={
-                                                app.mode === "dark"
-                                                    ? "primary"
-                                                    : "secondary"
-                                            }
-                                        />
-                                    }
-                                >
-                                    View All Profiles{" "}
-                                </Button>
-                            </Stack>
-                            </>
-                        }
-                    />
-                    <Box sx={{ padding: 4 }}>
-                        <Grid item xs={12} md={6}>
-                        </Grid>
-                    </Box>
-                </Card>
-            </Fade>
+            <Head>
+                <title>GoingUP: Profile</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+
+            <Typography variant="h1">Dashboard</Typography>
+
+            <Box>
+                <SuggestedProfilesPage />
+            </Box>
         </>
     );
-};
-
-export default Dashboard;
+}
