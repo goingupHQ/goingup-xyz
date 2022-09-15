@@ -12,7 +12,6 @@ import {
     Grid,
 } from "@mui/material";
 import ChevronRightIcon from "../../components/icons/ChevronRightIcon";
-import SuggestedProfiles from "../../components/pages/dashboard/suggested-profiles";
 
 const SuggestedProfilesPage = () => {
     const wallet = useContext(WalletContext);
@@ -65,7 +64,6 @@ const SuggestedProfilesPage = () => {
                     />
                     <Box sx={{ padding: 4 }}>
                         <Grid item xs={12} md={6}>
-                            <SuggestedProfiles />
                         </Grid>
                     </Box>
                 </Card>
