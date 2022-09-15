@@ -543,7 +543,9 @@ const ProfileSection = (props) => {
                                     variant='sh2'
                                     sx={{ marginX: { xs: "27px", md: "42px" } }}
                                 >
-                                    {truncateEthAddress(account.address)}
+                                    {account.chain === 'Ethereum' &&
+                                        truncateEthAddress(account.address)}
+                                    {account.chain != 'Ethereum' && `Wallet Address`}
                                 </Typography>
                             </Stack>
                             {myAccount && (
