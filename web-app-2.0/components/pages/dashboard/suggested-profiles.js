@@ -52,42 +52,32 @@ export default function SuggestedProfiles() {
     return (
         <>
             <Fade in={true} timeout={1000}>
-                <Card>
-                    <CardHeader
-                        title={
-                            <>
-                                <Stack
-                                    direction='row'
-                                    justifyContent='space-between'
-                                    paddingTop={"14px"}
-                                    paddingX={"14px"}
-                                    spacing={3}
-                                >
-                                    <Typography variant='mobileh1'>
-                                        Suggested Profiles
-                                    </Typography>
-                                    <Button
-                                        color={
-                                            app.mode === "dark"
-                                                ? "primary"
-                                                : "secondary"
-                                        }
-                                        endIcon={
-                                            <ChevronRightIcon
-                                                color={
-                                                    app.mode === "dark"
-                                                        ? "primary"
-                                                        : "secondary"
-                                                }
-                                            />
-                                        }
-                                    >
-                                        View All Profiles
-                                    </Button>
-                                </Stack>
-                            </>
-                        }
-                    />
+                <Box>
+                    <Stack
+                        direction='row'
+                        justifyContent='space-between'
+                        paddingTop={"14px"}
+                        paddingX={"14px"}
+                        spacing={3}
+                    >
+                        <Typography variant='h1'>Suggested Profiles</Typography>
+                        <Button
+                            color={
+                                app.mode === "dark" ? "primary" : "secondary"
+                            }
+                            endIcon={
+                                <ChevronRightIcon
+                                    color={
+                                        app.mode === "dark"
+                                            ? "primary"
+                                            : "secondary"
+                                    }
+                                />
+                            }
+                        >
+                            View All Profiles
+                        </Button>
+                    </Stack>
                     {loading ? (
                         <CircularProgress />
                     ) : (
@@ -96,7 +86,11 @@ export default function SuggestedProfiles() {
                                 return (
                                     <Card
                                         key={item.address}
-                                        sx={{ margin: "30px", padding: "24px", maxWidth: "400px" }}
+                                        sx={{
+                                            margin: "30px",
+                                            padding: "24px",
+                                            maxWidth: "400px",
+                                        }}
                                     >
                                         <Grid item>
                                             <CardHeader
@@ -253,11 +247,14 @@ export default function SuggestedProfiles() {
                                                 }
                                                 title={
                                                     <>
-                                                        <Typography variant='h1'>
+                                                        <Typography variant='h2'>
                                                             {item.name}
                                                         </Typography>
                                                         <Box>
-                                                            <Typography variant='sh1'>
+                                                            <Typography
+                                                                variant='sh1'
+                                                                color='#6E8094'
+                                                            >
                                                                 {app.occupations.find(
                                                                     (o) =>
                                                                         o.id ==
@@ -347,7 +344,7 @@ export default function SuggestedProfiles() {
                                                         app.mode === "dark"
                                                             ? "#FFFFFF"
                                                             : "#22272F",
-                                                            width: "100%",
+                                                    width: "100%",
                                                 }}
                                             >
                                                 <Typography variant='sh3'>
@@ -360,7 +357,7 @@ export default function SuggestedProfiles() {
                             })}
                         </Grid>
                     )}
-                </Card>
+                </Box>
             </Fade>
         </>
     );
