@@ -1,11 +1,6 @@
 import Head from 'next/head';
-import { Typography } from '@mui/material';
-import { AppContext } from '../../contexts/app-context';
-import { useContext, useEffect } from 'react';
-import { WalletContext } from '../../contexts/wallet-context';
-import { Box } from '@mui/system';
-import { useRouter } from 'next/router';
-import SuggestedProfilesPage from './suggested-profiles-page';
+import { Typography, Box } from '@mui/material';
+import SuggestedProfiles from '../../components/pages/dashboard/suggested-profiles';
 
 export default function Dashboard() {
 
@@ -16,10 +11,10 @@ export default function Dashboard() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <Typography variant="h1">Dashboard</Typography>
+            <Typography variant="h1"></Typography>
 
             <Box>
-                <SuggestedProfilesPage />
+                <SuggestedProfiles />
             </Box>
         </>
     );
