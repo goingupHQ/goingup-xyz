@@ -1,4 +1,4 @@
-import { Backdrop, Paper, TextField, Tooltip, Typography } from '@mui/material';
+import { Autocomplete, Backdrop, Paper, TextField, Tooltip, Typography } from '@mui/material';
 import React, { forwardRef, useImperativeHandle } from 'react';
 import { WalletContext } from '../../contexts/wallet-context';
 import debounce from 'lodash.debounce';
@@ -12,21 +12,24 @@ function AddressInput(props, ref) {
 
     const [invalidAddress, setInvalidAddress] = React.useState(false);
     const [scanningQr, setScanningQr] = React.useState(false);
+    const [options, setOptions] = React.useState([]);
+    const [inputValue, setInputValue] = React.useState('');
 
     const inputRef = React.useRef(null);
 
     useImperativeHandle(ref, () => ({
         focus() {
             inputRef.current.focus();
-        }
+        },
     }));
 
-    const addressChangeHandler = (event) => {
-        const address = event.target.value;
+    const addressChangeHandler = (event, newValue) => {
+        console.log('addressChangeHandler', newValue);
+        setValue(newValue);
     };
 
-    const debouncedChangeHandler = React.useMemo(() => debounce(addressChangeHandler, 500), []);
     const mainnetProvider = ethers.getDefaultProvider('homestead');
+    const checkNonAddress = React.useMemo(() => debounce(async (value) => {}, 500), []);
 
     return (
         <>
@@ -42,8 +45,8 @@ function AddressInput(props, ref) {
                 placeholder="markibanez.eth or 0x68D99e952cF3D4faAa6411C1953979F54552A8F7"
                 color={invalidAddress ? 'error' : 'primary'}
                 value={value}
-                onChange={e => {
-                    setValue(e.target.value)
+                onChange={(e) => {
+                    setValue(e.target.value);
                 }}
                 onBlur={async () => {
                     setInvalidAddress(false);
