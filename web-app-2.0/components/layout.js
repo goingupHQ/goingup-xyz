@@ -248,6 +248,11 @@ export default function Layout({ children }) {
                             },
                         },
                     },
+                    MuiCircularProgress: {
+                        defaultProps: {
+                            color: app.mode === 'dark' ? 'primary' : 'secondary',
+                        }
+                    }
                 },
                 spacing: [0, 10, 15, 20, 30, 60, 80],
                 icons: {
