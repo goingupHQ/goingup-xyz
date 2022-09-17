@@ -6,30 +6,24 @@ import {
     Box,
     Button,
     Card,
-    CardContent,
     CardHeader,
     CircularProgress,
     Fade,
     Grid,
     Stack,
-    styled,
     Typography,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import truncateEthAddress from "truncate-eth-address";
 import ChevronRightIcon from "../../icons/ChevronRightIcon";
-
-const CardContentWrapper = styled(CardContent)(
-    () => `
-        position: relative;
-  `
-);
+import Router, { useRouter } from "next/router";
 
 export default function SuggestedProfiles() {
     const app = useContext(AppContext);
     const wallet = useContext(WalletContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         if (!wallet.address) return;
@@ -340,6 +334,9 @@ export default function SuggestedProfiles() {
                                                             : "#22272F",
                                                     width: "100%",
                                                 }}
+                                                onClick={() => {
+                                                        router.push(`/profile/${item.address}`);
+                                                    }}
                                             >
                                                 <Typography variant='sh3'>
                                                     View Profile
