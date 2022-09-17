@@ -117,19 +117,6 @@ const AppreciationTokens = (props) => {
                                         View All{" "}
                                     </Button>
                                 </Stack>
-                                <Stack
-                                    direction='row'
-                                    paddingTop={"14px"}
-                                    paddingX={"18px"}
-                                    spacing={1}
-                                >
-                                    <Button variant="outlined" color='text'>
-                                        Received
-                                    </Button>
-                                    <Button color='text'>
-                                        Sent
-                                    </Button>
-                                </Stack>
                             </>
                         }
                     />
