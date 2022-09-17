@@ -32,9 +32,11 @@ function MembersList(props, ref) {
     };
 
     React.useEffect(() => {
+        //
         if (projectId) {
             load();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectId]);
 
     return (

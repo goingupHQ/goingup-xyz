@@ -26,9 +26,11 @@ export default function InviteCard(props) {
     };
 
     React.useEffect(() => {
+        //
         if (address) {
             load();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address]);
 
     const [disinviting, setDisinviting] = React.useState(false);

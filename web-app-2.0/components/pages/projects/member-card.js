@@ -26,9 +26,11 @@ export default function MemberCard(props) {
     };
 
     React.useEffect(() => {
+        //
         if (projectId && member) {
             load();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectId, member]);
 
     const [removing, setRemoving] = React.useState(false);
