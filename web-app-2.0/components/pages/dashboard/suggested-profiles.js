@@ -51,10 +51,8 @@ export default function SuggestedProfiles() {
                         direction='row'
                         justifyContent='space-between'
                         paddingTop={"14px"}
-                        paddingX={"14px"}
-                        spacing={3}
                     >
-                        <Typography variant='h1'>Suggested Profiles</Typography>
+                        <Typography variant='h2'>Suggested Profiles</Typography>
                         <Button
                             color={
                                 app.mode === "dark" ? "primary" : "secondary"
@@ -83,10 +81,10 @@ export default function SuggestedProfiles() {
                                         sx={{
                                             margin: "30px",
                                             padding: "24px",
-                                            width: "400px",
+                                            width: "430px",
                                         }}
                                     >
-                                        <Grid>
+                                        <Grid item>
                                             <CardHeader
                                                 avatar={
                                                     <Badge
