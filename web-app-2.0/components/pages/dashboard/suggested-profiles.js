@@ -89,10 +89,10 @@ export default function SuggestedProfiles() {
                                         sx={{
                                             margin: "30px",
                                             padding: "24px",
-                                            maxWidth: "400px",
+                                            width: "400px",
                                         }}
                                     >
-                                        <Grid item>
+                                        <Grid>
                                             <CardHeader
                                                 avatar={
                                                     <Badge
@@ -284,10 +284,7 @@ export default function SuggestedProfiles() {
                                                 }}
                                                 direction='row'
                                                 alignItems='center'
-                                                justifyContent={{
-                                                    xs: "center",
-                                                    md: "space-evenly",
-                                                }}
+                                                justifyContent='space-between'
                                                 marginBottom={"10px"}
                                             >
                                                 <Box
@@ -319,10 +316,7 @@ export default function SuggestedProfiles() {
                                                 <Typography
                                                     variant='sh2'
                                                     sx={{
-                                                        marginX: {
-                                                            xs: "27px",
-                                                            md: "42px",
-                                                        },
+                                                        marginRight: "42px",
                                                     }}
                                                 >
                                                     {item.chain ===
