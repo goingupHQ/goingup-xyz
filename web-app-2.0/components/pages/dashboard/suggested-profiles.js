@@ -289,13 +289,11 @@ export default function SuggestedProfiles() {
 
                                                         paddingY: { md: "5px" },
                                                         paddingBottom: "3px",
+                                                        paddingX: "50px",
                                                     }}
                                                 >
                                                     <Typography
                                                         variant='sh2'
-                                                        sx={{
-                                                            marginX: "42px",
-                                                        }}
                                                     >
                                                         {item.name
                                                             .toLowerCase()
