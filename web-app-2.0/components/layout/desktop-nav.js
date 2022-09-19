@@ -38,11 +38,11 @@ export default function DesktopNav(props) {
             <Stack
                 direction="row"
                 spacing={3}
-                sx={{ display: { xs: 'none', md: 'initial', paddingBottom: '10px' } }}
+                sx={{ display: { xs: 'none', md: 'initial', paddingBottom: '10px', paddingLeft: '14px' } }}
             >
-                <Link href="/">
+                <Link href="/dashboard">
                     <Button
-                        sx={pathname === '/' ? activeButtonStyle : inactiveButtonStyle}
+                        sx={pathname === '/dashboard' ? activeButtonStyle : inactiveButtonStyle}
                         startIcon={<DashboardIcon />}
                     >
                         Dashboard

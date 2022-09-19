@@ -40,11 +40,11 @@ export default function MobileNav(props) {
                 <SearchBox />
             </Box> */}
 
-            <Link href="/">
+            <Link href="/dashboard">
                 <Button
                     onClick={closeNav}
-                    sx={router.pathname === '/' ? activeButtonStyle : inactiveButtonStyle}
-                    startIcon={<DashboardIcon color={ router.pathname === '/' ? activeColor: inactiveColor } />}
+                    sx={router.pathname === '/dashboard' ? activeButtonStyle : inactiveButtonStyle}
+                    startIcon={<DashboardIcon color={ router.pathname === '/dashboard' ? activeColor: inactiveColor } />}
                 >
                     Dashboard
                 </Button>

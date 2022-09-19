@@ -28,7 +28,9 @@ export default function PendingInvites(props) {
     };
 
     React.useEffect(() => {
+        //
         if (wallet.address) load();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wallet.address]);
 
     const [accepting, setAccepting] = React.useState(false);

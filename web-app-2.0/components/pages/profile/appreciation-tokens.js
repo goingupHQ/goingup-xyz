@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { AppContext } from '../../../contexts/app-context';
-import { WalletContext } from '../../../contexts/wallet-context';
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../../../contexts/app-context";
+import { WalletContext } from "../../../contexts/wallet-context";
 import {
     Grid,
     Card,
@@ -13,13 +13,13 @@ import {
     CircularProgress,
     Button,
     Box,
-} from '@mui/material';
-import { ethers } from 'ethers';
-import artifact from '../../../../artifacts/GoingUpUtilityToken.json';
-import ChevronRightIcon from '../../icons/ChevronRightIcon';
-import AppreciationTokenCard from './appreciation-token-card';
+} from "@mui/material";
+import { ethers } from "ethers";
+import artifact from "../../../../artifacts/GoingUpUtilityToken.json";
+import ChevronRightIcon from "../../icons/ChevronRightIcon";
+import AppreciationTokenCard from "./appreciation-token-card";
 
-const CardContentWrapper = styled(CardContent)( () => ``);
+const CardContentWrapper = styled(CardContent)(() => ``);
 
 const AppreciationTokens = (props) => {
     const [loading, setLoading] = useState(true);
@@ -31,7 +31,11 @@ const AppreciationTokens = (props) => {
 
     const contractAddress = wallet.utilityToken.address;
     const provider = wallet.utilityToken.provider;
-    const contract = new ethers.Contract(contractAddress, artifact.abi, provider);
+    const contract = new ethers.Contract(
+        contractAddress,
+        artifact.abi,
+        provider
+    );
 
     useEffect(() => {
         const load = async () => {
@@ -40,8 +44,16 @@ const AppreciationTokens = (props) => {
                 const addresses = [address, address, address, address];
                 const tokenIDs = [1, 2, 3, 4];
 
-                const result = await contract.balanceOfBatch(addresses, tokenIDs);
-                setBalances([result[0].toNumber(), result[1].toNumber(), result[2].toNumber(), result[3].toNumber()]);
+                const result = await contract.balanceOfBatch(
+                    addresses,
+                    tokenIDs
+                );
+                setBalances([
+                    result[0].toNumber(),
+                    result[1].toNumber(),
+                    result[2].toNumber(),
+                    result[3].toNumber(),
+                ]);
             } catch (err) {
                 console.log(err);
             } finally {
@@ -52,7 +64,6 @@ const AppreciationTokens = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address]);
 
-
     const { account } = props;
     const myAccount = wallet.address === account.address;
 
@@ -61,38 +72,70 @@ const AppreciationTokens = (props) => {
             <Fade in={true} timeout={1000}>
                 <Card
                     sx={{
-                        marginX: { xs: '-16px', md: '0px' },
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        marginTop: '30px',
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        marginTop: "30px",
                         backgroundColor: {
-                            xs: app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
-                            md: app.mode === 'dark' ? '#111921' : '#F5F5F5',
+                            xs: app.mode === "dark" ? "#0F151C" : "#FFFFFF",
+                            md: app.mode === "dark" ? "#111921" : "#F5F5F5",
                         },
                     }}
                 >
                     <CardHeader
                         sx={{
-                            alignItems: 'flex-start',
-                            paddingBottom: '4px',
+                            alignItems: "flex-start",
+                            paddingBottom: "4px",
                         }}
                         title={
-                            <Stack direction="row" justifyContent="space-between" paddingTop={'14px'} paddingX={'14px'}>
-                                <Typography variant="mobileh1">Appreciation Tokens</Typography>
-                                <Button
-                                    color={app.mode === 'dark' ? 'primary' : 'secondary'}
-                                    endIcon={<ChevronRightIcon color={app.mode === 'dark' ? 'primary' : 'secondary'} />}
+                            <>
+                                <Stack
+                                    direction='row'
+                                    justifyContent='space-between'
+                                    paddingTop={"14px"}
+                                    paddingX={"14px"}
                                 >
-                                    View All{' '}
-                                </Button>
-                            </Stack>
+                                    <Typography variant='mobileh1'>
+                                        Appreciation Tokens
+                                    </Typography>
+                                    <Button
+                                        color={
+                                            app.mode === "dark"
+                                                ? "primary"
+                                                : "secondary"
+                                        }
+                                        endIcon={
+                                            <ChevronRightIcon
+                                                color={
+                                                    app.mode === "dark"
+                                                        ? "primary"
+                                                        : "secondary"
+                                                }
+                                            />
+                                        }
+                                    >
+                                        View All{" "}
+                                    </Button>
+                                </Stack>
+                                <Stack
+                                    direction='row'
+                                    paddingTop={"14px"}
+                                    paddingX={"18px"}
+                                >
+                                    <Button variant="outlined" color='text'>
+                                        Received
+                                    </Button>
+                                    <Button color='text'>
+                                        Sent
+                                    </Button>
+                                </Stack>
+                            </>
                         }
                     />
                     <Box sx={{ padding: 4 }}>
                         {loading && (
-                            <Typography variant="h4" sx={{ padding: 2 }}>
-                                Retrieving <CircularProgress size="12pt" />
+                            <Typography variant='h4' sx={{ padding: 2 }}>
+                                Retrieving <CircularProgress size='12pt' />
                             </Typography>
                         )}
 
@@ -107,7 +150,12 @@ const AppreciationTokens = (props) => {
                                                 md={6}
                                                 key={index}
                                             >
-                                                {balances[index] > 0 && <AppreciationTokenCard tier={index + 1} balance={balance} />}
+                                                {balances[index] > 0 && (
+                                                    <AppreciationTokenCard
+                                                        tier={index + 1}
+                                                        balance={balance}
+                                                    />
+                                                )}
                                             </Grid>
                                         )
                                     );
