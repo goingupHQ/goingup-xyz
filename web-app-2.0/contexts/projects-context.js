@@ -22,6 +22,8 @@ export const ProjectsProvider = ({ children }) => {
 
     const { networkParams } = wallet.networks[contractNetwork];
 
+    const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network == contractNetwork);
+
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const router = useRouter();
 
@@ -84,10 +86,7 @@ export const ProjectsProvider = ({ children }) => {
                 });
             });
         }
-    }, [wallet.address]);
-
-    console.log(wallet.network, contractNetwork);
-    const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network == contractNetwork);
+    }, [wallet.address, isCorrectNetwork]);
 
     const getContract = () => {
         return new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
@@ -129,6 +128,19 @@ export const ProjectsProvider = ({ children }) => {
         const project = await contract.projects(projectId);
         return project;
     };
+
+    const getJoinedProjects = async (address) => {
+        const contract = getContract();
+        const projectIds = await contract.getProjectsByAddress(address);
+
+        const projects = [];
+        for (const projectId of projectIds) {
+            const project = await contract.projects(projectId);
+            projects.push(project);
+        }
+
+        return projects;
+    }
 
     const createProject = async (name, description, started, ended, primaryUrl, tags, isPrivate) => {
         const contract = getContract();
@@ -194,7 +206,14 @@ export const ProjectsProvider = ({ children }) => {
     const getProjectMember = async (projectId, memberAddress) => {
         const contract = getContract();
         const member = await contract.projectMemberMapping(projectId, memberAddress);
-        return member;
+        return {
+            address: memberAddress,
+            role: member.role,
+            goal: member.goal,
+            goalAcheived: member.goalAcheived,
+            rewardVerified: member.rewardVerified,
+            reward: JSON.parse(member.rewardData),
+        };
     };
 
     const getPendingInvites = async (projectId) => {
@@ -278,6 +297,7 @@ export const ProjectsProvider = ({ children }) => {
         getProjects,
         getProjectsAfterBlock,
         getProject,
+        getJoinedProjects,
         createProject,
         updateProject,
         transferProjectOwnership,

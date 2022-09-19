@@ -17,6 +17,7 @@ export default function MemberCard(props) {
         setLoading(true);
         try {
             const result = await projectsContext.getProjectMember(projectId, member);
+            console.log('result', result);
             setMemberData(result);
         } catch (err) {
             console.log(err);

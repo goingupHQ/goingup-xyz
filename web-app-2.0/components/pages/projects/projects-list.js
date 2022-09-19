@@ -18,8 +18,13 @@ export default function ProjectsList(props) {
     const load = async () => {
         setLoading(true);
         try {
-            setProjects(await projectsContext.getProjects());
+            const ownedProjects = await projectsContext.getProjects();
+            const joinedProjects = await projectsContext.getJoinedProjects(wallet.address);
+            console.log('ownedProjects', ownedProjects);
+            console.log('joinedProjects', joinedProjects);
+            setProjects([...ownedProjects, ...joinedProjects]);
         } catch (err) {
+            console.error(err);
             enqueueSnackbar('There was an error loading your projects', { variant: 'error' });
         } finally {
             setLoading(false);
@@ -27,9 +32,7 @@ export default function ProjectsList(props) {
     };
 
     useEffect(() => {
-        //
         if (wallet.address) load();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wallet.address]);
 
     return (
