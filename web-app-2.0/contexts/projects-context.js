@@ -236,15 +236,11 @@ export const ProjectsProvider = ({ children }) => {
         const contract = getContract();
 
         const freeMembers = await contract.freeMembers();
-        console.log('freeMembers', freeMembers);
         const pendingInvites = await contract.getPendingInvites(projectId);
-        console.log('freeMembers', freeMembers);
         const members = await contract.getProjectMembers(projectId);
-        console.log('members', members);
 
         const fee = ethers.BigNumber.from(0);
         if (pendingInvites.length + members.length + 1 >= freeMembers) fee = await contract.addMemberPrice();
-        console.log('fee', fee);
 
         const tx = await contract.inviteMember(projectId, member, role, goal, JSON.stringify(rewards), { value: fee });
         return tx;
