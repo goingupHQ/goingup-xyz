@@ -6,11 +6,13 @@ import moment from 'moment';
 import { useSnackbar } from 'notistack';
 import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
+import { UtilityTokensContext } from './utility-tokens-context';
 
 export const ProjectsContext = createContext();
 
 export const ProjectsProvider = ({ children }) => {
     const wallet = useContext(WalletContext);
+    const utilityTokensContext = useContext(UtilityTokensContext);
 
     // polygon mumbai testnet
     const contractAddress = '0xF5df032832cb3c4BEf2D28B440fA57D5dAC47881';
@@ -206,14 +208,17 @@ export const ProjectsProvider = ({ children }) => {
     const getProjectMember = async (projectId, memberAddress) => {
         const contract = getContract();
         const member = await contract.projectMemberMapping(projectId, memberAddress);
-        return {
+
+        const memberData = {
             address: memberAddress,
             role: member.role,
             goal: member.goal,
-            goalAcheived: member.goalAcheived,
+            goalAchieved: member.goalAchieved,
             rewardVerified: member.rewardVerified,
             reward: JSON.parse(member.rewardData),
         };
+
+        return memberData;
     };
 
     const getPendingInvites = async (projectId) => {

@@ -101,11 +101,16 @@ export default function MemberCard(props) {
                 });
                 setSettingAsAchieved(false);
                 if (reload) reload();
+                load();
             });
         } catch (err) {
             console.log(err);
             setSettingAsAchieved(false);
         }
+    };
+
+    const [sendingReward, setSendingReward] = React.useState(false);
+    const sendReward = async () => {
     };
 
     return (
@@ -125,7 +130,11 @@ export default function MemberCard(props) {
                     <Typography variant="body1">
                         Goal: <b>{memberData.goal}</b>
                     </Typography>
+                    <Typography variant="body1">
+                        Achieved: <b>{memberData.goalAchieved ? 'Yes' : 'No'}</b>
+                    </Typography>
                     <Stack direction={{ xs: 'column', md: 'row' }} spacing={1}>
+                        {!memberData.goalAchieved &&
                         <LoadingButton
                             variant="contained"
                             color="primary"
@@ -135,6 +144,20 @@ export default function MemberCard(props) {
                         >
                             Set Goal As Achieved
                         </LoadingButton>
+                        }
+
+                        {memberData.goalAchieved &&
+                        <LoadingButton
+                            variant="contained"
+                            color="primary"
+                            loading={sendingReward}
+                            loadingIndicator={<CircularProgress size={14} />}
+                            onClick={sendReward}
+                        >
+                            Send Reward
+                        </LoadingButton>
+                        }
+
                         <LoadingButton
                             variant="contained"
                             color="secondary"
