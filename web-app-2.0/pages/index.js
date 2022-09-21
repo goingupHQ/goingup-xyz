@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { Typography } from '@mui/material';
 import { AppContext } from '../contexts/app-context';
 import { useContext, } from 'react';
+import SuggestedProfiles from '../components/pages/dashboard/suggested-profiles';
 
 export default function Home() {
     const app = useContext(AppContext);
@@ -12,7 +13,7 @@ export default function Home() {
                 <title>GoingUP: Dashboard</title>
             </Head>
 
-            <Typography variant="h1">Dashboard</Typography>
+            <SuggestedProfiles />
 
             {/* <Stack direction="column" spacing={3} marginY={'100px'}>
                 <Card>
