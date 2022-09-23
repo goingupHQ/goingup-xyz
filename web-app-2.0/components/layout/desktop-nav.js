@@ -40,9 +40,9 @@ export default function DesktopNav(props) {
                 spacing={3}
                 sx={{ display: { xs: 'none', md: 'initial', paddingBottom: '10px', paddingLeft: '14px' } }}
             >
-                <Link href="/dashboard">
+                <Link href="/">
                     <Button
-                        sx={pathname === '/dashboard' ? activeButtonStyle : inactiveButtonStyle}
+                        sx={pathname === '/' ? activeButtonStyle : inactiveButtonStyle}
                         startIcon={<DashboardIcon />}
                     >
                         Dashboard
