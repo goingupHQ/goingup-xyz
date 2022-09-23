@@ -1,10 +1,12 @@
-import { ReactNode, useState, createContext, useEffect, useRef } from 'react';
+import { ReactNode, useState, createContext, useEffect, useRef, useContext } from 'react';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import { useSnackbar } from 'notistack';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
+import { AppContext } from './app-context';
+import { Backdrop, Button, Paper, Stack, Typography } from '@mui/material';
 
 export const WalletContext = createContext({});
 
@@ -91,13 +93,14 @@ const web3ModalOptions = {
     // network: 'mainnet',
     cacheProvider: true,
     providerOptions,
-    theme: 'light'
-}
+    theme: 'light',
+};
 
 export function WalletProvider({ children }) {
     const router = useRouter();
-    const { enqueueSnackbar } = useSnackbar();
     const wselRef = useRef(null);
+
+    const app = useContext(AppContext);
 
     const [address, setAddress] = useState(null);
     const [network, setNetwork] = useState(null);
@@ -105,6 +108,125 @@ export function WalletProvider({ children }) {
     const [ethersProvider, setEthersProvider] = useState(null);
     const [ethersSigner, setEthersSigner] = useState(null);
     const [walletType, setWalletType] = useState(null);
+
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+    useEffect(() => {
+        if (address) {
+            if (Notification.permission === 'denied') {
+                if (localStorage.getItem('notifs-denied-forever') === 'true') return;
+
+                enqueueSnackbar('Please enable notifications in your browser settings', {
+                    variant: 'warning',
+                    persist: true,
+                    action: (key) => (
+                        <Stack direction="row" spacing={1}>
+                            <Button variant="contained" color="primary" onClick={() => closeSnackbar(key)}>
+                                Later
+                            </Button>
+
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => {
+                                    closeSnackbar(key);
+                                    localStorage.setItem('notifs-denied-forever', true);
+                                    enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
+                                }}
+                            >
+                                Never
+                            </Button>
+                        </Stack>
+                    ),
+                });
+            }
+
+            if (Notification.permission === 'granted') {
+                // check for existing subscription
+                if (localStorage.getItem('psn-subscription')) {
+                    const subscription = JSON.parse(localStorage.getItem('subscription'));
+                    postPsnSubscription(subscription);
+                } else {
+                    app.subscribeUserToPush()
+                        .then((subscription) => {
+                            postPsnSubscription(subscription);
+                        });
+                }
+            }
+
+            if (Notification.permission === 'default') {
+                if (localStorage.getItem('notifs-denied-forever') === 'true') return;
+                enqueueSnackbar('Do you want to receive notifications from GoingUP?', {
+                    variant: 'info',
+                    persist: true,
+                    action: (key) => (
+                        <Stack direction="row" spacing={1}>
+                            <Button variant="contained" color="primary" onClick={() => askNotifsConsent(key)}>
+                                Yes
+                            </Button>
+
+                            <Button variant="contained" color="secondary" onClick={() => closeSnackbar(key)}>
+                                No
+                            </Button>
+
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => {
+                                    closeSnackbar(key);
+                                    localStorage.setItem('notifs-denied-forever', true);
+                                    enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
+                                }}
+                            >
+                                Never
+                            </Button>
+                        </Stack>
+                    ),
+                });
+            }
+        }
+    }, [address]);
+
+    const askNotifsConsent = async (snackbarKey) => {
+        closeSnackbar(snackbarKey);
+        const key = enqueueSnackbar('Please approve notifications in the prompt which should be near the address bar', {
+            variant: 'info',
+            persist: true,
+        });
+
+        try {
+            const result = await Notification.requestPermission();
+
+            if (result === 'granted') {
+                const subscription = await app.subscribeUserToPush();
+                postPsnSubscription(subscription);
+            } else {
+                enqueueSnackbar('You did not allow notifications', { variant: 'warning' });
+            }
+        } catch (e) {
+            console.log(e);
+        } finally {
+            closeSnackbar(key);
+        }
+    };
+
+    const postPsnSubscription = async (subscription) => {
+        if (subscription) {
+            localStorage.setItem('psn-subscription', JSON.stringify(subscription));
+            await fetch('/api/psn', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    subscription,
+                    address,
+                }),
+            });
+
+            enqueueSnackbar('Notifications enabled', { variant: 'success' });
+        }
+    }
 
     const connect = async () => {
         let cache;
@@ -327,7 +449,7 @@ export function WalletProvider({ children }) {
                 signMessage,
                 utilityToken,
                 setWeb3ModalTheme,
-                mainnetENSProvider
+                mainnetENSProvider,
             }}
         >
             {children}

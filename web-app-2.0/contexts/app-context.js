@@ -1,5 +1,6 @@
 import { useMediaQuery } from '@mui/material';
 import { createContext, useEffect, useState } from 'react';
+import convertVapidKey from 'convert-vapid-public-key'
 
 const availability = [
     { id: 1, text: 'Philanthropy' },
@@ -50,6 +51,33 @@ const maxReputationScore = 140;
 
 export const AppContext = createContext();
 
+const registerServiceWorker = async () => {
+    if (!('serviceWorker' in navigator)) {
+        return;
+    }
+
+    if (!('PushManager' in window)) {
+        return;
+    }
+
+    const registration = await navigator.serviceWorker.register('/service-workers/push-notifications.js');
+    console.log('Push Notifications Service Worker Registered');
+    return registration;
+};
+
+const subscribeUserToPush = async () => {
+    const registration = await registerServiceWorker();
+    const subscribeOptions = {
+        userVisibleOnly: true,
+        applicationServerKey: convertVapidKey(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY),
+    };
+
+    const subscription = await registration.pushManager.subscribe(subscribeOptions);
+    console.log('User is subscribed.', subscription);
+    localStorage.setItem('psn-subscription', JSON.stringify(subscription));
+    return subscription;
+};
+
 export const AppProvider = ({ children }) => {
     const [mode, setMode] = useState('dark');
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -61,6 +89,8 @@ export const AppProvider = ({ children }) => {
         } else {
             setMode(cache);
         }
+
+        registerServiceWorker();
     }, [mode]);
 
     const setDarkMode = () => {
@@ -84,7 +114,9 @@ export const AppProvider = ({ children }) => {
         setDarkMode,
         setLightMode,
         maxReputationScore,
-        mode
+        mode,
+        registerServiceWorker,
+        subscribeUserToPush,
     };
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
