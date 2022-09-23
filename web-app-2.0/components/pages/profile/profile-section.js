@@ -14,8 +14,6 @@ import {
     CircularProgress,
     Badge,
     Button,
-    Divider,
-    Paper,
     IconButton,
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -47,6 +45,8 @@ const ProfileSection = (props) => {
     const [gettingFollowStats, setGettingFollowStats] = useState(true);
     const [followersCount, setFollowersCount] = useState(0);
     const [followingCount, setFollowingCount] = useState(0);
+    const [isHolder, setIsHolder] = useState(null);
+    const [checkHolder, setCheckHolder] = useState(true);
 
     const uploadPhoto = async (e, photoType) => {
         if (photoType === 'cover-photo') setUploadingCover(true);
@@ -152,6 +152,23 @@ const ProfileSection = (props) => {
                 .finally(() => setGettingFollowStats(false));
         }
     }, [wallet.address, account.address]);
+
+    useEffect(() => {
+        if (account.address) {
+            setCheckHolder(true);
+            fetch(`/api/accounts/${account.address}/is-membership-nft-holder`)
+            .then(async (response) => {
+                const result = await response.json();
+                console.log("isHolder", result);
+                if (result.isHolder === true) {
+                    setIsHolder(true);
+                } else {
+                    setIsHolder(false);
+                }
+            })
+            .finally(() => setCheckHolder(false));
+        }
+    }, [account.address]); 
 
     const follow = async () => {
         if (!wallet.address) {
@@ -337,6 +354,7 @@ const ProfileSection = (props) => {
                                             src={account.profilePhoto}
                                             sx={{
                                                 marginLeft: "-15px",
+                                                marginTop: "-15px",
                                                 width: { xs: 60, md: 114 },
                                                 height: { xs: 60, md: 114 },
                                             }}
@@ -345,7 +363,21 @@ const ProfileSection = (props) => {
                                 }
                                 title={
                                     <>
-                                        <Typography variant='h1'>
+                                        {checkHolder && (<CircularProgress size={'14px'} />)}
+                                        {!checkHolder && isHolder && (
+                                            <Typography variant="sh3" sx={{
+                                                backgroundColor:
+                                                    app.mode === "dark"
+                                                        ? "#192530"
+                                                        : "#CFCFCF",
+                                                borderRadius: "8px",
+                                                width: "fit-content",
+                                                padding: "6px 12px",
+                                            }}>
+                                                💎 Premium
+                                            </Typography>
+                                        )}
+                                        <Typography marginTop={'10px'} variant='h1'>
                                             {account.name}
                                         </Typography>
                                         <Box>
@@ -401,7 +433,7 @@ const ProfileSection = (props) => {
                                                 }}
                                             >
                                                 {gettingFollowStats && (
-                                                    <Typography variant='h4'>
+                                                    <Typography variant='sh3'>
                                                         Getting follow stats{" "}
                                                         <CircularProgress size='14px' />
                                                     </Typography>
@@ -462,7 +494,7 @@ const ProfileSection = (props) => {
                                         sx={{
                                             position: "absolute",
                                             left: { xs: 70, md: 130, lg: 220 },
-                                            top: { xs: 160, md: 200, lg: 200 },
+                                            top: { xs: 165, md: 205, lg: 205 },
                                         }}
                                         onClick={() => {
                                             uploadProfileInputRef.current.click();
