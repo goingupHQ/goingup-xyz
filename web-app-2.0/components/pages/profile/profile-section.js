@@ -159,7 +159,6 @@ const ProfileSection = (props) => {
             fetch(`/api/accounts/${account.address}/is-membership-nft-holder`)
             .then(async (response) => {
                 const result = await response.json();
-                console.log("isHolder", result);
                 if (result.isHolder === true) {
                     setIsHolder(true);
                 } else {
