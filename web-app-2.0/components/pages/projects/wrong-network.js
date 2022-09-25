@@ -11,7 +11,7 @@ export default function WrongNetwork(props) {
             </Typography>
 
             <img
-                src="/images/illustrations/page-lost.svg"
+                src="/images/illustrations/nakamoto.svg"
                 alt="connection-lost"
                 style={{ width: '100%', maxWidth: '500px' }}
             />

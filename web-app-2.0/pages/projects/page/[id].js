@@ -10,6 +10,7 @@ import ProjectInformation from '../../../components/pages/projects/project-infor
 import { WalletContext } from '../../../contexts/wallet-context';
 import ProjectMembers from '../../../components/pages/projects/project-members';
 import LoadingIllustration from '../../../components/common/loading-illustration';
+import WrongNetwork from '../../../components/pages/projects/wrong-network';
 
 export default function ProjectPage(props) {
     const router = useRouter();
@@ -46,26 +47,35 @@ export default function ProjectPage(props) {
             <Head>
                 <title>{project === null ? 'GoingUP Project' : `${project?.name} `}</title>
             </Head>
-            <Grid container sx={{ mb: 3 }} rowSpacing={2}>
-                <Grid item xs={12} md={6}>
-                    <Typography variant="h1">{project === null ? 'Loading Project...' : project.name}</Typography>
+
+            {projectsContext.isCorrectNetwork &&
+            <>
+                <Grid container sx={{ mb: 3 }} rowSpacing={2}>
+                    <Grid item xs={12} md={6}>
+                        <Typography variant="h1">{project === null ? 'Loading Project...' : project.name}</Typography>
+                    </Grid>
                 </Grid>
-            </Grid>
 
 
-            {!loading && router.isReady &&
-                <Stack direction="column" spacing={3}>
-                    <ProjectInformation id={id} project={project} />
+                {!loading && router.isReady &&
+                    <Stack direction="column" spacing={3}>
+                        <ProjectInformation id={id} project={project} />
 
-                    <ProjectMembers id={id} project={project} />
-                </Stack>
+                        <ProjectMembers id={id} project={project} />
+                    </Stack>
+                }
+
+                {loading &&
+                    <Box sx={{ py: '60px', textAlign: 'center' }}>
+                        <LoadingIllustration />
+                    </Box>
+                }
+            </>
             }
 
-            {loading &&
-                <Box sx={{ py: '60px', textAlign: 'center' }}>
-                    <LoadingIllustration />
-                </Box>
-            }
+            {!projectsContext.isCorrectNetwork && <WrongNetwork />}
+
+
         </>
     );
 }
