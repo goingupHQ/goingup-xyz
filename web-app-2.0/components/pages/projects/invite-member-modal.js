@@ -120,7 +120,6 @@ const InviteMemberModal = (props, ref) => {
                 variant: 'info',
                 action: (key) => (
                     <Button variant="contained" color="primary" onClick={() => {
-                        console.log('hello' + key);
                         window.open(`${projectsContext.networkParams.blockExplorerUrls[0]}tx/${tx.hash}`, '_blank');
                     }}>Open in Block Explorer</Button>
                 ),
@@ -135,10 +134,8 @@ const InviteMemberModal = (props, ref) => {
                 enqueueSnackbar('Member invite transaction confirmed', {
                     variant: 'success',
                 });
-                reload();
+                if (reload) reload();
             });
-
-            if (reload) reload();
         } catch (err) {
             if (typeof err === 'string') enqueueSnackbar(err, { variant: 'error' });
             else enqueueSnackbar(err.message, { variant: 'error' });

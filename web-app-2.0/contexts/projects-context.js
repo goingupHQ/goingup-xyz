@@ -289,6 +289,12 @@ export const ProjectsProvider = ({ children }) => {
         return tx;
     };
 
+    const leaveProject = async (projectId, reason) => {
+        const contract = getContract();
+        const tx = await contract.leaveProject(projectId, reason);
+        return tx;
+    };
+
     const setMemberGoalAsAchieved = async(projectId, member) => {
         const contract = getContract();
         const tx = await contract.setMemberGoalAsAchieved(projectId, member);
@@ -315,6 +321,7 @@ export const ProjectsProvider = ({ children }) => {
         disinviteProjectMember,
         acceptProjectInvite,
         removeProjectMember,
+        leaveProject,
         setMemberGoalAsAchieved,
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;

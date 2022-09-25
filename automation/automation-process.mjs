@@ -98,6 +98,15 @@ if (projectsContract) {
 
         sendNotificationToAddress(member, `Project Invitation Accepted`, `Your transaction to accept the invitation to ${project.name} has been confirmed in the blockchain`, `/projects/page/${projectId}`);
     });
+
+    projectsContract.on('LeaveProject', async (projectId, member, reason) => {
+        console.log(`LeaveProject: ${projectId} ${member} ${reason}`);
+        const project = await projectsContract.projects(projectId);
+
+        sendNotificationToAddress(project.owner, `Project Member Left`, `${member} has left ${project.name}`, `/projects/page/${projectId}`);
+
+        sendNotificationToAddress(member, `Leave Project`, `Your transaction to leave ${project.name} has been confirmed in the blockchain`, null);
+    });
 }
 
 console.info('Event Listener Started');
