@@ -152,7 +152,7 @@ const InviteMemberModal = (props, ref) => {
             <DialogTitle>
                 <Typography variant="h2">Invite Member To {project?.name}</Typography>
             </DialogTitle>
-            <DialogContent sx={{ paddingY: 5, paddingTop: 5 }}>
+            <DialogContent sx={{ paddingTop: 5 }}>
                 <br />
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -246,6 +246,10 @@ const InviteMemberModal = (props, ref) => {
                             <LoadingButton loading={inviting} variant="contained" color="primary" onClick={inviteMember}>
                                 Invite Member
                             </LoadingButton>
+
+                            <Button variant="contained" color="secondary" onClick={handleClose}>
+                                Cancel
+                            </Button>
                         </Stack>
                     </Grid>
                 </Grid>
