@@ -4,13 +4,16 @@ import ProfileLink from '../../common/profile-link';
 import { ProjectsContext } from '../../../contexts/projects-context';
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
+import { WalletContext } from '../../../contexts/wallet-context';
 
 export default function MemberCard(props) {
-    const { projectId, member, reload } = props;
+    const { projectId, project, member, reload } = props;
     const projectsContext = React.useContext(ProjectsContext);
 
     const [memberData, setMemberData] = React.useState(null);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+    const wallet = React.useContext(WalletContext);
 
     const [loading, setLoading] = React.useState(true);
     const load = async () => {
@@ -110,8 +113,7 @@ export default function MemberCard(props) {
     };
 
     const [sendingReward, setSendingReward] = React.useState(false);
-    const sendReward = async () => {
-    };
+    const sendReward = async () => {};
 
     return (
         <Paper sx={{ p: 3 }}>
@@ -133,41 +135,44 @@ export default function MemberCard(props) {
                     <Typography variant="body1">
                         Achieved: <b>{memberData.goalAchieved ? 'Yes' : 'No'}</b>
                     </Typography>
-                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={1}>
-                        {!memberData.goalAchieved &&
-                        <LoadingButton
-                            variant="contained"
-                            color="primary"
-                            loading={settingAsAchieved}
-                            loadingIndicator={<CircularProgress size={14} />}
-                            onClick={setGoalAsAchieved}
-                        >
-                            Set Goal As Achieved
-                        </LoadingButton>
-                        }
 
-                        {memberData.goalAchieved &&
-                        <LoadingButton
-                            variant="contained"
-                            color="primary"
-                            loading={sendingReward}
-                            loadingIndicator={<CircularProgress size={14} />}
-                            onClick={sendReward}
-                        >
-                            Send Reward
-                        </LoadingButton>
-                        }
+                    {project.owner === wallet.address && (
+                        <Stack direction={{ xs: 'column', md: 'row' }} spacing={1}>
+                            {!memberData.goalAchieved && (
+                                <LoadingButton
+                                    variant="contained"
+                                    color="primary"
+                                    loading={settingAsAchieved}
+                                    loadingIndicator={<CircularProgress size={14} />}
+                                    onClick={setGoalAsAchieved}
+                                >
+                                    Set Goal As Achieved
+                                </LoadingButton>
+                            )}
 
-                        <LoadingButton
-                            variant="contained"
-                            color="secondary"
-                            loading={removing}
-                            loadingIndicator={<CircularProgress size={14} />}
-                            onClick={removeMember}
-                        >
-                            Remove
-                        </LoadingButton>
-                    </Stack>
+                            {memberData.goalAchieved && (
+                                <LoadingButton
+                                    variant="contained"
+                                    color="primary"
+                                    loading={sendingReward}
+                                    loadingIndicator={<CircularProgress size={14} />}
+                                    onClick={sendReward}
+                                >
+                                    Send Reward
+                                </LoadingButton>
+                            )}
+
+                            <LoadingButton
+                                variant="contained"
+                                color="secondary"
+                                loading={removing}
+                                loadingIndicator={<CircularProgress size={14} />}
+                                onClick={removeMember}
+                            >
+                                Remove
+                            </LoadingButton>
+                        </Stack>
+                    )}
                 </Stack>
             )}
         </Paper>
