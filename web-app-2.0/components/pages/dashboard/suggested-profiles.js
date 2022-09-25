@@ -32,7 +32,6 @@ export default function SuggestedProfiles() {
         fetch(`/api/get-potential-collaborators?address=${wallet.address}`)
             .then(async (response) => {
                 const result = await response.json();
-                console.log(result);
                 setData(result);
             })
             .catch((err) => {

@@ -31,8 +31,6 @@ const Poaps = (props) => {
     const [loading, setLoading] = useState(true);
     const [poaps, setPoaps] = useState([]);
     const [open, setOpen] = useState(false);
-    const [randomPoap, setRandomPoap] = useState([]);
-
     const { address } = props.account;
 
     useEffect(() => {
@@ -43,13 +41,17 @@ const Poaps = (props) => {
             .then(async (response) => {
                 if (response.status === 200) {
                     const result = await response.json();
-                    const clones = [];
-                    for (let i = 0; i < 60; i++) {
-                        clones.push(...result);
+                    if (result.length > 9) {
+                        setPoaps(result);
+                        setInterval(() => {
+                            let shuffled = result.sort(
+                                () => 0.5 - Math.random()
+                            );
+                            setPoaps(shuffled);
+                        }, 10000);
+                    } else {
+                        setPoaps(result);
                     }
-                    setPoaps(clones);
-                    setRandomPoap([clones])
-                    // setPoaps(result);
                 }
             })
             .catch((err) => {
@@ -58,27 +60,8 @@ const Poaps = (props) => {
             .finally(() => {
                 setLoading(false);
             });
-            // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address]);
-
-    let intervalId;
-    useEffect(() => {
-        if (poaps.length > 9) {
-            showRandomPoap();
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            intervalId = setInterval(setRandomPoap, 7000);
-        }
-
-        return () => clearInterval(intervalId);
-    }, [randomPoap]);
-    const showRandomPoap = async () => {
-        if (poaps.length > 9) {
-            await sleep(500);
-            const randomIndex = Math.floor(Math.random() * poaps.length);
-            setRandomPoap(poaps[randomIndex]);
-        }
-        console.log("randomPoap", randomPoap)
-    };
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
@@ -210,7 +193,11 @@ const Poaps = (props) => {
                             {!loading &&
                                 poaps.slice(0, 9).map((p) => {
                                     return (
-                                        <Fade in={true} timeout={500} key={p.tokenId}>
+                                        <Fade
+                                            in={true}
+                                            timeout={500}
+                                            key={p.tokenId}
+                                        >
                                             <Grid
                                                 item
                                                 key={p.tokenId}
