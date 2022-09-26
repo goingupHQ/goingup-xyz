@@ -5,6 +5,7 @@ import { ProjectsContext } from '../../../contexts/projects-context';
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { WalletContext } from '../../../contexts/wallet-context';
+import SendAppreciationToken from '../../common/SendAppreciationToken';
 
 export default function MemberCard(props) {
     const { projectId, project, member, reload } = props;
@@ -14,6 +15,8 @@ export default function MemberCard(props) {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const wallet = React.useContext(WalletContext);
+
+    const satRef = React.useRef(null);
 
     const [loading, setLoading] = React.useState(true);
     const load = async () => {
@@ -121,7 +124,7 @@ export default function MemberCard(props) {
         }
 
         if (rewardType === 'goingup-utility') {
-
+            satRef.current.openFromProjectMember(projectId, memberData);
         }
     };
 
@@ -146,7 +149,7 @@ export default function MemberCard(props) {
                         Achieved: <b>{memberData.goalAchieved ? 'Yes' : 'No'}</b>
                     </Typography>
 
-                    {project.owner === wallet.address && (
+                    {project?.owner === wallet.address && (
                         <Stack direction={{ xs: 'column', md: 'row' }} spacing={1}>
                             {!memberData.goalAchieved && (
                                 <LoadingButton
@@ -185,6 +188,8 @@ export default function MemberCard(props) {
                     )}
                 </Stack>
             )}
+
+            <SendAppreciationToken ref={satRef} sendToAddress={member} />
         </Paper>
     );
 }
