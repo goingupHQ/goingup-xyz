@@ -126,9 +126,6 @@ const InviteMemberModal = (props, ref) => {
                 persist: true,
             });
 
-            // const receipt = await tx.wait();
-            // closeSnackbar(key);
-
             tx.wait().then((receipt) => {
                 closeSnackbar(key);
                 enqueueSnackbar('Member invite transaction confirmed', {
