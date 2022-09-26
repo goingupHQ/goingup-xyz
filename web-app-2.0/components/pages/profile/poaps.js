@@ -46,10 +46,9 @@ const Poaps = (props) => {
                             let shuffled = result.sort(
                                 () => 0.5 - Math.random()
                             );
-                            setPoaps(shuffled);
+                            setAllPoaps(shuffled);
                         }
                     }, 10000);
-                    setAllPoaps(result);
                 }
             })
             .catch((err) => {
@@ -209,7 +208,7 @@ const Poaps = (props) => {
                             rowSpacing={3}
                         >
                             {!loading &&
-                                allPoaps.slice(0, 9).map((p) => {
+                                poaps.slice(0, 9).map((p) => {
                                     return (
                                         <Fade
                                             in={true}
