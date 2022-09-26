@@ -16,10 +16,7 @@ import {
     Modal,
 } from "@mui/material";
 import ChevronRightIcon from "../../icons/ChevronRightIcon";
-import { useRouter } from "next/router";
-// import moment from "moment";
 import PoapCard from "./poap-card";
-import sleep from "sleep-promise";
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -30,6 +27,8 @@ const CardContentWrapper = styled(CardContent)(
 const Poaps = (props) => {
     const [loading, setLoading] = useState(true);
     const [poaps, setPoaps] = useState([]);
+    const [allPoaps, setAllPoaps] = useState([]);
+    const [viewAllPoaps, setViewAllPoaps] = useState([]);
     const [open, setOpen] = useState(false);
     const { address } = props.account;
 
@@ -41,17 +40,36 @@ const Poaps = (props) => {
             .then(async (response) => {
                 if (response.status === 200) {
                     const result = await response.json();
-                    if (result.length > 9) {
-                        setPoaps(result);
-                        setInterval(() => {
+                    setPoaps(result);
+                    setInterval(() => {
+                        if (result.length > 9) {
                             let shuffled = result.sort(
                                 () => 0.5 - Math.random()
                             );
                             setPoaps(shuffled);
-                        }, 10000);
-                    } else {
-                        setPoaps(result);
-                    }
+                        }
+                    }, 10000);
+                    setAllPoaps(result);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [address]);
+
+    useEffect(() => {
+        // do some
+        setLoading(true);
+        const url = `https://frontend.poap.tech/actions/scan/${account.address}`;
+        fetch(url)
+            .then(async (response) => {
+                if (response.status === 200) {
+                    const result = await response.json();
+                    setViewAllPoaps(result);
                 }
             })
             .catch((err) => {
@@ -157,7 +175,7 @@ const Poaps = (props) => {
                                             rowSpacing={3}
                                         >
                                             {!loading &&
-                                                poaps.map((p) => {
+                                                viewAllPoaps.map((p) => {
                                                     return (
                                                         <Grid
                                                             item
@@ -191,7 +209,7 @@ const Poaps = (props) => {
                             rowSpacing={3}
                         >
                             {!loading &&
-                                poaps.slice(0, 9).map((p) => {
+                                allPoaps.slice(0, 9).map((p) => {
                                     return (
                                         <Fade
                                             in={true}
