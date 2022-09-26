@@ -107,6 +107,15 @@ if (projectsContract) {
 
         sendNotificationToAddress(member, `Leave Project`, `Your transaction to leave ${project.name} has been confirmed in the blockchain`, null);
     });
+
+    projectsContract.on('SetMemberGoalAsAchieved', async (projectId, setBy, member) => {
+        console.log(`SetMemberGoalAsAchieved: ${projectId} ${setBy} ${member}`);
+        const project = await projectsContract.projects(projectId);
+
+        sendNotificationToAddress(project.owner, `Member Goal Achieved`, `${member} has achieved their goal in ${project.name}`, `/projects/page/${projectId}`);
+
+        sendNotificationToAddress(member, `Goal Achieved`, `Your goal in ${project.name} has been marked as achieved`, null);
+    });
 }
 
 console.info('Event Listener Started');
