@@ -73,7 +73,6 @@ const subscribeUserToPush = async () => {
     };
 
     const subscription = await registration.pushManager.subscribe(subscribeOptions);
-    console.log('User is subscribed.', subscription);
     localStorage.setItem('psn-subscription', JSON.stringify(subscription));
     return subscription;
 };
@@ -82,7 +81,7 @@ export const AppProvider = ({ children }) => {
     const [mode, setMode] = useState('dark');
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     useEffect(() => {
-        const cache = localStorage.getItem('color-mode'); console.log('cache', cache)
+        const cache = localStorage.getItem('color-mode');
         if (!cache) {
             localStorage.setItem('color-mode', prefersDarkMode ? 'dark' : 'light');
             setMode('dark');

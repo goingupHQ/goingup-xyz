@@ -29,7 +29,6 @@ export default function ProjectPage(props) {
             projectsContext
                 .getProject(id)
                 .then((project) => {
-                    console.log(project);
                     setProject(project);
                 })
                 .catch((err) => {

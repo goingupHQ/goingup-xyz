@@ -20,7 +20,6 @@ export default function MemberCard(props) {
         setLoading(true);
         try {
             const result = await projectsContext.getProjectMember(projectId, member);
-            console.log('result', result);
             setMemberData(result);
         } catch (err) {
             console.log(err);
@@ -113,7 +112,9 @@ export default function MemberCard(props) {
     };
 
     const [sendingReward, setSendingReward] = React.useState(false);
-    const sendReward = async () => {};
+    const sendReward = async () => {
+        console.log(memberData.reward);
+    };
 
     return (
         <Paper sx={{ p: 3 }}>

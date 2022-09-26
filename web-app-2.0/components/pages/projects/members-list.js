@@ -22,7 +22,7 @@ function MembersList(props, ref) {
     const load = async () => {
         setLoading(true);
         try {
-            const result = await projectsContext.getProjectMembers(projectId); console.log('result', result);
+            const result = await projectsContext.getProjectMembers(projectId);
             setMembers(result);
         } catch (err) {
             console.log(err);
