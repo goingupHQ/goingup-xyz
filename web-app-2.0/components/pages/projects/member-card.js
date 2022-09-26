@@ -113,7 +113,16 @@ export default function MemberCard(props) {
 
     const [sendingReward, setSendingReward] = React.useState(false);
     const sendReward = async () => {
-        console.log(memberData.reward);
+        const rewardType = memberData.reward.type;
+
+        if (rewardType === 'pro-bono') {
+            enqueueSnackbar('This member has a reward type of pro-bono', { variant: 'info' });
+            return;
+        }
+
+        if (rewardType === 'goingup-utility') {
+
+        }
     };
 
     return (
