@@ -5,6 +5,7 @@ import ProjectForm from '../../../components/pages/projects/project-form';
 import { useRouter } from 'next/router';
 import { Backdrop, CircularProgress } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import WrongNetwork from '../../../components/pages/projects/wrong-network';
 
 export default function EditProject() {
     const projectsContext = useContext(ProjectsContext);
@@ -38,11 +39,17 @@ export default function EditProject() {
                 <title>Going UP - Edit A Project</title>
             </Head>
 
-            <ProjectForm projectData={data} />
+            {!projectsContext.isCorrectNetwork && <WrongNetwork />}
 
-            <Backdrop open={loading} sx={{ zIndex: 1200 }}>
-                <CircularProgress />
-            </Backdrop>
+            {projectsContext.isCorrectNetwork && (
+                <>
+                    <ProjectForm projectData={data} />
+
+                    <Backdrop open={loading} sx={{ zIndex: 1200 }}>
+                        <CircularProgress />
+                    </Backdrop>
+                </>
+            )}
         </>
     );
 }

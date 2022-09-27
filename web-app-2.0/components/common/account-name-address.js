@@ -25,8 +25,8 @@ export default function AccountNameAddress(props) {
     }, [address]);
 
     return (
-        <NextLink href={`/profile/${address}`}>
+        <>
             {name === null ? (ensName || displayAddress) : `${name} (${ensName || displayAddress})`}
-        </NextLink>
+        </>
     );
 }

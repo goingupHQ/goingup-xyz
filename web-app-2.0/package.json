@@ -23,6 +23,7 @@
     "@mui/x-date-pickers": "^5.0.0-beta.7",
     "@walletconnect/web3-provider": "^1.7.8",
     "@wardrakus/possessive": "^0.0.1",
+    "convert-vapid-public-key": "^1.1.0",
     "ethers": "^5.6.9",
     "keccak256": "^1.0.6",
     "lodash": "^4.17.21",
@@ -43,6 +44,7 @@
     "truncate-eth-address": "^1.0.2",
     "uuid": "^8.3.2",
     "validator": "^13.7.0",
+    "web-push": "^3.5.0",
     "web3-cardano-token": "^0.0.12",
     "web3modal": "^1.9.8"
   },

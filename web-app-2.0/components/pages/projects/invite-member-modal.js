@@ -120,25 +120,19 @@ const InviteMemberModal = (props, ref) => {
                 variant: 'info',
                 action: (key) => (
                     <Button variant="contained" color="primary" onClick={() => {
-                        console.log('hello' + key);
                         window.open(`${projectsContext.networkParams.blockExplorerUrls[0]}tx/${tx.hash}`, '_blank');
                     }}>Open in Block Explorer</Button>
                 ),
                 persist: true,
             });
 
-            // const receipt = await tx.wait();
-            // closeSnackbar(key);
-
             tx.wait().then((receipt) => {
                 closeSnackbar(key);
                 enqueueSnackbar('Member invite transaction confirmed', {
                     variant: 'success',
                 });
-                reload();
+                if (reload) reload();
             });
-
-            if (reload) reload();
         } catch (err) {
             if (typeof err === 'string') enqueueSnackbar(err, { variant: 'error' });
             else enqueueSnackbar(err.message, { variant: 'error' });
@@ -152,7 +146,7 @@ const InviteMemberModal = (props, ref) => {
             <DialogTitle>
                 <Typography variant="h2">Invite Member To {project?.name}</Typography>
             </DialogTitle>
-            <DialogContent sx={{ paddingY: 5, paddingTop: 5 }}>
+            <DialogContent sx={{ paddingTop: 5 }}>
                 <br />
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -246,6 +240,10 @@ const InviteMemberModal = (props, ref) => {
                             <LoadingButton loading={inviting} variant="contained" color="primary" onClick={inviteMember}>
                                 Invite Member
                             </LoadingButton>
+
+                            <Button variant="contained" color="secondary" onClick={handleClose}>
+                                Cancel
+                            </Button>
                         </Stack>
                     </Grid>
                 </Grid>

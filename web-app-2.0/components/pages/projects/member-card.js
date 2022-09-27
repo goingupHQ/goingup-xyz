@@ -4,20 +4,25 @@ import ProfileLink from '../../common/profile-link';
 import { ProjectsContext } from '../../../contexts/projects-context';
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
+import { WalletContext } from '../../../contexts/wallet-context';
+import SendAppreciationToken from '../../common/SendAppreciationToken';
 
 export default function MemberCard(props) {
-    const { projectId, member, reload } = props;
+    const { projectId, project, member, reload } = props;
     const projectsContext = React.useContext(ProjectsContext);
 
     const [memberData, setMemberData] = React.useState(null);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+    const wallet = React.useContext(WalletContext);
+
+    const satRef = React.useRef(null);
 
     const [loading, setLoading] = React.useState(true);
     const load = async () => {
         setLoading(true);
         try {
             const result = await projectsContext.getProjectMember(projectId, member);
-            console.log('result', result);
             setMemberData(result);
         } catch (err) {
             console.log(err);
@@ -101,10 +106,25 @@ export default function MemberCard(props) {
                 });
                 setSettingAsAchieved(false);
                 if (reload) reload();
+                load();
             });
         } catch (err) {
             console.log(err);
             setSettingAsAchieved(false);
+        }
+    };
+
+    const [sendingReward, setSendingReward] = React.useState(false);
+    const sendReward = async () => {
+        const rewardType = memberData.reward.type;
+
+        if (rewardType === 'pro-bono') {
+            enqueueSnackbar('This member has a reward type of pro-bono', { variant: 'info' });
+            return;
+        }
+
+        if (rewardType === 'goingup-utility') {
+            satRef.current.openFromProjectMember(projectId, memberData);
         }
     };
 
@@ -125,28 +145,51 @@ export default function MemberCard(props) {
                     <Typography variant="body1">
                         Goal: <b>{memberData.goal}</b>
                     </Typography>
-                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={1}>
-                        <LoadingButton
-                            variant="contained"
-                            color="primary"
-                            loading={settingAsAchieved}
-                            loadingIndicator={<CircularProgress size={14} />}
-                            onClick={setGoalAsAchieved}
-                        >
-                            Set Goal As Achieved
-                        </LoadingButton>
-                        <LoadingButton
-                            variant="contained"
-                            color="secondary"
-                            loading={removing}
-                            loadingIndicator={<CircularProgress size={14} />}
-                            onClick={removeMember}
-                        >
-                            Remove
-                        </LoadingButton>
-                    </Stack>
+                    <Typography variant="body1">
+                        Achieved: <b>{memberData.goalAchieved ? 'Yes' : 'No'}</b>
+                    </Typography>
+
+                    {project?.owner === wallet.address && (
+                        <Stack direction={{ xs: 'column', md: 'row' }} spacing={1}>
+                            {!memberData.goalAchieved && (
+                                <LoadingButton
+                                    variant="contained"
+                                    color="primary"
+                                    loading={settingAsAchieved}
+                                    loadingIndicator={<CircularProgress size={14} />}
+                                    onClick={setGoalAsAchieved}
+                                >
+                                    Set Goal As Achieved
+                                </LoadingButton>
+                            )}
+
+                            {memberData.goalAchieved && (
+                                <LoadingButton
+                                    variant="contained"
+                                    color="primary"
+                                    loading={sendingReward}
+                                    loadingIndicator={<CircularProgress size={14} />}
+                                    onClick={sendReward}
+                                >
+                                    Send Reward
+                                </LoadingButton>
+                            )}
+
+                            <LoadingButton
+                                variant="contained"
+                                color="secondary"
+                                loading={removing}
+                                loadingIndicator={<CircularProgress size={14} />}
+                                onClick={removeMember}
+                            >
+                                Remove
+                            </LoadingButton>
+                        </Stack>
+                    )}
                 </Stack>
             )}
+
+            <SendAppreciationToken ref={satRef} sendToAddress={member} />
         </Paper>
     );
 }
