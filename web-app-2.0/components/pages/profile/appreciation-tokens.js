@@ -46,6 +46,8 @@ const AppreciationTokens = (props) => {
     };
 
     useEffect(() => {
+        setIsSent(false);
+        setIsReceived(true);
         const load = async () => {
             setLoading(true);
             try {
