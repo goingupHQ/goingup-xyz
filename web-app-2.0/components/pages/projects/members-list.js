@@ -22,7 +22,7 @@ function MembersList(props, ref) {
     const load = async () => {
         setLoading(true);
         try {
-            const result = await projectsContext.getProjectMembers(projectId); console.log('result', result);
+            const result = await projectsContext.getProjectMembers(projectId);
             setMembers(result);
         } catch (err) {
             console.log(err);
@@ -63,7 +63,7 @@ function MembersList(props, ref) {
                         <Grid container spacing={2}>
                             {members.map((member) => (
                                 <Grid item xs={12} md={6} lg={4} key={member}>
-                                    <MemberCard projectId={projectId} member={member} reload={load} />
+                                    <MemberCard projectId={projectId} project={project} member={member} reload={load} />
                                 </Grid>
                             ))}
                         </Grid>

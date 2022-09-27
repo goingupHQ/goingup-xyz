@@ -7,7 +7,7 @@ import { Stack } from '@mui/system';
 import { Typography, Box, Avatar } from '@mui/material';
 import Identicon from './Identicon';
 
-export default function AccountNameAddress(props) {
+export default function ProfileLink(props) {
     const { address, textSx } = props;
     const [name, setName] = React.useState(null);
     const [ensName, setEnsName] = React.useState(null);

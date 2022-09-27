@@ -2,26 +2,34 @@ import { Button, Chip, Grid, Link, Paper, Stack, Typography } from '@mui/materia
 import moment from 'moment';
 import NextLink from 'next/link';
 import React from 'react';
+import { WalletContext } from '../../../contexts/wallet-context';
 import SectionHeader from '../../common/section-header';
 
 export default function ProjectInformation(props) {
     const { id, project } = props;
+
+    const wallet = React.useContext(WalletContext);
+
     return (
         <Paper sx={{ padding: 3 }}>
             <Grid container rowSpacing={3}>
                 <Grid item xs={12}>
                     <SectionHeader title="Project Information">
-                        <NextLink href={`/projects/edit/${id}`} passHref>
-                            <Button variant="contained" color="primary" size="large">
-                                Edit this Project
-                            </Button>
-                        </NextLink>
+                        {project?.owner === wallet.address && (
+                            <>
+                                <NextLink href={`/projects/edit/${id}`} passHref>
+                                    <Button variant="contained" color="primary" size="large">
+                                        Edit this Project
+                                    </Button>
+                                </NextLink>
 
-                        <NextLink href={`/projects/transfer-ownership/${id}`} passHref>
-                            <Button variant="contained" color="secondary" size="large">
-                                Transfer Ownership
-                            </Button>
-                        </NextLink>
+                                <NextLink href={`/projects/transfer-ownership/${id}`} passHref>
+                                    <Button variant="contained" color="secondary" size="large">
+                                        Transfer Ownership
+                                    </Button>
+                                </NextLink>
+                            </>
+                        )}
                     </SectionHeader>
                 </Grid>
 

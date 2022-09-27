@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { WalletContext } from '../../contexts/wallet-context';
 import { AppContext } from '../../contexts/app-context';
 import { LoadingButton } from '@mui/lab';
@@ -14,18 +13,15 @@ import {
     InputLabel,
     MenuItem,
     Typography,
-    TextField
+    TextField,
+    Stack,
 } from '@mui/material';
-import {
-    forwardRef,
-    useContext,
-    useImperativeHandle,
-    useState,
-    useEffect
-} from 'react';
+import { forwardRef, useContext, useImperativeHandle, useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { useSnackbar } from 'notistack';
 import artifact from '../../../artifacts/GoingUpUtilityToken.json';
+import AccountNameAddress from './account-name-address';
+import { UtilityTokensContext } from '../../contexts/utility-tokens-context';
 
 const SendAppreciationToken = (props, ref) => {
     const { sendToName, sendToAddress } = props;
@@ -33,15 +29,28 @@ const SendAppreciationToken = (props, ref) => {
     const [sending, setSending] = useState(false);
 
     const [tier, setTier] = useState(1);
+    const [amount, setAmount] = useState(1);
     const [message, setMessage] = useState('');
+    const [member, setMember] = useState(null);
+    const [projectId, setProjectId] = useState(null);
 
     const wallet = useContext(WalletContext);
     const { enqueueSnackbar } = useSnackbar();
 
+    const utilityTokensContext = useContext(UtilityTokensContext);
+
     useImperativeHandle(ref, () => ({
         showModal() {
             setOpen(true);
-        }
+        },
+
+        openFromProjectMember(projectId, member) {
+            setProjectId(projectId);
+            setMember(member);
+            setTier(member.reward?.tokenId || 1);
+            setAmount(member.reward?.amount || 1);
+            setOpen(true);
+        },
     }));
 
     const close = () => {
@@ -49,49 +58,31 @@ const SendAppreciationToken = (props, ref) => {
     };
 
     const fieldStyle = {
-        m: 1
+        m: 1,
     };
 
     const send = async () => {
         setSending(true);
         try {
             if (wallet.chain === 'Ethereum') {
-                if (wallet.network != wallet.utilityToken.chainId) {
-                    enqueueSnackbar(`Please switch to ${wallet.utilityToken.chainName} 💫`, {
-                        variant: 'error'
+                const tx = await utilityTokensContext.sendUtilityToken(sendToAddress, tier, amount, message); console.log('sendAppreciationToken.js: send() tx:', tx);
+
+                if (tx) {
+                    enqueueSnackbar(`The appreciation token mint transaction has been submitted to the blockchain 👍`, {
+                        variant: 'success',
                     });
-                    return;
+
+                    close();
                 }
-                const address = wallet.utilityToken.address;
-                const signer = wallet.ethersSigner;
-
-                const contract = new ethers.Contract(
-                    address,
-                    artifact.abi,
-                    signer
-                );
-                const settings = await contract.tokenSettings(tier);
-                const tx = await contract.mint(sendToAddress, tier, 1, Boolean(message), message, {
-                    value: settings.price
-                });
-
-                enqueueSnackbar(
-                    `The appreciation token mint transaction has been submitted to the blockchain 👍`,
-                    { variant: 'success' }
-                );
-                close();
             }
 
             if (wallet.chain === 'Cardano') {
-                enqueueSnackbar(
-                    'Sorry, appreciation tokens are not yet available for Cardano',
-                    { variant: 'error' }
-                );
+                enqueueSnackbar('Sorry, appreciation tokens are not yet available for Cardano', { variant: 'error' });
             }
         } catch (err) {
             console.log(err);
             enqueueSnackbar('Sorry something went wrong 😥', {
-                variant: 'error'
+                variant: 'error',
             });
         } finally {
             setSending(false);
@@ -100,9 +91,9 @@ const SendAppreciationToken = (props, ref) => {
 
     return (
         <div>
-            <Dialog open={open} onClose={close} maxWidth="lg">
+            <Dialog open={open} onClose={close} maxWidth="sm">
                 <DialogTitle>
-                    Send Appreciation Token To {sendToName}
+                    Send Appreciation Token To <AccountNameAddress address={sendToAddress} />
                 </DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2}>
@@ -110,18 +101,17 @@ const SendAppreciationToken = (props, ref) => {
                             <img
                                 src={`/images/appreciation-token-t${tier}-display.png`}
                                 style={{ maxWidth: '200px' }}
-                                alt='appreciation-token'
+                                alt="appreciation-token"
                             />
                         </Grid>
                         <Grid
                             item
                             xs={12}
-                            sx={{ paddingTop: '25px !important' }}
+                            md={Boolean(member) ? 6 : 12}
+                            sx={{ paddingTop: { sm: 'initial', md: '25px !important' } }}
                         >
                             <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">
-                                    Token Tier
-                                </InputLabel>
+                                <InputLabel id="demo-simple-select-label">Token Tier</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
@@ -131,22 +121,27 @@ const SendAppreciationToken = (props, ref) => {
                                         // @ts-ignore
                                         setTier(parseInt(e.target.value));
                                     }}
+                                    disabled={Boolean(member)}
                                 >
-                                    <MenuItem value={1}>
-                                        Appreciation Token Tier 1
-                                    </MenuItem>
-                                    <MenuItem value={2}>
-                                        Appreciation Token Tier 2
-                                    </MenuItem>
-                                    <MenuItem value={3}>
-                                        Appreciation Token Tier 3
-                                    </MenuItem>
-                                    <MenuItem value={4}>
-                                        Appreciation Token Tier 4
-                                    </MenuItem>
+                                    <MenuItem value={1}>Appreciation Token Tier 1</MenuItem>
+                                    <MenuItem value={2}>Appreciation Token Tier 2</MenuItem>
+                                    <MenuItem value={3}>Appreciation Token Tier 3</MenuItem>
+                                    <MenuItem value={4}>Appreciation Token Tier 4</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
+
+                        {Boolean(member) && (
+                            <Grid
+                                item
+                                xs={12}
+                                md={Boolean(member) ? 6 : 12}
+                                sx={{ paddingTop: { sm: 'initial', md: '25px !important' } }}
+                            >
+                                <TextField label="Amount" fullWidth value={amount} disabled />
+                            </Grid>
+                        )}
+
                         <Grid item xs={12} sx={{ textAlign: 'center' }}>
                             <TextField
                                 label="Message"
@@ -154,29 +149,28 @@ const SendAppreciationToken = (props, ref) => {
                                 rows={4}
                                 fullWidth
                                 value={message}
-                                onChange={e => setMessage(e.target.value)}
+                                onChange={(e) => setMessage(e.target.value)}
                             />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} justifyContent="flex-start">
+                                <LoadingButton
+                                    loading={sending}
+                                    loadingIndicator="Submitting..."
+                                    color="primary"
+                                    variant="contained"
+                                    onClick={send}
+                                >
+                                    Send Appreciation Token
+                                </LoadingButton>
+                                <Button color="secondary" variant="contained" onClick={close}>
+                                    Cancel
+                                </Button>
+                            </Stack>
                         </Grid>
                     </Grid>
                 </DialogContent>
-                <DialogActions>
-                    <Button
-                        color="secondary"
-                        variant="contained"
-                        onClick={close}
-                    >
-                        Cancel
-                    </Button>
-                    <LoadingButton
-                        loading={sending}
-                        loadingIndicator="Submitting..."
-                        color="primary"
-                        variant="contained"
-                        onClick={send}
-                    >
-                        Send Appreciation Token
-                    </LoadingButton>
-                </DialogActions>
             </Dialog>
         </div>
     );
