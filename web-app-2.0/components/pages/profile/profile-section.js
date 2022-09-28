@@ -373,7 +373,7 @@ const ProfileSection = (props) => {
                                                 width: "fit-content",
                                                 padding: "6px 12px",
                                             }}>
-                                                💎 Premium
+                                                💎 OG Member
                                             </Typography>
                                         )}
                                         <Typography marginTop={'10px'} variant='h1'>
