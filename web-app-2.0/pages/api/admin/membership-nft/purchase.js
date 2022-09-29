@@ -34,9 +34,11 @@ export default async function handler(req, res) {
 
     let pk;
     switch (account) {
+        case 'heather':
         case 'emmanuel':
             pk = process.env.EMMANUEL_SALES_PK;
             break;
+        case 'jack':
         case 'anbessa':
             pk = process.env.ANBESSA_SALES_PK;
             break;
