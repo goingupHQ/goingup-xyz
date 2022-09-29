@@ -55,8 +55,8 @@ export default function SentAppreciationTokenCard(props) {
     return (
         <>
             <Box>
-                {messages.map((message) => (
-                    <Grid item xs={12} key={message}>
+                {messages.map((message, key) => (
+                    <Grid item xs={12} key={key}>
                         <Typography>{message}</Typography>
                     </Grid>
                 ))}
