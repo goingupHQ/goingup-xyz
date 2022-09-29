@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../contexts/app-context";
 import { WalletContext } from "../../../contexts/wallet-context";
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 import {
     Grid,
     Card,
@@ -24,7 +24,7 @@ import { useTheme } from "@mui/material";
 import SendAppreciationToken from "../../common/SendAppreciationToken";
 import FollowersList from "./followers-list";
 import FollowingList from "./following-list";
-import EditProfile from './edit-profile';
+import EditProfile from "./edit-profile";
 
 const ProfileSection = (props) => {
     const wallet = useContext(WalletContext);
@@ -49,8 +49,8 @@ const ProfileSection = (props) => {
     const [checkHolder, setCheckHolder] = useState(true);
 
     const uploadPhoto = async (e, photoType) => {
-        if (photoType === 'cover-photo') setUploadingCover(true);
-        if (photoType === 'profile-photo') setUploadingProfile(true);
+        if (photoType === "cover-photo") setUploadingCover(true);
+        if (photoType === "profile-photo") setUploadingProfile(true);
 
         try {
             const file = e.target.files[0];
@@ -66,12 +66,12 @@ const ProfileSection = (props) => {
             });
 
             const { address, ethersSigner } = wallet;
-            const message = 'update-account';
+            const message = "update-account";
             const signature = await wallet.signMessage(message);
 
             const upload = await fetch(url, {
-                method: 'POST',
-                body: formData
+                method: "POST",
+                body: formData,
             });
 
             if (upload.ok) {
@@ -81,51 +81,51 @@ const ProfileSection = (props) => {
                 );
 
                 let account = {};
-                if (photoType === 'cover-photo')
+                if (photoType === "cover-photo")
                     account.coverPhoto = `${upload.url}${filename}`;
-                if (photoType === 'profile-photo')
+                if (photoType === "profile-photo")
                     account.profilePhoto = `${upload.url}${filename}`;
 
-                const response = await fetch('/api/update-account', {
-                    method: 'POST',
+                const response = await fetch("/api/update-account", {
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
                         address,
                         signature,
-                        account
-                    })
+                        account,
+                    }),
                 });
 
                 if (response.status === 200) {
                     props.refresh();
                     const msg =
-                        photoType === 'cover-photo'
-                            ? 'Cover photo uploaded'
-                            : 'Profile photo uploaded';
-                    enqueueSnackbar(msg, { variant: 'success' });
+                        photoType === "cover-photo"
+                            ? "Cover photo uploaded"
+                            : "Profile photo uploaded";
+                    enqueueSnackbar(msg, { variant: "success" });
                 }
             } else {
-                throw 'Upload failed.';
+                throw "Upload failed.";
             }
         } catch (err) {
             const msg = `Could not upload your ${
-                photoType === 'cover-photo' ? 'cover' : 'profile'
+                photoType === "cover-photo" ? "cover" : "profile"
             } photo`;
-            enqueueSnackbar('Could not upload your cover photo', {
-                variant: 'error'
+            enqueueSnackbar("Could not upload your cover photo", {
+                variant: "error",
             });
             console.log(err);
         } finally {
-            if (photoType === 'cover-photo') {
+            if (photoType === "cover-photo") {
                 setUploadingCover(false);
-                uploadCoverInputRef.current.value = '';
+                uploadCoverInputRef.current.value = "";
             }
 
-            if (photoType === 'profile-photo') {
+            if (photoType === "profile-photo") {
                 setUploadingProfile(false);
-                uploadProfileInputRef.current.value = '';
+                uploadProfileInputRef.current.value = "";
             }
         }
     };
@@ -157,17 +157,17 @@ const ProfileSection = (props) => {
         if (account.address) {
             setCheckHolder(true);
             fetch(`/api/accounts/${account.address}/is-membership-nft-holder`)
-            .then(async (response) => {
-                const result = await response.json();
-                if (result.isHolder === true) {
-                    setIsHolder(true);
-                } else {
-                    setIsHolder(false);
-                }
-            })
-            .finally(() => setCheckHolder(false));
+                .then(async (response) => {
+                    const result = await response.json();
+                    if (result.isHolder === true) {
+                        setIsHolder(true);
+                    } else {
+                        setIsHolder(false);
+                    }
+                })
+                .finally(() => setCheckHolder(false));
         }
-    }, [account.address]); 
+    }, [account.address]);
 
     const follow = async () => {
         if (!wallet.address) {
@@ -362,21 +362,29 @@ const ProfileSection = (props) => {
                                 }
                                 title={
                                     <>
-                                        {checkHolder && (<CircularProgress size={'14px'} />)}
+                                        {checkHolder && (
+                                            <CircularProgress size={"14px"} />
+                                        )}
                                         {!checkHolder && isHolder && (
-                                            <Typography variant="sh3" sx={{
-                                                backgroundColor:
-                                                    app.mode === "dark"
-                                                        ? "#192530"
-                                                        : "#CFCFCF",
-                                                borderRadius: "8px",
-                                                width: "fit-content",
-                                                padding: "6px 12px",
-                                            }}>
+                                            <Typography
+                                                variant='sh3'
+                                                sx={{
+                                                    backgroundColor:
+                                                        app.mode === "dark"
+                                                            ? "#192530"
+                                                            : "#CFCFCF",
+                                                    borderRadius: "8px",
+                                                    width: "fit-content",
+                                                    padding: "6px 12px",
+                                                }}
+                                            >
                                                 💎 OG Member
                                             </Typography>
                                         )}
-                                        <Typography marginTop={'10px'} variant='h1'>
+                                        <Typography
+                                            marginTop={"10px"}
+                                            variant='h1'
+                                        >
                                             {account.name}
                                         </Typography>
                                         <Box>
@@ -574,9 +582,10 @@ const ProfileSection = (props) => {
                                     variant='sh2'
                                     sx={{ marginX: { xs: "27px", md: "42px" } }}
                                 >
-                                    {account.chain === 'Ethereum' &&
+                                    {account.chain === "Ethereum" &&
                                         truncateEthAddress(account.address)}
-                                    {account.chain != 'Ethereum' && `Wallet Address`}
+                                    {account.chain != "Ethereum" &&
+                                        `Wallet Address`}
                                 </Typography>
                             </Stack>
                             {myAccount && (
@@ -594,8 +603,7 @@ const ProfileSection = (props) => {
                                             variant='outlined'
                                             sx={{
                                                 color:
-                                                    app.mode ===
-                                                    "dark"
+                                                    app.mode === "dark"
                                                         ? "#FFFFFF"
                                                         : "#22272F",
                                             }}
@@ -688,21 +696,15 @@ const ProfileSection = (props) => {
                                 </>
                             )}
                         </Grid>
-                        <Typography
-                            variant='sh1'
-                            sx={{ margin: { md: "30px" } }}
-                        >
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit, sed do eiusmod tempor incididunt ut labore et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in
-                            reprehenderit in voluptate velit esse cillum dolore
-                            eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui officia
-                            deserunt mollit anim id est laborum.
-                        </Typography>
                     </Grid>
+                        <Box margin={3}>
+                            <Typography
+                                variant='sh1'
+                                sx={{ margin: {xs: "5px", md: "30px" } }}
+                            >
+                                {account.about}
+                            </Typography>
+                        </Box>
                 </Card>
             </Fade>
             <EditProfile
