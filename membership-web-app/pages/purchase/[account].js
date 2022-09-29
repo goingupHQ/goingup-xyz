@@ -19,15 +19,21 @@ export default function Purchase() {
         main: {
             address: '0xff188235879FA2dB8438802e399Ed31CaB0F61E4',
         },
-        emmanuel: {
+        heather: {
             address: '0xa96e945fd471C67B16D138b59Cc8abA4E8171b00',
         },
-        anbessa: {
+        jack: {
             address: '0xD8A1330988e89e20b9FFa1739E3F85c9cBa8eF51',
         },
-        ebae: {
-            address: '0xfCdFa41fA58AA9c5E4ef76FDd709c8E10dd3Bb42',
-        },
+        // emmanuel: {
+        //     address: '0xa96e945fd471C67B16D138b59Cc8abA4E8171b00',
+        // },
+        // anbessa: {
+        //     address: '0xD8A1330988e89e20b9FFa1739E3F85c9cBa8eF51',
+        // },
+        // ebae: {
+        //     address: '0xfCdFa41fA58AA9c5E4ef76FDd709c8E10dd3Bb42',
+        // },
     };
 
     const accountAddress = accounts[account]?.address;
@@ -161,7 +167,16 @@ export default function Purchase() {
             setMintStep(7);
         } catch (err) {
             if (typeof err === 'string') enqueueSnackbar(err, { variant: 'error' });
-            else if (typeof err.message === 'string') enqueueSnackbar(err.message, { variant: 'error' });
+            else if (typeof err.message === 'string') {
+                console.log(err.message);
+                if (err.message.startsWith('insufficient funds')) {
+                    enqueueSnackbar('Sorry you do not have enough ETH in your wallet', { variant: 'error' });
+                } else {
+                    enqueueSnackbar(err.message, { variant: 'error' });
+                }
+            } else if (typeof err.reason === 'string') enqueueSnackbar(err.reason, { variant: 'error' });
+            else enqueueSnackbar('Something went wrong. Please contact GoingUP support.', { variant: 'error' });
+
             console.log(err);
             setMinting(false);
         }

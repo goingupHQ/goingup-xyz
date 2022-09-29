@@ -10,6 +10,11 @@ export default async function handler(req, res) {
     const { address } = req.query;
     const { notification } = req.body;
 
+    if (!notification) {
+        res.status(400).json({ error: 'Bad Request' });
+        return;
+    }
+
     const db = await getDb();
     const psnSubscriptions = await db.collection('psn-subscriptions').find({ address }).toArray();
 
