@@ -144,13 +144,17 @@ export function WalletProvider({ children }) {
             if (Notification.permission === 'granted') {
                 // check for existing subscription
                 if (localStorage.getItem('psn-subscription')) {
-                    const subscription = JSON.parse(localStorage.getItem('subscription'));
-                    postPsnSubscription(subscription);
-                } else {
-                    app.subscribeUserToPush()
-                        .then((subscription) => {
+                    const subscription = JSON.parse(localStorage.getItem('psn-subscription'));
+                    if (subscription) postPsnSubscription(subscription);
+                    else {
+                        app.subscribeUserToPush().then((subscription) => {
                             postPsnSubscription(subscription);
                         });
+                    }
+                } else {
+                    app.subscribeUserToPush().then((subscription) => {
+                        postPsnSubscription(subscription);
+                    });
                 }
             }
 
@@ -199,7 +203,7 @@ export function WalletProvider({ children }) {
 
             if (result === 'granted') {
                 const subscription = await app.subscribeUserToPush();
-                postPsnSubscription(subscription);
+                postPsnSubscription(subscription, true);
             } else {
                 enqueueSnackbar('You did not allow notifications', { variant: 'warning' });
             }
@@ -210,7 +214,7 @@ export function WalletProvider({ children }) {
         }
     };
 
-    const postPsnSubscription = async (subscription) => {
+    const postPsnSubscription = async (subscription, showNotification = false) => {
         if (subscription) {
             localStorage.setItem('psn-subscription', JSON.stringify(subscription));
             await fetch('/api/psn', {
@@ -223,10 +227,9 @@ export function WalletProvider({ children }) {
                     address,
                 }),
             });
-
-            enqueueSnackbar('Notifications enabled', { variant: 'success' });
+            if (showNotification) enqueueSnackbar('Notifications enabled', { variant: 'success' });
         }
-    }
+    };
 
     const connect = async () => {
         let cache;
@@ -427,7 +430,7 @@ export function WalletProvider({ children }) {
         get provider() {
             return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALPOLY_TEST);
         },
-    }
+    };
 
     const setWeb3ModalTheme = (theme) => {
         web3ModalOptions.theme = theme;

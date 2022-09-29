@@ -24,7 +24,7 @@ import AccountNameAddress from './account-name-address';
 import { UtilityTokensContext } from '../../contexts/utility-tokens-context';
 
 const SendAppreciationToken = (props, ref) => {
-    const { sendToName, sendToAddress } = props;
+    const { sendToName, sendToAddress, onSent } = props;
     const [open, setOpen] = useState(false);
     const [sending, setSending] = useState(false);
 
@@ -68,6 +68,26 @@ const SendAppreciationToken = (props, ref) => {
                 const tx = await utilityTokensContext.sendUtilityToken(sendToAddress, tier, amount, message); console.log('sendAppreciationToken.js: send() tx:', tx);
 
                 if (tx) {
+                    if (projectId && member?.address) {
+                        fetch(`/api/projects/rewards/${tx.hash}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                projectId,
+                                member: member.address,
+                                tokenId: tier,
+                                amount,
+                                type: 'goingup-appreciation-token',
+                            }),
+                        });
+                    }
+
+                    if (onSent && typeof onSent === 'function') {
+                        onSent();
+                    }
+
                     enqueueSnackbar(`The appreciation token mint transaction has been submitted to the blockchain 👍`, {
                         variant: 'success',
                     });

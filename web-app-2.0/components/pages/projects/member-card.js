@@ -23,7 +23,25 @@ export default function MemberCard(props) {
         setLoading(true);
         try {
             const result = await projectsContext.getProjectMember(projectId, member);
+
+            const rewardsResponse = await fetch(
+                `/api/projects/rewards/get-by-member?projectId=${projectId}&member=${member}`
+            );
+
+            if (rewardsResponse.ok) {
+                const rewards = await rewardsResponse.json();
+                result.rewards = rewards;
+
+                setSendingReward(result.rewards?.unverified?.length > 0 && result.rewards?.verified?.length === 0);
+
+                setTimeout(() => {
+                    load();
+                }, 6 * 1000 * 60);
+
+                setRewardVerified(result.rewards?.verified?.length > 0);
+            }
             setMemberData(result);
+
         } catch (err) {
             console.log(err);
         } finally {
@@ -115,6 +133,7 @@ export default function MemberCard(props) {
     };
 
     const [sendingReward, setSendingReward] = React.useState(false);
+    const [rewardVerified, setRewardVerified] = React.useState(false);
     const sendReward = async () => {
         const rewardType = memberData.reward.type;
 
@@ -124,7 +143,7 @@ export default function MemberCard(props) {
         }
 
         if (rewardType === 'goingup-utility') {
-            satRef.current.openFromProjectMember(projectId, memberData);
+            satRef.current.openFromProjectMember(projectId, memberData, () => { load() });
         }
     };
 
@@ -170,8 +189,9 @@ export default function MemberCard(props) {
                                     loading={sendingReward}
                                     loadingIndicator={<CircularProgress size={14} />}
                                     onClick={sendReward}
+                                    disabled={rewardVerified}
                                 >
-                                    Send Reward
+                                    {rewardVerified ? 'Reward Verified' : 'Send Reward'}
                                 </LoadingButton>
                             )}
 
@@ -189,7 +209,7 @@ export default function MemberCard(props) {
                 </Stack>
             )}
 
-            <SendAppreciationToken ref={satRef} sendToAddress={member} />
+            <SendAppreciationToken ref={satRef} sendToAddress={member} onSent={load} />
         </Paper>
     );
 }
