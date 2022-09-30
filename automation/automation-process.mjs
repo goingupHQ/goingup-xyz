@@ -229,11 +229,6 @@ const verifyReward = async (txhash) => {
                                     }
                                 });
                         }
-
-                        // const tx = await projectsContractAsSigner.setMemberRewardAsVerified(
-                        //     reward.projectId,
-                        //     reward.member
-                        // );
                     }
 
                     if (receipt.status === 0) {
@@ -246,8 +241,6 @@ const verifyReward = async (txhash) => {
         }
     });
 };
-
-verifyReward('0x307ecb79dfa96f857c6431b7f4a1932e77d5bf70279833fbb33a17ae8dd5fe0d');
 
 console.info('Event Listener Started');
 setInterval(() => {}, 1 << 30);
