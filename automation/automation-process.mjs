@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import { ethers } from 'ethers';
 import fs from 'fs';
-// import { sendEmail } from './services/_sendinblue.mjs';
 import { MongoClient } from 'mongodb';
 import webpush from './get-web-push.mjs';
 
@@ -31,12 +30,16 @@ if (process.env.DEPLOYMENT === 'dev') {
         mumbaiProvider
     );
 } else if (process.env.DEPLOYMENT === 'production') {
-    // projectsContract = new ethers.Contract('NONE', projectsArtifact.abi, polygonProvider);
-    // utilityContract = new ethers.Contract(
-    //     '0x10D7B3aFA213D93a922a062fb91E8EcbD4A703d2',
-    //     utilityArtifact.abi,
-    //     polygonProvider
-    // );
+    projectsContract = new ethers.Contract(
+        '0xb6b83BaE8251d305FcbdaF2aE8cDffAC39216C95',
+        projectsArtifact.abi,
+        polygonProvider
+    );
+    utilityContract = new ethers.Contract(
+        '0x10D7B3aFA213D93a922a062fb91E8EcbD4A703d2',
+        utilityArtifact.abi,
+        polygonProvider
+    );
 }
 
 const sendNotificationToAddress = async (address, title, body, urlToOpen) => {
