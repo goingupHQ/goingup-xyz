@@ -15,12 +15,12 @@ export const ProjectsProvider = ({ children }) => {
     const utilityTokensContext = useContext(UtilityTokensContext);
 
     // polygon mumbai testnet
-    const contractAddress = '0xF5df032832cb3c4BEf2D28B440fA57D5dAC47881';
-    const contractNetwork = 80001;
+    // const contractAddress = '0xF5df032832cb3c4BEf2D28B440fA57D5dAC47881';
+    // const contractNetwork = 80001;
 
     // polygon mainnet
-    // const contractAddress = 'NOT_YET_DEPLOYED';
-    // const contractNetwork = 137;
+    const contractAddress = '0xb6b83BaE8251d305FcbdaF2aE8cDffAC39216C95';
+    const contractNetwork = 137;
 
     const { networkParams } = wallet.networks[contractNetwork];
 

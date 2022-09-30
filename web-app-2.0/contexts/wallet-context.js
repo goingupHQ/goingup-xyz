@@ -37,7 +37,7 @@ const networks = {
         group: 'polygon',
         networkParams: {
             chainId: '0x89',
-            chainName: 'Matic Mainnet',
+            chainName: 'Polygon Mainnet',
             nativeCurrency: {
                 name: 'MATIC',
                 symbol: 'MATIC',
