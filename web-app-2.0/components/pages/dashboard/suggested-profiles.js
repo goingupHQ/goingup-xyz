@@ -78,9 +78,11 @@ export default function SuggestedProfiles() {
                                     <Card
                                         key={item.address}
                                         sx={{
-                                            margin: "30px",
+                                            marginTop: "15px",
+                                            ml: "none",
+                                            mr: "15px",
                                             padding: "24px",
-                                            width: "430px",
+                                            width: { xs: "100%", md: "47%", lg:"31%" },
                                         }}
                                     >
                                         <Grid item>
@@ -238,7 +240,7 @@ export default function SuggestedProfiles() {
                                                 }
                                                 title={
                                                     <>
-                                                        <Typography variant='h2'>
+                                                        <Typography variant='h3'>
                                                             {item.name}
                                                         </Typography>
                                                         <Box>
@@ -288,7 +290,9 @@ export default function SuggestedProfiles() {
 
                                                         paddingY: { md: "5px" },
                                                         paddingBottom: "3px",
-                                                        paddingX: "50px",
+                                                        mx: "auto",
+                                                        ml: "none",
+                                                        paddingX: {xs: "50px", md: "20", lg: "10px"},
                                                     }}
                                                 >
                                                     <Typography
@@ -305,7 +309,8 @@ export default function SuggestedProfiles() {
                                                 <Typography
                                                     variant='sh2'
                                                     sx={{
-                                                        marginRight: "42px",
+                                                        mx: "auto",
+                                                        paddingX: "10px",
                                                     }}
                                                 >
                                                     {item.chain ===
