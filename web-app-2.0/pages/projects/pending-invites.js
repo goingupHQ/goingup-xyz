@@ -7,12 +7,15 @@ import LoadingIllustration from '../../components/common/loading-illustration';
 import { WalletContext } from '../../contexts/wallet-context';
 import { useSnackbar } from 'notistack';
 import WrongNetwork from '../../components/pages/projects/wrong-network';
+import { useRouter } from 'next/router';
 
 export default function PendingInvites(props) {
     const wallet = React.useContext(WalletContext);
     const projectsContext = React.useContext(ProjectsContext);
     const [pendingInvites, setPendingInvites] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
+
+    const router = useRouter();
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -62,7 +65,7 @@ export default function PendingInvites(props) {
                 enqueueSnackbar('Accept project invitation tx confirmed', {
                     variant: 'success',
                 });
-                load();
+                router.push(`/projects/page/${projectId}`);
                 setAccepting(false);
             });
         } catch (e) {

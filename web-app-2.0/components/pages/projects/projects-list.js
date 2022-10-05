@@ -46,7 +46,9 @@ export default function ProjectsList(props) {
     };
 
     useEffect(() => {
+        //
         if (wallet.address) load();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wallet.address]);
 
     return (
