@@ -109,6 +109,34 @@ export const ProjectsProvider = ({ children }) => {
         return projects;
     };
 
+    const getAccountProjects = async () => {
+        const contract = getContract();
+        const projects = [];
+
+        const response = await fetch(`/api/projects/account/${router.query.address}`);
+        const projectIds = await response.json();
+
+        for (const projectId of projectIds) {
+            const project = await contract.projects(projectId);
+            projects.push(project);
+        }
+
+        return projects;
+    };
+
+    const getAccountJoinedProjects = async (address) => {
+        const contract = getContract();
+        const projectIds = await contract.getProjectsByAddress(router.query.address);
+
+        const projects = [];
+        for (const projectId of projectIds) {
+            const project = await contract.projects(projectId);
+            projects.push(project);
+        }
+
+        return projects;
+    }
+
     const getProjectsAfterBlock = async (block) => {
         const contract = getContract();
         const projects = [];
@@ -308,6 +336,8 @@ export const ProjectsProvider = ({ children }) => {
         getProjects,
         getProjectsAfterBlock,
         getProject,
+        getAccountProjects,
+        getAccountJoinedProjects,
         getJoinedProjects,
         createProject,
         updateProject,
