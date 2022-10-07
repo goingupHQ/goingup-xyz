@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import possessive from "@wardrakus/possessive";
-import TopSection from "../../components/pages/profile/top-section";
 import {
     Grid,
     CardContent,
@@ -11,10 +10,10 @@ import {
     Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import Projects from "../projects";
 import Poaps from "../../components/pages/profile/poaps";
 import AppreciationTokens from "../../components/pages/profile/appreciation-tokens";
 import ProfileSection from "../../components/pages/profile/profile-section";
+import ProjectsSection from "../../components/pages/profile/project-sections";
 
 const CardContentWrapper = styled(CardContent)(
     () => `
@@ -66,12 +65,7 @@ function ProfilePage() {
                                 account={account}
                                 refresh={getAccount}
                             />
-                            {/* <TopSection
-                                account={account}
-                                refresh={getAccount}
-                            /> */}
-                            {/* <Projects account={account} /> */}
-
+                            <ProjectsSection account={account} />
                             <AppreciationTokens
                                 account={account}
                                 refresh={getAccount}
