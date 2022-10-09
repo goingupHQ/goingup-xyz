@@ -24,7 +24,6 @@ import moment from 'moment';
 import { isURL } from 'validator';
 import { WalletContext } from '../../../contexts/wallet-context';
 import { v4 as uuid } from "uuid";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 export default function ProjectForm(props) {
     const projectsContext = useContext(ProjectsContext);
@@ -183,6 +182,7 @@ export default function ProjectForm(props) {
                     form.ended,
                     form.primaryUrl,
                     form.tags,
+                    form.isPrivate,
                     form.projectImage,
                 );
 
@@ -376,7 +376,7 @@ export default function ProjectForm(props) {
                                         type='file'
                                         style={{ display: "none" }}
                                         onChange={(e) => {
-                                            uploadPhoto(e, "profile-photo");
+                                            uploadPhoto(e);
                                         }}
                                     />
                                     <Button
