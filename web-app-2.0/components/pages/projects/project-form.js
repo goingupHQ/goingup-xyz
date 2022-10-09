@@ -11,9 +11,10 @@ import {
     Backdrop,
     CircularProgress,
     Paper,
+    IconButton,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { ProjectsContext } from '../../../contexts/projects-context';
 import { AppContext } from '../../../contexts/app-context';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
@@ -22,6 +23,8 @@ import { useRouter } from 'next/router';
 import moment from 'moment';
 import { isURL } from 'validator';
 import { WalletContext } from '../../../contexts/wallet-context';
+import { v4 as uuid } from "uuid";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 export default function ProjectForm(props) {
     const projectsContext = useContext(ProjectsContext);
@@ -39,6 +42,7 @@ export default function ProjectForm(props) {
         primaryUrl: '',
         tags: [],
         isPrivate: false,
+        projectImage: null,
     });
 
     const [oldForm, setOldForm] = useState({
@@ -49,10 +53,77 @@ export default function ProjectForm(props) {
         primaryUrl: '',
         tags: [],
         isPrivate: false,
+        projectImage: null,
     });
 
     const [loading, setLoading] = useState(true);
+    const [uploadoadingImage, setUploadingImage] = useState(false);
+    const uploadImage = useRef(null);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+    const uploadPhoto = async (e, projectImage) => {
+        setUploadingImage(true);
+
+        try {
+            const file = e.target.files[0];
+            // const filename = encodeURIComponent(file.name);
+            const filename = uuid();
+            const res = await fetch(`/api/upload-to-gcp?file=${filename}`);
+            const { url, fields } = await res.json();
+            const formData = new FormData();
+
+            Object.entries({ ...fields, file }).forEach(([key, value]) => {
+                // @ts-ignore
+                formData.append(key, value);
+            });
+
+            const { address, ethersSigner } = wallet;
+            const message = "update-account";
+            const signature = await wallet.signMessage(message);
+
+            const upload = await fetch(url, {
+                method: "POST",
+                body: formData,
+            });
+
+            if (upload.ok) {
+                console.log(
+                    `Uploaded successfully to ${upload.url}${filename}`,
+                    projectImage
+                );
+
+                let account = {};
+                account.projectImage = `${upload.url}${filename}`
+
+                const response = await fetch("/api/update-account", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        address,
+                        signature,
+                        account,
+                    }),
+                });
+
+                if (response.status === 200) {
+                    props.refresh();
+                    const msg = "Project image uploded";
+                    enqueueSnackbar(msg, { variant: "success" });
+                }
+            } else {
+                throw "Upload failed.";
+            }
+        } catch (err) {
+            const msg = "Could not upload your project image";
+            enqueueSnackbar(msg, { variant: "error" });
+            console.log(err);
+        } finally {
+            setUploadingImage(false);
+            uploadImage.current.value = "";
+        }
+    };
 
     useEffect(() => {
         //
@@ -66,6 +137,7 @@ export default function ProjectForm(props) {
                 primaryUrl: projectData.primaryUrl,
                 tags: projectData.tags.split(',').map((tag) => tag.trim()),
                 isPrivate: projectData.isPrivate,
+                projectImage: projectData.projectImage,
             });
 
             setOldForm({
@@ -77,6 +149,7 @@ export default function ProjectForm(props) {
                 primaryUrl: projectData.primaryUrl,
                 tags: projectData.tags.split(',').map((tag) => tag.trim()),
                 isPrivate: projectData.isPrivate,
+                projectImage: projectData.projectImage,
             });
             setLoading(false);
         } else {
@@ -109,7 +182,8 @@ export default function ProjectForm(props) {
                     form.started,
                     form.ended,
                     form.primaryUrl,
-                    form.tags
+                    form.tags,
+                    form.projectImage,
                 );
 
                 closeSnackbar();
@@ -146,7 +220,8 @@ export default function ProjectForm(props) {
                     form.ended,
                     form.primaryUrl,
                     form.tags,
-                    form.isPrivate
+                    form.isPrivate,
+                    form.projectImage,
                 );
 
                 closeSnackbar();
@@ -293,6 +368,32 @@ export default function ProjectForm(props) {
                             <LoadingButton variant="contained" onClick={() => sendProject()}>
                                 {isCreate ? 'Create Project' : 'Update Project'}
                             </LoadingButton>
+                            <>
+                                    <input
+                                        ref={uploadImage}
+                                        accept='image/*'
+                                        id='contained-button-file'
+                                        type='file'
+                                        style={{ display: "none" }}
+                                        onChange={(e) => {
+                                            uploadPhoto(e, "profile-photo");
+                                        }}
+                                    />
+                                    <Button
+                                        disabled={uploadoadingImage}
+                                        color='success'
+                                        onClick={() => {
+                                            uploadImage.current.click();
+                                        }}
+                                    >
+                                        {uploadoadingImage && (
+                                            <CircularProgress size='20px' />
+                                        )}
+                                        {!uploadoadingImage && (
+                                            <Button variant="contained">Upload Image</Button>
+                                        )}
+                                    </Button>
+                                </>
                         </Grid>
                     </Grid>
                 </Paper>
