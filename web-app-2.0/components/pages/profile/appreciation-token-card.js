@@ -28,16 +28,18 @@ export default function AppreciationTokenCard(props) {
                 try {
                     const result = await getMessages(tier);
                     setMessages(result);
+                    console.log('result', result);
                 } catch (err) {
                     console.log(err);
                 } finally {
                     setLoading(false);
                 }
             }
-
+            if (router.isReady) {
         load();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [router.isReady]);
 
     let intervalId;
     useEffect(() => {
@@ -73,12 +75,15 @@ export default function AppreciationTokenCard(props) {
             const senderAddress = sender === router.query.address;
             setSentTo(senderAddress);
             console.log('senderAddress', senderAddress);
+            if(senderAddress) {
             return message;
+            }
         });
 
         // for (const m of messages) m.block = await contract.provider.getBlock(m.blockNumber);
-
-        for (const m of messagesResult) {
+        const filterMessageResult = messagesResult.filter((m) => Boolean(m));
+        console.log('filterMessageResult', filterMessageResult);
+        for (const m of filterMessageResult) {
             const fromName = await getSenderAccountName(m.to);
             const toName = await getSenderAccountName(m.from);
             console.log(fromName);
@@ -88,8 +93,7 @@ export default function AppreciationTokenCard(props) {
             }
         }
 
-        console.log('messagesResult', messagesResult);
-        return messagesResult;
+        return filterMessageResult;
     };
 
     const getSenderAccountName = async (address) => {
