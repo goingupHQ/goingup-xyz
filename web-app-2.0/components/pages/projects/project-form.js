@@ -39,8 +39,8 @@ export default function ProjectForm(props) {
         started: null,
         ended: null,
         primaryUrl: '',
-        tags: [],
-        isPrivate: false,
+            tags: [],
+            isPrivate: false,
         projectImage: null,
     });
 

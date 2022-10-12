@@ -15,6 +15,7 @@ import {
     Typography,
 } from "@mui/material";
 import ProjectSectionCard from "./project-section-card";
+import { useRouter } from "next/router";
 
 export default function ProjectsSection(props) {
     const { account } = props;
@@ -28,6 +29,8 @@ export default function ProjectsSection(props) {
     const [joinedProjects, setJoinedProjects] = useState([]);
     const [projectOwner, setProjectOwner] = useState(false);
     const [projectContributor, setProjectContributor] = useState(false);
+    const router = useRouter();
+    const { address } = router.query;
 
     const handleClick = () => {
         setProjectOwner((current) => !current);
@@ -37,11 +40,9 @@ export default function ProjectsSection(props) {
     const load = async () => {
         setLoading(true);
         try {
-            const ownedProjects = await projectsContext.getAccountProjects(
-                account.address
-            );
+            const ownedProjects = await projectsContext.getAccountProjects(address);
             const joinedProjects =
-                await projectsContext.getAccountJoinedProjects(wallet.address);
+                await projectsContext.getAccountJoinedProjects(address);
             setProjects(ownedProjects);
             setJoinedProjects(joinedProjects);
         } catch (err) {
@@ -53,9 +54,9 @@ export default function ProjectsSection(props) {
 
     useEffect(() => {
         //
-        if (account.address) load();
+        if (account.address && router.isReady) load();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [account.address]);
+    }, [account.address, router.isReady]);
 
     useEffect(() => {
         setProjectOwner(true);
