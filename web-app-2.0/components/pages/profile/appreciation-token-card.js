@@ -17,29 +17,27 @@ export default function AppreciationTokenCard(props) {
     const [messages, setMessages] = useState([]);
     const [showMessage, setShowMessage] = useState(true);
     const [shownMessage, setShownMessage] = useState({});
-    const [sent, setSent] = useState('');
-    const [sentTo, setSentTo] = useState('');
     const router = useRouter();
 
     useEffect(() => {
         //
         const load = async () => {
+            if (router.isReady) {
                 setLoading(true);
                 try {
-                    const result = await getMessages(tier);
+                    const result = await getMessages(tier, router.query.address);
                     setMessages(result);
-                    console.log('result', result);
                 } catch (err) {
                     console.log(err);
                 } finally {
                     setLoading(false);
                 }
             }
-            if (router.isReady) {
+        };
+
         load();
-        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [router.isReady]);
+    }, []);
 
     let intervalId;
     useEffect(() => {
@@ -57,43 +55,28 @@ export default function AppreciationTokenCard(props) {
     const provider = wallet.utilityToken.provider;
     const contract = new ethers.Contract(contractAddress, artifact.abi, provider);
 
-    const getMessages = async (tokenID, to) => {
+    const getMessages = async (tokenID, address) => {
         const _interface = new ethers.utils.Interface(artifact.abi);
-        const filter = contract.filters.WriteMintData(tokenID, to);
+        const filter = contract.filters.WriteMintData(tokenID, address);
         filter.fromBlock = 0;
         filter.toBlock = 'latest';
         const writeMintLogs = await await contract.provider.getLogs(filter);
         const messagesResult = writeMintLogs.map((log) => {
             const parsedLog = _interface.parseLog(log);
-            // console.log('parsedLog', parsedLog);
             const message = { ...parsedLog.args };
-            // console.log('message', message);
-            const sender = message[2];
-            const senderMessage = message[3];
-            setSent(senderMessage);
-            console.log('senderMessage', senderMessage);
-            const senderAddress = sender === router.query.address;
-            setSentTo(senderAddress);
-            console.log('senderAddress', senderAddress);
-            if(senderAddress) {
             return message;
-            }
         });
 
         // for (const m of messages) m.block = await contract.provider.getBlock(m.blockNumber);
-        const filterMessageResult = messagesResult.filter((m) => Boolean(m));
-        console.log('filterMessageResult', filterMessageResult);
-        for (const m of filterMessageResult) {
-            const fromName = await getSenderAccountName(m.to);
-            const toName = await getSenderAccountName(m.from);
-            console.log(fromName);
+
+        for (const m of messagesResult) {
+            const fromName = await getSenderAccountName(m.from);
             if (fromName) {
                 m.fromName = fromName;
-                m.toName = toName;
             }
         }
 
-        return filterMessageResult;
+        return messagesResult;
     };
 
     const getSenderAccountName = async (address) => {
@@ -159,13 +142,13 @@ export default function AppreciationTokenCard(props) {
                         <>
                             <Fade in={showMessage}>
                                 <Box>
-                                    <Typography variant="body1">{shownMessage.toName} - {shownMessage.data}</Typography>
+                                    <Typography variant="body1">{shownMessage.data}</Typography>
                                     <Typography variant="body1">
                                         {`- `}
                                         {shownMessage.fromName && (
-                                            <>{`${shownMessage.fromName} (${truncateEthAddress(shownMessage.to)})`}</>
+                                            <>{`${shownMessage.fromName} (${truncateEthAddress(shownMessage.from)})`}</>
                                         )}
-                                        {!shownMessage.fromName && <>{truncateEthAddress(shownMessage?.to || '')}</>}
+                                        {!shownMessage.fromName && <>{truncateEthAddress(shownMessage?.from || '')}</>}
                                     </Typography>
                                 </Box>
                             </Fade>

@@ -137,13 +137,23 @@ const AppreciationTokens = (props) => {
                                             Received
                                         </Button>
                                     ) : (
-                                        <Button onClick={handleClick} color='text'>Received</Button>
+                                        <Button
+                                            onClick={handleClick}
+                                            color='text'
+                                        >
+                                            Received
+                                        </Button>
                                     )}
                                     {isSent ? (
-                                    <Button variant='outlined' color='text'>Sent</Button>
+                                        <Button variant='outlined' color='text'>
+                                            Sent
+                                        </Button>
                                     ) : (
-                                        <Button onClick={handleClick} color='text'>
-                                            Sent    
+                                        <Button
+                                            onClick={handleClick}
+                                            color='text'
+                                        >
+                                            Sent
                                         </Button>
                                     )}
                                 </Stack>
@@ -181,10 +191,28 @@ const AppreciationTokens = (props) => {
                             </Grid>
                         )}
                         {!loading && isSent && (
-                            
-                            <SentAppreciationTokenCard />
+                            <Grid container columnSpacing={3} rowSpacing={3}>
+                                {balances.map((balance, index) => {
+                                    return (
+                                        balance > 0 && (
+                                            <Grid
+                                                item
+                                                xs={12}
+                                                md={6}
+                                                key={index}
+                                            >
+                                                {balances[index] > 0 && (
+                                                    <SentAppreciationTokenCard
+                                                        tier={index + 1}
+                                                        balance={balance}
+                                                    />
+                                                )}
+                                            </Grid>
+                                        )
+                                    );
+                                })}
+                            </Grid>
                         )}
-
                     </Box>
                 </Card>
             </Fade>
