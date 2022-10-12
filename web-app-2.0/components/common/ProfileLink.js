@@ -21,7 +21,7 @@ export default function ProfileLink(props) {
                     {!profile.profilePhoto && (
                         <Identicon address={profile.address} size={64} />
                     )}
-                    <Typography variant="h5">{profile.name}</Typography>
+                    <Typography variant="h3">{profile.name}</Typography>
                     <Typography variant="body1">
                         {
                             app.occupations.find(
