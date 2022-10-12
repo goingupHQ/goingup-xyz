@@ -121,7 +121,7 @@ export default function ProjectsSection(props) {
                                         spacing={4}
                                     >
                                         <Typography variant='h2'>
-                                            You have not created a project yet
+                                            {account.name} have not created a project yet
                                         </Typography>
 
                                         <img
@@ -132,17 +132,6 @@ export default function ProjectsSection(props) {
                                                 maxWidth: "200px",
                                             }}
                                         />
-
-                                        <Button
-                                            variant='contained'
-                                            color='primary'
-                                            size='large'
-                                            onClick={() =>
-                                                router.push("/projects/create")
-                                            }
-                                        >
-                                            Create your first Project
-                                        </Button>
                                     </Stack>
                                 )}
                                 {projects.length > 0 && projectOwner && (
@@ -168,6 +157,27 @@ export default function ProjectsSection(props) {
                                                     </Grid>
                                                 ))}
                                         </Grid>
+                                    </Stack>
+                                )}
+                                {joinedProjects.length === 0 && projectContributor && (
+                                    <Stack
+                                        justifyContent='center'
+                                        alignItems='center'
+                                        direction='column'
+                                        spacing={4}
+                                    >
+                                        <Typography variant='h2'>
+                                            {account.name} have not contributed to a project yet
+                                        </Typography>
+
+                                        <img
+                                            src='/images/illustrations/empty-box.svg'
+                                            alt='connection-lost'
+                                            style={{
+                                                width: "100%",
+                                                maxWidth: "200px",
+                                            }}
+                                        />
                                     </Stack>
                                 )}
                                 {joinedProjects.length > 0 &&
