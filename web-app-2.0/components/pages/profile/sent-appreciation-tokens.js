@@ -142,8 +142,7 @@ export default function AppreciationTokenCard(props) {
                     sx={{ paddingX: '15px' }}
                 >
                     <Typography variant="body1" color="textPrimary">
-                        <strong>
-                            {balance} T{tier} Token{balance !== 1 ? 's' : ''}
+                        <strong> T{tier} Token{balance !== 1 ? 's' : ''}
                         </strong>
                     </Typography>
                     {!loading && (
