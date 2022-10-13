@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { Backdrop, CircularProgress } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import WrongNetwork from '../../../components/pages/projects/wrong-network';
+import { WalletContext } from '../../../contexts/wallet-context';
 
 export default function EditProject() {
     const projectsContext = useContext(ProjectsContext);
@@ -13,6 +14,7 @@ export default function EditProject() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     const { enqueueSnackbar } = useSnackbar();
+    const wallet = useContext(WalletContext);
 
     const getProject = async () => {
         setLoading(true);
@@ -20,18 +22,17 @@ export default function EditProject() {
             setData(await projectsContext.getProject(router.query.id));
         } catch (err) {
             enqueueSnackbar('There was an error loading your project', { variant: 'error' });
+            console.error(err);
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        //
-        if (router.isReady) {
+        if (router.isReady && wallet.address) {
             getProject();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [router.isReady]);
+    }, [router.isReady, wallet.address]);
 
     return (
         <>
