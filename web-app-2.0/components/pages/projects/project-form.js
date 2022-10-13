@@ -12,6 +12,8 @@ import {
     CircularProgress,
     Paper,
     IconButton,
+    Box,
+    LinearProgress,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import React, { useState, useContext, useEffect, useRef } from 'react';
@@ -23,7 +25,7 @@ import { useRouter } from 'next/router';
 import moment from 'moment';
 import { isURL } from 'validator';
 import { WalletContext } from '../../../contexts/wallet-context';
-import { v4 as uuid } from "uuid";
+import { v4 as uuid } from 'uuid';
 
 export default function ProjectForm(props) {
     const projectsContext = useContext(ProjectsContext);
@@ -60,69 +62,69 @@ export default function ProjectForm(props) {
     const uploadImage = useRef(null);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-    const uploadPhoto = async (e, projectImage) => {
-        setUploadingImage(true);
+    // const uploadPhoto = async (e, projectImage) => {
+    //     setUploadingImage(true);
 
-        try {
-            const file = e.target.files[0];
-            // const filename = encodeURIComponent(file.name);
-            const filename = uuid();
-            const res = await fetch(`/api/upload-to-gcp?file=${filename}`);
-            const { url, fields } = await res.json();
-            const formData = new FormData();
+    //     try {
+    //         const file = e.target.files[0];
+    //         // const filename = encodeURIComponent(file.name);
+    //         const filename = uuid();
+    //         const res = await fetch(`/api/upload-to-gcp?file=${filename}`);
+    //         const { url, fields } = await res.json();
+    //         const formData = new FormData();
 
-            Object.entries({ ...fields, file }).forEach(([key, value]) => {
-                // @ts-ignore
-                formData.append(key, value);
-            });
+    //         Object.entries({ ...fields, file }).forEach(([key, value]) => {
+    //             // @ts-ignore
+    //             formData.append(key, value);
+    //         });
 
-            const { address, ethersSigner } = wallet;
-            const message = "update-account";
-            const signature = await wallet.signMessage(message);
+    //         const { address, ethersSigner } = wallet;
+    //         const message = "update-account";
+    //         const signature = await wallet.signMessage(message);
 
-            const upload = await fetch(url, {
-                method: "POST",
-                body: formData,
-            });
+    //         const upload = await fetch(url, {
+    //             method: "POST",
+    //             body: formData,
+    //         });
 
-            if (upload.ok) {
-                console.log(
-                    `Uploaded successfully to ${upload.url}${filename}`,
-                    projectImage
-                );
+    //         if (upload.ok) {
+    //             console.log(
+    //                 `Uploaded successfully to ${upload.url}${filename}`,
+    //                 projectImage
+    //             );
 
-                let account = {};
-                account.projectImage = `${upload.url}${filename}`
+    //             let account = {};
+    //             account.projectImage = `${upload.url}${filename}`
 
-                const response = await fetch("/api/update-account", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        address,
-                        signature,
-                        account,
-                    }),
-                });
+    //             const response = await fetch("/api/update-account", {
+    //                 method: "POST",
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                 },
+    //                 body: JSON.stringify({
+    //                     address,
+    //                     signature,
+    //                     account,
+    //                 }),
+    //             });
 
-                if (response.status === 200) {
-                    props.refresh();
-                    const msg = "Project image uploded";
-                    enqueueSnackbar(msg, { variant: "success" });
-                }
-            } else {
-                throw "Upload failed.";
-            }
-        } catch (err) {
-            const msg = "Could not upload your project image";
-            enqueueSnackbar(msg, { variant: "error" });
-            console.log(err);
-        } finally {
-            setUploadingImage(false);
-            uploadImage.current.value = "";
-        }
-    };
+    //             if (response.status === 200) {
+    //                 props.refresh();
+    //                 const msg = "Project image uploded";
+    //                 enqueueSnackbar(msg, { variant: "success" });
+    //             }
+    //         } else {
+    //             throw "Upload failed.";
+    //         }
+    //     } catch (err) {
+    //         const msg = "Could not upload your project image";
+    //         enqueueSnackbar(msg, { variant: "error" });
+    //         console.log(err);
+    //     } finally {
+    //         setUploadingImage(false);
+    //         uploadImage.current.value = "";
+    //     }
+    // };
 
     useEffect(() => {
         //
@@ -157,9 +159,9 @@ export default function ProjectForm(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectData]);
 
+    const [saving, setSaving] = useState(false);
     const sendProject = async () => {
         closeSnackbar();
-        setLoading(true);
 
         try {
             if (!form.name) throw 'Project name is required';
@@ -167,7 +169,7 @@ export default function ProjectForm(props) {
             if (form.primaryUrl && !isURL(form.primaryUrl)) throw 'Project primary URL is invalid';
             if (!projectsContext.isCorrectNetwork) throw 'You are not on the correct network';
 
-            enqueueSnackbar('Creating transactions, please approve on your wallet', {
+            enqueueSnackbar('Creating transaction, please approve on your wallet', {
                 variant: 'info',
                 persist: true,
             });
@@ -183,23 +185,27 @@ export default function ProjectForm(props) {
                     form.primaryUrl,
                     form.tags,
                     form.isPrivate,
-                    form.projectImage,
+                    form.projectImage
                 );
 
                 closeSnackbar();
+                setSaving(true);
 
                 enqueueSnackbar('Waiting for transaction confirmations', {
                     variant: 'info',
                     persist: true,
                     action: (key) => {
-                        <Button
-                            onClick={() => {
-                                const baseUrl = projectsContext.networkParams.blockExplorers[0];
-                                window.open(`${baseUrl}tx/${createTx.hash}`);
-                            }}
-                        >
-                            Show Transaction
-                        </Button>;
+                        return (
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    const baseUrl = projectsContext.networkParams.blockExplorers[0];
+                                    window.open(`${baseUrl}tx/${createTx.hash}`);
+                                }}
+                            >
+                                Open Transaction
+                            </Button>
+                        );
                     },
                 });
                 await createTx.wait();
@@ -221,10 +227,11 @@ export default function ProjectForm(props) {
                     form.primaryUrl,
                     form.tags,
                     form.isPrivate,
-                    form.projectImage,
+                    form.projectImage
                 );
 
                 closeSnackbar();
+                setSaving(true);
 
                 enqueueSnackbar('Waiting for transaction confirmations', {
                     variant: 'info',
@@ -256,148 +263,160 @@ export default function ProjectForm(props) {
                 });
             }
             console.log(e);
-        } finally {
-            setLoading(false);
+            setSaving(false);
         }
     };
 
     return (
         <>
-            <Stack spacing={1} sx={{ width: { xs: '100%', md: '60%', lg: '50%', xl: '40%' } }}>
-                <Typography variant="h1" sx={{ paddingLeft: 2 }}>
-                    {isCreate ? 'Create Project' : `Edit ${form.name || 'Project'}`}
-                </Typography>
+            {!saving && (
+                <Stack spacing={1} sx={{ width: { xs: '100%', md: '60%', lg: '50%', xl: '40%' } }}>
+                    <Typography variant="h1" sx={{ paddingLeft: 2 }}>
+                        {isCreate ? 'Create Project' : `Edit ${form.name || 'Project'}`}
+                    </Typography>
 
-                <Paper sx={{ padding: 2 }}>
-                    <Grid container columnSpacing={2} rowSpacing={2} sx={{ padding: 0 }}>
-                        <Grid item xs={12}>
-                            <TextField
-                                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                                id="outlined-basic"
-                                label="Project Name"
-                                variant="outlined"
-                                value={form.name}
-                                fullWidth
-                                autoComplete="off"
-                            />
-                        </Grid>
+                    <Paper sx={{ padding: 2 }}>
+                        <Grid container columnSpacing={2} rowSpacing={2} sx={{ padding: 0 }}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                                    id="outlined-basic"
+                                    label="Project Name"
+                                    variant="outlined"
+                                    value={form.name}
+                                    fullWidth
+                                    autoComplete="off"
+                                />
+                            </Grid>
 
-                        <Grid item xs={12}>
-                            <TextField
-                                onChange={(e) => setForm({ ...form, description: e.target.value })}
-                                value={form.description}
-                                id="outlined-basic"
-                                label="Project Description"
-                                variant="outlined"
-                                multiline
-                                rows={4}
-                                placeholder="This project is about..."
-                                fullWidth
-                            />
-                        </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    onChange={(e) => setForm({ ...form, description: e.target.value })}
+                                    value={form.description}
+                                    id="outlined-basic"
+                                    label="Project Description"
+                                    variant="outlined"
+                                    multiline
+                                    rows={4}
+                                    placeholder="This project is about..."
+                                    fullWidth
+                                />
+                            </Grid>
 
-                        <Grid item xs={12} md={6}>
-                            <DesktopDatePicker
-                                label="Started"
-                                inputFormat="MM/DD/yyyy"
-                                value={form.started}
-                                onChange={(e) => setForm({ ...form, started: e })}
-                                renderInput={(params) => <TextField {...params} autoComplete="off" fullWidth />}
-                            />
-                        </Grid>
+                            <Grid item xs={12} md={6}>
+                                <DesktopDatePicker
+                                    label="Started"
+                                    inputFormat="MM/DD/yyyy"
+                                    value={form.started}
+                                    onChange={(e) => setForm({ ...form, started: e })}
+                                    renderInput={(params) => <TextField {...params} autoComplete="off" fullWidth />}
+                                />
+                            </Grid>
 
-                        <Grid item xs={12} md={6}>
-                            <DesktopDatePicker
-                                label="Ended"
-                                inputFormat="MM/DD/yyyy"
-                                value={form.ended}
-                                onChange={(e) => setForm({ ...form, ended: e })}
-                                renderInput={(params) => <TextField {...params} autoComplete="off" fullWidth />}
-                            />
-                        </Grid>
+                            <Grid item xs={12} md={6}>
+                                <DesktopDatePicker
+                                    label="Ended"
+                                    inputFormat="MM/DD/yyyy"
+                                    value={form.ended}
+                                    onChange={(e) => setForm({ ...form, ended: e })}
+                                    renderInput={(params) => <TextField {...params} autoComplete="off" fullWidth />}
+                                />
+                            </Grid>
 
-                        <Grid item xs={12}>
-                            <TextField
-                                onChange={(e) => setForm({ ...form, primaryUrl: e.target.value })}
-                                value={form.primaryUrl}
-                                id="outlined-basic"
-                                label="Primary URL"
-                                variant="outlined"
-                                placeholder="https://www.project.com"
-                                fullWidth
-                                autoComplete="off"
-                            />
-                        </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    onChange={(e) => setForm({ ...form, primaryUrl: e.target.value })}
+                                    value={form.primaryUrl}
+                                    id="outlined-basic"
+                                    label="Primary URL"
+                                    variant="outlined"
+                                    placeholder="https://www.project.com"
+                                    fullWidth
+                                    autoComplete="off"
+                                />
+                            </Grid>
 
-                        <Grid item xs={12}>
-                            <Autocomplete
-                                multiple
-                                value={form.tags?.length === 0 ? [] : form.tags}
-                                options={[]}
-                                onChange={(e, value) => {
-                                    setForm({ ...form, tags: value });
-                                }}
-                                freeSolo
-                                renderTags={(value, getTagProps) =>
-                                    value.map((option, index) => (
-                                        <Chip
-                                            key={index}
-                                            variant="outlined"
-                                            label={option}
-                                            {...getTagProps({ index })}
+                            <Grid item xs={12}>
+                                <Autocomplete
+                                    multiple
+                                    value={form.tags?.length === 0 ? [] : form.tags}
+                                    options={[]}
+                                    onChange={(e, value) => {
+                                        setForm({ ...form, tags: value });
+                                    }}
+                                    freeSolo
+                                    renderTags={(value, getTagProps) =>
+                                        value.map((option, index) => (
+                                            <Chip
+                                                key={index}
+                                                variant="outlined"
+                                                label={option}
+                                                {...getTagProps({ index })}
+                                            />
+                                        ))
+                                    }
+                                    renderInput={(params) => <TextField {...params} variant="outlined" label="Tags" />}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <FormControlLabel
+                                    label="Is this a private project?"
+                                    control={
+                                        <Checkbox
+                                            checked={form.isPrivate}
+                                            onChange={(e) => setForm({ ...form, isPrivate: e.target.checked })}
                                         />
-                                    ))
-                                }
-                                renderInput={(params) => <TextField {...params} variant="outlined" label="Tags" />}
-                            />
-                        </Grid>
+                                    }
+                                />
+                            </Grid>
 
-                        <Grid item xs={12}>
-                            <FormControlLabel
-                                label="Is this a private project?"
-                                control={
-                                    <Checkbox
-                                        checked={form.isPrivate}
-                                        onChange={(e) => setForm({ ...form, isPrivate: e.target.checked })}
-                                    />
-                                }
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <LoadingButton variant="contained" onClick={() => sendProject()}>
-                                {isCreate ? 'Create Project' : 'Update Project'}
-                            </LoadingButton>
-                            <>
+                            <Grid item xs={12}>
+                                <LoadingButton variant="contained" onClick={() => sendProject()}>
+                                    {isCreate ? 'Create Project' : 'Update Project'}
+                                </LoadingButton>
+                                <>
                                     <input
                                         ref={uploadImage}
-                                        accept='image/*'
-                                        id='contained-button-file'
-                                        type='file'
-                                        style={{ display: "none" }}
+                                        accept="image/*"
+                                        id="contained-button-file"
+                                        type="file"
+                                        style={{ display: 'none' }}
                                         onChange={(e) => {
                                             uploadPhoto(e);
                                         }}
                                     />
                                     <Button
                                         disabled={uploadoadingImage}
-                                        color='success'
+                                        color="success"
                                         onClick={() => {
                                             uploadImage.current.click();
                                         }}
                                     >
-                                        {uploadoadingImage && (
-                                            <CircularProgress size='20px' />
-                                        )}
-                                        {!uploadoadingImage && (
-                                            <Button variant="contained">Upload Image</Button>
-                                        )}
+                                        {uploadoadingImage && <CircularProgress size="20px" />}
+                                        {!uploadoadingImage && <Button variant="contained">Upload Image</Button>}
                                     </Button>
                                 </>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Paper>
-            </Stack>
+                    </Paper>
+                </Stack>
+            )}
+
+            {saving && (
+                <Stack spacing={5} sx={{ width: '100%', padding: 2 }} justifyContent="center" alignItems="center">
+                    <Typography variant="h2">Transaction submitted and waiting for blockchain confirmations</Typography>
+                    <Box
+                        component="img"
+                        src="/images/illustrations/waiting-for-block-confirmations.svg"
+                        alt="Processing"
+                        sx={{ width: '100%', maxWidth: '500px' }}
+                    />
+                    <Box sx={{ width: '100%', maxWidth: '500px' }}>
+                        <LinearProgress variant="indeterminate" />
+                    </Box>
+                </Stack>
+            )}
 
             <Backdrop open={loading} sx={{ opacity: 1, zIndex: 1200 }}>
                 <CircularProgress />
