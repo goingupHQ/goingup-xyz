@@ -58,73 +58,7 @@ export default function ProjectForm(props) {
     });
 
     const [loading, setLoading] = useState(true);
-    const [uploadoadingImage, setUploadingImage] = useState(false);
-    const uploadImage = useRef(null);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-    // const uploadPhoto = async (e, projectImage) => {
-    //     setUploadingImage(true);
-
-    //     try {
-    //         const file = e.target.files[0];
-    //         // const filename = encodeURIComponent(file.name);
-    //         const filename = uuid();
-    //         const res = await fetch(`/api/upload-to-gcp?file=${filename}`);
-    //         const { url, fields } = await res.json();
-    //         const formData = new FormData();
-
-    //         Object.entries({ ...fields, file }).forEach(([key, value]) => {
-    //             // @ts-ignore
-    //             formData.append(key, value);
-    //         });
-
-    //         const { address, ethersSigner } = wallet;
-    //         const message = "update-account";
-    //         const signature = await wallet.signMessage(message);
-
-    //         const upload = await fetch(url, {
-    //             method: "POST",
-    //             body: formData,
-    //         });
-
-    //         if (upload.ok) {
-    //             console.log(
-    //                 `Uploaded successfully to ${upload.url}${filename}`,
-    //                 projectImage
-    //             );
-
-    //             let account = {};
-    //             account.projectImage = `${upload.url}${filename}`
-
-    //             const response = await fetch("/api/update-account", {
-    //                 method: "POST",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                 },
-    //                 body: JSON.stringify({
-    //                     address,
-    //                     signature,
-    //                     account,
-    //                 }),
-    //             });
-
-    //             if (response.status === 200) {
-    //                 props.refresh();
-    //                 const msg = "Project image uploded";
-    //                 enqueueSnackbar(msg, { variant: "success" });
-    //             }
-    //         } else {
-    //             throw "Upload failed.";
-    //         }
-    //     } catch (err) {
-    //         const msg = "Could not upload your project image";
-    //         enqueueSnackbar(msg, { variant: "error" });
-    //         console.log(err);
-    //     } finally {
-    //         setUploadingImage(false);
-    //         uploadImage.current.value = "";
-    //     }
-    // };
 
     useEffect(() => {
         //
@@ -136,9 +70,8 @@ export default function ProjectForm(props) {
                 started: projectData.started.toNumber() !== 0 ? new Date(projectData.started.toNumber() * 1000) : null,
                 ended: projectData.ended.toNumber() !== 0 ? new Date(projectData.ended.toNumber() * 1000) : null,
                 primaryUrl: projectData.primaryUrl,
-                tags: projectData.tags.split(',').map((tag) => tag.trim()),
+                tags: projectData.tags ? projectData.tags.split(',').map((tag) => tag.trim()) : [],
                 isPrivate: projectData.isPrivate,
-                projectImage: projectData.projectImage,
             });
 
             setOldForm({
@@ -148,9 +81,8 @@ export default function ProjectForm(props) {
                 started: projectData.started.toNumber() !== 0 ? new Date(projectData.started.toNumber() * 1000) : null,
                 ended: projectData.ended.toNumber() !== 0 ? new Date(projectData.ended.toNumber() * 1000) : null,
                 primaryUrl: projectData.primaryUrl,
-                tags: projectData.tags.split(',').map((tag) => tag.trim()),
+                tags: projectData.tags ? projectData.tags.split(',').map((tag) => tag.trim()) : [],
                 isPrivate: projectData.isPrivate,
-                projectImage: projectData.projectImage,
             });
             setLoading(false);
         } else {
