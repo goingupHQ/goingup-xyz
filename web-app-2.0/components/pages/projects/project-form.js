@@ -375,28 +375,6 @@ export default function ProjectForm(props) {
                                 <LoadingButton variant="contained" onClick={() => sendProject()}>
                                     {isCreate ? 'Create Project' : 'Update Project'}
                                 </LoadingButton>
-                                <>
-                                    <input
-                                        ref={uploadImage}
-                                        accept="image/*"
-                                        id="contained-button-file"
-                                        type="file"
-                                        style={{ display: 'none' }}
-                                        onChange={(e) => {
-                                            uploadPhoto(e);
-                                        }}
-                                    />
-                                    <Button
-                                        disabled={uploadoadingImage}
-                                        color="success"
-                                        onClick={() => {
-                                            uploadImage.current.click();
-                                        }}
-                                    >
-                                        {uploadoadingImage && <CircularProgress size="20px" />}
-                                        {!uploadoadingImage && <Button variant="contained">Upload Image</Button>}
-                                    </Button>
-                                </>
                             </Grid>
                         </Grid>
                     </Paper>
