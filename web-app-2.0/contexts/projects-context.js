@@ -233,12 +233,15 @@ export const ProjectsProvider = ({ children }) => {
         return members;
     };
 
-    const getProjectMember = async (projectId, memberAddress) => {
+    const getProjectMember = async (memberRecordId) => {
         const contract = getContract();
-        const member = await contract.projectMemberMapping(projectId, memberAddress);
+        const member = await contract.projectMemberStorage(memberRecordId);
 
         const memberData = {
-            address: memberAddress,
+            id: member.id,
+            projectId: member.projectId,
+            member: member.member,
+            address: member.member,
             role: member.role,
             goal: member.goal,
             goalAchieved: member.goalAchieved,

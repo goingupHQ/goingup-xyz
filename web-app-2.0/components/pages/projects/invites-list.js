@@ -13,7 +13,7 @@ export default function InvitesList(props) {
     const [loading, setLoading] = React.useState(true);
     const [pendingInvites, setPendingInvites] = React.useState([]);
     const [ownerAddress, setOwnerAddress] = React.useState(false);
-    
+
     const load = async () => {
         setLoading(true);
         try {
@@ -31,12 +31,10 @@ export default function InvitesList(props) {
     };
 
     React.useEffect(() => {
-        //
-        if (projectId) {
+        if (projectId && wallet.address) {
             load();
             getProjectOwner();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectId, wallet.address]);
 
     return (
@@ -73,17 +71,16 @@ export default function InvitesList(props) {
                             </Typography>
                             {ownerAddress && (
                                 <Grid container spacing={3}>
-                                    {pendingInvites.map((invite) => (
+                                    {pendingInvites.map((memberRecordId) => (
                                         <Grid
                                             item
                                             xs={12}
                                             md={6}
                                             lg={4}
-                                            key={invite}
+                                            key={memberRecordId}
                                         >
                                             <InviteCard
-                                                address={invite}
-                                                projectId={projectId}
+                                                memberRecordId={memberRecordId}
                                                 reload={load}
                                             />
                                         </Grid>

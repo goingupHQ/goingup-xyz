@@ -6,7 +6,7 @@ import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 
 export default function InviteCard(props) {
-    const { address, projectId, reload } = props;
+    const { memberRecordId, reload } = props;
     const projectCtx = React.useContext(ProjectsContext);
     const { enqueueSnackbar } = useSnackbar();
 
@@ -16,7 +16,7 @@ export default function InviteCard(props) {
     const load = async () => {
         setLoading(true);
         try {
-            const memberData = await projectCtx.getProjectMember(projectId, address);
+            const memberData = await projectCtx.getProjectMember(memberRecordId);
             setMember(memberData);
         } catch (err) {
             console.log(err);
@@ -27,11 +27,11 @@ export default function InviteCard(props) {
 
     React.useEffect(() => {
         //
-        if (address) {
+        if (memberRecordId) {
             load();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [address]);
+    }, [memberRecordId]);
 
     const [disinviting, setDisinviting] = React.useState(false);
     const disinvite = async () => {
@@ -54,7 +54,7 @@ export default function InviteCard(props) {
         <>
             <Paper variant="outlined" sx={{ padding: 3, height: '100%', alignItems: 'stretch' }}>
                 <Stack direction="column" spacing={2} alignItems="flex-start">
-                    <ProfileLink address={address} />
+                    <ProfileLink address={member?.address} />
 
                     {loading && <CircularProgress size={12} />}
 
