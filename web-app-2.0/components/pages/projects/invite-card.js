@@ -6,7 +6,7 @@ import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 
 export default function InviteCard(props) {
-    const { memberRecordId, reload } = props;
+    const { projectId, memberRecordId, reload } = props;
     const projectCtx = React.useContext(ProjectsContext);
     const { enqueueSnackbar } = useSnackbar();
 
@@ -37,7 +37,7 @@ export default function InviteCard(props) {
     const disinvite = async () => {
         setDisinviting(true);
         try {
-            const tx = await projectCtx.disinviteProjectMember(projectId, address);
+            const tx = await projectCtx.disinviteProjectMember(projectId, memberRecordId);
             enqueueSnackbar('Disinvite transaction submitted', { variant: 'info' });
             await tx.wait();
             enqueueSnackbar('Member disinvited', { variant: 'success' });

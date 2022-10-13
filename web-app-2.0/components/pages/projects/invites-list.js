@@ -80,6 +80,7 @@ export default function InvitesList(props) {
                                             key={memberRecordId}
                                         >
                                             <InviteCard
+                                                projectId={projectId}
                                                 memberRecordId={memberRecordId}
                                                 reload={load}
                                             />
