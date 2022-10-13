@@ -260,20 +260,9 @@ export const ProjectsProvider = ({ children }) => {
 
     const getPendingInvitesByAddress = async (address) => {
         const contract = getContract();
-        const projectIds = await contract.getPendingInvitesByAddress(address);
+        const memberRecordIds = await contract.getPendingInvitesByAddress(address);
 
-        const data = [];
-        for (const projectId of projectIds) {
-            const project = await getProject(projectId);
-            const memberData = await getProjectMember(projectId, address);
-            data.push({
-                projectId,
-                project,
-                memberData
-            });
-        }
-
-        return data;
+        return memberRecordIds;
     };
 
     const getMembersAndInvites = async (projectId) => {
@@ -308,9 +297,9 @@ export const ProjectsProvider = ({ children }) => {
         return tx;
     };
 
-    const acceptProjectInvite = async (projectId) => {
+    const acceptProjectInvite = async (memberRecordId) => {
         const contract = getContract();
-        const tx = await contract.acceptProjectInvitation(projectId);
+        const tx = await contract.acceptProjectInvitation(memberRecordId);
         return tx;
     };
 
