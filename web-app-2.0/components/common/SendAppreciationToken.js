@@ -65,7 +65,7 @@ const SendAppreciationToken = (props, ref) => {
         setSending(true);
         try {
             if (wallet.chain === 'Ethereum') {
-                const tx = await utilityTokensContext.sendUtilityToken(sendToAddress, tier, amount, message); console.log('sendAppreciationToken.js: send() tx:', tx);
+                const tx = await utilityTokensContext.sendUtilityToken(sendToAddress, tier, amount, message);
 
                 if (tx) {
                     if (projectId && member?.address) {
@@ -77,6 +77,7 @@ const SendAppreciationToken = (props, ref) => {
                             body: JSON.stringify({
                                 projectId,
                                 member: member.address,
+                                memberRecordId: member.id,
                                 tokenId: tier,
                                 amount,
                                 type: 'goingup-appreciation-token',

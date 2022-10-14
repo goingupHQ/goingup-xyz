@@ -18,12 +18,13 @@ export default async (req, res) => {
         }
 
         console.log('req.body:', req.body);
-        const { projectId, member, tokenId, amount, type } = req.body;
+        const { projectId, member, memberRecordId, tokenId, amount, type } = req.body;
 
         await db.collection('project-reward-txs').insertOne({
             txhash,
             projectId,
             member,
+            memberRecordId,
             tokenId,
             amount,
             type,
