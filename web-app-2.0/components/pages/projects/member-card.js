@@ -8,7 +8,7 @@ import { WalletContext } from '../../../contexts/wallet-context';
 import SendAppreciationToken from '../../common/SendAppreciationToken';
 
 export default function MemberCard(props) {
-    const { projectId, project, member, reload } = props;
+    const { projectId, project, memberRecordId, reload } = props;
     const projectsContext = React.useContext(ProjectsContext);
 
     const [memberData, setMemberData] = React.useState(null);
@@ -22,24 +22,24 @@ export default function MemberCard(props) {
     const load = async () => {
         setLoading(true);
         try {
-            const result = await projectsContext.getProjectMember(projectId, member);
+            const result = await projectsContext.getProjectMember(memberRecordId);
 
-            const rewardsResponse = await fetch(
-                `/api/projects/rewards/get-by-member?projectId=${projectId}&member=${member}`
-            );
+            // const rewardsResponse = await fetch(
+            //     `/api/projects/rewards/get-by-member?projectId=${projectId}&member=${member}`
+            // );
 
-            if (rewardsResponse.ok) {
-                const rewards = await rewardsResponse.json();
-                result.rewards = rewards;
+            // if (rewardsResponse.ok) {
+            //     const rewards = await rewardsResponse.json();
+            //     result.rewards = rewards;
 
-                setSendingReward(result.rewards?.unverified?.length > 0 && result.rewards?.verified?.length === 0);
+            //     setSendingReward(result.rewards?.unverified?.length > 0 && result.rewards?.verified?.length === 0);
 
-                setTimeout(() => {
-                    load();
-                }, 6 * 1000 * 60);
+            //     setTimeout(() => {
+            //         load();
+            //     }, 6 * 1000 * 60);
 
-                setRewardVerified(result.rewards?.verified?.length > 0);
-            }
+            //     setRewardVerified(result.rewards?.verified?.length > 0);
+            // }
             setMemberData(result);
 
         } catch (err) {
@@ -51,17 +51,17 @@ export default function MemberCard(props) {
 
     React.useEffect(() => {
         //
-        if (projectId && member) {
+        if (projectId && memberRecordId) {
             load();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [projectId, member]);
+    }, [projectId, memberRecordId]);
 
     const [removing, setRemoving] = React.useState(false);
     const removeMember = async () => {
         setRemoving(true);
         try {
-            const tx = await projectsContext.removeProjectMember(projectId, member);
+            const tx = await projectsContext.removeProjectMember(projectId, memberData.id);
 
             const shortTxHash = tx.hash.substr(0, 6) + '...' + tx.hash.substr(tx.hash.length - 4, 4);
             const key = enqueueSnackbar(`Remove member transaction submitted (${shortTxHash})`, {
@@ -157,20 +157,20 @@ export default function MemberCard(props) {
 
             {!loading && (
                 <Stack direction="column" spacing={1}>
-                    <ProfileLink address={member} textSx={{ fontWeight: 'bold', fontSize: 'larger' }} />
+                    <ProfileLink address={memberData?.address} textSx={{ fontWeight: 'bold', fontSize: 'larger' }} />
                     <Typography variant="body1">
-                        Role: <b>{memberData.role}</b>
+                        Role: <b>{memberData?.role}</b>
                     </Typography>
                     <Typography variant="body1">
-                        Goal: <b>{memberData.goal}</b>
+                        Goal: <b>{memberData?.goal}</b>
                     </Typography>
                     <Typography variant="body1">
-                        Achieved: <b>{memberData.goalAchieved ? 'Yes' : 'No'}</b>
+                        Achieved: <b>{memberData?.goalAchieved ? 'Yes' : 'No'}</b>
                     </Typography>
 
                     {project?.owner === wallet.address && (
                         <Stack direction={{ xs: 'column', md: 'row' }} spacing={1}>
-                            {!memberData.goalAchieved && (
+                            {!memberData?.goalAchieved && (
                                 <LoadingButton
                                     variant="contained"
                                     color="primary"
@@ -182,7 +182,7 @@ export default function MemberCard(props) {
                                 </LoadingButton>
                             )}
 
-                            {memberData.goalAchieved && (
+                            {memberData?.goalAchieved && (
                                 <LoadingButton
                                     variant="contained"
                                     color="primary"
@@ -209,7 +209,7 @@ export default function MemberCard(props) {
                 </Stack>
             )}
 
-            <SendAppreciationToken ref={satRef} sendToAddress={member} onSent={load} />
+            <SendAppreciationToken ref={satRef} sendToAddress={memberData?.address} onSent={load} />
         </Paper>
     );
 }

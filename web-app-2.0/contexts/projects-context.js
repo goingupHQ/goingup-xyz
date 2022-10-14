@@ -303,9 +303,9 @@ export const ProjectsProvider = ({ children }) => {
         return tx;
     };
 
-    const removeProjectMember = async (projectId, member) => {
+    const removeProjectMember = async (projectId, memberRecordId, reason = '') => {
         const contract = getContract();
-        const tx = await contract.removeMember(projectId, member, '');
+        const tx = await contract.removeMember(projectId, memberRecordId, reason);
         return tx;
     };
 

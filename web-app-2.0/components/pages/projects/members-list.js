@@ -63,7 +63,7 @@ function MembersList(props, ref) {
                         <Grid container spacing={2}>
                             {members.map((member) => (
                                 <Grid item xs={12} md={6} lg={4} key={member}>
-                                    <MemberCard projectId={projectId} project={project} member={member} reload={load} />
+                                    <MemberCard projectId={projectId} project={project} memberRecordId={member} reload={load} />
                                 </Grid>
                             ))}
                         </Grid>

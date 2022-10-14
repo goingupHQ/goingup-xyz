@@ -78,7 +78,7 @@ export default function PendingInvites(props) {
                             <Grid container spacing={2}>
                                 {pendingInvites.map((invite) => (
                                     <Grid item xs={12} md={4} key={invite}>
-                                        <PendingInviteCard memberRecordId={invite} />
+                                        <PendingInviteCard memberRecordId={invite} reload={load} />
                                     </Grid>
                                 ))}
                             </Grid>

@@ -4,7 +4,7 @@ import React from 'react';
 import { ProjectsContext } from '../../../contexts/projects-context';
 
 export default function PendingInviteCard(props) {
-    const { memberRecordId } = props;
+    const { memberRecordId, reload } = props;
     const [loading, setLoading] = React.useState(false);
     const [invite, setInvite] = React.useState(null);
 
@@ -36,10 +36,10 @@ export default function PendingInviteCard(props) {
     }, [memberRecordId]);
 
     const [accepting, setAccepting] = React.useState(false);
-    const acceptProjectInvite = async (projectId) => {
+    const acceptProjectInvite = async () => {
         setAccepting(true);
         try {
-            const tx = await projectsContext.acceptProjectInvite(projectId);
+            const tx = await projectsContext.acceptProjectInvite(memberRecordId);
             const shortTxHash = tx.hash.substr(0, 6) + '...' + tx.hash.substr(tx.hash.length - 4, 4);
             const key = enqueueSnackbar(`Accept project invitation tx submitted (${shortTxHash})`, {
                 variant: 'info',
@@ -63,8 +63,8 @@ export default function PendingInviteCard(props) {
                 enqueueSnackbar('Accept project invitation tx confirmed', {
                     variant: 'success',
                 });
-                router.push(`/projects/page/${projectId}`);
                 setAccepting(false);
+                if (reload) reload();
             });
         } catch (e) {
             console.error(e);
