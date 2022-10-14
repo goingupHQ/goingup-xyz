@@ -6,7 +6,6 @@ import { WalletContext } from '../../../contexts/wallet-context';
 
 export default function ProjectSectionCard(props) {
     const { project } = props;
-    console.log('project', project);
     const router = useRouter();
     const wallet = React.useContext(WalletContext);
     const app = React.useContext(AppContext);
