@@ -315,9 +315,9 @@ export const ProjectsProvider = ({ children }) => {
         return tx;
     };
 
-    const setMemberGoalAsAchieved = async(projectId, member) => {
+    const setMemberGoalAsAchieved = async(projectId, memberRecordId) => {
         const contract = getContract();
-        const tx = await contract.setMemberGoalAsAchieved(projectId, member);
+        const tx = await contract.setMemberGoalAsAchieved(projectId, memberRecordId);
         return tx;
     }
 

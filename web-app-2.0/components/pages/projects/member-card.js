@@ -98,7 +98,7 @@ export default function MemberCard(props) {
     const setGoalAsAchieved = async () => {
         setSettingAsAchieved(true);
         try {
-            const tx = await projectsContext.setMemberGoalAsAchieved(projectId, member);
+            const tx = await projectsContext.setMemberGoalAsAchieved(projectId, memberData.id);
 
             const shortTxHash = tx.hash.substr(0, 6) + '...' + tx.hash.substr(tx.hash.length - 4, 4);
             const key = enqueueSnackbar(`Set as achieved transaction submitted (${shortTxHash})`, {
