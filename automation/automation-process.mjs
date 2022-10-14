@@ -20,7 +20,7 @@ const projectsArtifact = JSON.parse(fs.readFileSync('./artifacts/GoingUpProjects
 let utilityContract, projectsContract;
 if (process.env.DEPLOYMENT === 'dev') {
     projectsContract = new ethers.Contract(
-        '0xF5df032832cb3c4BEf2D28B440fA57D5dAC47881',
+        '0x89e41C41Fa8Aa0AE4aF87609D3Cb0F466dB343ab',
         projectsArtifact.abi,
         mumbaiProvider
     );
@@ -54,37 +54,41 @@ const sendNotificationToAddress = async (address, title, body, urlToOpen) => {
     }
 };
 
-utilityContract.on('TransferSingle', async (operator, from, to, tokenId, event) => {
-    console.log(`TransferSingle: ${operator} ${from} ${to} ${tokenId}`);
-    console.log(`TransferSingle: ${event.blockNumber} ${event.blockHash} ${event.transactionHash}`);
+utilityContract.on('TransferSingle', async (operator, from, to, tokenId, amount, event) => {
+    try {
+        console.log(`TransferSingle: ${operator} ${from} ${to} ${tokenId} ${amount}`);
+        console.log(`TransferSingle: ${event.blockNumber} ${event.blockHash} ${event.transactionHash}`);
 
-    verifyReward(event.transactionHash);
+        verifyReward(event.transactionHash);
 
-    const token = await utilityContract.tokenSettings(tokenId);
+        const token = await utilityContract.tokenSettings(tokenId);
 
-    if (token.category.eq(1)) {
-        const message = `You have received a Tier ${tokenId} Appreciation Token from ${
-            from === '0x0000000000000000000000000000000000000000' ? operator : from
-        }`;
+        if (token.category.eq(1)) {
+            const message = `You have received a Tier ${tokenId} Appreciation Token from ${
+                from === '0x0000000000000000000000000000000000000000' ? operator : from
+            }`;
 
-        sendNotificationToAddress(to, 'Appreciation Token Received', message, null);
+            sendNotificationToAddress(to, 'Appreciation Token Received', message, null);
 
-        const now = new Date();
-        // const insertResp = await notifications.insertOne({
-        //     address: to,
-        //     message: `You have received a Tier ${tokenId} Appreciation Token from ${
-        //         from === '0x0000000000000000000000000000000000000000' ? operator : from
-        //     }`,
-        //     timestamp: now,
-        //     read: false,
-        // });
+            const now = new Date();
+            // const insertResp = await notifications.insertOne({
+            //     address: to,
+            //     message: `You have received a Tier ${tokenId} Appreciation Token from ${
+            //         from === '0x0000000000000000000000000000000000000000' ? operator : from
+            //     }`,
+            //     timestamp: now,
+            //     read: false,
+            // });
 
-        if (from === '0x0000000000000000000000000000000000000000') {
-            const updateResp = await accounts.updateOne(
-                { address: to },
-                { $push: { mintedUtilityTokens: { tokenId, timestamp: now } } }
-            );
+            if (from === '0x0000000000000000000000000000000000000000') {
+                const updateResp = await accounts.updateOne(
+                    { address: to },
+                    { $push: { mintedUtilityTokens: { tokenId, timestamp: now } } }
+                );
+            }
         }
+    } catch (err) {
+        console.error(err);
     }
 });
 
@@ -208,14 +212,13 @@ const verifyReward = async (txhash) => {
                         const signer = new ethers.Wallet(process.env.BACKEND_WALLET_PK, provider);
                         const projectsContractAsSigner = projectsContract.connect(signer);
 
-                        const memberData = await projectsContractAsSigner.projectMemberMapping(
-                            reward.projectId,
-                            reward.member
+                        const memberData = await projectsContractAsSigner.projectMemberStorage(
+                            reward.memberRecordId
                         );
 
                         if (memberData?.rewardVerified === false) {
                             projectsContractAsSigner
-                                .setMemberRewardAsVerified(reward.projectId, reward.member)
+                                .setMemberRewardAsVerified(reward.projectId, reward.memberRecordId)
                                 .then(async (tx) => {
                                     const txReceipt = await tx.wait();
                                     console.log(`Reward verified for ${reward.member} in project ${reward.projectId}`);
