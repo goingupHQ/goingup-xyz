@@ -1,9 +1,11 @@
+import { LoadingButton } from '@mui/lab';
 import { Button, Chip, Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import moment from 'moment';
 import NextLink from 'next/link';
 import React from 'react';
 import { WalletContext } from '../../../contexts/wallet-context';
 import SectionHeader from '../../common/section-header';
+import SetProjectLogo from './set-project-logo';
 
 export default function ProjectInformation(props) {
     const { id, project } = props;
@@ -80,6 +82,10 @@ export default function ProjectInformation(props) {
                     <Typography variant="body1">
                         {project?.ended?.toNumber() ? moment(project?.ended.toNumber() * 1000).format('LL') : 'None'}
                     </Typography>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <SetProjectLogo projectId={id} />
                 </Grid>
             </Grid>
         </Paper>

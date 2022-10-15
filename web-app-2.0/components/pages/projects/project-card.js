@@ -1,7 +1,8 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Link, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, Link, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { WalletContext } from '../../../contexts/wallet-context';
+import ProjectLogo from './project-logo';
 
 export default function ProjectCard(props) {
     const { project } = props;
@@ -20,7 +21,12 @@ export default function ProjectCard(props) {
                 }}
             >
                 <CardHeader
-                    title={project.name}
+                    title={
+                        <Stack direction="row" spacing={3} alignItems="center">
+                            <ProjectLogo projectId={project.id} height={98} width={98} />
+                            <Typography variant="h5">{project.name}</Typography>
+                        </Stack>
+                    }
                     sx={{ cursor: 'pointer' }}
                     onClick={() => router.push(`/projects/page/${project.id}`)}
                 />
@@ -43,7 +49,9 @@ export default function ProjectCard(props) {
 
                     <br />
                     <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                        {project.owner === wallet.address ? 'You are the owner of this project' : 'You are a member of this project'}
+                        {project.owner === wallet.address
+                            ? 'You are the owner of this project'
+                            : 'You are a member of this project'}
                     </Typography>
                 </CardContent>
 
@@ -56,15 +64,15 @@ export default function ProjectCard(props) {
                         Go to Project Page
                     </Button>
 
-                    {project.owner === wallet.address &&
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => router.push(`/projects/edit/${project?.id.toNumber()}`)}
-                    >
-                        Edit
-                    </Button>
-                    }
+                    {project.owner === wallet.address && (
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => router.push(`/projects/edit/${project?.id.toNumber()}`)}
+                        >
+                            Edit
+                        </Button>
+                    )}
                 </CardActions>
             </Card>
         </>

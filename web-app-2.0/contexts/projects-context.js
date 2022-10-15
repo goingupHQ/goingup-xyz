@@ -321,6 +321,18 @@ export const ProjectsProvider = ({ children }) => {
         return tx;
     }
 
+    const setProjectLogo = async (projectId, imageUrl) => {
+        const contract = getContract();
+        const tx = await contract.setProjectExtraData(projectId, 'logo', imageUrl);
+        return tx;
+    };
+
+    const getProjectLogo = async (projectId) => {
+        const contract = getContract();
+        const logo = await contract.extraData(projectId, 'logo');
+        return logo;
+    };
+
     const value = {
         networkParams,
         isCorrectNetwork,
@@ -345,6 +357,8 @@ export const ProjectsProvider = ({ children }) => {
         removeProjectMember,
         leaveProject,
         setMemberGoalAsAchieved,
+        setProjectLogo,
+        getProjectLogo,
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };

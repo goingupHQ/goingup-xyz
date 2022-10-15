@@ -55,7 +55,7 @@ export default function ProjectsList(props) {
         <>
             {!loading && (
                 <>
-                    {projects.length === 0 && (
+                    {projects.length + joinedProjects.length === 0 && (
                         <Stack
                             justifyContent='center'
                             alignItems='center'
