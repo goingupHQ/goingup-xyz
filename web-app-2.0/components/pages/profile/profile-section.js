@@ -32,7 +32,6 @@ const ProfileSection = (props) => {
                         sx={{
                             paddingX: { xs: '15px', md: '30px' },
                             marginTop: { xs: '15px', md: '30px' },
-                            marginBottom: '30px',
                         }}>
                         <Grid item>
                             <ProfilePhotoSection account={account} refresh={props.refresh} />
@@ -42,10 +41,10 @@ const ProfileSection = (props) => {
                             <ProfileAddressSection account={account} refresh={props.refresh} />
                         </Grid>
                     </Grid>
-                    <Box margin={3}>
+                    <Box paddingBottom={'30px'}>
                         <Typography
                             variant='sh1'
-                            sx={{ margin: { xs: '5px', md: '30px' } }}>
+                            sx={{ margin: '30px' }}>
                             {account.about}
                         </Typography>
                     </Box>

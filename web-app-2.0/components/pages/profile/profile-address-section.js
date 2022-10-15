@@ -97,7 +97,7 @@ const ProfileAddressSection = (props) => {
                     xs: 'none',
                     md: 'flex-end',
                 }}
-                marginLeft={'-8px'}>
+                marginRight={'3px'}>
                 <ContactsAndIntegrations
                     account={account}
                     refresh={props.refresh}
