@@ -15,6 +15,7 @@ import {
     Typography,
 } from "@mui/material";
 import ProjectSectionCard from "./project-section-card";
+import { useRouter } from "next/router";
 
 export default function ProjectsSection(props) {
     const { account } = props;
@@ -28,6 +29,8 @@ export default function ProjectsSection(props) {
     const [joinedProjects, setJoinedProjects] = useState([]);
     const [projectOwner, setProjectOwner] = useState(false);
     const [projectContributor, setProjectContributor] = useState(false);
+    const router = useRouter();
+    const { address } = router.query;
 
     const handleClick = () => {
         setProjectOwner((current) => !current);
@@ -37,11 +40,9 @@ export default function ProjectsSection(props) {
     const load = async () => {
         setLoading(true);
         try {
-            const ownedProjects = await projectsContext.getAccountProjects(
-                account.address
-            );
+            const ownedProjects = await projectsContext.getAccountProjects(address);
             const joinedProjects =
-                await projectsContext.getAccountJoinedProjects(wallet.address);
+                await projectsContext.getAccountJoinedProjects(address);
             setProjects(ownedProjects);
             setJoinedProjects(joinedProjects);
         } catch (err) {
@@ -53,9 +54,9 @@ export default function ProjectsSection(props) {
 
     useEffect(() => {
         //
-        if (account.address) load();
+        if (account.address && router.isReady) load();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [account.address]);
+    }, [account.address, router.isReady]);
 
     useEffect(() => {
         setProjectOwner(true);
@@ -120,7 +121,7 @@ export default function ProjectsSection(props) {
                                         spacing={4}
                                     >
                                         <Typography variant='h2'>
-                                            You have not created a project yet
+                                            {account.name} have not created a project yet
                                         </Typography>
 
                                         <img
@@ -131,17 +132,6 @@ export default function ProjectsSection(props) {
                                                 maxWidth: "200px",
                                             }}
                                         />
-
-                                        <Button
-                                            variant='contained'
-                                            color='primary'
-                                            size='large'
-                                            onClick={() =>
-                                                router.push("/projects/create")
-                                            }
-                                        >
-                                            Create your first Project
-                                        </Button>
                                     </Stack>
                                 )}
                                 {projects.length > 0 && projectOwner && (
@@ -167,6 +157,27 @@ export default function ProjectsSection(props) {
                                                     </Grid>
                                                 ))}
                                         </Grid>
+                                    </Stack>
+                                )}
+                                {joinedProjects.length === 0 && projectContributor && (
+                                    <Stack
+                                        justifyContent='center'
+                                        alignItems='center'
+                                        direction='column'
+                                        spacing={4}
+                                    >
+                                        <Typography variant='h2'>
+                                            {account.name} have not contributed to a project yet
+                                        </Typography>
+
+                                        <img
+                                            src='/images/illustrations/empty-box.svg'
+                                            alt='connection-lost'
+                                            style={{
+                                                width: "100%",
+                                                maxWidth: "200px",
+                                            }}
+                                        />
                                     </Stack>
                                 )}
                                 {joinedProjects.length > 0 &&

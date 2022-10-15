@@ -31,8 +31,6 @@ export default function ProjectsList(props) {
             const joinedProjects = await projectsContext.getJoinedProjects(
                 wallet.address
             );
-            console.log("ownedProjects", ownedProjects);
-            console.log("joinedProjects", joinedProjects);
             setProjects(ownedProjects);
             setJoinedProjects(joinedProjects);
         } catch (err) {

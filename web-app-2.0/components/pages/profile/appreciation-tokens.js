@@ -18,12 +18,15 @@ import { ethers } from "ethers";
 import artifact from "../../../../artifacts/GoingUpUtilityToken.json";
 import ChevronRightIcon from "../../icons/ChevronRightIcon";
 import AppreciationTokenCard from "./appreciation-token-card";
+import SentAppreciationTokenCard from "./sent-appreciation-tokens";
 
 const CardContentWrapper = styled(CardContent)(() => ``);
 
 const AppreciationTokens = (props) => {
     const [loading, setLoading] = useState(true);
     const [balances, setBalances] = useState([0, 0, 0, 0]);
+    const [isReceived, setIsReceived] = useState(true);
+    const [isSent, setIsSent] = useState(false);
 
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
@@ -37,7 +40,14 @@ const AppreciationTokens = (props) => {
         provider
     );
 
+    const handleClick = () => {
+        setIsReceived((current) => !current);
+        setIsSent((current) => !current);
+    };
+
     useEffect(() => {
+        setIsSent(false);
+        setIsReceived(true);
         const load = async () => {
             setLoading(true);
             try {
@@ -122,12 +132,30 @@ const AppreciationTokens = (props) => {
                                     paddingTop={"14px"}
                                     paddingX={"18px"}
                                 >
-                                    <Button variant="outlined" color='text'>
-                                        Received
-                                    </Button>
-                                    <Button color='text'>
-                                        Sent
-                                    </Button>
+                                    {isReceived ? (
+                                        <Button variant='outlined' color='text'>
+                                            Received
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            onClick={handleClick}
+                                            color='text'
+                                        >
+                                            Received
+                                        </Button>
+                                    )}
+                                    {isSent ? (
+                                        <Button variant='outlined' color='text'>
+                                            Sent
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            onClick={handleClick}
+                                            color='text'
+                                        >
+                                            Sent
+                                        </Button>
+                                    )}
                                 </Stack>
                             </>
                         }
@@ -139,7 +167,7 @@ const AppreciationTokens = (props) => {
                             </Typography>
                         )}
 
-                        {!loading && (
+                        {!loading && isReceived && (
                             <Grid container columnSpacing={3} rowSpacing={3}>
                                 {balances.map((balance, index) => {
                                     return (
@@ -152,6 +180,29 @@ const AppreciationTokens = (props) => {
                                             >
                                                 {balances[index] > 0 && (
                                                     <AppreciationTokenCard
+                                                        tier={index + 1}
+                                                        balance={balance}
+                                                    />
+                                                )}
+                                            </Grid>
+                                        )
+                                    );
+                                })}
+                            </Grid>
+                        )}
+                        {!loading && isSent && (
+                            <Grid container columnSpacing={3} rowSpacing={3}>
+                                {balances.map((balance, index) => {
+                                    return (
+                                        balance > 0 && (
+                                            <Grid
+                                                item
+                                                xs={12}
+                                                md={6}
+                                                key={index}
+                                            >
+                                                {balances[index] > 0 && (
+                                                    <SentAppreciationTokenCard
                                                         tier={index + 1}
                                                         balance={balance}
                                                     />
