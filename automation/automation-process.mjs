@@ -31,7 +31,7 @@ if (process.env.DEPLOYMENT === 'dev') {
     );
 } else if (process.env.DEPLOYMENT === 'production') {
     projectsContract = new ethers.Contract(
-        '0xb6b83BaE8251d305FcbdaF2aE8cDffAC39216C95',
+        '0x9C28e833aE76A1e123c2799034cA6865A1113CA5',
         projectsArtifact.abi,
         polygonProvider
     );
