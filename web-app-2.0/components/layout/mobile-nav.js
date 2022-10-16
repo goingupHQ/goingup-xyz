@@ -44,7 +44,7 @@ export default function MobileNav(props) {
                 <Button
                     onClick={closeNav}
                     sx={router.pathname === '/' ? activeButtonStyle : inactiveButtonStyle}
-                    startIcon={<DashboardIcon color={ router.pathname === '/' ? activeColor: inactiveColor } />}
+                    startIcon={<DashboardIcon color={ router.pathname === '/dashboard' ? activeColor: inactiveColor } />}
                 >
                     Dashboard
                 </Button>

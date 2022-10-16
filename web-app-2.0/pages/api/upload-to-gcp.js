@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     const file = bucket.file(req.query.file);
     const options = {
         expires: Date.now() + 1 * 60 * 1000, //  1 minute,
-        fields: { 'x-goog-meta-test': 'data' }
+        fields: {}
     };
 
     const [response] = await file.generateSignedPostPolicyV4(options);

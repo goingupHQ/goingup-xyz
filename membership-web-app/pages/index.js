@@ -10,7 +10,7 @@ import Web3Modal from 'web3modal';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import truncateEthAddress from 'truncate-eth-address';
 
-export default function Home() {
+export default function Mint() {
     const { enqueueSnackbar } = useSnackbar();
 
     const [availableSupply, setAvailableSupply] = useState(0);
@@ -134,12 +134,8 @@ export default function Home() {
 
     return (
         <>
-            <Grid
-                container
-                spacing={3}
-                sx={{ width: '100%', paddingX: { xs: 2, md: 6, lg: 12, xl: 22 }, pt: 4, pb: 16 }}
-            >
-                <Grid item xs={12} md={6} sx={{ px: 10 }}>
+            <Grid container sx={{ width: '100%', paddingX: { xs: 4, md: 6, lg: 12, xl: 22 }, pt: 4, pb: 16 }}>
+                <Grid item xs={12} md={6} sx={{ px: { sm: 4, md: 10 }, mb: { xs: 4, md: 0 } }}>
                     <model-viewer
                         alt="GoingUP Exclusive Premium Membership Trophy"
                         src="https://storage.googleapis.com/goingup-xyz-bucket-001/assets/GoingUP-Trophy_GLB.glb"
@@ -154,7 +150,7 @@ export default function Home() {
                             minHeight: '500px',
                             width: '100%',
                             borderRadius: '4px',
-                            border: `1px solid #fff`,
+                            border: `1px solid #E2E5DE`,
                         }}
                         ref={(ref) => {
                             modelRef.current = ref;
@@ -167,7 +163,7 @@ export default function Home() {
                     xs={12}
                     md={6}
                     sx={{
-                        px: 10,
+                        px: { sm: 4, md: 10 },
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',

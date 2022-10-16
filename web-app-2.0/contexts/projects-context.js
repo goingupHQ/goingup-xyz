@@ -1,42 +1,33 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { WalletContext } from './wallet-context';
 import artifact from '../artifacts/GoingUpProjects.json';
-console.log('Projects ABI', artifact.abi);
+import { ethers } from 'ethers';
+import moment from 'moment';
+import { useSnackbar } from 'notistack';
+import { Button } from '@mui/material';
+import { useRouter } from 'next/router';
+import { UtilityTokensContext } from './utility-tokens-context';
 
 export const ProjectsContext = createContext();
 
 export const ProjectsProvider = ({ children }) => {
     const wallet = useContext(WalletContext);
+    const utilityTokensContext = useContext(UtilityTokensContext);
 
     // polygon mumbai testnet
-    const contractAddress = '0xe0b5f0c73754347E1d2E3c84382970D7A70d666B';
-    const contractNetwork = 80001;
-    const networkParams = {
-        chainId: '0x13881',
-        chainName: 'Polygon Testnet',
-        nativeCurrency: {
-            name: 'MATIC',
-            symbol: 'MATIC',
-            decimals: 18,
-        },
-        rpcUrls: ['https://matic-mumbai.chainstacklabs.com'],
-        blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
-    };
+    // const contractAddress = '0x89e41C41Fa8Aa0AE4aF87609D3Cb0F466dB343ab';
+    // const contractNetwork = 80001;
 
     // polygon mainnet
-    // const contractAddress = 'NOT_YET_DEPLOYED';
-    // const contractNetwork = 137;
-    // const networkParams = {
-    //     chainId: '0x89',
-    //     chainName: 'Matic Mainnet',
-    //     nativeCurrency: {
-    //         name: 'MATIC',
-    //         symbol: 'MATIC',
-    //         decimals: 18,
-    //     },
-    //     rpcUrls: ['https://polygon-rpc.com/'],
-    //     blockExplorerUrls: ['https://polygonscan.com/'],
-    // };
+    const contractAddress = '0x9C28e833aE76A1e123c2799034cA6865A1113CA5';
+    const contractNetwork = 137;
+
+    const { networkParams } = wallet.networks[contractNetwork];
+
+    const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network == contractNetwork);
+
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const router = useRouter();
 
     async function switchToCorrectNetwork() {
         if (wallet.walletType === 'walletconnect') {
@@ -51,9 +42,7 @@ export const ProjectsProvider = ({ children }) => {
                 if (switchError.code === 4902) {
                     await ethereum.request({
                         method: 'wallet_addEthereumChain',
-                        params: [
-                            networkParams
-                        ],
+                        params: [networkParams],
                     });
                 }
             }
@@ -64,26 +53,314 @@ export const ProjectsProvider = ({ children }) => {
         setIsCorrectNetwork(wallet.network == contractNetwork);
     }, [wallet]);
 
-    console.log(wallet.network, contractNetwork);
-    const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network == contractNetwork);
+    // check for project invites
+    useEffect(() => {
+        if (wallet.address && isCorrectNetwork) {
+            getPendingInvitesByAddress(wallet.address).then((projectIDs) => {
+                if (projectIDs.length === 0) return;
+                enqueueSnackbar(`You have ${projectIDs.length} pending project invites.`, {
+                    variant: 'info',
+                    persist: true,
+                    action: (key) => (
+                        <>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                sx={{ mr: 1 }}
+                                onClick={() => {
+                                    router.push(`/projects/pending-invites`);
+                                    closeSnackbar(key);
+                                }}
+                            >
+                                Review
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                size="small"
+                                onClick={() => closeSnackbar(key)}
+                            >
+                                Ignore
+                            </Button>
+                        </>
+                    ),
+                });
+            });
+        }
+    }, [wallet.address, isCorrectNetwork]);
 
     const getContract = () => {
-        const contract = new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
-    }
+        return new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
+    };
 
     const getProjects = async () => {
-        return [];
+        const contract = getContract();
+        const projects = [];
+
+        const response = await fetch(`/api/projects/account/${wallet.address}`);
+        const projectIds = await response.json();
+
+        for (const projectId of projectIds) {
+            const project = await contract.projects(projectId);
+            projects.push(project);
+        }
+
+        return projects;
+    };
+
+    const getAccountProjects = async (address, includePrivate = false) => {
+        const contract = getContract();
+        const projects = [];
+
+        const response = await fetch(`/api/projects/account/${address}`);
+        const projectIds = await response.json();
+
+        for (const projectId of projectIds) {
+            const project = await contract.projects(projectId);
+            if (project.isPrivate && !includePrivate) continue;
+            projects.push(project);
+        }
+
+        return projects;
+    };
+
+    const getAccountJoinedProjects = async (address, includePrivate = false) => {
+        const contract = getContract();
+        const projectIds = await contract.getProjectsByAddress(address);
+
+        const projects = [];
+        for (const projectId of projectIds) {
+            const project = await contract.projects(projectId);
+            if (project.isPrivate && !includePrivate) continue;
+            projects.push(project);
+        }
+
+        return projects;
+    }
+
+    const getProjectsAfterBlock = async (block) => {
+        const contract = getContract();
+        const projects = [];
+
+        const response = await fetch(`/api/projects/after-block/${wallet.address}?block=${block}`);
+        const projectIds = await response.json();
+
+        for (const projectId of projectIds) {
+            const project = await contract.projects(projectId);
+            projects.push(project);
+        }
+
+        return projects;
+    };
+
+    const getProject = async (projectId) => {
+        if (!wallet.address) throw `no wallet connected`;
+        const contract = getContract();
+        const project = await contract.projects(projectId);
+        return project;
+    };
+
+    const getJoinedProjects = async (address) => {
+        const contract = getContract();
+        const projectIds = await contract.getProjectsByAddress(address);
+
+        const projects = [];
+        for (const projectId of projectIds) {
+            const project = await contract.projects(projectId);
+            projects.push(project);
+        }
+
+        return projects;
     }
 
     const createProject = async (name, description, started, ended, primaryUrl, tags, isPrivate) => {
-        const contract = get
+        const contract = getContract();
+
+        if (!isCorrectNetwork) throw 'Wrong network';
+        if (!wallet.ethersSigner) throw 'No wallet';
+
+        const price = await contract.price();
+
+        const tx = await contract.create(
+            name,
+            description || '',
+            started ? moment(started).unix() : 0,
+            ended ? moment(ended).unix() : 0,
+            primaryUrl || '',
+            tags ? tags.join(',') : '',
+            isPrivate,
+            { value: price }
+        );
+        return tx;
+    };
+
+    const updateProject = async (projectId, name, description, started, ended, primaryUrl, tags, isPrivate) => {
+        const contract = getContract();
+
+        if (!isCorrectNetwork) throw 'Wrong network';
+        if (!wallet.ethersSigner) throw 'No wallet';
+
+        const price = await contract.price();
+
+        const tx = await contract.update(
+            projectId,
+            name,
+            description || '',
+            started ? moment(started).unix() : 0,
+            ended ? moment(ended).unix() : 0,
+            primaryUrl || '',
+            tags ? tags.join(',') : '',
+            isPrivate,
+            { value: price }
+        );
+        return tx;
+    };
+
+    const transferProjectOwnership = async (projectId, newOwner) => {
+        const contract = getContract();
+
+        if (!isCorrectNetwork) throw 'Wrong network';
+        if (!wallet.ethersSigner) throw 'No wallet';
+
+        const price = await contract.price();
+
+        const tx = await contract.transferProjectOwnership(projectId, newOwner, { value: price });
+        return tx;
+    };
+
+    const getProjectMembers = async (projectId) => {
+        const contract = getContract();
+        const members = await contract.getProjectMembers(projectId);
+        return members;
+    };
+
+    const getProjectMember = async (memberRecordId) => {
+        const contract = getContract();
+        const member = await contract.projectMemberStorage(memberRecordId);
+
+        const memberData = {
+            id: member.id,
+            projectId: member.projectId,
+            member: member.member,
+            address: member.member,
+            role: member.role,
+            goal: member.goal,
+            goalAchieved: member.goalAchieved,
+            rewardVerified: member.rewardVerified,
+            reward: JSON.parse(member.rewardData),
+        };
+
+        return memberData;
+    };
+
+    const getPendingInvites = async (projectId) => {
+        const contract = getContract();
+        const invites = await contract.getPendingInvites(projectId);
+        return invites;
+    };
+
+    const getPendingInvitesByAddress = async (address) => {
+        const contract = getContract();
+        const memberRecordIds = await contract.getPendingInvitesByAddress(address);
+
+        return memberRecordIds;
+    };
+
+    const getMembersAndInvites = async (projectId) => {
+        const contract = getContract();
+        const members = await getProjectMembers(projectId);
+        const pendingInvites = await getPendingInvites(projectId);
+
+        return {
+            members,
+            pendingInvites,
+        };
+    };
+
+    const inviteProjectMember = async (projectId, member, role, goal, rewards) => {
+        const contract = getContract();
+
+        const freeMembers = await contract.freeMembers();
+        const pendingInvites = await contract.getPendingInvites(projectId);
+        const members = await contract.getProjectMembers(projectId);
+
+        const fee = ethers.BigNumber.from(0);
+        if (pendingInvites.length + members.length + 1 >= freeMembers) fee = await contract.addMemberPrice();
+
+        const tx = await contract.inviteMember(projectId, member, role, goal, JSON.stringify(rewards), { value: fee });
+        return tx;
+    };
+
+    const disinviteProjectMember = async (projectId, member) => {
+        const contract = getContract();
+
+        const tx = await contract.disinviteMember(projectId, member);
+        return tx;
+    };
+
+    const acceptProjectInvite = async (memberRecordId) => {
+        const contract = getContract();
+        const tx = await contract.acceptProjectInvitation(memberRecordId);
+        return tx;
+    };
+
+    const removeProjectMember = async (projectId, memberRecordId, reason = '') => {
+        const contract = getContract();
+        const tx = await contract.removeMember(projectId, memberRecordId, reason);
+        return tx;
+    };
+
+    const leaveProject = async (projectId, reason) => {
+        const contract = getContract();
+        const tx = await contract.leaveProject(projectId, reason);
+        return tx;
+    };
+
+    const setMemberGoalAsAchieved = async(projectId, memberRecordId) => {
+        const contract = getContract();
+        const tx = await contract.setMemberGoalAsAchieved(projectId, memberRecordId);
+        return tx;
     }
+
+    const setProjectLogo = async (projectId, imageUrl) => {
+        const contract = getContract();
+        const tx = await contract.setProjectExtraData(projectId, 'logo', imageUrl);
+        return tx;
+    };
+
+    const getProjectLogo = async (projectId) => {
+        const contract = getContract();
+        const logo = await contract.extraData(projectId, 'logo');
+        return logo;
+    };
 
     const value = {
         networkParams,
         isCorrectNetwork,
         switchToCorrectNetwork,
-        getProjects
+        getProjects,
+        getProjectsAfterBlock,
+        getProject,
+        getAccountProjects,
+        getAccountJoinedProjects,
+        getJoinedProjects,
+        createProject,
+        updateProject,
+        transferProjectOwnership,
+        getProjectMembers,
+        getProjectMember,
+        getPendingInvites,
+        getPendingInvitesByAddress,
+        getMembersAndInvites,
+        inviteProjectMember,
+        disinviteProjectMember,
+        acceptProjectInvite,
+        removeProjectMember,
+        leaveProject,
+        setMemberGoalAsAchieved,
+        setProjectLogo,
+        getProjectLogo,
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };

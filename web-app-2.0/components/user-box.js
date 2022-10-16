@@ -14,9 +14,7 @@ import {
     Stack
 } from '@mui/material';
 import truncateEthAddress from 'truncate-eth-address';
-import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenIcon from './../components/icons/LockOpenIcon';
-import WorkTwoToneIcon from '@mui/icons-material/WorkTwoTone';
 import Identicon from './../components/common/Identicon';
 import WalletChainSelection from '../contexts/wallet-chain-selection';
 import CollaboratorsIcon from './icons/CollaboratorsIcon';
@@ -30,14 +28,15 @@ const UserBoxButton = styled(Button)(
     padding: ${theme.spacing(0, 1)};
     background-color: ${theme.palette.background.userBox};
     height: 40px;
-    width: 148px;
+    width: 168px;
     min-width: 90px;
-    max-width: 148px;
+    max-width: 168px;
     &.Mui-active,
     &:hover {
       .MuiSvgIcon-root {
       }
     }
+    overflow: hidden;
 
     .MuiButton-label {
       justify-content: flex-start;
@@ -118,13 +117,15 @@ export default function UserBox () {
                 startIcon={
                     <>
                         {wallet.address === null &&
-                            <CollaboratorsIcon color={theme.palette.text.main} />
-                            // <Avatar variant="rounded" />
+                        <Box sx={{ paddingLeft: '4px', paddingTop: '10px'}}>
+                        <CollaboratorsIcon color={theme.palette.text.main} />
+                        {/* <Avatar variant="rounded" /> */}
+                        </Box>
                         }
 
                         {wallet.address !== null &&
-                            <Box sx={{ paddingTop: '12px', display: {xs: 'none', md: 'initial'} }}>
-                                <Identicon address={wallet.address} size={24}/>
+                            <Box sx={{ paddingLeft: '8px', paddingTop: '7px' }}>
+                                <Identicon address={wallet.address} size={19}/>
                             </Box>
                         }
                     </>

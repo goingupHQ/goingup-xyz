@@ -1,9 +1,8 @@
 import { ethers } from 'ethers';
-import { dbClient } from './_get-db-client';
+import { getDb } from './_get-db-client';
 
 export const getAccount = async (address) => {
-    await dbClient.connect();
-    const db = dbClient.db('main');
+    const db = await getDb();
     const accounts = db.collection('accounts');
 
     const account = await accounts.findOne({ address });

@@ -10,8 +10,8 @@ import ProjectsIcon from '../icons/ProjectsIcon';
 export default function DesktopNav(props) {
     const commonButtonStyle = {
         fontSize: '1rem',
-        padding: '10px 25px'
-    }
+        padding: '10px 25px',
+    };
 
     const activeButtonStyle = {
         ...commonButtonStyle,
@@ -19,8 +19,8 @@ export default function DesktopNav(props) {
         color: 'primary.contrastText',
         ':hover': {
             backgroundColor: 'hoverPrimary.main',
-        }
-    }
+        },
+    };
 
     const inactiveButtonStyle = {
         ...commonButtonStyle,
@@ -28,14 +28,18 @@ export default function DesktopNav(props) {
         ':hover': {
             color: 'hoverTab.main',
         },
-    }
+    };
 
     const router = useRouter();
     const { pathname } = router;
 
     return (
         <>
-            <Stack direction="row" spacing={3} sx={{ display: { xs: 'none', md: 'initial' }, margin: { xs: '10px 25px', lg: '10px 105px' } }}>
+            <Stack
+                direction="row"
+                spacing={3}
+                sx={{ display: { xs: 'none', md: 'initial', paddingBottom: '10px', paddingLeft: '14px' } }}
+            >
                 <Link href="/">
                     <Button
                         sx={pathname === '/' ? activeButtonStyle : inactiveButtonStyle}
@@ -47,7 +51,7 @@ export default function DesktopNav(props) {
 
                 <Link href="/projects">
                     <Button
-                        sx={pathname === '/projects' ? activeButtonStyle : inactiveButtonStyle}
+                        sx={pathname.startsWith('/projects') ? activeButtonStyle : inactiveButtonStyle}
                         startIcon={<ProjectsIcon />}
                     >
                         Projects
@@ -56,7 +60,7 @@ export default function DesktopNav(props) {
 
                 <Link href="/profile">
                     <Button
-                        sx={pathname === '/profile' ? activeButtonStyle : inactiveButtonStyle}
+                        sx={pathname.startsWith('/profile') ? activeButtonStyle : inactiveButtonStyle}
                         startIcon={<ProfileIcon />}
                     >
                         Profile
@@ -65,7 +69,7 @@ export default function DesktopNav(props) {
 
                 <Link href="/collaborators">
                     <Button
-                        sx={pathname === '/collaborators' ? activeButtonStyle : inactiveButtonStyle}
+                        sx={pathname.startsWith('/collaborators') ? activeButtonStyle : inactiveButtonStyle}
                         startIcon={<CollaboratorsIcon />}
                     >
                         Collaborators

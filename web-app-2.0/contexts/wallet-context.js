@@ -1,10 +1,12 @@
-import { ReactNode, useState, createContext, useEffect, useRef } from 'react';
+import { ReactNode, useState, createContext, useEffect, useRef, useContext } from 'react';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import { useSnackbar } from 'notistack';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
+import { AppContext } from './app-context';
+import { Backdrop, Button, Paper, Stack, Typography } from '@mui/material';
 
 export const WalletContext = createContext({});
 
@@ -32,9 +34,33 @@ const networks = {
     },
     137: {
         name: 'Polygon Mainnet',
+        group: 'polygon',
+        networkParams: {
+            chainId: '0x89',
+            chainName: 'Polygon Mainnet',
+            nativeCurrency: {
+                name: 'MATIC',
+                symbol: 'MATIC',
+                decimals: 18,
+            },
+            rpcUrls: ['https://polygon-rpc.com/'],
+            blockExplorerUrls: ['https://polygonscan.com/'],
+        },
     },
     80001: {
         name: 'Polygon Mumbai Testnet',
+        group: 'polygon',
+        networkParams: {
+            chainId: '0x13881',
+            chainName: 'Polygon Testnet',
+            nativeCurrency: {
+                name: 'MATIC',
+                symbol: 'MATIC',
+                decimals: 18,
+            },
+            rpcUrls: ['https://matic-mumbai.chainstacklabs.com'],
+            blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
+        },
     },
     'CARDANO-0': {
         name: 'Cardano Testnet',
@@ -67,13 +93,14 @@ const web3ModalOptions = {
     // network: 'mainnet',
     cacheProvider: true,
     providerOptions,
-    theme: 'light'
-}
+    theme: 'light',
+};
 
 export function WalletProvider({ children }) {
     const router = useRouter();
-    const { enqueueSnackbar } = useSnackbar();
     const wselRef = useRef(null);
+
+    const app = useContext(AppContext);
 
     const [address, setAddress] = useState(null);
     const [network, setNetwork] = useState(null);
@@ -81,6 +108,128 @@ export function WalletProvider({ children }) {
     const [ethersProvider, setEthersProvider] = useState(null);
     const [ethersSigner, setEthersSigner] = useState(null);
     const [walletType, setWalletType] = useState(null);
+
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+    useEffect(() => {
+        if (address) {
+            if (Notification.permission === 'denied') {
+                if (localStorage.getItem('notifs-denied-forever') === 'true') return;
+
+                enqueueSnackbar('Please enable notifications in your browser settings', {
+                    variant: 'warning',
+                    persist: true,
+                    action: (key) => (
+                        <Stack direction="row" spacing={1}>
+                            <Button variant="contained" color="primary" onClick={() => closeSnackbar(key)}>
+                                Later
+                            </Button>
+
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => {
+                                    closeSnackbar(key);
+                                    localStorage.setItem('notifs-denied-forever', true);
+                                    enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
+                                }}
+                            >
+                                Never
+                            </Button>
+                        </Stack>
+                    ),
+                });
+            }
+
+            if (Notification.permission === 'granted') {
+                // check for existing subscription
+                if (localStorage.getItem('psn-subscription')) {
+                    const subscription = JSON.parse(localStorage.getItem('psn-subscription'));
+                    if (subscription) postPsnSubscription(subscription);
+                    else {
+                        app.subscribeUserToPush().then((subscription) => {
+                            postPsnSubscription(subscription);
+                        });
+                    }
+                } else {
+                    app.subscribeUserToPush().then((subscription) => {
+                        postPsnSubscription(subscription);
+                    });
+                }
+            }
+
+            if (Notification.permission === 'default') {
+                if (localStorage.getItem('notifs-denied-forever') === 'true') return;
+                enqueueSnackbar('Do you want to receive notifications from GoingUP?', {
+                    variant: 'info',
+                    persist: true,
+                    action: (key) => (
+                        <Stack direction="row" spacing={1}>
+                            <Button variant="contained" color="primary" onClick={() => askNotifsConsent(key)}>
+                                Yes
+                            </Button>
+
+                            <Button variant="contained" color="secondary" onClick={() => closeSnackbar(key)}>
+                                No
+                            </Button>
+
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => {
+                                    closeSnackbar(key);
+                                    localStorage.setItem('notifs-denied-forever', true);
+                                    enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
+                                }}
+                            >
+                                Never
+                            </Button>
+                        </Stack>
+                    ),
+                });
+            }
+        }
+    }, [address]);
+
+    const askNotifsConsent = async (snackbarKey) => {
+        closeSnackbar(snackbarKey);
+        const key = enqueueSnackbar('Please approve notifications in the prompt which should be near the address bar', {
+            variant: 'info',
+            persist: true,
+        });
+
+        try {
+            const result = await Notification.requestPermission();
+
+            if (result === 'granted') {
+                const subscription = await app.subscribeUserToPush();
+                postPsnSubscription(subscription, true);
+            } else {
+                enqueueSnackbar('You did not allow notifications', { variant: 'warning' });
+            }
+        } catch (e) {
+            console.log(e);
+        } finally {
+            closeSnackbar(key);
+        }
+    };
+
+    const postPsnSubscription = async (subscription, showNotification = false) => {
+        if (subscription) {
+            localStorage.setItem('psn-subscription', JSON.stringify(subscription));
+            await fetch('/api/psn', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    subscription,
+                    address,
+                }),
+            });
+            if (showNotification) enqueueSnackbar('Notifications enabled', { variant: 'success' });
+        }
+    };
 
     const connect = async () => {
         let cache;
@@ -270,7 +419,16 @@ export function WalletProvider({ children }) {
         chainName: 'Polygon Mainnet',
         address: '0x10D7B3aFA213D93a922a062fb91E8EcbD4A703d2',
         get provider() {
-            return new ethers.providers.AlchemyProvider(this.chainId, 'QoyYGyWecbDsHBaaDFapJeqKEFgFyRMM');
+            return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALPOLY_MAIN);
+        },
+    };
+
+    const utilityTokenTestnet = {
+        chainId: 80001,
+        chainName: 'Polygon Mumbai Testnet',
+        address: '0x825D5014239a59d7587b9F53b3186a76BF58aF72',
+        get provider() {
+            return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALPOLY_TEST);
         },
     };
 
@@ -282,9 +440,12 @@ export function WalletProvider({ children }) {
         console.log(web3ModalOptions);
     };
 
+    const mainnetENSProvider = ethers.getDefaultProvider('homestead');
+
     return (
         <WalletContext.Provider
             value={{
+                networks,
                 chain,
                 connectEthereum,
                 disconnectEthereum,
@@ -300,6 +461,7 @@ export function WalletProvider({ children }) {
                 signMessage,
                 utilityToken,
                 setWeb3ModalTheme,
+                mainnetENSProvider,
             }}
         >
             {children}

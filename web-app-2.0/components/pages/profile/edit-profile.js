@@ -21,9 +21,10 @@ import { useSnackbar } from 'notistack';
 import { forwardRef, useContext, useImperativeHandle, useState } from 'react';
 
 const EditProfile = (props, ref) => {
-    const { account } = props;
+    const { account } = props; 
     const [open, setOpen] = useState(false);
     const [name, setName] = useState(account.name);
+    const [about, setAbout] = useState(account.about);
     const [occupation, setOccupation] = useState(account.occupation);
     const [openTo, setOpenTo] = useState(account.openTo);
     const [projectGoals, setProjectGoals] = useState(account.projectGoals);
@@ -68,7 +69,7 @@ const EditProfile = (props, ref) => {
                     address,
                     signature,
                     account: {
-                        name, occupation, openTo, projectGoals, idealCollab
+                        name, about, occupation, openTo, projectGoals, idealCollab
                     }
                 })
             });
@@ -110,6 +111,15 @@ const EditProfile = (props, ref) => {
                             sx={fieldStyle}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                        />
+                        <TextField
+                            label="About you"
+                            placeholder="Introduce yourself to the community"
+                            variant="outlined"
+                            required
+                            sx={fieldStyle}
+                            value={about}
+                            onChange={(e) => setAbout(e.target.value)}
                         />
 
                         <FormControl sx={fieldStyle} required>
