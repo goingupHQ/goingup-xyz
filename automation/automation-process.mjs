@@ -113,13 +113,14 @@ if (projectsContract) {
     });
 
     projectsContract.on('DisinviteMember', async (projectId, from, to) => {
-        console.log(`DisinviteMember: ${projectId} ${from} ${to}`);
+        console.log(`DisinviteMember: ${projectId} ${from} ${memberRecordId}`);
         const project = await projectsContract.projects(projectId);
+        const memberRecord = await projectsContract.projectMemberStorage(memberRecordId);
 
         sendNotificationToAddress(
             from,
             `Transaction Confirmed`,
-            `Your disinvitation to ${to} from ${project.name} has been confirmed in the blockchain.`,
+            `Your disinvitation to ${memberRecord.member} from ${project.name} has been confirmed in the blockchain.`,
             `/projects/page/${projectId}`
         );
 
@@ -150,38 +151,40 @@ if (projectsContract) {
         );
     });
 
-    projectsContract.on('LeaveProject', async (projectId, member, reason) => {
-        console.log(`LeaveProject: ${projectId} ${member} ${reason}`);
+    projectsContract.on('LeaveProject', async (projectId, memberRecordId, reason) => {
+        console.log(`LeaveProject: ${projectId} ${memberRecordId} ${reason}`);
         const project = await projectsContract.projects(projectId);
+        const memberRecord = await projectsContract.projectMemberStorage(memberRecordId);
 
         sendNotificationToAddress(
             project.owner,
             `Project Member Left`,
-            `${member} has left ${project.name}`,
+            `${memberRecord.member} has left ${project.name}`,
             `/projects/page/${projectId}`
         );
 
         sendNotificationToAddress(
-            member,
+            memberRecord.member,
             `Leave Project`,
             `Your transaction to leave ${project.name} has been confirmed in the blockchain`,
             null
         );
     });
 
-    projectsContract.on('SetMemberGoalAsAchieved', async (projectId, setBy, member) => {
-        console.log(`SetMemberGoalAsAchieved: ${projectId} ${setBy} ${member}`);
+    projectsContract.on('SetMemberGoalAsAchieved', async (projectId, setBy, memberRecordId) => {
+        console.log(`SetMemberGoalAsAchieved: ${projectId} ${setBy} ${memberRecordId}`);
         const project = await projectsContract.projects(projectId);
+        const memberRecord = await projectsContract.projectMemberStorage(memberRecordId);
 
         sendNotificationToAddress(
             project.owner,
             `Member Goal Achieved`,
-            `${member} has achieved their goal in ${project.name}`,
+            `${memberRecord.id} has achieved their goal in ${project.name}`,
             `/projects/page/${projectId}`
         );
 
         sendNotificationToAddress(
-            member,
+            memberRecord.member,
             `Goal Achieved`,
             `Your goal in ${project.name} has been marked as achieved`,
             null
