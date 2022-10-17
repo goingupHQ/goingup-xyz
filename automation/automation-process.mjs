@@ -234,6 +234,9 @@ const verifyReward = async (txhash) => {
                                             { $set: { verified: true } }
                                         );
                                     }
+                                })
+                                .catch((error) => {
+                                    console.error(error);
                                 });
                         }
                     }
