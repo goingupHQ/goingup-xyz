@@ -215,7 +215,9 @@ const verifyReward = async (txhash) => {
                         const signer = new ethers.Wallet(process.env.BACKEND_WALLET_PK, provider);
                         const projectsContractAsSigner = projectsContract.connect(signer);
 
-                        const memberData = await projectsContractAsSigner.projectMemberStorage(reward.memberRecordId);
+                        const memberData = await projectsContractAsSigner.projectMemberStorage(
+                            ethers.BigNumber.from(reward.memberRecordId)
+                        );
 
                         if (memberData?.rewardVerified === false) {
                             projectsContractAsSigner
