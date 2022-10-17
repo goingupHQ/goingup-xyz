@@ -7,6 +7,7 @@ import webpush from './get-web-push.mjs';
 // prevent process from exiting when an unhandled exception occurs
 process.on('uncaughtException', function (err) {
     console.log('Caught exception: ', err);
+    console.log(`Process is still alive`);
 });
 
 const uri = process.env.MONGODB_URI;
