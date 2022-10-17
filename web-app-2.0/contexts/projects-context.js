@@ -163,7 +163,15 @@ export const ProjectsProvider = ({ children }) => {
 
     const getJoinedProjects = async (address) => {
         const contract = getContract();
-        const projectIds = await contract.getProjectsByAddress(address);
+        const memberRecordIds = await contract.getProjectsByAddress(address);
+
+        console.log(memberRecordIds);
+
+        const projectIds = [];
+        for (const memberRecordId of memberRecordIds) {
+            const memberRecord = await contract.projectMemberStorage(memberRecordId);
+            if (!projectIds.includes(memberRecord.projectId.toString())) projectIds.push(memberRecord.projectId.toString());
+        }
 
         const projects = [];
         for (const projectId of projectIds) {

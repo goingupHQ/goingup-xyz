@@ -4,6 +4,12 @@ import fs from 'fs';
 import { MongoClient } from 'mongodb';
 import webpush from './get-web-push.mjs';
 
+// prevent process from exiting when an unhandled exception occurs
+process.on('uncaughtException', function (err) {
+    console.log('Caught exception: ', err);
+    console.log(`Process is still alive`);
+});
+
 const uri = process.env.MONGODB_URI;
 const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, keepAlive: true });
 await dbClient.connect();
@@ -112,14 +118,15 @@ if (projectsContract) {
         );
     });
 
-    projectsContract.on('DisinviteMember', async (projectId, from, to) => {
-        console.log(`DisinviteMember: ${projectId} ${from} ${to}`);
+    projectsContract.on('DisinviteMember', async (projectId, from, memberRecordId) => {
+        console.log(`DisinviteMember: ${projectId} ${from} ${memberRecordId}`);
         const project = await projectsContract.projects(projectId);
+        const memberRecord = await projectsContract.projectMemberStorage(memberRecordId);
 
         sendNotificationToAddress(
             from,
             `Transaction Confirmed`,
-            `Your disinvitation to ${to} from ${project.name} has been confirmed in the blockchain.`,
+            `Your disinvitation to ${memberRecord.member} from ${project.name} has been confirmed in the blockchain.`,
             `/projects/page/${projectId}`
         );
 
@@ -150,38 +157,40 @@ if (projectsContract) {
         );
     });
 
-    projectsContract.on('LeaveProject', async (projectId, member, reason) => {
-        console.log(`LeaveProject: ${projectId} ${member} ${reason}`);
+    projectsContract.on('LeaveProject', async (projectId, memberRecordId, reason) => {
+        console.log(`LeaveProject: ${projectId} ${memberRecordId} ${reason}`);
         const project = await projectsContract.projects(projectId);
+        const memberRecord = await projectsContract.projectMemberStorage(memberRecordId);
 
         sendNotificationToAddress(
             project.owner,
             `Project Member Left`,
-            `${member} has left ${project.name}`,
+            `${memberRecord.member} has left ${project.name}`,
             `/projects/page/${projectId}`
         );
 
         sendNotificationToAddress(
-            member,
+            memberRecord.member,
             `Leave Project`,
             `Your transaction to leave ${project.name} has been confirmed in the blockchain`,
             null
         );
     });
 
-    projectsContract.on('SetMemberGoalAsAchieved', async (projectId, setBy, member) => {
-        console.log(`SetMemberGoalAsAchieved: ${projectId} ${setBy} ${member}`);
+    projectsContract.on('SetMemberGoalAsAchieved', async (projectId, setBy, memberRecordId) => {
+        console.log(`SetMemberGoalAsAchieved: ${projectId} ${setBy} ${memberRecordId}`);
         const project = await projectsContract.projects(projectId);
+        const memberRecord = await projectsContract.projectMemberStorage(memberRecordId);
 
         sendNotificationToAddress(
             project.owner,
             `Member Goal Achieved`,
-            `${member} has achieved their goal in ${project.name}`,
+            `${memberRecord.id} has achieved their goal in ${project.name}`,
             `/projects/page/${projectId}`
         );
 
         sendNotificationToAddress(
-            member,
+            memberRecord.member,
             `Goal Achieved`,
             `Your goal in ${project.name} has been marked as achieved`,
             null
@@ -213,12 +222,15 @@ const verifyReward = async (txhash) => {
                         const projectsContractAsSigner = projectsContract.connect(signer);
 
                         const memberData = await projectsContractAsSigner.projectMemberStorage(
-                            reward.memberRecordId
+                            ethers.BigNumber.from(reward.memberRecordId)
                         );
 
                         if (memberData?.rewardVerified === false) {
                             projectsContractAsSigner
-                                .setMemberRewardAsVerified(reward.projectId, reward.memberRecordId)
+                                .setMemberRewardAsVerified(
+                                    reward.projectId,
+                                    ethers.BigNumber.from(reward.memberRecordId)
+                                )
                                 .then(async (tx) => {
                                     const txReceipt = await tx.wait();
                                     console.log(`Reward verified for ${reward.member} in project ${reward.projectId}`);
@@ -230,6 +242,9 @@ const verifyReward = async (txhash) => {
                                             { $set: { verified: true } }
                                         );
                                     }
+                                })
+                                .catch((error) => {
+                                    console.error(error);
                                 });
                         }
                     }

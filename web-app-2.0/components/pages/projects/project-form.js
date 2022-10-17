@@ -148,7 +148,7 @@ export default function ProjectForm(props) {
                 closeSnackbar();
 
                 enqueueSnackbar('Project created', { variant: 'success' });
-                router.push(`/projects/page/${createdProject.id.toNumber()}`);
+                router.push(`/projects`);
             } else {
                 const updateTx = await projectsContext.updateProject(
                     projectData.id,

@@ -1,5 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, CircularProgress, Paper, Stack, Typography, Button } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import React from 'react';
 import { ProjectsContext } from '../../../contexts/projects-context';
 
@@ -7,6 +8,8 @@ export default function PendingInviteCard(props) {
     const { memberRecordId, reload } = props;
     const [loading, setLoading] = React.useState(false);
     const [invite, setInvite] = React.useState(null);
+
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const projectsContext = React.useContext(ProjectsContext);
 
