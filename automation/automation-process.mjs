@@ -118,7 +118,7 @@ if (projectsContract) {
         );
     });
 
-    projectsContract.on('DisinviteMember', async (projectId, from, to) => {
+    projectsContract.on('DisinviteMember', async (projectId, from, memberRecordId) => {
         console.log(`DisinviteMember: ${projectId} ${from} ${memberRecordId}`);
         const project = await projectsContract.projects(projectId);
         const memberRecord = await projectsContract.projectMemberStorage(memberRecordId);
