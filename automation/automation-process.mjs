@@ -4,6 +4,11 @@ import fs from 'fs';
 import { MongoClient } from 'mongodb';
 import webpush from './get-web-push.mjs';
 
+// prevent process from exiting when an unhandled exception occurs
+process.on('uncaughtException', function (err) {
+    console.log('Caught exception: ', err);
+});
+
 const uri = process.env.MONGODB_URI;
 const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, keepAlive: true });
 await dbClient.connect();
