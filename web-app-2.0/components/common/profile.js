@@ -23,6 +23,7 @@ const Profile = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const [ensName, setEnsName] = useState('');
 
     useEffect(() => {
         if (!wallet.address) return;
@@ -52,11 +53,12 @@ const Profile = () => {
                                 marginRight: '10px',
                                 marginBottom: '10px',
                                 padding: '24px',
-                            }}>
+                            }}
+                        >
                             <CardHeader
                                 avatar={
                                     <Badge
-                                        overlap='circular'
+                                        overlap="circular"
                                         anchorOrigin={{
                                             vertical: 'bottom',
                                             horizontal: 'right',
@@ -68,20 +70,15 @@ const Profile = () => {
                                                     display: 'inline-flex',
                                                     backgroundColor: {
                                                         xs: 'none',
-                                                        md:
-                                                            app.mode === 'dark'
-                                                                ? '#121E28'
-                                                                : '#FFFFFF',
+                                                        md: app.mode === 'dark' ? '#121E28' : '#FFFFFF',
                                                     },
                                                     borderRadius: '50%',
                                                     padding: '3px',
-                                                }}>
+                                                }}
+                                            >
                                                 <Box
                                                     sx={{
-                                                        backgroundColor:
-                                                            app.mode === 'dark'
-                                                                ? '#121E28'
-                                                                : '#FFFFFF',
+                                                        backgroundColor: app.mode === 'dark' ? '#121E28' : '#FFFFFF',
                                                         borderRadius: '50%',
                                                         padding: {
                                                             xs: '17px',
@@ -94,13 +91,10 @@ const Profile = () => {
                                                 />
                                                 <CircularProgress
                                                     size={50}
-                                                    variant='determinate'
+                                                    variant="determinate"
                                                     sx={{
                                                         position: 'absolute',
-                                                        color:
-                                                            app.mode === 'dark'
-                                                                ? '#1D3042'
-                                                                : '#CFCFCF',
+                                                        color: app.mode === 'dark' ? '#1D3042' : '#CFCFCF',
                                                         padding: {
                                                             xs: 1,
                                                             sm: 1,
@@ -113,13 +107,9 @@ const Profile = () => {
                                                 <CircularProgress
                                                     size={50}
                                                     thickness={7}
-                                                    variant='determinate'
-                                                    color='success'
-                                                    value={
-                                                        100 *
-                                                        (item.reputationScore /
-                                                            app.maxReputationScore)
-                                                    }
+                                                    variant="determinate"
+                                                    color="success"
+                                                    value={100 * (item.reputationScore / app.maxReputationScore)}
                                                     sx={{
                                                         color: '#3AB795',
                                                         position: 'relative',
@@ -140,23 +130,20 @@ const Profile = () => {
                                                         position: 'absolute',
                                                         display: 'flex',
                                                         alignItems: 'center',
-                                                        justifyContent:
-                                                            'center',
-                                                    }}>
-                                                    <Typography
-                                                        color={'#3AB795'}
-                                                        variant='rep'>
+                                                        justifyContent: 'center',
+                                                    }}
+                                                >
+                                                    <Typography color={'#3AB795'} variant="rep">
                                                         {' '}
                                                         {Math.round(
-                                                            100 *
-                                                                (item.reputationScore /
-                                                                    app.maxReputationScore)
+                                                            100 * (item.reputationScore / app.maxReputationScore)
                                                         )}
                                                         %
                                                     </Typography>
                                                 </Box>
                                             </Box>
-                                        }>
+                                        }
+                                    >
                                         <Avatar
                                             src={item.profilePhoto}
                                             sx={{
@@ -174,17 +161,10 @@ const Profile = () => {
                                 }
                                 title={
                                     <>
-                                        <Typography variant='h3'>
-                                            {item.name}
-                                        </Typography>
+                                        <Typography variant="h3">{item.name}</Typography>
                                         <Box>
-                                            <Typography
-                                                variant='sh1'
-                                                color='#6E8094'>
-                                                {app.occupations.find(
-                                                    (o) =>
-                                                        o.id == item.occupation
-                                                )?.text || 'None'}
+                                            <Typography variant="sh1" color="#6E8094">
+                                                {app.occupations.find((o) => o.id == item.occupation)?.text || 'None'}
                                             </Typography>
                                         </Box>
                                     </>
@@ -193,73 +173,63 @@ const Profile = () => {
                             <Stack
                                 sx={{
                                     border: 3,
-                                    borderColor:
-                                        app.mode === 'dark'
-                                            ? '#253340'
-                                            : '#CFCFCF',
+                                    borderColor: app.mode === 'dark' ? '#253340' : '#CFCFCF',
                                     borderRadius: '8px',
 
-                                    backgroundColor:
-                                        app.mode === 'dark'
-                                            ? '#253340'
-                                            : '#CFCFCF',
+                                    backgroundColor: app.mode === 'dark' ? '#253340' : '#CFCFCF',
                                 }}
-                                direction='row'
-                                alignItems='center'
-                                justifyContent='space-between'
-                                marginBottom={'10px'}>
-                                <Box
-                                    sx={{
-                                        backgroundColor:
-                                            app.mode === 'dark'
-                                                ? '#111921'
-                                                : '#F5F5F5',
-                                        borderRadius: '4px',
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="space-between"
+                                marginBottom={'10px'}
+                            >
+                                {ensName && (
+                                    <Box
+                                        sx={{
+                                            backgroundColor: app.mode === 'dark' ? '#111921' : '#F5F5F5',
+                                            borderRadius: '4px',
 
-                                        paddingY: { md: '5px' },
-                                        paddingBottom: '3px',
-                                        mx: 'auto',
-                                        ml: 'none',
-                                        paddingX: {
-                                            xs: '50px',
-                                            md: '20',
-                                            lg: '10px',
-                                        },
-                                    }}>
-                                    <Typography variant='sh2'>
-                                        {item.name
-                                            .toLowerCase()
-                                            .replace(/\s/g, '') + '.eth'}
-                                    </Typography>
-                                </Box>
+                                            paddingY: { md: '5px' },
+                                            paddingBottom: '3px',
+                                            mx: 'auto',
+                                            ml: 'none',
+                                            paddingX: {
+                                                xs: '50px',
+                                                md: '20',
+                                                lg: '10px',
+                                            },
+                                        }}
+                                    >
+                                        <Typography variant="sh2">{}</Typography>
+                                    </Box>
+                                )}
                                 <Typography
-                                    variant='sh2'
+                                    variant="sh2"
                                     sx={{
                                         mx: 'auto',
                                         paddingX: '10px',
-                                    }}>
+                                    }}
+                                >
                                     {item.chain === 'Ethereum' &&
-                                        truncateEthAddress(item.address)}
-                                    {item.chain != 'Ethereum' &&
-                                        `Wallet Address`}
+                                    <>
+                                        {truncateEthAddress(item.address)}
+                                    </>
+                                    }
+                                    {item.chain != 'Ethereum' && `Wallet Address`}
                                 </Typography>
                             </Stack>
                             <Button
-                                variant='outlined'
-                                color='profileButton'
+                                variant="outlined"
+                                color="profileButton"
                                 sx={{
-                                    color:
-                                        app.mode === 'dark'
-                                            ? '#FFFFFF'
-                                            : '#22272F',
+                                    color: app.mode === 'dark' ? '#FFFFFF' : '#22272F',
                                     width: '100%',
                                 }}
                                 onClick={() => {
                                     router.push(`/profile/${item.address}`);
-                                }}>
-                                <Typography variant='sh3'>
-                                    View Profile
-                                </Typography>
+                                }}
+                            >
+                                <Typography variant="sh3">View Profile</Typography>
                             </Button>
                         </Card>
                     </Grid>

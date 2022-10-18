@@ -120,7 +120,7 @@ const ProfileAddressSection = (props) => {
                     md: 'space-evenly',
                 }}
                 marginBottom={'10px'}>
-                <Box
+                {/* <Box
                     sx={{
                         backgroundColor:
                             app.mode === 'dark' ? '#111921' : '#F5F5F5',
@@ -136,7 +136,7 @@ const ProfileAddressSection = (props) => {
                         }}>
                         {account.name.toLowerCase().replace(/\s/g, '') + '.eth'}
                     </Typography>
-                </Box>
+                </Box> */}
                 <Typography
                     variant='sh2'
                     sx={{
