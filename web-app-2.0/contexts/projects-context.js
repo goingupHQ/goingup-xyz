@@ -96,16 +96,9 @@ export const ProjectsProvider = ({ children }) => {
 
     const getProjects = async () => {
         const contract = getContract();
-        const projects = [];
 
         const response = await fetch(`/api/projects/account/${wallet.address}`);
-        const projectIds = await response.json();
-
-        for (const projectId of projectIds) {
-            const project = await contract.projects(projectId);
-            projects.push(project);
-        }
-
+        const projects = await response.json(); console.log('projects', projects);
         return projects;
     };
 
@@ -140,17 +133,8 @@ export const ProjectsProvider = ({ children }) => {
     }
 
     const getProjectsAfterBlock = async (block) => {
-        const contract = getContract();
-        const projects = [];
-
         const response = await fetch(`/api/projects/after-block/${wallet.address}?block=${block}`);
-        const projectIds = await response.json();
-
-        for (const projectId of projectIds) {
-            const project = await contract.projects(projectId);
-            projects.push(project);
-        }
-
+        const projects = await response.json();
         return projects;
     };
 
@@ -158,14 +142,17 @@ export const ProjectsProvider = ({ children }) => {
         if (!wallet.address) throw `no wallet connected`;
         const contract = getContract();
         const project = await contract.projects(projectId);
-        return project;
+
+        if (project.owner === ethers.constants.AddressZero) {
+            return null;
+        } else {
+            return project;
+        }
     };
 
     const getJoinedProjects = async (address) => {
         const contract = getContract();
         const memberRecordIds = await contract.getProjectsByAddress(address);
-
-        console.log(memberRecordIds);
 
         const projectIds = [];
         for (const memberRecordId of memberRecordIds) {

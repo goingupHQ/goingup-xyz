@@ -107,8 +107,6 @@ export default function ProjectForm(props) {
             });
 
             if (isCreate) {
-                const currentBlock = await wallet.ethersProvider.getBlockNumber();
-
                 const createTx = await projectsContext.createProject(
                     form.name,
                     form.description,
@@ -120,6 +118,7 @@ export default function ProjectForm(props) {
                     form.projectImage
                 );
 
+                const currentBlock = await wallet.ethersProvider.getBlockNumber(); console.log(currentBlock);
                 closeSnackbar();
                 setSaving(true);
 
@@ -131,7 +130,7 @@ export default function ProjectForm(props) {
                             <Button
                                 variant="contained"
                                 onClick={() => {
-                                    const baseUrl = projectsContext.networkParams.blockExplorers[0];
+                                    const baseUrl = projectsContext.networkParams.blockExplorerUrls[0];
                                     window.open(`${baseUrl}tx/${createTx.hash}`);
                                 }}
                             >
@@ -142,13 +141,13 @@ export default function ProjectForm(props) {
                 });
                 await createTx.wait();
 
-                const projectsAfterBlock = await projectsContext.getProjectsAfterBlock(currentBlock);
+                const projectsAfterBlock = await projectsContext.getProjectsAfterBlock(currentBlock); console.log(`projectsAfterBlock`, projectsAfterBlock);
                 const createdProject = projectsAfterBlock.slice(-1)[0];
 
                 closeSnackbar();
 
                 enqueueSnackbar('Project created', { variant: 'success' });
-                router.push(`/projects`);
+                router.push(`/projects/page/${createdProject.id}`);
             } else {
                 const updateTx = await projectsContext.updateProject(
                     projectData.id,

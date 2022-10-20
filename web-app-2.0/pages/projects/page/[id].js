@@ -22,21 +22,29 @@ export default function ProjectPage(props) {
 
     const wallet = React.useContext(WalletContext);
 
+    const load = async () => {
+        setLoading(true);
+        try {
+            let project;
+            while (!project) {
+                project = await projectsContext.getProject(id);
+                if (!project) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                } else {
+                    setProject(project);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     React.useEffect(() => {
         //
         if (router.isReady && wallet.address) {
-            setLoading(true);
-            projectsContext
-                .getProject(id)
-                .then((project) => {
-                    setProject(project);
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
+            load();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, wallet.address]);
