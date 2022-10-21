@@ -215,7 +215,7 @@ const Profile = () => {
                                         {truncateEthAddress(item.address)}
                                     </>
                                     }
-                                    {item.chain != 'Ethereum' && `Wallet Address`}
+                                    {item.chain != 'Ethereum' && `${item.address.substring(0, 6)}...${item.address.substring(item.address.length - 4, item.address.length)}`}
                                 </Typography>
                             </Stack>
                             <Button
