@@ -95,38 +95,26 @@ export const ProjectsProvider = ({ children }) => {
     };
 
     const getProjects = async () => {
-        const contract = getContract();
-
         const response = await fetch(`/api/projects/account/${wallet.address}`);
-        const projects = await response.json(); console.log('projects', projects);
+        const projects = await response.json();
         return projects;
     };
 
     const getAccountProjects = async (address, includePrivate = false) => {
-        const contract = getContract();
-        const projects = [];
+        const response = await fetch(`/api/projects/account/${wallet.address}`);
+        const projects = await response.json();
 
-        const response = await fetch(`/api/projects/account/${address}`);
-        const projectIds = await response.json();
-
-        for (const projectId of projectIds) {
-            const project = await contract.projects(projectId);
-            if (project.isPrivate && !includePrivate) continue;
-            projects.push(project);
+        if (!includePrivate) {
+            return projects.filter((project) => !project.isPrivate);
         }
 
         return projects;
     };
 
     const getAccountJoinedProjects = async (address, includePrivate = false) => {
-        const contract = getContract();
-        const projectIds = await contract.getProjectsByAddress(address);
-
-        const projects = [];
-        for (const projectId of projectIds) {
-            const project = await contract.projects(projectId);
-            if (project.isPrivate && !includePrivate) continue;
-            projects.push(project);
+        const projects = await getJoinedProjects(address);
+        if (!includePrivate) {
+            return projects.filter((project) => !project.isPrivate);
         }
 
         return projects;
