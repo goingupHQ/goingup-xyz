@@ -20,28 +20,24 @@ import { WalletContext } from '../../contexts/wallet-context';
 const Profile = (props) => {
     const app = useContext(AppContext);
     const { account } = props;
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false);
     const router = useRouter();
     const [ensName, setEnsName] = useState('');
 
-    // useEffect(() => {
-    //     if (!wallet.address) return;
+    useEffect(() => {
+        if (!account.address) return;
 
-    //     setLoading(true);
-    //     fetch(`/api/get-potential-collaborators?address=${wallet.address}`)
-    //         .then(async (response) => {
-    //             const result = await response.json(); console.log('result', result);
-    //             setData(result);
+        fetch(`/api/accounts/get-ens-name?address=${account.address}`)
+            .then(async (response) => {
+                if (response.ok) {
+                    const result = await response.text();
+                    if (result) setEnsName(result);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
 
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         })
-    //         .finally(() => {
-    //             setLoading(false);
-    //         });
-    // }, [wallet.address]);
+    }, [account.address]);
 
     return (
         <Card
@@ -194,7 +190,7 @@ const Profile = (props) => {
                             },
                         }}
                     >
-                        <Typography variant="sh2">{}</Typography>
+                        <Typography variant="sh2">{ensName}</Typography>
                     </Box>
                 )}
                 <Typography
@@ -202,6 +198,7 @@ const Profile = (props) => {
                     sx={{
                         mx: 'auto',
                         paddingX: '10px',
+                        paddingY: { md: '5px' },
                     }}
                 >
                     {account.chain === 'Ethereum' && <>{truncateEthAddress(account.address)}</>}
