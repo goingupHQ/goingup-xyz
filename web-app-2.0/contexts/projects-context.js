@@ -101,7 +101,7 @@ export const ProjectsProvider = ({ children }) => {
     };
 
     const getAccountProjects = async (address, includePrivate = false) => {
-        const response = await fetch(`/api/projects/account/${wallet.address}`);
+        const response = await fetch(`/api/projects/account/${address}`);
         const projects = await response.json();
 
         if (!includePrivate) {
