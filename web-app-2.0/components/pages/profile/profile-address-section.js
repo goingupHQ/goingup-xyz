@@ -1,10 +1,4 @@
-import {
-    Box,
-    Button,
-    CircularProgress,
-    Stack,
-    Typography,
-} from '@mui/material';
+import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '../../../contexts/app-context';
 import ContactsAndIntegrations from './contacts-and-integrations';
@@ -26,12 +20,27 @@ const ProfileAddressSection = (props) => {
     const [following, setFollowing] = useState(false);
     const [checkingRel, setCheckingRel] = useState(true);
 
+    const [ensName, setEnsName] = useState('');
+
+    useEffect(() => {
+        if (!account.address) return;
+
+        fetch(`/api/accounts/get-ens-name?address=${account.address}`)
+            .then(async (response) => {
+                if (response.ok) {
+                    const result = await response.text();
+                    if (result) setEnsName(result);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [account.address]);
+
     useEffect(() => {
         if (wallet.address) {
             setCheckingRel(true);
-            fetch(
-                `/api/get-rel?address=${wallet.address}&target=${account.address}`
-            )
+            fetch(`/api/get-rel?address=${wallet.address}&target=${account.address}`)
                 .then(async (response) => {
                     const result = await response.json();
                     setFollowing(result.following);
@@ -91,17 +100,15 @@ const ProfileAddressSection = (props) => {
     return (
         <>
             <Stack
-                direction='row'
-                alignItems='center'
+                direction="row"
+                alignItems="center"
                 justifyContent={{
                     xs: 'none',
                     md: 'flex-end',
                 }}
-                marginRight={'3px'}>
-                <ContactsAndIntegrations
-                    account={account}
-                    refresh={props.refresh}
-                />
+                marginRight={'3px'}
+            >
+                <ContactsAndIntegrations account={account} refresh={props.refresh} />
             </Stack>
 
             <Stack
@@ -110,65 +117,67 @@ const ProfileAddressSection = (props) => {
                     borderColor: app.mode === 'dark' ? '#253340' : '#CFCFCF',
                     borderRadius: '8px',
 
-                    backgroundColor:
-                        app.mode === 'dark' ? '#253340' : '#CFCFCF',
+                    backgroundColor: app.mode === 'dark' ? '#253340' : '#CFCFCF',
                 }}
-                direction='row'
-                alignItems='center'
+                direction="row"
+                alignItems="center"
                 justifyContent={{
                     xs: 'center',
                     md: 'space-evenly',
                 }}
-                marginBottom={'10px'}>
-                {/* <Box
-                    sx={{
-                        backgroundColor:
-                            app.mode === 'dark' ? '#111921' : '#F5F5F5',
-                        borderRadius: '4px',
-
-                        paddingY: { md: '5px' },
-                        paddingBottom: '3px',
-                    }}>
-                    <Typography
-                        variant='sh2'
+                marginBottom={'10px'}
+            >
+                {ensName && (
+                    <Box
                         sx={{
-                            marginX: '42px',
-                        }}>
-                        {account.name.toLowerCase().replace(/\s/g, '') + '.eth'}
-                    </Typography>
-                </Box> */}
+                            backgroundColor: app.mode === 'dark' ? '#111921' : '#F5F5F5',
+                            borderRadius: '4px',
+                            paddingY: { md: '5px' },
+                            paddingBottom: '3px',
+                        }}
+                    >
+                        <Typography
+                            variant="sh2"
+                            sx={{
+                                marginX: '42px',
+                            }}
+                        >
+                            {ensName}
+                        </Typography>
+                    </Box>
+                )}
                 <Typography
-                    variant='sh2'
+                    variant="sh2"
                     sx={{
                         marginX: { xs: '27px', md: '42px' },
-                    }}>
-                    {account.chain === 'Ethereum' &&
-                        truncateEthAddress(account.address)}
+                        paddingY: { md: '5px' },
+                    }}
+                >
+                    {account.chain === 'Ethereum' && truncateEthAddress(account.address)}
                     {account.chain != 'Ethereum' && `Wallet Address`}
                 </Typography>
             </Stack>
             {myAccount && (
                 <>
                     <Box
-                        display='flex'
+                        display="flex"
                         sx={{ marginBottom: 2 }}
                         justifyContent={{
                             xs: 'initial',
                             md: 'flex-end',
-                        }}>
+                        }}
+                    >
                         <Button
-                            color='profileButton'
-                            variant='outlined'
+                            color="profileButton"
+                            variant="outlined"
                             sx={{
-                                color:
-                                    app.mode === 'dark' ? '#FFFFFF' : '#22272F',
+                                color: app.mode === 'dark' ? '#FFFFFF' : '#22272F',
                             }}
                             onClick={() => {
                                 editProfileRef.current.showModal();
-                            }}>
-                            <Typography variant='sh3'>
-                                Edit My GoingUP Profile
-                            </Typography>
+                            }}
+                        >
+                            <Typography variant="sh3">Edit My GoingUP Profile</Typography>
                         </Button>
                     </Box>
                 </>
@@ -181,8 +190,8 @@ const ProfileAddressSection = (props) => {
                         <>
                             <Stack
                                 spacing={1}
-                                direction='row'
-                                alignItems='center'
+                                direction="row"
+                                alignItems="center"
                                 justifyContent={{
                                     xs: 'none',
                                     md: 'flex-end',
@@ -190,65 +199,50 @@ const ProfileAddressSection = (props) => {
                                 sx={{
                                     borderRadius: '4px',
                                     paddingBottom: '3px',
-                                }}>
+                                }}
+                            >
                                 {!following && (
                                     <Button
-                                        variant='outlined'
-                                        color='profileButton'
+                                        variant="outlined"
+                                        color="profileButton"
                                         sx={{
-                                            color:
-                                                app.mode === 'dark'
-                                                    ? '#FFFFFF'
-                                                    : '#22272F',
+                                            color: app.mode === 'dark' ? '#FFFFFF' : '#22272F',
                                         }}
-                                        onClick={follow}>
-                                        <Typography variant='sh3'>
-                                            Follow
-                                        </Typography>
+                                        onClick={follow}
+                                    >
+                                        <Typography variant="sh3">Follow</Typography>
                                     </Button>
                                 )}
                                 {following && (
                                     <Button
-                                        variant='outlined'
-                                        color='profileButton'
+                                        variant="outlined"
+                                        color="profileButton"
                                         sx={{
-                                            color:
-                                                app.mode === 'dark'
-                                                    ? '#FFFFFF'
-                                                    : '#22272F',
+                                            color: app.mode === 'dark' ? '#FFFFFF' : '#22272F',
                                         }}
-                                        onClick={unfollow}>
-                                        <Typography variant='sh3'>
-                                            Unfollow
-                                        </Typography>
+                                        onClick={unfollow}
+                                    >
+                                        <Typography variant="sh3">Unfollow</Typography>
                                     </Button>
                                 )}
                                 <Button
-                                    variant='outlined'
-                                    color='profileButton'
+                                    variant="outlined"
+                                    color="profileButton"
                                     onClick={() => {
                                         sendAppreciationRef.current.showModal();
                                     }}
                                     sx={{
-                                        color:
-                                            app.mode === 'dark'
-                                                ? '#FFFFFF'
-                                                : '#22272F',
-                                    }}>
-                                    <Typography variant='sh3'>
-                                        Send Appreciation Token
-                                    </Typography>
+                                        color: app.mode === 'dark' ? '#FFFFFF' : '#22272F',
+                                    }}
+                                >
+                                    <Typography variant="sh3">Send Appreciation Token</Typography>
                                 </Button>
                             </Stack>
                         </>
                     )}
                 </>
             )}
-            <EditProfile
-                ref={editProfileRef}
-                account={account}
-                refresh={props.refresh}
-            />
+            <EditProfile ref={editProfileRef} account={account} refresh={props.refresh} />
             <SendAppreciationToken
                 ref={sendAppreciationRef}
                 sendToName={account.name}
