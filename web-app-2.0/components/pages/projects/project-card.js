@@ -6,6 +6,7 @@ import ProjectLogo from './project-logo';
 
 export default function ProjectCard(props) {
     const { project } = props;
+    const projectId = project.id?._hex ? parseInt(project.id._hex, 16) : project.id;
     const router = useRouter();
     const wallet = React.useContext(WalletContext);
 
@@ -59,7 +60,7 @@ export default function ProjectCard(props) {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => router.push(`/projects/page/${project?.id.toNumber()}`)}
+                        onClick={() => router.push(`/projects/page/${projectId}`)}
                     >
                         Go to Project Page
                     </Button>
@@ -68,7 +69,7 @@ export default function ProjectCard(props) {
                         <Button
                             variant="contained"
                             color="secondary"
-                            onClick={() => router.push(`/projects/edit/${project?.id.toNumber()}`)}
+                            onClick={() => router.push(`/projects/edit/${projectId}`)}
                         >
                             Edit
                         </Button>
