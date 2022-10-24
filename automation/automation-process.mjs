@@ -196,6 +196,30 @@ if (projectsContract) {
             null
         );
     });
+
+    projectsContract.on('Create', async (creator, projectId) => {
+        console.log(`Create: ${creator} ${projectId}`);
+        const project = await projectsContract.projects(projectId);
+        await db
+            .collection('goingup-projects')
+            .updateOne({ id: projectId }, { $set: { ...project } }, { upsert: true });
+    });
+
+    projectsContract.on('Update', async (updater, projectId) => {
+        console.log(`Update: ${updater} ${projectId}`);
+        const project = await projectsContract.projects(projectId);
+        await db
+            .collection('goingup-projects')
+            .updateOne({ id: projectId }, { $set: { ...project } }, { upsert: true });
+    });
+
+    projectsContract.on('TransferProjectOwnership', async(projectId, from, to) => {
+        console.log(`TransferProjectOwnership: ${projectId} ${from} ${to}`);
+        const project = await projectsContract.projects(projectId);
+        await db
+            .collection('goingup-projects')
+            .updateOne({ id: projectId }, { $set: { ...project } }, { upsert: true });
+    });
 }
 
 // verify pending rewards
