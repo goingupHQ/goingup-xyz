@@ -21,7 +21,9 @@ export default function SetProjectLogo(props) {
             const file = e.target.files[0];
             // const filename = encodeURIComponent(file.name);
             const filename = uuid();
+            console.log('uploading file', file, filename);
             const res = await fetch(`/api/upload-to-gcp?file=${filename}`);
+            console.log('upload-to-gcp response:', res);
             const { url, fields } = await res.json();
             const formData = new FormData();
 
