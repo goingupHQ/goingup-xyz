@@ -37,6 +37,7 @@ export default function SetProjectLogo(props) {
 
             if (upload.ok) {
                 const imageUrl = `${upload.url}${filename}`;
+                console.log(imageUrl);
 
                 const approveKey = enqueueSnackbar('Approve the transaction on your wallet to set your project photo', {
                     variant: 'info',
