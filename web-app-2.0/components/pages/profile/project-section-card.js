@@ -15,6 +15,7 @@ import ProjectLogo from '../projects/project-logo';
 
 export default function ProjectSectionCard(props) {
     const { project } = props;
+    const projectId = project.id?._hex ? parseInt(project.id._hex, 16) : project.id;
     const router = useRouter();
     const wallet = React.useContext(WalletContext);
     const app = React.useContext(AppContext);
@@ -70,10 +71,10 @@ export default function ProjectSectionCard(props) {
                                         size='small'
                                         onClick={() =>
                                             router.push(
-                                                `/projects/page/${project?.id.toNumber()}`
+                                                `/projects/page/${projectId}`
                                             )
                                         }>
-                                        Project Page
+                                        Go to Project Page
                                     </Button>
 
                                     {project.owner === wallet.address && (
