@@ -42,11 +42,11 @@ const fluidItemStyle = {
 
 const EmailLogin = (props) =>
 {
-    const { subject } = props;
+    const { code } = props;
 
     return (
         <Box align="center" style={containerStyle}>
-            <Email align="center" headCSS={emailHeadCSS} title={subject}>
+            <Email align="center" headCSS={emailHeadCSS} title={'GoingUP Wallet Verification Code'}>
                 <Item style={{ height: 45 }} />
                 <Item>
                     <Image
@@ -62,7 +62,7 @@ const EmailLogin = (props) =>
                         <Item style={{ height: 40 }} />
                         <Item>
                             <Span fontSize={22} fontWeight="bold">
-                                Login to your GoingUP account
+                                GoingUP Wallet Verification Code
                             </Span>
                         </Item>
                         <Item style={{ height: 25 }} />
@@ -70,9 +70,16 @@ const EmailLogin = (props) =>
                             Hello,
                         </Item>
                         <Item style={{ height: 25 }} />
+
                         <Item style={{ color: '#000' }}>
-                            This is your login code: 1234567
+                            You have initiated a login to connect your GoingUP Wallet to the GoingUP app. Below is your verification code. Please copy your code and paste it into the app to complete the login process.
                         </Item>
+                        <Item style={{ height: 25 }} />
+
+                        <Item style={{ color: '#000', fontWeight: 'bold' }}>
+                            {code}
+                        </Item>
+                        <Item style={{ height: 25 }} />
 
                         <Item style={{ height: 35 }} />
                     </Box>
