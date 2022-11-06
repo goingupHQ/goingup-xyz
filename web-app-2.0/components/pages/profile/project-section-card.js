@@ -20,7 +20,6 @@ export default function ProjectSectionCard(props) {
     const wallet = React.useContext(WalletContext);
     const app = React.useContext(AppContext);
     const tags = project.tags.toString().split(',').slice(0, 3);
-    console.log('tags', tags);
     const newTags = tags.map((tag) => {
         return (
             <Typography
