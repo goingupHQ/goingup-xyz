@@ -3,12 +3,15 @@ import { Dialog, DialogContent, Stack, Typography, useTheme } from '@mui/materia
 import { forwardRef, createRef, useContext, useImperativeHandle, useState, useEffect } from 'react';
 import { AppContext } from './app-context';
 import ConnectUsingEmail from './connect-using-email';
+import { useSnackbar } from 'notistack';
 
 const WalletChainSelection = (props, ref) => {
     const [open, setOpen] = useState(false);
     const theme = useTheme();
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
+
+    const { enqueueSnackbar } = useSnackbar();
 
     const connectUsingEmailRef = createRef();
 
@@ -56,8 +59,9 @@ const WalletChainSelection = (props, ref) => {
                             justifyContent="center"
                             sx={chainItemSx}
                             onClick={() => {
-                                handleClose();
-                                connectUsingEmailRef.current.showModal();
+                                // handleClose();
+                                // connectUsingEmailRef.current.showModal();
+                                enqueueSnackbar('Not yet available but it is coming soon!', { variant: 'info' });
                             }}
                         >
                             <h2
