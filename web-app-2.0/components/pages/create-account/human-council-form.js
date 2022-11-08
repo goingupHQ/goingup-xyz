@@ -22,7 +22,7 @@ import ProjectGoals from './project-goals';
 import InviteFriends from './invite-friends';
 import { LoadingButton } from '@mui/lab';
 import { useRouter } from 'next/router';
-import isEmail from 'validator/lib/isemail';
+import isEmail from 'validator/lib/isEmail';
 
 export default function CreateAccountForm() {
     const router = useRouter();
