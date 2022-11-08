@@ -7,6 +7,7 @@ import sleep from 'sleep-promise';
 import artifact from '../../../../artifacts/GoingUpUtilityToken.json';
 import truncateEthAddress from 'truncate-eth-address';
 import { useRouter } from 'next/router';
+import ProfileLink from '../../common/profile-link';
 
 export default function AppreciationTokenCard(props) {
     const { tier, balance } = props;
@@ -148,15 +149,13 @@ export default function AppreciationTokenCard(props) {
                     {!loading && (
                         <>
                             <Fade in={showMessage}>
-                                <Box>
-                                    <Typography variant="body1">{shownMessage.data}</Typography>
-                                    <Typography variant="body1">
-                                        {`- `}
-                                        {shownMessage.fromName && (
-                                            <>{`${shownMessage.fromName} (${truncateEthAddress(shownMessage.to)})`}</>
-                                        )}
-                                        {!shownMessage.fromName && <>{truncateEthAddress(shownMessage?.to || '')}</>}
-                                    </Typography>
+                                <Box>{shownMessage.fromName && (
+                                    <ProfileLink address={shownMessage.to} />)}
+                                {!shownMessage.fromName && <>{truncateEthAddress(shownMessage?.from || '')}</>}
+                                <Typography variant="body1">{shownMessage.data}</Typography>
+                                {shownMessage.fromName && (
+                                    <ProfileLink address={shownMessage.from || ''} />)}
+                                {!shownMessage.fromName && '- '}
                                 </Box>
                             </Fade>
 
