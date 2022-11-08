@@ -247,7 +247,8 @@ export default function CreateAccountForm() {
                         }}
                     >
                         <Button
-                            color="inherit"
+                            variant="contained"
+                            color="secondary"
                             disabled={activeStep === 0}
                             onClick={handleBack}
                             sx={{ mr: 1 }}
@@ -255,7 +256,7 @@ export default function CreateAccountForm() {
                             Back
                         </Button>
                         <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleNext}>
+                        <Button onClick={handleNext} variant="contained">
                             {activeStep === steps.length - 1
                                 ? 'Finish'
                                 : 'Next'}

@@ -13,7 +13,8 @@ import {
     DialogTitle,
     useTheme,
     useMediaQuery,
-    styled
+    styled,
+    TextField
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { WalletContext } from '../../../contexts/wallet-context';
@@ -31,7 +32,6 @@ export default function CreateAccountForm() {
     const { enqueueSnackbar } = useSnackbar();
     const steps = ['Personal Information', 'Project Goals', 'Invite Friends'];
     const [activeStep, setActiveStep] = useState(0);
-    const [skipped, setSkipped] = useState(new Set());
 
     const [open, setOpen] = React.useState(false);
 
@@ -79,23 +79,7 @@ export default function CreateAccountForm() {
 
     const personalInfoRef = useRef(null);
 
-    // @ts-ignore
-    const isStepOptional = (step) => {
-        // return step === 1;
-        return false;
-    };
-
-    const isStepSkipped = (step) => {
-        return skipped.has(step);
-    };
-
     const handleNext = () => {
-        let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-            newSkipped = new Set(newSkipped.values());
-            newSkipped.delete(activeStep);
-        }
-
         let hasError = false;
 
         if (activeStep === 0) {
@@ -149,8 +133,20 @@ export default function CreateAccountForm() {
             if (activeStep === steps.length - 1) {
                 setOpen(true);
             } else {
+                // send login code email when step 0 is complete
+                if (activeStep === 0) {
+                    fetch('/api/accounts/email/send-human-council-code', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email
+                        })
+                    });
+                }
+
                 setActiveStep((prevActiveStep) => prevActiveStep + 1);
-                setSkipped(newSkipped);
             }
         }
     };
@@ -162,6 +158,8 @@ export default function CreateAccountForm() {
     const handleReset = () => {
         setActiveStep(0);
     };
+
+    const [loginCode, setLoginCode] = useState('');
 
     const createAccount = async (e) => {
         e.preventDefault();
@@ -219,14 +217,7 @@ export default function CreateAccountForm() {
                 {steps.map((label, index) => {
                     const stepProps = {};
                     const labelProps = { optional: React.ReactNode } = {};
-                    if (isStepOptional(index)) {
-                        labelProps.optional = (
-                            <Typography variant="caption">Optional</Typography>
-                        );
-                    }
-                    if (isStepSkipped(index)) {
-                        stepProps.completed = false;
-                    }
+
                     return (
                         <Step key={label} {...stepProps}>
                             <StepLabel {...labelProps}>{label}</StepLabel>
@@ -268,7 +259,8 @@ export default function CreateAccountForm() {
                         }}
                     >
                         <Button
-                            color="inherit"
+                            variant="contained"
+                            color="secondary"
                             disabled={activeStep === 0}
                             onClick={handleBack}
                             sx={{ mr: 1 }}
@@ -276,7 +268,7 @@ export default function CreateAccountForm() {
                             Back
                         </Button>
                         <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleNext}>
+                        <Button variant="contained" onClick={handleNext}>
                             {activeStep === steps.length - 1
                                 ? 'Finish'
                                 : 'Next'}
@@ -294,13 +286,22 @@ export default function CreateAccountForm() {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        We are about to create your GoingUP account. Are you sure the details you provided are correct?
+                        We sent an login code to {email}. Please paste it below to complete your account creation.
                     </DialogContentText>
+                    <TextField
+                        autoFocus
+                        label="Login Code"
+                        value={loginCode}
+                        onChange={(e) => setLoginCode(e.target.value)}
+                        fullWidth
+                        sx={{ mt: 3 }}
+                    />
+
                 </DialogContent>
                 <DialogActions>
-                    <Button variant='text' onClick={handleClose}>No</Button>
+                    <Button variant='text' onClick={handleClose}>Go back</Button>
                     <LoadingButton variant='contained' onClick={createAccount} loading={creating} loadingIndicator='Creating...'>
-                        Yes, create my GoingUP account
+                        Create my GoingUP account
                     </LoadingButton>
                 </DialogActions>
             </Dialog>

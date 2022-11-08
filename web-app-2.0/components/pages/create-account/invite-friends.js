@@ -2,7 +2,8 @@ import { useContext } from 'react';
 import {
     Box,
     Grid,
-    TextField
+    TextField,
+    Typography
 } from '@mui/material';
 import { AppContext } from '../../../contexts/app-context';
 
@@ -29,12 +30,10 @@ function InviteFriends(props) {
 
     return (
         <>
-            <Box>
-                <h3>
-                    Invite up to four friends by typing the email addresses
-                    below
-                </h3>
-            </Box>
+            <Typography variant="h3" sx={{ mb: 2 }}>
+                Invite up to four friends by typing the email addresses
+                below
+            </Typography>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
                     <TextField
