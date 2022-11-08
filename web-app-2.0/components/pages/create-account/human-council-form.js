@@ -163,37 +163,38 @@ export default function CreateAccountForm() {
 
     const createAccount = async (e) => {
         e.preventDefault();
+
+        if (!loginCode) {
+            enqueueSnackbar('Please enter the code we sent to your email', {
+                variant: 'error'
+            });
+            return;
+        }
+
         setCreating(true);
 
         try {
-            const { address } = wallet;
-            const signature = await wallet.signMessage('create-account');
-
-            const response = await fetch('api/create-account/', {
+            const response = await fetch('api/accounts/create-human-council-account', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    address,
-                    signature,
+                    code: loginCode,
                     account: {
-                        name, occupation, openTo, projectGoals, idealCollab
+                        name, email, occupation, openTo, projectGoals, idealCollab
                     },
                     email1, email2, email3, email4, inviteMessage
                 })
-            })
-
-            console.log(response.status);
+            });
 
             if (response.status === 200) {
-                enqueueSnackbar('Your account was successfully created', { variant: 'success' });
-                router.push(`/profile/${wallet.address}`);
+                enqueueSnackbar('Your Human Council x GoingUP account is saved. We will notify you by email when you can start using your GoingUP wallet with the dapp.', { variant: 'success' });
+                setOpen(false);
             } else {
-                enqueueSnackbar('There was a problem creating your account', { variant: 'error' });
+                const data = await response.json();
+                enqueueSnackbar(data.error || 'Something went wrong', { variant: 'error' });
             }
-
-            setOpen(false);
         } catch (err) {
             console.log(err);
         } finally {

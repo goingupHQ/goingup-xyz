@@ -72,7 +72,7 @@ const HumanCouncilLoginCode = (props) =>
                         <Item style={{ height: 25 }} />
 
                         <Item style={{ color: '#000' }}>
-                            Below is your verification code. Please copy your code and paste it into the app to complete the login process.
+                            Below is your verification code. Please copy your code and paste it into the app to complete the Human Council x GoingUP onboarding process.
                         </Item>
                         <Item style={{ height: 25 }} />
 
