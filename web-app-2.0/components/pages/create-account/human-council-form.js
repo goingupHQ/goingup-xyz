@@ -79,7 +79,8 @@ export default function CreateAccountForm() {
 
     const personalInfoRef = useRef(null);
 
-    const handleNext = () => {
+    const [loadingNext, setLoadingNext] = useState(false);
+    const handleNext = async () => {
         let hasError = false;
 
         if (activeStep === 0) {
@@ -112,6 +113,23 @@ export default function CreateAccountForm() {
             if (!openTo.length) {
                 enqueueSnackbar('Please choose an availability', { variant: 'error' });
                 hasError = true;
+            }
+
+            setLoadingNext(true);
+            try {
+                const accountCheckResponse = await fetch(`/api/accounts/email/has-account?email=${email}`);
+                const accountCheck = await accountCheckResponse.json();
+
+                if (accountCheck.hasAccount) {
+                    enqueueSnackbar(`${email} is already used and associated with a GoingUP account`, { variant: 'error' });
+                    hasError = true;
+                }
+            } catch (err) {
+                console.log(err);
+                enqueueSnackbar('Something went wrong. Please try again', { variant: 'error' });
+                hasError = true;
+            } finally {
+                setLoadingNext(false);
             }
         }
 
@@ -269,11 +287,11 @@ export default function CreateAccountForm() {
                             Back
                         </Button>
                         <Box sx={{ flex: '1 1 auto' }} />
-                        <Button variant="contained" onClick={handleNext}>
+                        <LoadingButton variant="contained" onClick={handleNext} loading={loadingNext}>
                             {activeStep === steps.length - 1
                                 ? 'Finish'
                                 : 'Next'}
-                        </Button>
+                        </LoadingButton>
                     </Box>
                 </React.Fragment>
             )}
