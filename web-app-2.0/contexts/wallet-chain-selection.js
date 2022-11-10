@@ -1,5 +1,5 @@
 import { WalletContext } from './wallet-context';
-import { Dialog, DialogContent, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Dialog, DialogContent, Stack, Typography, useTheme } from '@mui/material';
 import { forwardRef, createRef, useContext, useImperativeHandle, useState, useEffect } from 'react';
 import { AppContext } from './app-context';
 import ConnectUsingEmail from './connect-using-email';
@@ -74,7 +74,7 @@ const WalletChainSelection = (props, ref) => {
                             >
                                 GoingUP Wallet
                             </h2>
-                            <sub>Your own wallet, managed by us.</sub>
+                            <sub style={{ textAlign: 'center' }}>Your own wallet, managed by us.</sub>
                         </Stack>
 
                         <Stack
@@ -88,17 +88,16 @@ const WalletChainSelection = (props, ref) => {
                                 wallet.connectEthereum();
                             }}
                         >
-                            <h2
-                                style={{
-                                    whiteSpace: 'nowrap',
-                                    textOverflow: 'ellipsis',
-                                    overflowX: 'hidden',
+                            <Box
+                                component="h2"
+                                sx={{
                                     margin: '0px',
+                                    textAlign: 'center',
                                 }}
                             >
-                                Ethereum and EVM-compatible chains
-                            </h2>
-                            <sub>Metamask, Coinbase Wallet, WalletConnect, etc.</sub>
+                                Ethereum or EVM-compatible Wallet
+                            </Box>
+                            <sub style={{ textAlign: 'center' }}>Metamask, Coinbase Wallet, WalletConnect, etc.</sub>
                         </Stack>
 
                         {/* <Stack
