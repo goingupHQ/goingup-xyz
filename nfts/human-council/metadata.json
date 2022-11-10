@@ -1,0 +1,17 @@
+{
+    "name": "Human Council DAO Appreciation Token",
+    "description": "Appreciate Token from Human Council DAO powered by GoingUP.xyz",
+    "image": "https://storage.googleapis.com/goingup-xyz-bucket-001/utility-tokens/human-council-token.jpg",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "Created On",
+            "value": 1668042880
+        },
+        {
+            "display_type": "boost_number",
+            "trait_type": "Reputation Score Boost",
+            "value": 1
+        }
+    ]
+}
