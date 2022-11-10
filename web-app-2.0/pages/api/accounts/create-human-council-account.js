@@ -1,4 +1,6 @@
 import { getDb } from  '../_get-db-client';
+import { encrypt } from '../_encryption';
+import { ethers } from  'ethers';
 
 export default async (req, res) => {
     if (req.method !== 'POST') {
@@ -38,9 +40,29 @@ export default async (req, res) => {
         return;
     }
 
+    // create random wallet
+    const wallet = ethers.Wallet.createRandom();
+
+    // encrypt private key
+    const encryptedPrivateKey = encrypt(wallet.privateKey, process.env.CUSTODY_KEY);
+
+    account.reputationScore = 60;
+    account.address = wallet.address;
+    account.walletKey = encryptedPrivateKey;
+
     // upsert account to human-council-accounts collection
-    const accounts = db.collection('human-council-accounts');
-    const result = await accounts.updateOne({ email: account.email }, { $set: account }, { upsert: true });
+    const accounts = db.collection('accounts');
+
+    // check if account with this email already exists
+    const existingAccount = await accounts.findOne({ email: account.email });
+
+    if (existingAccount) {
+        res.status(400).json({ error: 'Account with this email already exists' });
+        return;
+    }
+
+    // insert account
+    await accounts.updateOne({ email: account.email }, { $set: account }, { upsert: true });
 
     // delete code from human-council-codes collection
     await db.collection('human-council-codes').deleteOne({ code });
