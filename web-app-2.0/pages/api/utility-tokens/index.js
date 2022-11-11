@@ -25,6 +25,12 @@ export default async function handler(req, res) {
             categoryName: 'GoingUP Appreciation Tokens',
             tokenIds: [1, 2, 3, 4],
             tokenSettings: []
+        },
+        {
+            categoryId: 2,
+            categoryName: 'Human Council DAO Tokens',
+            tokenIds: [5],
+            tokenSettings: []
         }
     ];
 

@@ -14,12 +14,12 @@ const backgroundStyle = {
     boxShadow: '6px 6px 40px 3px rgba(140, 152, 164, 0.2)',
     margin: '0 auto',
     width: '100%',
-    padding: '0 32px',
+    padding: '0 32px'
 };
 
 const containerStyle = {
     backgroundColor: '#F5F8FA',
-    width: '100%',
+    width: '100%'
 };
 
 const linkStyle = {
@@ -28,7 +28,7 @@ const linkStyle = {
     paddingBottom: '13px',
     paddingTop: '13px',
     textDecoration: 'none',
-    width: '100%',
+    width: '100%'
 };
 
 const fluidItemStyle = {
@@ -37,15 +37,16 @@ const fluidItemStyle = {
     cursor: 'pointer',
     height: 48,
     textAlign: 'center',
-    textDecoration: 'none',
+    textDecoration: 'none'
 };
 
-const InviteFriend = (props) => {
-    const { username, subject, confirmationUrl, personalMessage } = props;
+const EmailLogin = (props) =>
+{
+    const { code } = props;
 
     return (
         <Box align="center" style={containerStyle}>
-            <Email align="center" headCSS={emailHeadCSS} title={subject}>
+            <Email align="center" headCSS={emailHeadCSS} title={'GoingUP Wallet Verification Code'}>
                 <Item style={{ height: 45 }} />
                 <Item>
                     <Image
@@ -61,36 +62,31 @@ const InviteFriend = (props) => {
                         <Item style={{ height: 40 }} />
                         <Item>
                             <Span fontSize={22} fontWeight="bold">
-                                Join us at GoingUP
+                                GoingUP Wallet Verification Code
                             </Span>
                         </Item>
                         <Item style={{ height: 25 }} />
-                        <Item style={{ color: '#000' }}>Hello,</Item>
-                        <Item style={{ height: 25 }} />
                         <Item style={{ color: '#000' }}>
-                            Your friend {username} is inviting you to join our Web3 networking platform. We are looking
-                            forward to adding you to our growing network.
+                            Hello,
                         </Item>
+                        <Item style={{ height: 25 }} />
 
-                        {personalMessage && (
-                            <>
-                                <Item style={{ height: 25 }} />
-                                <Item style={{ color: '#000' }}>Personal message: {personalMessage}</Item>
-                            </>
-                        )}
-
-                        <Item style={{ height: 50 }} />
-                        <Item className="button" style={fluidItemStyle}>
-                            <A href={confirmationUrl} style={linkStyle}>
-                                Join GoingUP
-                            </A>
+                        <Item style={{ color: '#000' }}>
+                            You have initiated a login to connect your GoingUP Wallet to the GoingUP app. Below is your verification code. Please copy your code and paste it into the app to complete the login process.
                         </Item>
+                        <Item style={{ height: 25 }} />
+
+                        <Item style={{ color: '#000', fontWeight: 'bold' }}>
+                            {code}
+                        </Item>
+                        <Item style={{ height: 25 }} />
+
                         <Item style={{ height: 35 }} />
                     </Box>
                 </Item>
             </Email>
         </Box>
     );
-};
+}
 
-export default InviteFriend;
+export default EmailLogin;

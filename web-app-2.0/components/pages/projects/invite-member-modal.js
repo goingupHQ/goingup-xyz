@@ -111,7 +111,7 @@ const InviteMemberModal = (props, ref) => {
 
             setInviting(true);
 
-            const tx = await projectsContext.inviteProjectMember(project.id, address, role, goal, rewards);
+            const tx = await projectsContext.inviteProjectMember(project.id, address, role, goal, JSON.stringify(rewards));
 
             setOpen(false);
 

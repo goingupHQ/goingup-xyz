@@ -113,80 +113,84 @@ export function WalletProvider({ children }) {
 
     useEffect(() => {
         if (address) {
-            if (Notification.permission === 'denied') {
-                if (localStorage.getItem('notifs-denied-forever') === 'true') return;
+            try {
+                if (Notification.permission === 'denied') {
+                    if (localStorage.getItem('notifs-denied-forever') === 'true') return;
 
-                enqueueSnackbar('Please enable notifications in your browser settings', {
-                    variant: 'warning',
-                    persist: true,
-                    action: (key) => (
-                        <Stack direction="row" spacing={1}>
-                            <Button variant="contained" color="primary" onClick={() => closeSnackbar(key)}>
-                                Later
-                            </Button>
+                    enqueueSnackbar('Please enable notifications in your browser settings', {
+                        variant: 'warning',
+                        persist: true,
+                        action: (key) => (
+                            <Stack direction="row" spacing={1}>
+                                <Button variant="contained" color="primary" onClick={() => closeSnackbar(key)}>
+                                    Later
+                                </Button>
 
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => {
-                                    closeSnackbar(key);
-                                    localStorage.setItem('notifs-denied-forever', true);
-                                    enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
-                                }}
-                            >
-                                Never
-                            </Button>
-                        </Stack>
-                    ),
-                });
-            }
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => {
+                                        closeSnackbar(key);
+                                        localStorage.setItem('notifs-denied-forever', true);
+                                        enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
+                                    }}
+                                >
+                                    Never
+                                </Button>
+                            </Stack>
+                        ),
+                    });
+                }
 
-            if (Notification.permission === 'granted') {
-                // check for existing subscription
-                if (localStorage.getItem('psn-subscription')) {
-                    const subscription = JSON.parse(localStorage.getItem('psn-subscription'));
-                    if (subscription) postPsnSubscription(subscription);
-                    else {
+                if (Notification.permission === 'granted') {
+                    // check for existing subscription
+                    if (localStorage.getItem('psn-subscription')) {
+                        const subscription = JSON.parse(localStorage.getItem('psn-subscription'));
+                        if (subscription) postPsnSubscription(subscription);
+                        else {
+                            app.subscribeUserToPush().then((subscription) => {
+                                postPsnSubscription(subscription);
+                            });
+                        }
+                    } else {
                         app.subscribeUserToPush().then((subscription) => {
                             postPsnSubscription(subscription);
                         });
                     }
-                } else {
-                    app.subscribeUserToPush().then((subscription) => {
-                        postPsnSubscription(subscription);
+                }
+
+                if (Notification.permission === 'default') {
+                    if (localStorage.getItem('notifs-denied-forever') === 'true') return;
+                    enqueueSnackbar('Do you want to receive notifications from GoingUP?', {
+                        variant: 'info',
+                        persist: true,
+                        action: (key) => (
+                            <Stack direction="row" spacing={1}>
+                                <Button variant="contained" color="primary" onClick={() => askNotifsConsent(key)}>
+                                    Yes
+                                </Button>
+
+                                <Button variant="contained" color="secondary" onClick={() => closeSnackbar(key)}>
+                                    No
+                                </Button>
+
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => {
+                                        closeSnackbar(key);
+                                        localStorage.setItem('notifs-denied-forever', true);
+                                        enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
+                                    }}
+                                >
+                                    Never
+                                </Button>
+                            </Stack>
+                        ),
                     });
                 }
-            }
-
-            if (Notification.permission === 'default') {
-                if (localStorage.getItem('notifs-denied-forever') === 'true') return;
-                enqueueSnackbar('Do you want to receive notifications from GoingUP?', {
-                    variant: 'info',
-                    persist: true,
-                    action: (key) => (
-                        <Stack direction="row" spacing={1}>
-                            <Button variant="contained" color="primary" onClick={() => askNotifsConsent(key)}>
-                                Yes
-                            </Button>
-
-                            <Button variant="contained" color="secondary" onClick={() => closeSnackbar(key)}>
-                                No
-                            </Button>
-
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => {
-                                    closeSnackbar(key);
-                                    localStorage.setItem('notifs-denied-forever', true);
-                                    enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
-                                }}
-                            >
-                                Never
-                            </Button>
-                        </Stack>
-                    ),
-                });
+            } catch (err) {
+                console.log(err);
             }
         }
     }, [address]);

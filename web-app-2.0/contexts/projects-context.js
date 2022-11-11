@@ -318,6 +318,12 @@ export const ProjectsProvider = ({ children }) => {
         return logo;
     };
 
+    const manuallyAddMember = async (projectId, member, role, goal, rewards) => {
+        const contract = getContract();
+        const tx = await contract.manuallyAddMember(projectId, member, role, goal, JSON.stringify(rewards));
+        return tx;
+    }
+
     const value = {
         networkParams,
         isCorrectNetwork,
@@ -344,6 +350,7 @@ export const ProjectsProvider = ({ children }) => {
         setMemberGoalAsAchieved,
         setProjectLogo,
         getProjectLogo,
+        manuallyAddMember,
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };

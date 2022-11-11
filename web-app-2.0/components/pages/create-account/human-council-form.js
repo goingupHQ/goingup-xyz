@@ -13,15 +13,17 @@ import {
     DialogTitle,
     useTheme,
     useMediaQuery,
-    styled
+    styled,
+    TextField
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { WalletContext } from '../../../contexts/wallet-context';
-import PersonalInfo from './personal-info';
+import PersonalInfo from './human-council-personal-info';
 import ProjectGoals from './project-goals';
 import InviteFriends from './invite-friends';
 import { LoadingButton } from '@mui/lab';
 import { useRouter } from 'next/router';
+import isEmail from 'validator/lib/isEmail';
 
 export default function CreateAccountForm() {
     const router = useRouter();
@@ -30,7 +32,6 @@ export default function CreateAccountForm() {
     const { enqueueSnackbar } = useSnackbar();
     const steps = ['Personal Information', 'Project Goals', 'Invite Friends'];
     const [activeStep, setActiveStep] = useState(0);
-    const [skipped, setSkipped] = useState(new Set());
 
     const [open, setOpen] = React.useState(false);
 
@@ -39,6 +40,7 @@ export default function CreateAccountForm() {
     };
 
     const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [occupation, setOccupation] = useState(null);
     const [openTo, setOpenTo] = useState([]);
     const [projectGoals, setProjectGoals] = useState([]);
@@ -53,6 +55,8 @@ export default function CreateAccountForm() {
     const state = {
         name,
         setName,
+        email,
+        setEmail,
         occupation,
         setOccupation,
         openTo,
@@ -75,23 +79,8 @@ export default function CreateAccountForm() {
 
     const personalInfoRef = useRef(null);
 
-    // @ts-ignore
-    const isStepOptional = (step) => {
-        // return step === 1;
-        return false;
-    };
-
-    const isStepSkipped = (step) => {
-        return skipped.has(step);
-    };
-
-    const handleNext = () => {
-        let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-            newSkipped = new Set(newSkipped.values());
-            newSkipped.delete(activeStep);
-        }
-
+    const [loadingNext, setLoadingNext] = useState(false);
+    const handleNext = async () => {
         let hasError = false;
 
         if (activeStep === 0) {
@@ -102,6 +91,20 @@ export default function CreateAccountForm() {
                 hasError = true;
             }
 
+            if (!email) {
+                enqueueSnackbar('We need your email', {
+                    variant: 'error'
+                });
+                hasError = true;
+            } else {
+                if (!isEmail(email)) {
+                    enqueueSnackbar('Please enter a valid email', {
+                        variant: 'error'
+                    });
+                    hasError = true;
+                }
+            }
+
             if (!occupation) {
                 enqueueSnackbar('Please choose an occupation', { variant: 'error' });
                 hasError = true;
@@ -110,6 +113,23 @@ export default function CreateAccountForm() {
             if (!openTo.length) {
                 enqueueSnackbar('Please choose an availability', { variant: 'error' });
                 hasError = true;
+            }
+
+            setLoadingNext(true);
+            try {
+                const accountCheckResponse = await fetch(`/api/accounts/email/has-account?email=${email}`);
+                const accountCheck = await accountCheckResponse.json();
+
+                if (accountCheck.hasAccount) {
+                    enqueueSnackbar(`${email} is already used and associated with a GoingUP account`, { variant: 'error' });
+                    hasError = true;
+                }
+            } catch (err) {
+                console.log(err);
+                enqueueSnackbar('Something went wrong. Please try again', { variant: 'error' });
+                hasError = true;
+            } finally {
+                setLoadingNext(false);
             }
         }
 
@@ -131,8 +151,20 @@ export default function CreateAccountForm() {
             if (activeStep === steps.length - 1) {
                 setOpen(true);
             } else {
+                // send login code email when step 0 is complete
+                if (activeStep === 0) {
+                    fetch('/api/accounts/email/send-human-council-code', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email
+                        })
+                    });
+                }
+
                 setActiveStep((prevActiveStep) => prevActiveStep + 1);
-                setSkipped(newSkipped);
             }
         }
     };
@@ -145,39 +177,42 @@ export default function CreateAccountForm() {
         setActiveStep(0);
     };
 
+    const [loginCode, setLoginCode] = useState('');
+
     const createAccount = async (e) => {
         e.preventDefault();
+
+        if (!loginCode) {
+            enqueueSnackbar('Please enter the code we sent to your email', {
+                variant: 'error'
+            });
+            return;
+        }
+
         setCreating(true);
 
         try {
-            const { address } = wallet;
-            const signature = await wallet.signMessage('create-account');
-
-            const response = await fetch('api/create-account/', {
+            const response = await fetch('api/accounts/create-human-council-account', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    address,
-                    signature,
+                    code: loginCode,
                     account: {
-                        name, occupation, openTo, projectGoals, idealCollab
+                        name, email, occupation, openTo, projectGoals, idealCollab
                     },
                     email1, email2, email3, email4, inviteMessage
                 })
-            })
-
-            console.log(response.status);
+            });
 
             if (response.status === 200) {
-                enqueueSnackbar('Your account was successfully created', { variant: 'success' });
-                router.push(`/profile/${wallet.address}`);
+                enqueueSnackbar('Your Human Council x GoingUP account is saved. We will notify you by email when you can start using your GoingUP wallet with the dapp.', { variant: 'success' });
+                setOpen(false);
             } else {
-                enqueueSnackbar('There was a problem creating your account', { variant: 'error' });
+                const data = await response.json();
+                enqueueSnackbar(data.error || 'Something went wrong', { variant: 'error' });
             }
-
-            setOpen(false);
         } catch (err) {
             console.log(err);
         } finally {
@@ -194,18 +229,14 @@ export default function CreateAccountForm() {
                         ? 'vertical'
                         : 'horizontal'
                 }
+                sx={{
+                    mb: { xs: 0, md: 4 },
+                }}
             >
                 {steps.map((label, index) => {
                     const stepProps = {};
                     const labelProps = { optional: React.ReactNode } = {};
-                    if (isStepOptional(index)) {
-                        labelProps.optional = (
-                            <Typography variant="caption">Optional</Typography>
-                        );
-                    }
-                    if (isStepSkipped(index)) {
-                        stepProps.completed = false;
-                    }
+
                     return (
                         <Step key={label} {...stepProps}>
                             <StepLabel {...labelProps}>{label}</StepLabel>
@@ -256,11 +287,11 @@ export default function CreateAccountForm() {
                             Back
                         </Button>
                         <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleNext} variant="contained">
+                        <LoadingButton variant="contained" onClick={handleNext} loading={loadingNext}>
                             {activeStep === steps.length - 1
                                 ? 'Finish'
                                 : 'Next'}
-                        </Button>
+                        </LoadingButton>
                     </Box>
                 </React.Fragment>
             )}
@@ -274,13 +305,22 @@ export default function CreateAccountForm() {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        We are about to create your GoingUP account. Are you sure the details you provided are correct?
+                        We sent an login code to {email}. Please paste it below to complete your account creation.
                     </DialogContentText>
+                    <TextField
+                        autoFocus
+                        label="Login Code"
+                        value={loginCode}
+                        onChange={(e) => setLoginCode(e.target.value)}
+                        fullWidth
+                        sx={{ mt: 3 }}
+                    />
+
                 </DialogContent>
                 <DialogActions>
-                    <Button variant='text' onClick={handleClose}>No</Button>
+                    <Button variant='text' onClick={handleClose}>Go back</Button>
                     <LoadingButton variant='contained' onClick={createAccount} loading={creating} loadingIndicator='Creating...'>
-                        Yes, create my GoingUP account
+                        Create my GoingUP account
                     </LoadingButton>
                 </DialogActions>
             </Dialog>

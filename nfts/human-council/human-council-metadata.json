@@ -1,0 +1,17 @@
+{
+    "name": "Human Council DAO Appreciation Token",
+    "description": "Appreciation Token from Human Council DAO powered by GoingUP.xyz\n\nThe Appreciation Token is shaped as a seed. The future promise of our world rests on the children of today, the potential of which is beautified by the two flowers within its membrane. We offer you this as we hope we can promise the world a beautiful future.",
+    "image": "ipfs://bafybeigtlbstqxph7rqsan4pndrlcipbxxukf7srwxumbgqjlfay7wcfym/human-council-token.jpg",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "Created On",
+            "value": 1668042880
+        },
+        {
+            "display_type": "boost_number",
+            "trait_type": "Reputation Score Boost",
+            "value": 1
+        }
+    ]
+}

@@ -110,6 +110,18 @@ const SendAppreciationToken = (props, ref) => {
         }
     };
 
+    const getTokenImage = (tokenId) => {
+        switch (tokenId) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                return `/images/appreciation-token-t${tokenId}-display.png`;
+            case 5:
+                return `/images/human-council-token.jpg`
+        }
+    }
+
     return (
         <div>
             <Dialog open={open} onClose={close} maxWidth="sm">
@@ -120,7 +132,7 @@ const SendAppreciationToken = (props, ref) => {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sx={{ textAlign: 'center' }}>
                             <img
-                                src={`/images/appreciation-token-t${tier}-display.png`}
+                                src={getTokenImage(tier)}
                                 style={{ maxWidth: '200px' }}
                                 alt="appreciation-token"
                             />
@@ -148,6 +160,7 @@ const SendAppreciationToken = (props, ref) => {
                                     <MenuItem value={2}>Appreciation Token Tier 2</MenuItem>
                                     <MenuItem value={3}>Appreciation Token Tier 3</MenuItem>
                                     <MenuItem value={4}>Appreciation Token Tier 4</MenuItem>
+                                    <MenuItem value={5}>Human Council DAO Appreciation Token</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>

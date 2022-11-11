@@ -1,8 +1,9 @@
 import Head from 'next/head';
 import { Typography } from '@mui/material';
 import { AppContext } from '../contexts/app-context';
-import { useContext, } from 'react';
+import { useContext } from 'react';
 import SuggestedProfiles from '../components/pages/dashboard/suggested-profiles';
+import Script from 'next/script';
 
 export default function Home() {
     const app = useContext(AppContext);
@@ -75,6 +76,17 @@ export default function Home() {
                     </CardContent>
                 </Card>
             </Stack> */}
+
+            <Script src="https://www.googletagmanager.com/gtag/js?id=G-1B35FBTX4R" strategy="afterInteractive" />
+            <Script id="google-analytics" strategy="afterInteractive">
+                {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){window.dataLayer.push(arguments);}
+                    gtag('js', new Date());
+
+                    gtag('config', 'G-1B35FBTX4R');
+                `}
+            </Script>
         </>
     );
 }
