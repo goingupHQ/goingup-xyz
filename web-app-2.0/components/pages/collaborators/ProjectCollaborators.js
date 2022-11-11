@@ -1,9 +1,7 @@
-
 import { AppContext } from '../../../contexts/app-context';
 import { WalletContext } from '../../../contexts/wallet-context';
-import { Box, Button, Fade, Grid, Stack, Typography } from '@mui/material';
+import { Box, Fade, Grid, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import ChevronRightIcon from '../../icons/ChevronRightIcon';
 import Profile from '../../common/profile';
 import LoadingIllustration from '../../common/loading-illustration';
 
@@ -17,7 +15,9 @@ export default function ProjectCollaborators(props) {
         if (!wallet.address) return;
 
         setLoading(true);
-        fetch(`/api/get-potential-collaborators?address=${wallet.address}`)
+        let url = `/api/get-potential-collaborators?count=6`;
+        if (wallet.address) url += `&address=${wallet.address}`;
+        fetch(url)
             .then(async (response) => {
                 const result = await response.json();
                 setData(result);
@@ -34,7 +34,9 @@ export default function ProjectCollaborators(props) {
         <>
             <Fade in={true} timeout={1000}>
                 <Box>
-                    <Typography marginBottom={3} variant='h2'>Project Collaborators</Typography>
+                    <Typography marginBottom={3} variant='h2'>
+                        Project Collaborators
+                    </Typography>
                     {loading ? (
                         <Box sx={{ mt: '100px' }}>
                             <LoadingIllustration />
@@ -42,8 +44,7 @@ export default function ProjectCollaborators(props) {
                     ) : (
                         <Grid>
                             {data.map((account, index) => (
-                                <Grid
-                                    key={account.address}>
+                                <Grid margin={2} key={account.address}>
                                     <Profile account={account} />
                                 </Grid>
                             ))}
