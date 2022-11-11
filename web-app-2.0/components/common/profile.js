@@ -43,8 +43,8 @@ const Profile = (props) => {
         <Card
             key={account.address}
             sx={{
-                marginRight: '10px',
-                marginBottom: '10px',
+                // marginRight: '10px',
+                // marginBottom: '10px',
                 padding: '24px',
             }}
         >
