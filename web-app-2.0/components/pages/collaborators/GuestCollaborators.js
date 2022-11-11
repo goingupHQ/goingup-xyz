@@ -1,9 +1,7 @@
-
 import { AppContext } from '../../../contexts/app-context';
 import { WalletContext } from '../../../contexts/wallet-context';
-import { Box, Button, Fade, Grid, Stack, Typography } from '@mui/material';
+import { Box, Fade, Grid, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import ChevronRightIcon from '../../icons/ChevronRightIcon';
 import Profile from '../../common/profile';
 import LoadingIllustration from '../../common/loading-illustration';
 
@@ -34,7 +32,9 @@ export default function GuestCollaborators(props) {
         <>
             <Fade in={true} timeout={1000}>
                 <Box>
-                    <Typography marginBottom={3} variant='h2'>Guest Collaborators</Typography>
+                    <Typography marginBottom={3} variant='h2'>
+                        Guest Collaborators
+                    </Typography>
                     {loading ? (
                         <Box sx={{ mt: '100px' }}>
                             <LoadingIllustration />
@@ -42,8 +42,7 @@ export default function GuestCollaborators(props) {
                     ) : (
                         <Grid>
                             {data.slice(0, 6).map((account, index) => (
-                                <Grid
-                                    key={account.address}>
+                                <Grid margin={2} key={account.address}>
                                     <Profile account={account} />
                                 </Grid>
                             ))}
