@@ -121,7 +121,7 @@ export default function AppreciationTokenCard(props) {
             >
                 <Box
                     component="img"
-                    src={`/images/appreciation-token-t${tier}-display.png`}
+                    src={`/images/appreciation-token-t${tier}-display.jpg`}
                     sx={{ width: '120px', height: '120px' }}
                     alt={`appreciation-token-t${tier}`}
                 />
