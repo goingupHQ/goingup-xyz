@@ -83,7 +83,7 @@ export default function ProjectSectionCard(props) {
                                             size='small'
                                             onClick={() =>
                                                 router.push(
-                                                    `/projects/edit/${project?.id.toNumber()}`
+                                                    `/projects/edit/${projectId}`
                                                 )
                                             }>
                                             Edit
@@ -94,7 +94,6 @@ export default function ProjectSectionCard(props) {
                         </Stack>
                     }
                     sx={{ cursor: 'pointer' }}
-                    onClick={() => router.push(`/projects/page/${project.id}`)}
                 />
             </Card>
         </>
