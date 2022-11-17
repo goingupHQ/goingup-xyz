@@ -31,7 +31,7 @@ export const ProjectsProvider = ({ children }) => {
 
     async function switchToCorrectNetwork() {
         if (wallet.walletType === 'walletconnect') {
-            throw new Error('WalletConnect does not support adding networks. Please add the network manually.');
+            throw new Error('WalletConnect does not support switching networks. Please add and switch to the network manually.');
         } else {
             try {
                 await ethereum.request({
