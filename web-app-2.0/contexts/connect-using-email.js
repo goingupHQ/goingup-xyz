@@ -26,17 +26,16 @@ const ConnectUsingEmail = (props, ref) => {
     }));
 
     const handleClose = (event, reason) => {
-        if (reason && reason == "backdropClick")
-            return;
+        if (reason && reason == 'backdropClick') return;
         setOpen(false);
-    }
+    };
 
     const changeStep = async (step) => {
         setStep(-1);
         sleep(500).then(() => {
             setStep(step);
         });
-    }
+    };
 
     const sendLoginCode = async () => {
         if (!email) {
@@ -77,7 +76,7 @@ const ConnectUsingEmail = (props, ref) => {
 
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="md">
-            <DialogContent sx={{ paddingY: 4, minHeight: 230 }} >
+            <DialogContent sx={{ paddingY: 4, minHeight: 230 }}>
                 <Stack direction="column" spacing={3}>
                     <Typography variant="h2" align="center">
                         Connect to the app using your GoingUP Wallet
@@ -98,32 +97,50 @@ const ConnectUsingEmail = (props, ref) => {
                                 onChange={(e) => setEmail(e.target.value)}
                             />
 
-                            <LoadingButton
-                                variant="contained"
-                                color="primary"
-                                fullWidth
-                                onClick={sendLoginCode}
-                                loading={sendingEmail}
-                            >
-                                Send Login Code
-                            </LoadingButton>
+                            <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
+                                <LoadingButton
+                                    variant="contained"
+                                    color="primary"
+                                    fullWidth
+                                    onClick={sendLoginCode}
+                                    loading={sendingEmail}
+                                >
+                                    Send Login Code
+                                </LoadingButton>
+
+                                <Button variant="outlined" color="secondary" fullWidth onClick={() => setOpen(false)}>
+                                    Cancel
+                                </Button>
+                            </Stack>
                         </Stack>
                     </Fade>
 
                     <Fade in={step === 1} mountOnEnter unmountOnExit>
-                        <Stack direction="column" spacing={2}>
-                            <Typography variant="body1" align="center">
-                                We have sent a login code to your <b>{email}</b>. Please enter it below to login.
-                            </Typography>
+                        <Stack direction="column" spacing={3}>
+                            <Stack direction="column" spacing={0}>
+                                <Typography variant="body1" align="center">
+                                    We have sent a login code to your <b>{email}</b>
+                                </Typography>
 
-                            <TextField label="Login Code" placeholder="123456" variant="outlined" fullWidth />
+                                <Typography variant="body1" align="center">
+                                    Once you have received the code, please paste it below to login to the app
+                                </Typography>
+                            </Stack>
 
-                            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                            <Stack direction="column" spacing={0}>
+                                <TextField label="Login Code" placeholder="123456" variant="outlined" fullWidth />
+
+                                <Typography variant="subtitle2" align="center">
+                                    If you cannot find the email, please check your spam folder
+                                </Typography>
+                            </Stack>
+
+                            <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
                                 <Button variant="contained" color="primary" fullWidth>
                                     Login and Connect
                                 </Button>
 
-                                <Button variant="outlined" color="primary" fullWidth onClick={() => changeStep(0)}>
+                                <Button variant="outlined" color="secondary" fullWidth onClick={() => changeStep(0)}>
                                     Go back
                                 </Button>
                             </Stack>
