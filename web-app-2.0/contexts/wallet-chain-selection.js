@@ -59,9 +59,9 @@ const WalletChainSelection = (props, ref) => {
                             justifyContent="center"
                             sx={chainItemSx}
                             onClick={() => {
-                                handleClose();
-                                connectUsingEmailRef.current.showModal();
-                                // enqueueSnackbar('Not yet available but it is coming soon!', { variant: 'info' });
+                                // handleClose();
+                                // connectUsingEmailRef.current.showModal();
+                                enqueueSnackbar('Not yet available but it is coming soon!', { variant: 'info' });
                             }}
                         >
                             <h2
