@@ -254,7 +254,7 @@ export default function Layout({ children }) {
                         }
                     }
                 },
-                spacing: [0, 10, 15, 20, 30, 60, 80],
+                // spacing: [0, 10, 15, 20, 30, 60, 80],
                 icons: {
                     sizes: {
                         small: 16,
