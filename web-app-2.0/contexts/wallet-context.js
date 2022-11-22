@@ -423,7 +423,7 @@ export function WalletProvider({ children }) {
         chainName: 'Polygon Mainnet',
         address: '0x10D7B3aFA213D93a922a062fb91E8EcbD4A703d2',
         get provider() {
-            return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_KEY);
+            return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_MAINNET);
         },
     };
 

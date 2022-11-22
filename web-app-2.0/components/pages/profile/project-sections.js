@@ -43,19 +43,21 @@ export default function ProjectsSection(props) {
             const ownedProjects = await projectsContext.getAccountProjects(address);
             const joinedProjects =
                 await projectsContext.getAccountJoinedProjects(address);
+
+                console.log("ownedProjects", ownedProjects);
+                console.log("joinedProjects", joinedProjects);
+
             setProjects(ownedProjects);
             setJoinedProjects(joinedProjects);
         } catch (err) {
-            console.error(err);
+            console.error('Error loading projects', err);
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        //
         if (account.address && router.isReady) load();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [account.address, router.isReady]);
 
     useEffect(() => {
@@ -143,13 +145,13 @@ export default function ProjectsSection(props) {
                                         >
                                             {projects
                                                 .slice(0, 3)
-                                                .map((project) => (
+                                                .map((project, index) => (
                                                     <Grid
                                                         item
                                                         xs={12}
                                                         md={6}
                                                         lg={4}
-                                                        key={project.id}
+                                                        key={project.id._hex || index}
                                                     >
                                                         <ProjectSectionCard
                                                             project={project}
@@ -190,13 +192,13 @@ export default function ProjectsSection(props) {
                                             >
                                                 {joinedProjects
                                                     .slice(0, 3)
-                                                    .map((project) => (
+                                                    .map((project, index) => (
                                                         <Grid
                                                             item
                                                             xs={12}
                                                             md={6}
                                                             lg={4}
-                                                            key={project.id}
+                                                            key={project.id._hex || index}
                                                         >
                                                             <ProjectSectionCard
                                                                 project={

@@ -17,10 +17,12 @@ export const ProjectsProvider = ({ children }) => {
     // polygon mumbai testnet
     // const contractAddress = '0x89e41C41Fa8Aa0AE4aF87609D3Cb0F466dB343ab';
     // const contractNetwork = 80001;
+    // const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_TESTNET;
 
     // polygon mainnet
     const contractAddress = '0x9C28e833aE76A1e123c2799034cA6865A1113CA5';
     const contractNetwork = 137;
+    const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_MAINNET;
 
     const { networkParams } = wallet.networks[contractNetwork];
 
@@ -91,8 +93,17 @@ export const ProjectsProvider = ({ children }) => {
     }, [wallet.address, isCorrectNetwork]);
 
     const getContract = () => {
+        if (!wallet.ethersSigner) return getReadOnlyContract();
+        if (wallet.network != contractNetwork) return getReadOnlyContract();
+        console.log('getContract');
         return new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
     };
+
+    const getReadOnlyContract = () => {
+        console.log('getReadOnlyContract');
+        const readOnlyProvider = new ethers.providers.AlchemyProvider(contractNetwork, alchemyKey);
+        return new ethers.Contract(contractAddress, artifact.abi, readOnlyProvider);
+    }
 
     const getProjects = async () => {
         const response = await fetch(`/api/projects/account/${wallet.address}`);

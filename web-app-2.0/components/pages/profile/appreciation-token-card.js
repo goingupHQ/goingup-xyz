@@ -20,11 +20,11 @@ export default function AppreciationTokenCard(props) {
     const router = useRouter();
 
     useEffect(() => {
-        //
         const load = async () => {
             if (router.isReady) {
                 setLoading(true);
                 try {
+                    console.log(contractAddress, provider, contract);
                     const result = await getMessages(tier, router.query.address);
                     setMessages(result);
                 } catch (err) {
@@ -36,15 +36,13 @@ export default function AppreciationTokenCard(props) {
         };
 
         load();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+
+    }, [tier, balance, router.isReady]);
 
     let intervalId;
     useEffect(() => {
-        //
         if (messages.length > 0) {
             showRandomMessage();
-            // eslint-disable-next-line react-hooks/exhaustive-deps
             intervalId = setInterval(showRandomMessage, 7000);
         }
 
