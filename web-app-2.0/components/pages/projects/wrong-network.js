@@ -24,7 +24,7 @@ export default function WrongNetwork(props) {
                 size="large"
                 onClick={() => {
                     try {
-                        projectsContext.switchNetwork();
+                        projectsContext.switchToCorrectNetwork();
                     } catch (e) {
                         if (typeof e === 'string') {
                             enqueueSnackbar(e, { variant: 'error' });
