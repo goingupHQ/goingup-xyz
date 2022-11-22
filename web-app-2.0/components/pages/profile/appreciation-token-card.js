@@ -58,8 +58,9 @@ export default function AppreciationTokenCard(props) {
     const getMessages = async (tokenID, address) => {
         const _interface = new ethers.utils.Interface(artifact.abi);
         const filter = contract.filters.WriteMintData(tokenID, address);
-        filter.fromBlock = 0;
+        filter.fromBlock = '0x1c548c0';
         filter.toBlock = 'latest';
+        filter.address = contractAddress;
         const writeMintLogs = await await contract.provider.getLogs(filter);
         const messagesResult = writeMintLogs.map((log) => {
             const parsedLog = _interface.parseLog(log);

@@ -24,18 +24,18 @@ export default function AppreciationTokenCard(props) {
     useEffect(() => {
         //
         const load = async () => {
-                setLoading(true);
-                try {
-                    const result = await getMessages(tier);
-                    setMessages(result);
-                } catch (err) {
-                    console.log(err);
-                } finally {
-                    setLoading(false);
-                }
+            setLoading(true);
+            try {
+                const result = await getMessages(tier);
+                setMessages(result);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setLoading(false);
             }
-            if (router.isReady) {
-        load();
+        };
+        if (router.isReady) {
+            load();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [router.isReady]);
@@ -59,8 +59,9 @@ export default function AppreciationTokenCard(props) {
     const getMessages = async (tokenID, to) => {
         const _interface = new ethers.utils.Interface(artifact.abi);
         const filter = contract.filters.WriteMintData(tokenID, to);
-        filter.fromBlock = 0;
+        filter.fromBlock = '0x1c548c0';
         filter.toBlock = 'latest';
+        filter.address = contractAddress;
         const writeMintLogs = await await contract.provider.getLogs(filter);
         const messagesResult = writeMintLogs.map((log) => {
             const parsedLog = _interface.parseLog(log);
@@ -70,8 +71,8 @@ export default function AppreciationTokenCard(props) {
             setSent(senderMessage);
             const senderAddress = sender === router.query.address;
             setSentTo(senderAddress);
-            if(senderAddress) {
-            return message;
+            if (senderAddress) {
+                return message;
             }
         });
 
@@ -142,7 +143,9 @@ export default function AppreciationTokenCard(props) {
                     sx={{ paddingX: '15px' }}
                 >
                     <Typography variant="body1" color="textPrimary">
-                        <strong> T{tier} Token{balance !== 1 ? 's' : ''}
+                        <strong>
+                            {' '}
+                            T{tier} Token{balance !== 1 ? 's' : ''}
                         </strong>
                     </Typography>
                     {!loading && (

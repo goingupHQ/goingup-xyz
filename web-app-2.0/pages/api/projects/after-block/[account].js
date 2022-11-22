@@ -13,6 +13,7 @@ export default async function handler(req, res) {
     const filter = contract.filters.Create(account);
     filter.fromBlock = parseInt(block);
     filter.toBlock = 'latest';
+    filter.address = contractAddress;
     const logs = await provider.getLogs(filter);
     const projectIds = logs.map(log => parseInt(log.data, 16));
 
