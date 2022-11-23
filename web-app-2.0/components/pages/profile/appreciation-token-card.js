@@ -59,7 +59,7 @@ export default function AppreciationTokenCard(props) {
         filter.fromBlock = '0x1c548c0';
         filter.toBlock = 'latest';
         filter.address = contractAddress;
-        const writeMintLogs = await await contract.provider.getLogs(filter);
+        const writeMintLogs = await contract.provider.getLogs(filter);
         const messagesResult = writeMintLogs.map((log) => {
             const parsedLog = _interface.parseLog(log);
             const message = { ...parsedLog.args };
