@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import fs from 'fs';
 import { MongoClient } from 'mongodb';
 import webpush from './get-web-push.mjs';
+import cacheUtilityTokenData from './cache-utility-token-data.mjs';
 
 // prevent process from exiting when an unhandled exception occurs
 process.on('uncaughtException', function (err) {
@@ -283,6 +284,12 @@ const verifyReward = async (txhash) => {
         }
     });
 };
+
+// cache utility token data every 6 hours
+setInterval(async () => {
+    cacheUtilityTokenData();
+}, 1000 * 60 * 60 * 6);
+cacheUtilityTokenData();
 
 console.info('Event Listener Started');
 setInterval(() => {}, 1 << 30);
