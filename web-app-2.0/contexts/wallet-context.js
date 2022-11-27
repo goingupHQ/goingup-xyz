@@ -281,6 +281,7 @@ export function WalletProvider({ children }) {
             if (
                 !result.hasAccount &&
                 router.pathname !== '/create-account' &&
+                router.pathname?.toLowerCase() !== '/gitcoin-donors/claim-appreciation-token' &&
                 router.pathname?.toLowerCase() !== '/profile/[address]'
             ) {
                 router.push('/create-account');
