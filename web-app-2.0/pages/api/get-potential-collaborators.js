@@ -1,10 +1,9 @@
-import { parse } from '@ethersproject/transactions';
 import { getDb } from './_get-db-client';
 
 export default async function handler(req, res) {
     const { address, count, includeNoPhotos } = req.query;
 
-    const parsedCount = parseInt(count);
+    const parsedCount = parseInt(count || 12);
 
     if (isNaN(parsedCount)) {
         res.status(400).json({ error: 'Invalid count' });
