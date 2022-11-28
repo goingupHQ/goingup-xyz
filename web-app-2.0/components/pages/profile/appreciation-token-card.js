@@ -7,11 +7,13 @@ import sleep from 'sleep-promise';
 import artifact from '../../../../artifacts/GoingUpUtilityToken.json';
 import truncateEthAddress from 'truncate-eth-address';
 import { useRouter } from 'next/router';
+import { UtilityTokensContext } from '../../../contexts/utility-tokens-context';
 
 export default function AppreciationTokenCard(props) {
     const { tier, balance } = props;
     const app = useContext(AppContext);
     const wallet = useContext(WalletContext);
+    const utilityTokens = useContext(UtilityTokensContext);
 
     const [loading, setLoading] = useState(true);
     const [messages, setMessages] = useState([]);
@@ -24,7 +26,6 @@ export default function AppreciationTokenCard(props) {
             if (router.isReady) {
                 setLoading(true);
                 try {
-                    console.log(contractAddress, provider, contract);
                     const result = await getMessages(tier, router.query.address);
                     setMessages(result);
                 } catch (err) {
@@ -36,7 +37,6 @@ export default function AppreciationTokenCard(props) {
         };
 
         load();
-
     }, [tier, balance, router.isReady]);
 
     let intervalId;
@@ -55,18 +55,13 @@ export default function AppreciationTokenCard(props) {
 
     const getMessages = async (tokenID, address) => {
         const _interface = new ethers.utils.Interface(artifact.abi);
-        const filter = contract.filters.WriteMintData(tokenID, address);
-        filter.fromBlock = '0x1c548c0';
-        filter.toBlock = 'latest';
-        filter.address = contractAddress;
-        const writeMintLogs = await contract.provider.getLogs(filter);
+        const writeMintLogs = await utilityTokens.getWriteMintLogs(tokenID, address);
+
         const messagesResult = writeMintLogs.map((log) => {
             const parsedLog = _interface.parseLog(log);
             const message = { ...parsedLog.args };
             return message;
         });
-
-        // for (const m of messages) m.block = await contract.provider.getBlock(m.blockNumber);
 
         for (const m of messagesResult) {
             const fromName = await getSenderAccountName(m.from);
@@ -121,7 +116,7 @@ export default function AppreciationTokenCard(props) {
                 <Box
                     component="img"
                     src={`/images/appreciation-token-t${tier}-display.jpg`}
-                    sx={{ width: '120px', height: '120px' }}
+                    sx={{ width: '120px', height: '120px', borderRadius: '8px' }}
                     alt={`appreciation-token-t${tier}`}
                 />
 

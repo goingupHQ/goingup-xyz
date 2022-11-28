@@ -44,7 +44,8 @@ export const UtilityTokensProvider = ({ children }) => {
             return null;
         }
 
-        const contractAddress = wallet.network == 137 ? mainnet.address : testnet.address; console.log('utility-tokens-context.js: sendUtilityToken() contractAddress:', contractAddress);
+        const contractAddress = wallet.network == 137 ? mainnet.address : testnet.address;
+        console.log('utility-tokens-context.js: sendUtilityToken() contractAddress:', contractAddress);
         const abi = artifact.abi;
         const provider = wallet.network == 137 ? mainnet.provider : testnet.provider;
 
@@ -65,12 +66,31 @@ export const UtilityTokensProvider = ({ children }) => {
         });
     }, []);
 
+    const getWriteMintLogs = async (tokenID, address) => {
+        const contractAddress = wallet.utilityToken.address;
+        const provider = wallet.utilityToken.provider;
+        const contract = new ethers.Contract(contractAddress, artifact.abi, provider);
+
+        const cachedLogsResponse = await fetch(`/api/accounts/${address}/get-utility-mint-logs?tokenId=${tokenID}`);
+        const cachedLogsData = await cachedLogsResponse.json();
+        const { lastCachedBlock, mintLogs } = cachedLogsData;
+
+        const filter = contract.filters.WriteMintData(tokenID, address);
+        filter.fromBlock = lastCachedBlock;
+        filter.toBlock = 'latest';
+        filter.address = contractAddress;
+        const logs = await provider.getLogs(filter);
+        const allLogs = [...mintLogs, ...logs];
+        return allLogs;
+    };
+
     return (
         <UtilityTokensContext.Provider
             value={{
                 utilityTokens,
                 getUtilityTokens,
                 sendUtilityToken,
+                getWriteMintLogs,
             }}
         >
             {children}
