@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 import { getDb } from '../get-db-client.mjs';
 
 // get donor wallet addresses from csv file
-const csvFilePath = './scripts/gitcoin-donors.csv';
+const csvFilePath = './scripts/additional-gitcoin.csv';
 const csvData = await csv().fromFile(csvFilePath);
 
 // fix addresses to be checksummed

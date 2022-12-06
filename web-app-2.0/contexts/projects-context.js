@@ -100,7 +100,6 @@ export const ProjectsProvider = ({ children }) => {
     };
 
     const getReadOnlyContract = () => {
-        console.log('getReadOnlyContract');
         const readOnlyProvider = new ethers.providers.AlchemyProvider(contractNetwork, alchemyKey);
         return new ethers.Contract(contractAddress, artifact.abi, readOnlyProvider);
     }

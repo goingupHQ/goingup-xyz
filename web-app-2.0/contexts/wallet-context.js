@@ -410,15 +410,6 @@ export function WalletProvider({ children }) {
         }
     };
 
-    // const utilityToken = {
-    //     chainId: 5,
-    //     chainName: 'Goerli Testnet',
-    //     address: '0x75c390a5B9BE38caC9F9Ff1159805C750e6e6d23',
-    //     get provider() {
-    //         return new ethers.providers.AlchemyProvider(this.chainId, '8L_6aM0-crh5sm3t4BFg6Hjv90NIh0bw')
-    //     }
-    // }
-
     const utilityToken = {
         chainId: 137,
         chainName: 'Polygon Mainnet',
