@@ -86,8 +86,8 @@ export default function Metrics(props) {
                 Utility Tokens Supply
             </Typography>
             <Grid container spacing={2}>
-                {utilityTokens.map((token) => (
-                    <Grid item xs={6} md={3}>
+                {utilityTokens.map((token, index) => (
+                    <Grid key={index} item xs={6} md={3}>
                         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
                             <Typography variant="body1">
                                 {token.description}
