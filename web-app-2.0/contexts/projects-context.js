@@ -100,9 +100,23 @@ export const ProjectsProvider = ({ children }) => {
     };
 
     const getReadOnlyContract = () => {
-        const readOnlyProvider = new ethers.providers.AlchemyProvider(contractNetwork, alchemyKey);
+        const readOnlyProvider = new ethers.providers.JsonRpcProvider(`https://polygon-rpc.com`);
         return new ethers.Contract(contractAddress, artifact.abi, readOnlyProvider);
     }
+
+    const getProjectsCount = async () => {
+        const contract = getReadOnlyContract();
+        let count = 0;
+        let currentProjectId = 1;
+        while (true) {
+            const project = await contract.projects(currentProjectId);
+            if (project.id.toNumber() === 0) break;
+            count++;
+            currentProjectId++;
+        };
+
+        return count;
+    };
 
     const getProjects = async () => {
         const response = await fetch(`/api/projects/account/${wallet.address}`);
@@ -361,6 +375,7 @@ export const ProjectsProvider = ({ children }) => {
         setProjectLogo,
         getProjectLogo,
         manuallyAddMember,
+        getProjectsCount
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };
