@@ -19,8 +19,11 @@ const db = await dbClient.db();
 const notifications = await db.collection('notifications');
 const accounts = await db.collection('accounts');
 
-const polygonProvider = new ethers.providers.AlchemyProvider(137, process.env.ALCHEMY_POLYGON_KEY);
-const mumbaiProvider = new ethers.providers.AlchemyProvider(80001, process.env.ALCHEMY_MUMBAI_KEY);
+// const polygonProvider = new ethers.providers.AlchemyProvider(137, process.env.ALCHEMY_POLYGON_KEY);
+// const mumbaiProvider = new ethers.providers.AlchemyProvider(80001, process.env.ALCHEMY_MUMBAI_KEY);
+
+const polygonProvider = new ethers.providers.JsonRpcProvider(`https://polygon-rpc.com`);
+const mumbaiProvider = new ethers.providers.JsonRpcProvider(`https://matic-mumbai.chainstacklabs.com`);
 
 const utilityArtifact = JSON.parse(fs.readFileSync('./artifacts/GoingUpUtilityTokens.json'));
 const projectsArtifact = JSON.parse(fs.readFileSync('./artifacts/GoingUpProjects.json'));
@@ -214,7 +217,7 @@ if (projectsContract) {
             .updateOne({ id: projectId }, { $set: { ...project } }, { upsert: true });
     });
 
-    projectsContract.on('TransferProjectOwnership', async(projectId, from, to) => {
+    projectsContract.on('TransferProjectOwnership', async (projectId, from, to) => {
         console.log(`TransferProjectOwnership: ${projectId} ${from} ${to}`);
         const project = await projectsContract.projects(projectId);
         await db
