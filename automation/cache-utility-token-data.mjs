@@ -1,6 +1,5 @@
 // This script is used to cache extra data like messages on the GoingUP utility token smart contract
 // Contract on block explorer: https://polygonscan.com/address/0x10d7b3afa213d93a922a062fb91e8ecbd4a703d2
-
 import { ethers } from 'ethers';
 import fs from 'fs';
 import { getDb } from './get-db-client.mjs';
@@ -24,12 +23,61 @@ export default async function cacheUtilityTokenData() {
 
     // get all events from last cached block to current block
     const _interface = new ethers.utils.Interface(utilityArtifact.abi);
+
     const filter = utilityContract.filters.WriteMintData(null, null);
     filter.fromBlock = lastCachedBlock;
     filter.toBlock = currentBlock;
     filter.address = contractAddress;
     const writeMintLogs = await utilityContract.provider.getLogs(filter);
     console.log(`Found ${writeMintLogs.length} WriteMintData events`);
+
+    // get all transfer events from last cached block to current block with from address 0x0000000000000000000000000000000000000000
+    const transferFilter = utilityContract.filters.TransferSingle(
+        null,
+        '0x0000000000000000000000000000000000000000',
+        null
+    );
+    transferFilter.fromBlock = lastCachedBlock;
+    transferFilter.toBlock = currentBlock;
+    transferFilter.address = contractAddress;
+    const transferLogs = await utilityContract.provider.getLogs(transferFilter);
+    console.log(`Found ${transferLogs.length} TransferSingle events`);
+
+    // parse transfer logs
+    const parsedTransferLogs = transferLogs.map((log) => {
+        const parsedLog = _interface.parseLog(log);
+        return {
+            tokenId: parsedLog.args.id.toNumber(),
+            to: parsedLog.args.to,
+            value: parsedLog.args.value,
+            blockNumber: log.blockNumber,
+            transactionHash: log.transactionHash,
+        };
+    });
+
+    // sum up all transfer events for each token
+    const transferLogsByTokenId = parsedTransferLogs.reduce((acc, log) => {
+        if (!acc[log.tokenId]) {
+            acc[log.tokenId] = {
+                tokenId: log.tokenId,
+                totalMinted: 0,
+            };
+        }
+        acc[log.tokenId].totalMinted++;
+        return acc;
+    }, {});
+
+    // increment supply in database for each token
+    for (const tokenId in transferLogsByTokenId) {
+        const updateResult = await db
+            .collection('utility-token-supply')
+            .updateOne(
+                { tokenId: parseInt(tokenId) },
+                { $inc: { supply: transferLogsByTokenId[tokenId].totalMinted } },
+                { upsert: true }
+            );
+        console.log(`Added supply for token ${tokenId} by ${transferLogsByTokenId[tokenId].totalMinted}`);
+    }
 
     // save result to database
     if (writeMintLogs.length > 0) {
