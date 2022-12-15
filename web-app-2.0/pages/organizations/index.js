@@ -1,8 +1,7 @@
 import Head from 'next/head';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import { AppContext } from '../../contexts/app-context';
 import { useContext, useEffect } from 'react';
-import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
 import { OrganizationsContext } from '../../contexts/organizations-context';
 import OrganizationsSection from '../../components/pages/organizations/organizations-section';
