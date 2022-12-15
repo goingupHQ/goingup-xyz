@@ -58,6 +58,15 @@ export default function DesktopNav(props) {
                     </Button>
                 </Link>
 
+                <Link href="/organizations">
+                    <Button
+                        sx={pathname.startsWith('/organizations') ? activeButtonStyle : inactiveButtonStyle}
+                        startIcon={<ProfileIcon />}
+                    >
+                        Organizations
+                    </Button>
+                </Link>
+
                 <Link href="/profile">
                     <Button
                         sx={pathname.startsWith('/profile') ? activeButtonStyle : inactiveButtonStyle}
