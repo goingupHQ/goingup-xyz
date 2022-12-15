@@ -79,7 +79,7 @@ export default function Organizations() {
                 <link rel='icon' href='/favicon.ico' />
             </Head>
 
-            <Typography variant='h1' marginY={2}>
+            <Typography variant='h1' marginY={3}>
                 Organizations
             </Typography>
 
@@ -104,10 +104,10 @@ export default function Organizations() {
                             key={organization.address}
                             sx={{
                                 display: 'inline-block',
-                                width: 'full',
+                                width: '300px',
                                 height: '300px',
                                 borderRadius: '10px',
-                                margin: '10px',
+                                margin: '20px',
                                 backgroundColor:
                                     app.mode === 'dark' ? '#111921' : '#F5F5F5',
                                 borderRadius: '8px',
@@ -125,7 +125,7 @@ export default function Organizations() {
                             <Stack
                                 direction='row'
                                 alignItems='center'
-                                marginTop={5}
+                                marginTop={4}
                                 spacing={2}>
                                 <Button
                                     variant='contained'
