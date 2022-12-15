@@ -10,6 +10,7 @@ import {
     Stack,
     Typography,
 } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { AppContext } from '../../../contexts/app-context';
@@ -56,8 +57,14 @@ export default function OrganizationsSection() {
                                                     borderRadius: '50%',
                                                     padding: '3px',
                                                     position: 'absolute',
-                                                    marginTop: {xs: '70px', md: '80px'},
-                                                    marginLeft: {xs: '160px', md: '180px'},
+                                                    marginTop: {
+                                                        xs: '70px',
+                                                        md: '80px',
+                                                    },
+                                                    marginLeft: {
+                                                        xs: '160px',
+                                                        md: '180px',
+                                                    },
                                                 }}>
                                                 <Box
                                                     sx={{
@@ -69,7 +76,8 @@ export default function OrganizationsSection() {
                                                         padding: {
                                                             xs: '17px',
                                                             md: 'none',
-                                                            position: 'absolute',
+                                                            position:
+                                                                'absolute',
                                                             marginTop: '8px',
                                                             marginLeft: '8px',
                                                         },
@@ -156,7 +164,8 @@ export default function OrganizationsSection() {
                                         />
                                         <Typography variant='h5'>
                                             {organization.name}
-                                        </Typography>
+                                        <CheckIcon color='success' />
+                                        </Typography>{' '}
                                     </Stack>
                                 }
                             />
