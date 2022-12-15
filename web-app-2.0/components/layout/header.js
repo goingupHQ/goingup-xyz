@@ -23,7 +23,7 @@ export default function Header(props) {
 
     return (
         <>
-            <AppBar sx={{ boxShadow: 6, paddingX: { lg: '85px' } }}>
+            <AppBar sx={{ boxShadow: 6, paddingX: { md: '45px' } }}>
                 <Toolbar sx={{ paddingY: 0 }}>
                     <Grid container spacing={1} alignItems="center" justifyContent="space-between">
                         <Grid item xs={5}>
@@ -78,7 +78,7 @@ export default function Header(props) {
                         marginTop: '12px'
                     }}
                 /> */}
-                <DesktopNav />
+                {/* <DesktopNav /> */}
                 <Fade direction="down" in={drawerOpen} mountOnEnter unmountOnExit>
                     <Box sx={{ paddingBottom: '20px', paddingX: '32px', zIndex: 100 }}>
                         <MobileNav closeNav={() => { setDrawerOpen(false) }} />
