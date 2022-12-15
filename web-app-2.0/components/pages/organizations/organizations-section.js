@@ -22,8 +22,8 @@ export default function OrganizationsSection() {
         <>
             <Grid container spacing={2}>
                 {org.organizations.map((organization) => (
-                    <Grid item spacing={1} xs={12} md={6} lg={4}>
-                        <Card>
+                    <Grid item spacing={1} xs={12} md={6} lg={4} xl={3}>
+                        <Card sx={{ p: 3 }}>
                             <CardHeader
                                 title={
                                     <Stack
