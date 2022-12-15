@@ -63,7 +63,7 @@ export default function SuggestedProfiles(props) {
     return (
         <>
             <Fade in={true} timeout={1000}>
-                <Box>
+                <Box  marginTop={3}>
                     <Stack
                         direction={{ xs: 'column', md: 'row' }}
                         alignItems="center"
@@ -71,7 +71,7 @@ export default function SuggestedProfiles(props) {
                         sx={{ mb: 2 }}
                         spacing={3}
                     >
-                        <Typography variant="h2">Suggested Profiles</Typography>
+                        <Typography variant="h1">Suggested Profiles</Typography>
                         <TextField
                             variant="outlined"
                             label="Search Profiles"

@@ -15,7 +15,7 @@ export default function Collaborators() {
             </Head>
 
             {/* <Typography variant='h1'>Collaborators</Typography> */}
-            <Grid container>
+            <Grid container marginTop={3}>
                 <Grid item xs={12} md={6}>
                     <ProjectCollaborators />
                 </Grid>
