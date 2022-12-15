@@ -10,60 +10,37 @@ export function OrganizationsProvider({ children }) {
             name: 'GoingUp',
             description: 'Web3 Protocol for reputation & identity description',
             address: '0x5f4eC3D',
-            logo:
-                app.mode === 'dark'
-                    ? '/images/goingup-logo-dark.svg'
-                    : '/images/goingup-logo-light.svg',
+            logo: '/images/goingup-glyph.png',
         },
         {
             name: 'GoingUp',
             description: 'Web3 Protocol for reputation & identity description',
             address: '0x5f4eC3D',
-
-            logo:
-                app.mode === 'dark'
-                    ? '/images/goingup-logo-dark.svg'
-                    : '/images/goingup-logo-light.svg',
+            logo: '/images/goingup-glyph.png',
         },
         {
             name: 'GoingUp',
             description: 'Web3 Protocol for reputation & identity description',
             address: '0x5f4eC3D',
-
-            logo:
-                app.mode === 'dark'
-                    ? '/images/goingup-logo-dark.svg'
-                    : '/images/goingup-logo-light.svg',
+            logo: '/images/goingup-glyph.png',
         },
         {
             name: 'GoingUp',
             description: 'Web3 Protocol for reputation & identity description',
             address: '0x5f4eC3D',
-
-            logo:
-                app.mode === 'dark'
-                    ? '/images/goingup-logo-dark.svg'
-                    : '/images/goingup-logo-light.svg',
+            logo: '/images/goingup-glyph.png',
         },
         {
             name: 'GoingUp',
             description: 'Web3 Protocol for reputation & identity description',
             address: '0x5f4eC3D',
-
-            logo:
-                app.mode === 'dark'
-                    ? '/images/goingup-logo-dark.svg'
-                    : '/images/goingup-logo-light.svg',
+            logo: '/images/goingup-glyph.png',
         },
         {
             name: 'GoingUp',
             description: 'Web3 Protocol for reputation & identity description',
             address: '0x5f4eC3D',
-
-            logo:
-                app.mode === 'dark'
-                    ? '/images/goingup-logo-dark.svg'
-                    : '/images/goingup-logo-light.svg',
+            logo: '/images/goingup-glyph.png',
         },
     ];
 
