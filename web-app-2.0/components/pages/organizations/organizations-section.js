@@ -1,9 +1,11 @@
 import {
+    Badge,
     Box,
     Button,
     Card,
     CardContent,
     CardHeader,
+    CircularProgress,
     Grid,
     Stack,
     Typography,
@@ -22,9 +24,123 @@ export default function OrganizationsSection() {
         <>
             <Grid container spacing={2}>
                 {org.organizations.map((organization) => (
-                    <Grid item spacing={1} xs={12} md={6} lg={4} xl={3} key={organization.id}>
+                    <Grid
+                        item
+                        spacing={1}
+                        xs={12}
+                        md={6}
+                        lg={4}
+                        xl={3}
+                        key={organization.id}>
                         <Card sx={{ p: 3 }}>
                             <CardHeader
+                                avatar={
+                                    <Badge
+                                        overlap='circular'
+                                        anchorOrigin={{
+                                            vertical: 'bottom',
+                                            horizontal: 'right',
+                                        }}
+                                        badgeContent={
+                                            <Box
+                                                sx={{
+                                                    position: 'relative',
+                                                    display: 'inline-flex',
+                                                    backgroundColor: {
+                                                        xs: 'none',
+                                                        md:
+                                                            app.mode === 'dark'
+                                                                ? '#121E28'
+                                                                : '#FFFFFF',
+                                                    },
+                                                    borderRadius: '50%',
+                                                    padding: '3px',
+                                                    position: 'absolute',
+                                                    marginTop: {xs: '70px', md: '80px'},
+                                                    marginLeft: {xs: '160px', md: '180px'},
+                                                }}>
+                                                <Box
+                                                    sx={{
+                                                        backgroundColor:
+                                                            app.mode === 'dark'
+                                                                ? '#121E28'
+                                                                : '#FFFFFF',
+                                                        borderRadius: '50%',
+                                                        padding: {
+                                                            xs: '17px',
+                                                            md: 'none',
+                                                            position: 'absolute',
+                                                            marginTop: '8px',
+                                                            marginLeft: '8px',
+                                                        },
+                                                    }}
+                                                />
+                                                <CircularProgress
+                                                    size={50}
+                                                    variant='determinate'
+                                                    sx={{
+                                                        position: 'absolute',
+                                                        color:
+                                                            app.mode === 'dark'
+                                                                ? '#1D3042'
+                                                                : '#CFCFCF',
+                                                        padding: {
+                                                            xs: 1,
+                                                            sm: 1,
+                                                            md: 0,
+                                                        },
+                                                    }}
+                                                    thickness={7}
+                                                    value={100}
+                                                />
+                                                <CircularProgress
+                                                    size={50}
+                                                    thickness={7}
+                                                    variant='determinate'
+                                                    color='success'
+                                                    value={
+                                                        100 *
+                                                        (120 /
+                                                            app.maxReputationScore)
+                                                    }
+                                                    sx={{
+                                                        color: '#3AB795',
+                                                        position: 'relative',
+                                                        display: 'inline-flex',
+                                                        padding: {
+                                                            xs: 1,
+                                                            sm: 1,
+                                                            md: 0,
+                                                        },
+                                                    }}
+                                                />
+                                                <Box
+                                                    sx={{
+                                                        top: 0,
+                                                        left: 0,
+                                                        bottom: 0,
+                                                        right: 0,
+                                                        position: 'absolute',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent:
+                                                            'center',
+                                                    }}>
+                                                    <Typography
+                                                        color={'#3AB795'}
+                                                        variant='rep'>
+                                                        {' '}
+                                                        {Math.round(
+                                                            100 *
+                                                                (120 /
+                                                                    app.maxReputationScore)
+                                                        )}
+                                                        %
+                                                    </Typography>
+                                                </Box>
+                                            </Box>
+                                        }></Badge>
+                                }
                                 title={
                                     <Stack
                                         direction='row'
