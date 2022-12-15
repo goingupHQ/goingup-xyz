@@ -1,11 +1,11 @@
 import Head from 'next/head';
-import { Button, Stack, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { AppContext } from '../../contexts/app-context';
 import { useContext, useEffect } from 'react';
-import { WalletContext } from '../../contexts/wallet-context';
 import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
 import { OrganizationsContext } from '../../contexts/organizations-context';
+import OrganizationsSection from '../../components/pages/organizations/organizations-section';
 
 export default function Organizations() {
     const app = useContext(AppContext);
@@ -37,54 +37,7 @@ export default function Organizations() {
                 </Box>
             )}
 
-            {org.organizations !== null && (
-                <>
-                    {org.organizations.map((organization) => (
-                        <Box
-                            key={organization.address}
-                            sx={{
-                                display: 'inline-block',
-                                width: {xs: '100%', md: '300px'},
-                                height: '300px',
-                                borderRadius: '10px',
-                                margin: {xs: '10px 0', md: '10px 10px'},
-                                backgroundColor:
-                                    app.mode === 'dark' ? '#111921' : '#F5F5F5',
-                                borderRadius: '8px',
-                                padding: '15px',
-                            }}>
-                            <img
-                                src={organization.logo}
-                                alt={organization.name}
-                                style={{ width: '200px', height: '140px' }}
-                            />
-
-                            <Typography variant='h3'>
-                                {organization.description}
-                            </Typography>
-                            <Stack
-                                direction='row'
-                                alignItems='center'
-                                marginTop={4}
-                                spacing={2}>
-                                <Button
-                                    variant='contained'
-                                    color='secondary'
-                                    onClick={() => {
-                                        router.push(
-                                            `/organizations/${organization.address}`
-                                        );
-                                    }}>
-                                    Protocol
-                                </Button>
-                                <Button variant='contained' color='secondary'>
-                                    Identity
-                                </Button>
-                            </Stack>
-                        </Box>
-                    ))}
-                </>
-            )}
+            {org.organizations !== null && <OrganizationsSection />}
         </>
     );
 }
