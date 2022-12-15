@@ -104,10 +104,10 @@ export default function Organizations() {
                             key={organization.address}
                             sx={{
                                 display: 'inline-block',
-                                width: '300px',
+                                width: {xs: '100%', md: '300px'},
                                 height: '300px',
                                 borderRadius: '10px',
-                                margin: '20px',
+                                margin: {xs: '10px 0', md: '10px 10px'},
                                 backgroundColor:
                                     app.mode === 'dark' ? '#111921' : '#F5F5F5',
                                 borderRadius: '8px',
