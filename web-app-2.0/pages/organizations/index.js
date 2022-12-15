@@ -5,72 +5,12 @@ import { useContext, useEffect } from 'react';
 import { WalletContext } from '../../contexts/wallet-context';
 import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
+import { OrganizationsContext } from '../../contexts/organizations-context';
 
 export default function Organizations() {
     const app = useContext(AppContext);
+    const org = useContext(OrganizationsContext);
     const router = useRouter();
-
-    const organizations = [
-        {
-            name: 'GoingUp',
-            description: 'Web3 Protocol for reputation & identity description',
-            address: '0x5f4eC3D',
-            logo:
-                app.mode === 'dark'
-                    ? '/images/goingup-logo-dark.svg'
-                    : '/images/goingup-logo-light.svg',
-        },
-        {
-            name: 'GoingUp',
-            description: 'Web3 Protocol for reputation & identity description',
-            address: '0x5f4eC3D',
-
-            logo:
-                app.mode === 'dark'
-                    ? '/images/goingup-logo-dark.svg'
-                    : '/images/goingup-logo-light.svg',
-        },
-        {
-            name: 'GoingUp',
-            description: 'Web3 Protocol for reputation & identity description',
-            address: '0x5f4eC3D',
-
-            logo:
-                app.mode === 'dark'
-                    ? '/images/goingup-logo-dark.svg'
-                    : '/images/goingup-logo-light.svg',
-        },
-        {
-            name: 'GoingUp',
-            description: 'Web3 Protocol for reputation & identity description',
-            address: '0x5f4eC3D',
-
-            logo:
-                app.mode === 'dark'
-                    ? '/images/goingup-logo-dark.svg'
-                    : '/images/goingup-logo-light.svg',
-        },
-        {
-            name: 'GoingUp',
-            description: 'Web3 Protocol for reputation & identity description',
-            address: '0x5f4eC3D',
-
-            logo:
-                app.mode === 'dark'
-                    ? '/images/goingup-logo-dark.svg'
-                    : '/images/goingup-logo-light.svg',
-        },
-        {
-            name: 'GoingUp',
-            description: 'Web3 Protocol for reputation & identity description',
-            address: '0x5f4eC3D',
-
-            logo:
-                app.mode === 'dark'
-                    ? '/images/goingup-logo-dark.svg'
-                    : '/images/goingup-logo-light.svg',
-        },
-    ];
 
     return (
         <>
@@ -83,7 +23,7 @@ export default function Organizations() {
                 Organizations
             </Typography>
 
-            {organizations === null && (
+            {org.organizations === null && (
                 <Box sx={{ mt: 4, textAlign: 'center' }}>
                     <Typography variant='h2'>
                         You need a connected wallet with a GoingUP account to
@@ -97,9 +37,9 @@ export default function Organizations() {
                 </Box>
             )}
 
-            {organizations !== null && (
+            {org.organizations !== null && (
                 <>
-                    {organizations.map((organization) => (
+                    {org.organizations.map((organization) => (
                         <Box
                             key={organization.address}
                             sx={{
