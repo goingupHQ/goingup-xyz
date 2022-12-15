@@ -29,9 +29,11 @@ export default function EditProject() {
     };
 
     useEffect(() => {
+        //
         if (router.isReady && wallet.address) {
             getProject();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [router.isReady, wallet.address]);
 
     return (

@@ -33,9 +33,11 @@ export default function PendingInviteCard(props) {
     };
 
     React.useEffect(() => {
+        //
         if (memberRecordId) {
             load();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [memberRecordId]);
 
     const [accepting, setAccepting] = React.useState(false);

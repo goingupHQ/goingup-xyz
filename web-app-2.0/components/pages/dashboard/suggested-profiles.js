@@ -14,7 +14,9 @@ export default function SuggestedProfiles(props) {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
+        //
         findRandomProfiles();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wallet.address]);
 
     const findRandomProfiles = () => {
@@ -57,6 +59,7 @@ export default function SuggestedProfiles(props) {
                     setLoading(false);
                 }
             }, 1000),
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
 

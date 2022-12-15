@@ -2,7 +2,7 @@ import { getDb } from  '../_get-db-client';
 import { encrypt } from '../_encryption';
 import { ethers } from  'ethers';
 
-export default async (req, res) => {
+export default async function handler(req, res) {
     if (req.method !== 'POST') {
         res.status(405).json({ error: 'Method not allowed' });
         return;

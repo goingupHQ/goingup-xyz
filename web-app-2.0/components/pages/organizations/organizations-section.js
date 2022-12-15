@@ -22,7 +22,7 @@ export default function OrganizationsSection() {
         <>
             <Grid container spacing={2}>
                 {org.organizations.map((organization) => (
-                    <Grid item spacing={1} xs={12} md={6} lg={4} xl={3}>
+                    <Grid item spacing={1} xs={12} md={6} lg={4} xl={3} key={organization.id}>
                         <Card sx={{ p: 3 }}>
                             <CardHeader
                                 title={

@@ -1,6 +1,6 @@
 import { getDb } from "../../_get-db-client";
 
-export default async (req, res) => {
+export default async function handler (req, res) {
     // get email from query string
     const { email } = req.query;
 

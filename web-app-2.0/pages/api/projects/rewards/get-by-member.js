@@ -1,6 +1,6 @@
 import { getDb } from '../../_get-db-client';
 
-export default async (req, res) => {
+export default async function handler(req, res) {
     if (req.method !== 'GET') {
         res.status(405).json({ message: 'Method not allowed' });
         return;

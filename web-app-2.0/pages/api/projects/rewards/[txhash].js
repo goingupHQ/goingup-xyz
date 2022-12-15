@@ -1,6 +1,6 @@
 import { getDb } from '../../_get-db-client';
 
-export default async (req, res) => {
+export default async function handler(req, res) {
     const { txhash } = req.query;
     const db = await getDb();
 
