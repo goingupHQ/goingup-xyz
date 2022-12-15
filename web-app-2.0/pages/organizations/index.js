@@ -6,49 +6,71 @@ import { WalletContext } from '../../contexts/wallet-context';
 import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
 
-const organizations = [
-    {
-        name: 'GoingUp',
-        description: 'Web3 Protocol for reputation & identity description',
-        address: '0x5f4eC3D',
-        logo: 'http://localhost:3025/images/goingup-logo-dark.svg',
-    },
-    {
-        name: 'GoingUp',
-        description: 'Web3 Protocol for reputation & identity description',
-        address: '0x5f4eC3D',
-        logo: 'http://localhost:3025/images/goingup-logo-dark.svg',
-    },
-    {
-        name: 'GoingUp',
-        description: 'Web3 Protocol for reputation & identity description',
-        address: '0x5f4eC3D',
-        logo: 'http://localhost:3025/images/goingup-logo-dark.svg',
-    },
-    {
-        name: 'GoingUp',
-        description: 'Web3 Protocol for reputation & identity description',
-        address: '0x5f4eC3D',
-        logo: 'http://localhost:3025/images/goingup-logo-dark.svg',
-    },
-    {
-        name: 'GoingUp',
-        description: 'Web3 Protocol for reputation & identity description',
-        address: '0x5f4eC3D',
-        logo: 'http://localhost:3025/images/goingup-logo-dark.svg',
-    },
-    {
-        name: 'GoingUp',
-        description: 'Web3 Protocol for reputation & identity description',
-        address: '0x5f4eC3D',
-        logo: 'http://localhost:3025/images/goingup-logo-dark.svg',
-    },
-];
-
 export default function Organizations() {
     const app = useContext(AppContext);
-    const wallet = useContext(WalletContext);
     const router = useRouter();
+
+    const organizations = [
+        {
+            name: 'GoingUp',
+            description: 'Web3 Protocol for reputation & identity description',
+            address: '0x5f4eC3D',
+            logo:
+                app.mode === 'dark'
+                    ? '/images/goingup-logo-dark.svg'
+                    : '/images/goingup-logo-light.svg',
+        },
+        {
+            name: 'GoingUp',
+            description: 'Web3 Protocol for reputation & identity description',
+            address: '0x5f4eC3D',
+
+            logo:
+                app.mode === 'dark'
+                    ? '/images/goingup-logo-dark.svg'
+                    : '/images/goingup-logo-light.svg',
+        },
+        {
+            name: 'GoingUp',
+            description: 'Web3 Protocol for reputation & identity description',
+            address: '0x5f4eC3D',
+
+            logo:
+                app.mode === 'dark'
+                    ? '/images/goingup-logo-dark.svg'
+                    : '/images/goingup-logo-light.svg',
+        },
+        {
+            name: 'GoingUp',
+            description: 'Web3 Protocol for reputation & identity description',
+            address: '0x5f4eC3D',
+
+            logo:
+                app.mode === 'dark'
+                    ? '/images/goingup-logo-dark.svg'
+                    : '/images/goingup-logo-light.svg',
+        },
+        {
+            name: 'GoingUp',
+            description: 'Web3 Protocol for reputation & identity description',
+            address: '0x5f4eC3D',
+
+            logo:
+                app.mode === 'dark'
+                    ? '/images/goingup-logo-dark.svg'
+                    : '/images/goingup-logo-light.svg',
+        },
+        {
+            name: 'GoingUp',
+            description: 'Web3 Protocol for reputation & identity description',
+            address: '0x5f4eC3D',
+
+            logo:
+                app.mode === 'dark'
+                    ? '/images/goingup-logo-dark.svg'
+                    : '/images/goingup-logo-light.svg',
+        },
+    ];
 
     return (
         <>
@@ -86,16 +108,8 @@ export default function Organizations() {
                                 height: '300px',
                                 borderRadius: '10px',
                                 margin: '10px',
-                                backgroundColor: {
-                                    xs:
-                                        app.mode === 'dark'
-                                            ? '#111921'
-                                            : '#F5F5F5',
-                                    md:
-                                        app.mode === 'dark'
-                                            ? '#111921'
-                                            : '#FFFFFF',
-                                },
+                                backgroundColor:
+                                    app.mode === 'dark' ? '#111921' : '#F5F5F5',
                                 borderRadius: '8px',
                                 padding: '15px',
                             }}>
