@@ -16,7 +16,7 @@ import { useContext } from 'react';
 import { AppContext } from '../../../contexts/app-context';
 import { OrganizationsContext } from '../../../contexts/organizations-context';
 
-export default function OrganizationsSection() {
+export default function OrganizationsList() {
     const app = useContext(AppContext);
     const org = useContext(OrganizationsContext);
     const router = useRouter();

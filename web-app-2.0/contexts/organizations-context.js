@@ -9,37 +9,37 @@ export function OrganizationsProvider({ children }) {
         {
             name: 'GoingUp',
             description: 'Web3 Protocol for reputation & identity description',
-            address: '0x5f4eC3D',
+            address: '1',
             logo: '/images/goingup-glyph.png',
         },
         {
             name: 'GoingUp',
             description: 'Web3 Protocol for reputation & identity description',
-            address: '0x5f4eC3D',
+            address: '2',
             logo: '/images/goingup-glyph.png',
         },
         {
             name: 'GoingUp',
             description: 'Web3 Protocol for reputation & identity description',
-            address: '0x5f4eC3D',
+            address: '3',
             logo: '/images/goingup-glyph.png',
         },
         {
             name: 'GoingUp',
             description: 'Web3 Protocol for reputation & identity description',
-            address: '0x5f4eC3D',
+            address: '4',
             logo: '/images/goingup-glyph.png',
         },
         {
             name: 'GoingUp',
             description: 'Web3 Protocol for reputation & identity description',
-            address: '0x5f4eC3D',
+            address: '5',
             logo: '/images/goingup-glyph.png',
         },
         {
             name: 'GoingUp',
             description: 'Web3 Protocol for reputation & identity description',
-            address: '0x5f4eC3D',
+            address: '6',
             logo: '/images/goingup-glyph.png',
         },
     ];

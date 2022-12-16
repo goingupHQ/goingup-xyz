@@ -4,7 +4,7 @@ import { AppContext } from '../../contexts/app-context';
 import { useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { OrganizationsContext } from '../../contexts/organizations-context';
-import OrganizationsSection from '../../components/pages/organizations/organizations-section';
+import OrganizationsList from '../../components/pages/organizations/organizations-list';
 
 export default function Organizations() {
     const app = useContext(AppContext);
@@ -36,7 +36,7 @@ export default function Organizations() {
                 </Box>
             )}
 
-            {org.organizations !== null && <OrganizationsSection />}
+            {org.organizations !== null && <OrganizationsList />}
         </>
     );
 }
