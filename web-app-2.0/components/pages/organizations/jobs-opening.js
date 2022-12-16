@@ -38,7 +38,7 @@ export default function JobsOpening(props) {
                                 }}
                             />
                             <Typography variant='h2'>
-                                {account.name} has no openings available
+                                {account.name} have no openings available
                             </Typography>
                         </Stack>
                     </>
