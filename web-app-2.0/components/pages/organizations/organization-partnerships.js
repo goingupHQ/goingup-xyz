@@ -37,15 +37,15 @@ export default function OrganizationPartnerships(props) {
                         display: 'flex',
                         flexDirection: 'column',
                         marginTop: '30px',
+                        border: 0,
+                        backgroundColor:
+                            app.mode === 'dark' ? '#0F151C' : '#FFFFFF',
                     }}>
                     <Box>
                         <Typography margin={3} variant='h2'>
                             Partnerships
                         </Typography>
-                        <Stack
-                            spacing={4}
-                            paddingBottom={'30px'}
-                            paddingX={'30px'}>
+                        <Stack spacing={4} paddingBottom={'30px'}>
                             {loading ? (
                                 <Box sx={{ mt: '100px' }}>
                                     <LoadingIllustration />
@@ -66,4 +66,3 @@ export default function OrganizationPartnerships(props) {
         </>
     );
 }
-
