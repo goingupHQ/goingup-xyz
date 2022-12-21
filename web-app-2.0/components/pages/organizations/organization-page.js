@@ -26,9 +26,7 @@ export default function OrganizationPage() {
     useEffect(() => {
         // do some
         if (address) {
-            setAccount(
-                org.organizations.find((org) => org.address === address)
-            );
+            setAccount(org.orgs.find((org) => org._id === address));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address]);
@@ -161,22 +159,27 @@ export default function OrganizationPage() {
                                     spacing={6}
                                     alignItems='center'>
                                     <img
-                                        src={account?.logo}
+                                        src={org.logo}
                                         alt={account?.name}
                                         style={{
                                             width: '100',
                                             height: '100',
                                         }}
                                     />
-                                    <Typography variant='h5'>
-                                        {account?.name}
-                                        <CheckIcon color='success' />
-                                    </Typography>{' '}
+                                    <Stack direction={'column'}>
+                                        <Typography variant='h4'>
+                                            {account?.name}
+                                            <CheckIcon color='success' />
+                                        </Typography>{' '}
+                                        <Typography variant='h6'>
+                                            {account?.shortDescription}
+                                        </Typography>
+                                    </Stack>
                                 </Stack>
                             }
                         />
                         <CardContent>
-                            <Typography variant='h3'>
+                            <Typography variant='h3' marginTop={2}>
                                 {account?.description}
                             </Typography>
                         </CardContent>
