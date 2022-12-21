@@ -159,13 +159,14 @@ export default function OrganizationPage() {
                                     spacing={6}
                                     alignItems='center'>
                                     <img
-                                        src={account?.logo || org.logo}
-                                        alt={account?.name}
-                                        style={{
-                                            width: '100',
-                                            height: '100',
-                                        }}
-                                    />
+                                                src={
+                                                    account?.logo ||
+                                                    org.logo
+                                                }
+                                                alt={account?.name}
+                                                width={80}
+                                                height={80}
+                                            />
                                     <Stack direction={'column'}>
                                         <Typography variant='h4'>
                                             {account?.name}
