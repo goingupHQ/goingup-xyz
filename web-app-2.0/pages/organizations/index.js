@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Typography, Box } from '@mui/material';
 import { AppContext } from '../../contexts/app-context';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { OrganizationsContext } from '../../contexts/organizations-context';
 import OrganizationsList from '../../components/pages/organizations/organizations-list';
@@ -10,6 +10,15 @@ export default function Organizations() {
     const app = useContext(AppContext);
     const org = useContext(OrganizationsContext);
     const router = useRouter();
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        fetch('/api/get-orgs-count')
+            .then((res) => res.json())
+            .then((data) => {
+                setCount(data.orgsCount);
+            });
+    }, []);
 
     return (
         <>
@@ -19,7 +28,7 @@ export default function Organizations() {
             </Head>
 
             <Typography variant='h1' marginY={3}>
-                Organizations
+                Organizations: showing {count} results
             </Typography>
 
             {org.organizations === null && (
