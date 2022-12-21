@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import { OrganizationsContext } from '../../../contexts/organizations-context';
 import CheckIcon from '@mui/icons-material/Check';
 import { Stack } from '@mui/system';
+import ContactsAndIntegrations from '../profile/contacts-and-integrations';
 
 export default function OrganizationPage() {
     const app = useContext(AppContext);
@@ -159,14 +160,11 @@ export default function OrganizationPage() {
                                     spacing={6}
                                     alignItems='center'>
                                     <img
-                                                src={
-                                                    account?.logo ||
-                                                    org.logo
-                                                }
-                                                alt={account?.name}
-                                                width={80}
-                                                height={80}
-                                            />
+                                        src={account?.logo || org.logo}
+                                        alt={account?.name}
+                                        width={80}
+                                        height={80}
+                                    />
                                     <Stack direction={'column'}>
                                         <Typography variant='h4'>
                                             {account?.name}
@@ -175,6 +173,9 @@ export default function OrganizationPage() {
                                         <Typography variant='h6'>
                                             {account?.shortDescription}
                                         </Typography>
+                                        <ContactsAndIntegrations
+                                            account={''}
+                                        />
                                     </Stack>
                                 </Stack>
                             }
