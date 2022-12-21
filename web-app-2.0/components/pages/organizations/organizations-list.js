@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AppContext } from '../../../contexts/app-context';
 import { OrganizationsContext } from '../../../contexts/organizations-context';
 
@@ -21,10 +21,14 @@ export default function OrganizationsList() {
     const org = useContext(OrganizationsContext);
     const router = useRouter();
 
+    useEffect(() => {
+        org.getOrgs();
+    }, []);
+
     return (
         <>
             <Grid container spacing={2}>
-                {org.organizations.map((organization) => (
+                {org.orgs.map((organization) => (
                     <Grid
                         item
                         spacing={1}
@@ -33,7 +37,7 @@ export default function OrganizationsList() {
                         lg={4}
                         xl={3}
                         key={organization.id}>
-                        <Card sx={{ p: 3 }}>
+                        <Card sx={{ p: 3, height: '100%' }}>
                             <CardHeader
                                 avatar={
                                     <Badge
@@ -155,7 +159,7 @@ export default function OrganizationsList() {
                                         spacing={6}
                                         alignItems='center'>
                                         <img
-                                            src={organization.logo}
+                                            src={organization.logo || org.logo}
                                             alt={organization.name}
                                             style={{
                                                 width: '100',
@@ -164,29 +168,30 @@ export default function OrganizationsList() {
                                         />
                                         <Typography variant='h5'>
                                             {organization.name}
-                                        <CheckIcon color='success' />
+                                            <CheckIcon color='success' />
                                         </Typography>{' '}
                                     </Stack>
                                 }
                             />
                             <CardContent>
                                 <Typography variant='h3'>
-                                    {organization.description}
+                                    {organization.shortDescription}
                                 </Typography>
+                            </CardContent>
+                            <CardContent>
                                 <Stack
                                     direction='row'
-                                    alignItems='center'
-                                    marginTop={4}
+                                    alignItems={'flex-end'}
                                     spacing={2}>
                                     <Button
                                         variant='contained'
-                                        color='secondary'
+                                        color='primary'
                                         onClick={() => {
                                             router.push(
-                                                `/organizations/${organization.address}`
+                                                `/organizations/${organization._id}`
                                             );
                                         }}>
-                                        Protocol
+                                        Organization Page
                                     </Button>
                                     <Button
                                         variant='contained'
