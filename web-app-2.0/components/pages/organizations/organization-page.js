@@ -159,7 +159,7 @@ export default function OrganizationPage() {
                                     spacing={6}
                                     alignItems='center'>
                                     <img
-                                        src={org.logo}
+                                        src={account?.logo || org.logo}
                                         alt={account?.name}
                                         style={{
                                             width: '100',

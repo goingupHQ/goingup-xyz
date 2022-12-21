@@ -23,6 +23,7 @@ export default function OrganizationsList() {
 
     useEffect(() => {
         org.getOrgs();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -161,10 +162,8 @@ export default function OrganizationsList() {
                                         <img
                                             src={organization.logo || org.logo}
                                             alt={organization.name}
-                                            style={{
-                                                width: '100',
-                                                height: '100',
-                                            }}
+                                            width={80}
+                                            height={80}
                                         />
                                         <Typography variant='h5'>
                                             {organization.name}
