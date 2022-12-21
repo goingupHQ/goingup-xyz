@@ -30,22 +30,7 @@ export default function Organizations() {
             <Typography variant='h1' marginY={3}>
                 Organizations: showing {count} results
             </Typography>
-
-            {org.organizations === null && (
-                <Box sx={{ mt: 4, textAlign: 'center' }}>
-                    <Typography variant='h2'>
-                        You need a connected wallet with a GoingUP account to
-                        access your Organization
-                    </Typography>
-                    <img
-                        src='/images/illustrations/connection-lost.svg'
-                        alt='connection-lost'
-                        style={{ width: '100%', maxWidth: '500px' }}
-                    />
-                </Box>
-            )}
-
-            {org.organizations !== null && <OrganizationsList />}
+            {org.orgs !== null && <OrganizationsList />}
         </>
     );
 }
