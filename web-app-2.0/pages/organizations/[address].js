@@ -5,11 +5,11 @@ import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { OrganizationsContext } from '../../contexts/organizations-context';
 import OrganizationPage from '../../components/pages/organizations/organization-page';
-import AppreciationTokens from '../../components/pages/profile/appreciation-tokens';
 import JobsOpening from '../../components/pages/organizations/jobs-opening';
 import OrganizationMembers from '../../components/pages/organizations/organization-members';
 import OrganizationPartnerships from '../../components/pages/organizations/organization-partnerships';
 import OrganizationProjects from '../../components/pages/organizations/organization-projects';
+import OrganizationTokens from '../../components/pages/organizations/organization-tokens';
 
 export default function Organization() {
     const app = useContext(AppContext);
@@ -39,7 +39,7 @@ export default function Organization() {
                     <Box>
                         <OrganizationPage />
                         <OrganizationProjects account={account} />
-                        <AppreciationTokens account={account} />
+                        <OrganizationTokens account={account} />
                         <Grid container spacing={4}>
                             <Grid item xs={12} md={6}>
                                 <OrganizationMembers />
