@@ -5,11 +5,11 @@ import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { OrganizationsContext } from '../../contexts/organizations-context';
 import OrganizationPage from '../../components/pages/organizations/organization-page';
-import ProjectsSection from '../../components/pages/profile/project-sections';
 import AppreciationTokens from '../../components/pages/profile/appreciation-tokens';
 import JobsOpening from '../../components/pages/organizations/jobs-opening';
 import OrganizationMembers from '../../components/pages/organizations/organization-members';
 import OrganizationPartnerships from '../../components/pages/organizations/organization-partnerships';
+import OrganizationProjects from '../../components/pages/organizations/organization-projects';
 
 export default function Organization() {
     const app = useContext(AppContext);
@@ -22,7 +22,7 @@ export default function Organization() {
         // do some
         if (address) {
             setAccount(
-                org.organizations.find((org) => org.address === address)
+                org.orgs.find((org) => org._id === address)
             );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,7 +38,7 @@ export default function Organization() {
                     </Head>
                     <Box>
                         <OrganizationPage />
-                        <ProjectsSection account={account} />
+                        <OrganizationProjects account={account} />
                         <AppreciationTokens account={account} />
                         <Grid container spacing={4}>
                             <Grid item xs={12} md={6}>
