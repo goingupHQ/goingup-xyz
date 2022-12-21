@@ -5,19 +5,23 @@ import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { OrganizationsContext } from '../../contexts/organizations-context';
 import OrganizationsList from '../../components/pages/organizations/organizations-list';
+import LoadingIllustration from '../../components/common/loading-illustration';
 
 export default function Organizations() {
     const app = useContext(AppContext);
     const org = useContext(OrganizationsContext);
     const router = useRouter();
     const [count, setCount] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         fetch('/api/get-orgs-count')
             .then((res) => res.json())
             .then((data) => {
                 setCount(data.orgsCount);
             });
+            setLoading(false);
     }, []);
 
     return (
@@ -30,7 +34,13 @@ export default function Organizations() {
             <Typography variant='h1' marginY={3}>
                 Organizations: showing {count} results
             </Typography>
-            {org.orgs !== null && <OrganizationsList />}
+            {loading ? (
+                <Box sx={{ mt: '100px' }}>
+                    <LoadingIllustration />
+                </Box>
+            ) : (
+                <OrganizationsList />
+            )}
         </>
     );
 }
