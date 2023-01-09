@@ -60,6 +60,16 @@ export default function MobileNav(props) {
                 </Button>
             </Link>
 
+            <Link href="/organizations">
+                    <Button
+                        onClick={closeNav}
+                        sx={router.pathname === '/organizations' ? activeButtonStyle : inactiveButtonStyle}
+                        startIcon={<ProfileIcon color={ router.pathname === '/organizations' ? activeColor: inactiveColor } />}
+                    >
+                        Organizations
+                    </Button>
+                </Link>
+
             <Link href="/profile">
                 <Button
                     onClick={closeNav}

@@ -1,4 +1,9 @@
-import { createTheme, ThemeProvider, useMediaQuery, useTheme } from '@mui/material';
+import {
+    createTheme,
+    ThemeProvider,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
 import { SnackbarProvider } from 'notistack';
 import { useContext } from 'react';
 import Layout from '../components/layout';
@@ -9,6 +14,7 @@ import { UtilityTokensProvider } from '../contexts/utility-tokens-context';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import '../styles/globals.css';
+import { OrganizationsProvider } from '../contexts/organizations-context';
 
 function App({ Component, pageProps }) {
     return (
@@ -16,13 +22,15 @@ function App({ Component, pageProps }) {
             <SnackbarProvider maxSnack={20} preventDuplicate>
                 <AppProvider>
                     <WalletProvider>
-                        <UtilityTokensProvider>
-                            <ProjectsProvider>
-                                <Layout>
-                                    <Component {...pageProps} />
-                                </Layout>
-                            </ProjectsProvider>
-                        </UtilityTokensProvider>
+                        <OrganizationsProvider>
+                            <UtilityTokensProvider>
+                                <ProjectsProvider>
+                                    <Layout>
+                                        <Component {...pageProps} />
+                                    </Layout>
+                                </ProjectsProvider>
+                            </UtilityTokensProvider>
+                        </OrganizationsProvider>
                     </WalletProvider>
                 </AppProvider>
             </SnackbarProvider>

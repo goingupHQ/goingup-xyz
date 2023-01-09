@@ -31,10 +31,12 @@ export default function InvitesList(props) {
     };
 
     React.useEffect(() => {
+        //
         if (projectId && wallet.address) {
             load();
             getProjectOwner();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectId, wallet.address]);
 
     return (

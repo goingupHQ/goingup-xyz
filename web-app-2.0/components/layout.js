@@ -3,6 +3,7 @@ import { Box, createTheme, ThemeProvider } from '@mui/material';
 import { useContext, useEffect, useMemo } from 'react';
 import { AppContext } from '../contexts/app-context';
 import { WalletContext } from '../contexts/wallet-context';
+import DesktopNav from './layout/desktop-nav';
 import Header from './layout/header';
 
 export default function Layout({ children }) {
@@ -285,11 +286,12 @@ export default function Layout({ children }) {
                 <Header />
                 <Box
                     sx={{
-                        paddingTop: { xs: '74px', md: '160px' },
+                        paddingTop: { xs: '74px', md: '80px' },
                         paddingBottom: 5,
-                        paddingX: { xs: '15px', lg: '105px' },
+                        paddingX: { xs: '15px', md: '65px' },
                     }}
                 >
+                <DesktopNav />
                     {children}
                 </Box>
             </ThemeProvider>

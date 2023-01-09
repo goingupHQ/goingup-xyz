@@ -115,8 +115,8 @@ const UploadProfilePhoto = (props) => {
                         color='success'
                         sx={{
                             position: 'absolute',
-                            left: { xs: 70, md: 130, lg: 220 },
-                            top: { xs: 165, md: 205, lg: 205 },
+                            left: { xs: 70, md: 180 },
+                            top: { xs: 165, md: 190 },
                         }}
                         onClick={() => {
                             uploadProfileInputRef.current.click();

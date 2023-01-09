@@ -60,7 +60,7 @@ function ProfilePage() {
                         <Typography variant='h2'>{account?.name}</Typography>
                     </Box>
                     <Fade in={true} timeout={1000}>
-                        <Box>
+                        <Box marginTop={3}>
                             <ProfileSection
                                 account={account}
                                 refresh={getAccount}

@@ -10,7 +10,7 @@ import ProjectsIcon from '../icons/ProjectsIcon';
 export default function DesktopNav(props) {
     const commonButtonStyle = {
         fontSize: '1rem',
-        padding: '10px 25px',
+        padding: '10px 10px',
     };
 
     const activeButtonStyle = {
@@ -38,7 +38,7 @@ export default function DesktopNav(props) {
             <Stack
                 direction="row"
                 spacing={3}
-                sx={{ display: { xs: 'none', md: 'initial', paddingBottom: '10px', paddingLeft: '14px' } }}
+                sx={{ display: { xs: 'none', md: 'initial', paddingBottom: '10px' } }}
             >
                 <Link href="/">
                     <Button
@@ -55,6 +55,15 @@ export default function DesktopNav(props) {
                         startIcon={<ProjectsIcon />}
                     >
                         Projects
+                    </Button>
+                </Link>
+
+                <Link href="/organizations">
+                    <Button
+                        sx={pathname.startsWith('/organizations') ? activeButtonStyle : inactiveButtonStyle}
+                        startIcon={<ProfileIcon />}
+                    >
+                        Organizations
                     </Button>
                 </Link>
 
