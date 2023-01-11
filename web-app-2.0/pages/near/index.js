@@ -44,7 +44,7 @@ export default function Home() {
                 setTokens(result);
             });
         }
-    }, [user]);
+    }, [user]); 
 
     const mintToken = async () => {
         await callFunction(
