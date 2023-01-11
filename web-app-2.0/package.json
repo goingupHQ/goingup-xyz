@@ -33,6 +33,7 @@
     "merkletreejs": "^0.2.32",
     "moment": "^2.29.4",
     "mongodb": "^4.8.1",
+    "near-api-js": "^1.1.0",
     "next": "12.2.2",
     "nextjs-cors": "^2.1.1",
     "notistack": "^2.0.5",
