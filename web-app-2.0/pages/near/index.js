@@ -57,7 +57,7 @@ export default function Home() {
                 metadata: {
                     title: 'test title',
                     description: 'test description',
-                    media: 'https://media.licdn.com/dms/image/C560BAQGnbrbibTKR6Q/company-logo_200_200/0/1672737295471?e=1680739200&v=beta&t=dhlWalKcErYK8iwwIWGmIr4C1U2SIDT43OCGDMzIn7w',
+                    media: 'https://app.goingup.xyz/images/goingup-glyph.png',
                 },
                 receiver_id: user,
             },
@@ -74,7 +74,7 @@ export default function Home() {
                 metadata: {
                     title: 'Appreciation Token',
                     description: 'Thank you!',
-                    media: 'https://media.licdn.com/dms/image/C560BAQGnbrbibTKR6Q/company-logo_200_200/0/1672737295471?e=1680739200&v=beta&t=dhlWalKcErYK8iwwIWGmIr4C1U2SIDT43OCGDMzIn7w',
+                    media: 'https://app.goingup.xyz/images/appreciation-token-t1-display.png',
                 },
                 receiver_id: prompt('Enter the receiver ID'),
             },
