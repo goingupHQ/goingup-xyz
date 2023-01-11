@@ -29,11 +29,8 @@ export default function Home() {
         setIsLoading(false);
         if (wallet.getAccountId()) {
             setUser(wallet.getAccountId());
-            console.log('user', user);
-            console.log('wallet', wallet);
-            viewFunction('nft_metadata', { token_id: '1' }).then((result) => {
-                console.log('result', result);
-            });
+            console.log('Wallet ID', user);
+            console.log('Contract ID', wallet._near.config.owner_id);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wallet]);
@@ -43,7 +40,7 @@ export default function Home() {
             viewFunction('nft_tokens_for_owner', {
                 account_id: user,
             }).then((result) => {
-                console.log('results', result);
+                console.log('Tokens', result);
                 setTokens(result);
             });
         }
