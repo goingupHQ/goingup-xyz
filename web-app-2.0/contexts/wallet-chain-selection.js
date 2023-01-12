@@ -4,6 +4,7 @@ import { forwardRef, createRef, useContext, useImperativeHandle, useState, useEf
 import { AppContext } from './app-context';
 import ConnectUsingEmail from './connect-using-email';
 import { useSnackbar } from 'notistack';
+import { signIn } from './near-context';
 
 const WalletChainSelection = (props, ref) => {
     const [open, setOpen] = useState(false);
@@ -98,6 +99,27 @@ const WalletChainSelection = (props, ref) => {
                                 Ethereum or EVM-compatible Wallet
                             </Box>
                             <sub style={{ textAlign: 'center' }}>Metamask, Coinbase Wallet, WalletConnect, etc.</sub>
+                        </Stack>
+
+                        <Stack
+                            direction="column"
+                            alignItems="center"
+                            justifyContent="center"
+                            sx={chainItemSx}
+                            onClick={() => {
+                                handleClose();
+                                signIn();
+                            }}
+                        >
+                            <Box
+                                component="h2"
+                                sx={{
+                                    margin: '0px',
+                                    textAlign: 'center',
+                                }}
+                            >
+                                Near
+                            </Box>
                         </Stack>
 
                         {/* <Stack
