@@ -4,7 +4,7 @@ import { forwardRef, createRef, useContext, useImperativeHandle, useState, useEf
 import { AppContext } from './app-context';
 import ConnectUsingEmail from './connect-using-email';
 import { useSnackbar } from 'notistack';
-import { signIn } from './near-context';
+import { signIn, initNear } from './near-context';
 
 const WalletChainSelection = (props, ref) => {
     const [open, setOpen] = useState(false);
@@ -17,6 +17,7 @@ const WalletChainSelection = (props, ref) => {
     const connectUsingEmailRef = createRef();
 
     useEffect(() => {
+        initNear();
         if (wallet.address) setOpen(false);
     }, [wallet.address]);
 
