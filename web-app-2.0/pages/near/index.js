@@ -127,109 +127,122 @@ export default function Home() {
                             <Typography variant='h2' marginY={2}>
                                 Welcome, {user}
                             </Typography>
-                            <Button
-                                variant='outlined'
-                                onClick={() => {
-                                    router.push(`/near/${user}`);
-                                }}>
-                                Create Account
-                            </Button>
-                            <Button
-                                variant='outlined'
-                                onClick={() => {
-                                    mintToken();
-                                }}>
-                                Mint Token
-                            </Button>
-                            <Button
-                                variant='outlined'
-                                onClick={() => {
-                                    sendToken();
-                                }}>
-                                Send Token
-                            </Button>
-                            <Button
-                                variant='contained'
-                                onClick={() => {
-                                    signOut();
-                                    setUser(null);
-                                }}>
-                                Sign out
-                            </Button>
+                            <Stack direction='row' spacing={2} marginY={2}>
+                                <Button
+                                    variant='outlined'
+                                    onClick={() => {
+                                        router.push(`/near/${user}`);
+                                    }}>
+                                    Create Account
+                                </Button>
+                                <Button
+                                    variant='outlined'
+                                    onClick={() => {
+                                        mintToken();
+                                    }}>
+                                    Mint Token
+                                </Button>
+                                <Button
+                                    variant='outlined'
+                                    onClick={() => {
+                                        sendToken();
+                                    }}>
+                                    Send Token
+                                </Button>
+                                <Button
+                                    variant='contained'
+                                    onClick={() => {
+                                        signOut();
+                                        setUser(null);
+                                    }}>
+                                    Sign out
+                                </Button>
+                            </Stack>
                             {tokens && (
-                                <Box marginY={2}>
+                                <>
                                     <Typography variant='h1'>
-                                        Your NFTs
+                                        Your Tokens
                                     </Typography>
-                                    <Grid container spacing={2}>
-                                        {tokens.map((token) => (
-                                            <Grid item key={token.token_id}>
-                                                <Card
-                                                    sx={{
-                                                        p: 2,
-                                                    }}>
-                                                    <Typography
-                                                        variant='h3'
-                                                        textAlign={'center'}>
-                                                        {token.metadata.title}
-                                                    </Typography>
-                                                    <Box
-                                                        marginY={2}
-                                                        display='flex'
-                                                        justifyContent='center'>
-                                                        <img
-                                                            src={
-                                                                token.metadata
-                                                                    .media
-                                                            }
-                                                            alt={
+                                    <Box marginY={2}>
+                                        <Grid container spacing={2}>
+                                            {tokens.map((token) => (
+                                                <Grid item key={token.token_id}>
+                                                    <Card
+                                                        sx={{
+                                                            p: 2,
+                                                        }}>
+                                                        <Typography
+                                                            variant='h3'
+                                                            textAlign={
+                                                                'center'
+                                                            }>
+                                                            {
                                                                 token.metadata
                                                                     .title
                                                             }
-                                                            width='200'
-                                                            height='200'
-                                                        />
-                                                    </Box>
-                                                    <Typography
-                                                        variant='h3'
-                                                        textAlign={'center'}>
-                                                        {
-                                                            token.metadata
-                                                                .description
-                                                        }
-                                                    </Typography>
-                                                    <Stack
-                                                        marginTop={2}
-                                                        direction='row'
-                                                        spacing={2}>
-                                                        <Button
-                                                            onClick={() => {
-                                                                router.push(
-                                                                    `https://testnet.mynearwallet.com/nft-detail/app.goingup.testnet/${token.token_id}`
-                                                                );
-                                                            }}
-                                                            variant='contained'
-                                                            color='primary'
-                                                            type='Button'>
-                                                            View Token
-                                                        </Button>
-                                                        <Button
-                                                            onClick={() => {
-                                                                handleTransfer(
-                                                                    token.token_id
-                                                                );
-                                                            }}
-                                                            variant='contained'
-                                                            color='secondary'
-                                                            type='Button'>
-                                                            Transfer Token
-                                                        </Button>
-                                                    </Stack>
-                                                </Card>
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-                                </Box>
+                                                        </Typography>
+                                                        <Box
+                                                            marginY={2}
+                                                            display='flex'
+                                                            justifyContent='center'>
+                                                            <img
+                                                                src={
+                                                                    token
+                                                                        .metadata
+                                                                        .media
+                                                                }
+                                                                alt={
+                                                                    token
+                                                                        .metadata
+                                                                        .title
+                                                                }
+                                                                width='200'
+                                                                height='200'
+                                                            />
+                                                        </Box>
+                                                        <Typography
+                                                            variant='h3'
+                                                            textAlign={
+                                                                'center'
+                                                            }>
+                                                            {
+                                                                token.metadata
+                                                                    .description
+                                                            }
+                                                        </Typography>
+                                                        <Stack
+                                                            marginTop={2}
+                                                            direction='row'
+                                                            spacing={2}>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    router.push(
+                                                                        `https://testnet.mynearwallet.com/nft-detail/app.goingup.testnet/${token.token_id}`
+                                                                    );
+                                                                }}
+                                                                variant='contained'
+                                                                color='primary'
+                                                                type='Button'>
+                                                                View Token
+                                                            </Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    handleTransfer(
+                                                                        token.token_id
+                                                                    );
+                                                                }}
+                                                                variant='contained'
+                                                                color='secondary'
+                                                                type='Button'>
+                                                                Transfer Token
+                                                            </Button>
+                                                        </Stack>
+                                                    </Card>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                    </Box>
+                                </>
                             )}
                         </Box>
                     </>
