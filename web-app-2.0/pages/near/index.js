@@ -107,6 +107,13 @@ export default function Home() {
                         <Typography variant='h2'>
                             You need a connected wallet with a GoingUP account
                             to access your Profile
+                        </Typography>
+                        <img
+                            src='/images/illustrations/connection-lost.svg'
+                            alt='connection-lost'
+                            style={{ width: '100%', maxWidth: '500px', marginTop: '20px' }}
+                        />
+                        <Box marginY={2}>
                             <Button
                                 variant='contained'
                                 onClick={() => {
@@ -114,12 +121,7 @@ export default function Home() {
                                 }}>
                                 Connect Wallet
                             </Button>
-                        </Typography>
-                        <img
-                            src='/images/illustrations/connection-lost.svg'
-                            alt='connection-lost'
-                            style={{ width: '100%', maxWidth: '500px' }}
-                        />
+                        </Box>
                     </Box>
                 ) : (
                     <>
