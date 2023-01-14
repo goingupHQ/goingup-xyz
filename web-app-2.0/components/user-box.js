@@ -94,6 +94,8 @@ export default function UserBox () {
                         wallet.connectEthereum();
                     } else if (cache.blockchain === 'cardano') {
                         wallet.connectCardano();
+                    } else if (cache.blockchain === 'near') {
+                        wallet.connectNear();
                     }
                 }
             } else {
