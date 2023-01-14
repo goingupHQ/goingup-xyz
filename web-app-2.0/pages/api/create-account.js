@@ -19,7 +19,7 @@ export default async function handler(req, res) {
         const { account, email1, email2, email3, email4, inviteMessage } = body;
         account.address = body.address;
         account.reputationScore = 50; // completed onboarding score
-        account.chain = ethers.utils.isAddress(body.address) ? 'Ethereum' : 'Cardano';
+        account.chain = ethers.utils.isAddress(body.address) ? 'Ethereum' : 'Near';
         const result = await accounts.insertOne(account);
 
         if (email1 || email2 || email3 || email4) {
