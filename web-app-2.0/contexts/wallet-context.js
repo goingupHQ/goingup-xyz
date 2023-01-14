@@ -7,6 +7,7 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import { AppContext } from './app-context';
 import { Backdrop, Button, Paper, Stack, Typography } from '@mui/material';
+import { initNear, signIn, signOut, wallet } from './near-context';
 
 export const WalletContext = createContext({});
 
@@ -67,6 +68,20 @@ const networks = {
     },
     'CARDANO-1': {
         name: 'Cardano Mainnet',
+    },
+    NEAR: {
+        name: 'NEAR Testnet',
+        networkParams: {
+            chainId: 'testnet',
+            chainName: 'NEAR Testnet',
+            nativeCurrency: {
+                name: 'NEAR',
+                symbol: 'NEAR',
+                decimals: 24,
+            },
+            rpcUrls: ['https://rpc.testnet.near.org'],
+            blockExplorerUrls: ['https://explorer.testnet.near.org'],
+        },
     },
 };
 
@@ -248,6 +263,8 @@ export function WalletProvider({ children }) {
                     connectEthereum();
                 } else if (cache.blockchain === 'cardano') {
                     connectCardano();
+                } else if (cache.blockchain === 'near') {
+                    connectNear();
                 }
             }
         } else {
@@ -260,6 +277,8 @@ export function WalletProvider({ children }) {
             disconnectEthereum();
         } else if (chain === 'Cardano') {
             disconnectCardano();
+        } else if (chain === 'NEAR') {
+            disconnectNear();
         }
 
         localStorage.removeItem('wallet-context-cache');
@@ -288,6 +307,26 @@ export function WalletProvider({ children }) {
         } else {
             throw `${response.status}: ${(await response).text()}`;
         }
+    };
+
+    const connectNear = async () => {
+        const account = wallet.getAccountId();
+        setAddress(account);
+        setChain('NEAR');
+        localStorage.setItem(
+            'wallet-context-cache',
+            JSON.stringify({
+                blockchain: 'near',
+                address: account,
+            })
+        );
+        checkForGoingUpAccount(account);
+    };
+
+    const disconnectNear = async () => {
+        signOut();
+        setAddress(null);
+        setChain(null);
     };
 
     const connectEthereum = async () => {
@@ -466,8 +505,9 @@ export function WalletProvider({ children }) {
                 utilityToken,
                 setWeb3ModalTheme,
                 mainnetENSProvider,
-            }}
-        >
+                connectNear,
+                disconnectNear,
+            }}>
             {children}
         </WalletContext.Provider>
     );
