@@ -110,6 +110,7 @@ const WalletChainSelection = (props, ref) => {
                             onClick={() => {
                                 handleClose();
                                 signIn();
+                                wallet.connectNear();
                             }}
                         >
                             <Box
