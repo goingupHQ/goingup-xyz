@@ -28,9 +28,9 @@ const UserBoxButton = styled(Button)(
     padding: ${theme.spacing(0, 1)};
     background-color: ${theme.palette.background.userBox};
     height: 40px;
-    width: 168px;
+    width: 188px;
     min-width: 90px;
-    max-width: 168px;
+    max-width: 188px;
     &.Mui-active,
     &:hover {
       .MuiSvgIcon-root {
