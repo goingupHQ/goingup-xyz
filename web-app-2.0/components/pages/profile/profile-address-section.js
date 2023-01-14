@@ -154,7 +154,8 @@ const ProfileAddressSection = (props) => {
                     }}
                 >
                     {account.chain === 'Ethereum' && truncateEthAddress(account.address)}
-                    {account.chain != 'Ethereum' && `Wallet Address`}
+                    {account.chain === 'Near' && (account.address)}
+                    {account.chain != 'Ethereum' || 'Near' && `Wallet Address`}
                 </Typography>
             </Stack>
             {myAccount && (
