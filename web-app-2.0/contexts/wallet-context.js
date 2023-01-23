@@ -7,6 +7,7 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import { AppContext } from './app-context';
 import { Backdrop, Button, Paper, Stack, Typography } from '@mui/material';
+import { getCookie } from 'cookies-next';
 
 export const WalletContext = createContext({});
 
@@ -291,16 +292,43 @@ export function WalletProvider({ children }) {
         }
     };
 
+    const signInEthereum = async (address, signer) => {
+        if (!address) throw 'No address found';
+        if (!ethersSigner) throw 'No signer found';
+
+        // sign a message with wallet
+        const message = `I am signing this message to prove that I own the address ${address}. This message will be used to sign in to app.goingup.xyz and receive an authentication token cookie.`;
+
+        const signature = await ethersSigner.signMessage(message);
+
+        // send signature to server
+        const response = await fetch(`/api/accounts/${address}/sign-in`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                signature,
+            }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+
+            console.log('signed in with ethereum', result);
+        }
+    };
+
     const connectEthereum = async () => {
         web3Modal = new Web3Modal(web3ModalOptions);
         const instance = await web3Modal.connect();
+
         instance.on('accountsChanged', (accounts) => {
             setAddress(ethers.utils.getAddress(accounts[0]));
         });
 
-        instance.on('chainChanged', (chainId) => {
-            const networkId = parseInt(chainId, 16);
-            setNetwork(networkId);
+        instance.on('connect', (info) => {
+            console.log('connected', info);
         });
 
         const provider = new ethers.providers.Web3Provider(instance, 'any');
@@ -340,9 +368,12 @@ export function WalletProvider({ children }) {
                 type: walletType,
             })
         );
+
+        signInEthereum(userAddress, signer);
     };
 
     const disconnectEthereum = async () => {
+        web3Modal = new Web3Modal(web3ModalOptions);
         web3Modal.clearCachedProvider();
 
         clearState();
@@ -391,8 +422,13 @@ export function WalletProvider({ children }) {
 
     const signMessage = async (message) => {
         if (chain === 'Ethereum') {
-            const signature = await ethersSigner.signMessage(message);
-            return signature;
+            const authToken = getCookie('auth-token');
+            if (authToken) {
+                return authToken;
+            } else {
+                const signature = await ethersSigner.signMessage(message);
+                return signature;
+            }
         } else if (chain === 'Cardano') {
             //     // @ts-ignore
             //     const cardano = window.cardano;
