@@ -130,13 +130,13 @@ export default function Home() {
                                 Welcome, {user}
                             </Typography>
                             <Stack direction='row' spacing={2} marginY={2}>
-                                <Button
+                                {/* <Button
                                     variant='outlined'
                                     onClick={() => {
                                         router.push(`/near/${user}`);
                                     }}>
                                     Create Account
-                                </Button>
+                                </Button> */}
                                 <Button
                                     variant='outlined'
                                     onClick={() => {
