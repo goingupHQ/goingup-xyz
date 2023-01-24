@@ -52,7 +52,7 @@ export default function Home() {
                 metadata: {
                     title: 'GoingUp Appreciation Token',
                     description: 'Thank you',
-                    media: 'https://app.goingup.xyz/images/appreciation-token-t4-display.png',
+                    media: 'https://app.goingup.xyz/images/appreciation-token-t4-display.jpg',
                 },
                 receiver_id: user,
             },
@@ -69,7 +69,7 @@ export default function Home() {
                 metadata: {
                     title: 'GoingUp Appreciation Token',
                     description: 'Thank you!',
-                    media: 'https://app.goingup.xyz/images/appreciation-token-t1-display.png',
+                    media: 'https://app.goingup.xyz/images/appreciation-token-t1-display.jpg',
                 },
                 receiver_id: prompt('Enter the receiver ID'),
             },
