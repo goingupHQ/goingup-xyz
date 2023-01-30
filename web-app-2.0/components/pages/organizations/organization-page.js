@@ -181,7 +181,7 @@ export default function OrganizationPage() {
                             }
                         />
                         <CardContent>
-                            <Typography variant='h3' marginTop={2}>
+                            <Typography variant='h3' marginTop={2} sx={{ width: { md: '60%'}}}>
                                 {account?.description}
                             </Typography>
                         </CardContent>
