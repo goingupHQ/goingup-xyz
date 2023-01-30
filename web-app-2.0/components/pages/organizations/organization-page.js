@@ -173,15 +173,16 @@ export default function OrganizationPage() {
                                         <Typography variant='h6'>
                                             {account?.shortDescription}
                                         </Typography>
-                                        <ContactsAndIntegrations
-                                            account={''}
-                                        />
+                                        <ContactsAndIntegrations account={''} />
                                     </Stack>
                                 </Stack>
                             }
                         />
                         <CardContent>
-                            <Typography variant='h3' marginTop={2}>
+                            <Typography
+                                variant='h3'
+                                marginTop={2}
+                                sx={{ width: { md: '60%' } }}>
                                 {account?.description}
                             </Typography>
                         </CardContent>
