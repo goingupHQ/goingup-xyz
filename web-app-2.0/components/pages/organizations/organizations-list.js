@@ -215,9 +215,14 @@ export default function OrganizationsList() {
                                             Organization Page
                                         </Button>
                                         <Button
+                                            onClick={() => {
+                                                router.push(
+                                                    organization.website
+                                                );
+                                            }}
                                             variant='contained'
                                             color='secondary'>
-                                            Identity
+                                            Oragnization Website
                                         </Button>
                                     </Stack>
                                 </CardContent>
