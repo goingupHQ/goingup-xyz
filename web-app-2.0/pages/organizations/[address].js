@@ -40,14 +40,14 @@ export default function Organization() {
                         <OrganizationPage />
                         <OrganizationProjects account={account} />
                         <OrganizationTokens account={account} />
-                        <Grid container spacing={4}>
+                        {/* <Grid container spacing={4}>
                             <Grid item xs={12} md={6}>
                                 <OrganizationMembers />
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <OrganizationPartnerships />
                             </Grid>
-                        </Grid>
+                        </Grid> */}
                         <JobsOpening account={account} />
                     </Box>
                 </>
