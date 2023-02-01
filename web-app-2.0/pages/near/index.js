@@ -52,6 +52,57 @@ export default function Home() {
                 metadata: {
                     title: 'GoingUp Appreciation Token',
                     description: 'Thank you',
+                    media: 'https://app.goingup.xyz/images/appreciation-token-t1-display.jpg',
+                },
+                receiver_id: user,
+            },
+            '1', // attached GAS (optional)
+            '7730000000000000000000' // attached GAS (optional)
+        );
+    };
+
+    const mintToken2 = async () => {
+        await callFunction(
+            'nft_mint',
+            {
+                token_id: id,
+                metadata: {
+                    title: 'GoingUp Appreciation Token',
+                    description: 'Thank you',
+                    media: 'https://app.goingup.xyz/images/appreciation-token-t2-display.jpg',
+                },
+                receiver_id: user,
+            },
+            '1', // attached GAS (optional)
+            '7730000000000000000000' // attached GAS (optional)
+        );
+    };
+
+    const mintToken3 = async () => {
+        await callFunction(
+            'nft_mint',
+            {
+                token_id: id,
+                metadata: {
+                    title: 'GoingUp Appreciation Token',
+                    description: 'Thank you',
+                    media: 'https://app.goingup.xyz/images/appreciation-token-t3-display.jpg',
+                },
+                receiver_id: user,
+            },
+            '1', // attached GAS (optional)
+            '7730000000000000000000' // attached GAS (optional)
+        );
+    };
+
+    const mintToken4 = async () => {
+        await callFunction(
+            'nft_mint',
+            {
+                token_id: id,
+                metadata: {
+                    title: 'GoingUp Appreciation Token',
+                    description: 'Thank you',
                     media: 'https://app.goingup.xyz/images/appreciation-token-t4-display.jpg',
                 },
                 receiver_id: user,
@@ -70,6 +121,57 @@ export default function Home() {
                     title: 'GoingUp Appreciation Token',
                     description: 'Thank you!',
                     media: 'https://app.goingup.xyz/images/appreciation-token-t1-display.jpg',
+                },
+                receiver_id: prompt('Enter the receiver ID'),
+            },
+            '1', // attached GAS (optional)
+            '7730000000000000000000' // attached GAS (optional)
+        );
+    };
+
+    const sendToken2 = async () => {
+        await callFunction(
+            'nft_mint',
+            {
+                token_id: id,
+                metadata: {
+                    title: 'GoingUp Appreciation Token',
+                    description: 'Thank you!',
+                    media: 'https://app.goingup.xyz/images/appreciation-token-t2-display.jpg',
+                },
+                receiver_id: prompt('Enter the receiver ID'),
+            },
+            '1', // attached GAS (optional)
+            '7730000000000000000000' // attached GAS (optional)
+        );
+    };
+
+    const sendToken3 = async () => {
+        await callFunction(
+            'nft_mint',
+            {
+                token_id: id,
+                metadata: {
+                    title: 'GoingUp Appreciation Token',
+                    description: 'Thank you!',
+                    media: 'https://app.goingup.xyz/images/appreciation-token-t3-display.jpg',
+                },
+                receiver_id: prompt('Enter the receiver ID'),
+            },
+            '1', // attached GAS (optional)
+            '7730000000000000000000' // attached GAS (optional)
+        );
+    };
+
+    const sendToken4 = async () => {
+        await callFunction(
+            'nft_mint',
+            {
+                token_id: id,
+                metadata: {
+                    title: 'GoingUp Appreciation Token',
+                    description: 'Thank you!',
+                    media: 'https://app.goingup.xyz/images/appreciation-token-t4-display.jpg',
                 },
                 receiver_id: prompt('Enter the receiver ID'),
             },
@@ -111,7 +213,11 @@ export default function Home() {
                         <img
                             src='/images/illustrations/connection-lost.svg'
                             alt='connection-lost'
-                            style={{ width: '100%', maxWidth: '500px', marginTop: '20px' }}
+                            style={{
+                                width: '100%',
+                                maxWidth: '500px',
+                                marginTop: '20px',
+                            }}
                         />
                         <Box marginY={2}>
                             <Button
@@ -127,7 +233,16 @@ export default function Home() {
                     <>
                         <Box marginY={2}>
                             <Typography variant='h2' marginY={2}>
-                                Welcome, {user}
+                                Welcome, {user}{' '}
+                                <Button
+                                    marginLeft={2}
+                                    variant='contained'
+                                    onClick={() => {
+                                        signOut();
+                                        setUser(null);
+                                    }}>
+                                    Sign out
+                                </Button>
                             </Typography>
                             <Stack direction='row' spacing={2} marginY={2}>
                                 {/* <Button
@@ -138,26 +253,70 @@ export default function Home() {
                                     Create Account
                                 </Button> */}
                                 <Button
-                                    variant='outlined'
+                                    variant='contained'
                                     onClick={() => {
                                         mintToken();
                                     }}>
-                                    Mint Token
-                                </Button>
-                                <Button
-                                    variant='outlined'
-                                    onClick={() => {
-                                        sendToken();
-                                    }}>
-                                    Send Token
+                                    Mint Token 1
                                 </Button>
                                 <Button
                                     variant='contained'
                                     onClick={() => {
-                                        signOut();
-                                        setUser(null);
+                                        mintToken2();
                                     }}>
-                                    Sign out
+                                    Mint Token 2
+                                </Button>
+                                <Button
+                                    variant='contained'
+                                    onClick={() => {
+                                        mintToken3();
+                                    }}>
+                                    Mint Token 3
+                                </Button>
+                                <Button
+                                    variant='contained'
+                                    onClick={() => {
+                                        mintToken4();
+                                    }}>
+                                    Mint Token 4
+                                </Button>
+                            </Stack>
+
+                            <Stack direction='row' spacing={2} marginY={2}>
+                                <Button
+                                    variant='contained'
+                                    color='secondary'
+                                    onClick={() => {
+                                        sendToken();
+                                    }}>
+                                    Send Token 1
+                                </Button>
+
+                                <Button
+                                    variant='contained'
+                                    color='secondary'
+                                    onClick={() => {
+                                        sendToken2();
+                                    }}>
+                                    Send Token 2
+                                </Button>
+
+                                <Button
+                                    variant='contained'
+                                    color='secondary'
+                                    onClick={() => {
+                                        sendToken3();
+                                    }}>
+                                    Send Token 3
+                                </Button>
+
+                                <Button
+                                    variant='contained'
+                                    color='secondary'
+                                    onClick={() => {
+                                        sendToken4();
+                                    }}>
+                                    Send Token 4
                                 </Button>
                             </Stack>
                             {tokens && (
