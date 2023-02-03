@@ -15,23 +15,26 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import '../styles/globals.css';
 import { OrganizationsProvider } from '../contexts/organizations-context';
+import AppTheme from '../app-theme';
 
 function App({ Component, pageProps }) {
     return (
         <LocalizationProvider dateAdapter={AdapterMoment}>
             <SnackbarProvider maxSnack={20} preventDuplicate>
                 <AppProvider>
-                    <WalletProvider>
-                        <OrganizationsProvider>
-                            <UtilityTokensProvider>
-                                <ProjectsProvider>
-                                    <Layout>
-                                        <Component {...pageProps} />
-                                    </Layout>
-                                </ProjectsProvider>
-                            </UtilityTokensProvider>
-                        </OrganizationsProvider>
-                    </WalletProvider>
+                    <AppTheme>
+                        <WalletProvider>
+                            <OrganizationsProvider>
+                                <UtilityTokensProvider>
+                                    <ProjectsProvider>
+                                        <Layout>
+                                            <Component {...pageProps} />
+                                        </Layout>
+                                    </ProjectsProvider>
+                                </UtilityTokensProvider>
+                            </OrganizationsProvider>
+                        </WalletProvider>
+                    </AppTheme>
                 </AppProvider>
             </SnackbarProvider>
         </LocalizationProvider>
