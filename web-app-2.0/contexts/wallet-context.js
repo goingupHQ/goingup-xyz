@@ -9,6 +9,7 @@ import { AppContext } from './app-context';
 import { Backdrop, Button, Paper, Stack, Typography } from '@mui/material';
 import { getCookie } from 'cookies-next';
 import { useModal } from 'connectkit';
+import { useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 
 export const WalletContext = createContext({});
 
@@ -322,65 +323,65 @@ export function WalletProvider({ children }) {
         }
     };
 
+    const { address: evmAddress, isConnected: evmIsConnected, isConnecting: evmIsConnecting } = useAccount();
+    const { chain: evmChain } = useNetwork();
+    const evmProvider = useProvider();
+    const { data: evmSigner } = useSigner();
     const connectEthereum = async () => {
         setConnectKitOpen(true);
-        return;
-        web3Modal = new Web3Modal(web3ModalOptions);
-        const instance = await web3Modal.connect();
 
-        instance.on('accountsChanged', (accounts) => {
-            setAddress(ethers.utils.getAddress(accounts[0]));
-        });
+        // const provider = new ethers.providers.Web3Provider(instance, 'any');
+        // const signer = provider.getSigner();
 
-        instance.on('connect', (info) => {
-            console.log('connected', info);
-        });
+        // let walletType = null;
+        // if (instance.isMetaMask) walletType = 'metamask';
+        // if (instance.isWalletConnect) walletType = 'walletconnect';
+        // if (instance.isCoinbaseWallet) walletType = 'coinbase';
 
-        const provider = new ethers.providers.Web3Provider(instance, 'any');
-        const signer = provider.getSigner();
-
-        let walletType = null;
-        if (instance.isMetaMask) walletType = 'metamask';
-        if (instance.isWalletConnect) walletType = 'walletconnect';
-        if (instance.isCoinbaseWallet) walletType = 'coinbase';
-
-        let userAddress = null;
-        switch (walletType) {
-            case 'metamask':
-            case 'coinbase':
-                // @ts-ignore
-                userAddress = ethers.utils.getAddress(instance.selectedAddress);
-                break;
-            case 'walletconnect':
-                // @ts-ignore
-                userAddress = ethers.utils.getAddress(instance.accounts[0]);
-                break;
-        }
-
-        setChain(`Ethereum`);
-        setNetwork(instance.networkVersion);
-        setWalletType(walletType);
-        setEthersProvider(provider);
-        setEthersSigner(signer);
-        setAddress(userAddress);
-
-        enqueueSnackbar('Wallet connected', { variant: 'success' });
-        checkForGoingUpAccount(userAddress);
-        localStorage.setItem(
-            'wallet-context-cache',
-            JSON.stringify({
-                blockchain: 'ethereum',
-                type: walletType,
-            })
-        );
-
-        signInEthereum(userAddress, signer);
+        // let userAddress = null;
+        // switch (walletType) {
+        //     case 'metamask':
+        //     case 'coinbase':
+        //         // @ts-ignore
+        //         userAddress = ethers.utils.getAddress(instance.selectedAddress);
+        //         break;
+        //     case 'walletconnect':
+        //         // @ts-ignore
+        //         userAddress = ethers.utils.getAddress(instance.accounts[0]);
+        //         break;
+        // }
     };
 
-    const disconnectEthereum = async () => {
-        web3Modal = new Web3Modal(web3ModalOptions);
-        web3Modal.clearCachedProvider();
+    useEffect(() => {
+        if (evmIsConnected && !evmIsConnecting) {
+            setChain(`Ethereum`);
+            setNetwork(evmChain);
+            // setWalletType(walletType);
+            setEthersProvider(evmProvider);
+            setEthersSigner(evmSigner);
+            setAddress(evmAddress);
 
+            enqueueSnackbar('Wallet connected', { variant: 'success' });
+            checkForGoingUpAccount(evmAddress);
+            localStorage.setItem(
+                'wallet-context-cache',
+                JSON.stringify({
+                    blockchain: 'evm',
+                    // type: walletType,
+                })
+            );
+
+            signInEthereum(evmAddress, evmSigner);
+        }
+
+        if (!evmIsConnected && !evmIsConnecting) {
+            clearState();
+        }
+    }, [evmAddress, evmChain, evmIsConnected, evmIsConnecting, evmProvider, evmSigner]);
+
+    const { disconnect: evmDisconnect } = useDisconnect();
+    const disconnectEthereum = async () => {
+        evmDisconnect();
         clearState();
     };
 
