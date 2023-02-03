@@ -16,9 +16,18 @@ const client = createClient(
 
 export default function ConnectKit(props) {
     const theme = useTheme();
+    const borderRadius = `${theme.shape.borderRadius}px`;
+    const primaryColor = theme.palette.primary.main;
     return (
         <WagmiConfig client={client}>
-            <ConnectKitProvider theme="default" mode={theme.palette.mode}>
+            <ConnectKitProvider customTheme={{
+                '--ck-font-family': theme.typography.fontFamily,
+                '--ck-border-radius': borderRadius,
+                '--ck-primary-color': primaryColor,
+                '--ck-primary-button-hover-background': primaryColor,
+                '--ck-primary-button-hover-color': theme.palette.primary.contrastText,
+                '--ck-primary-button-border-radius': borderRadius,
+            }} mode={theme.palette.mode}>
                 {props.children}
             </ConnectKitProvider>
         </WagmiConfig>
