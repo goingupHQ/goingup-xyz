@@ -1,6 +1,6 @@
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { AppContext } from './contexts/app-context';
+import { AppContext } from '../contexts/app-context';
 
 export default function AppTheme(props) {
     const app = React.useContext(AppContext);

@@ -8,6 +8,7 @@ import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import { AppContext } from './app-context';
 import { Backdrop, Button, Paper, Stack, Typography } from '@mui/material';
 import { getCookie } from 'cookies-next';
+import { useModal } from 'connectkit';
 
 export const WalletContext = createContext({});
 
@@ -111,6 +112,8 @@ export function WalletProvider({ children }) {
     const [walletType, setWalletType] = useState(null);
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+    const { setOpen: setConnectKitOpen } = useModal();
 
     useEffect(() => {
         if (address) {
@@ -320,6 +323,8 @@ export function WalletProvider({ children }) {
     };
 
     const connectEthereum = async () => {
+        setConnectKitOpen(true);
+        return;
         web3Modal = new Web3Modal(web3ModalOptions);
         const instance = await web3Modal.connect();
 
