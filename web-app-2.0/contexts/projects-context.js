@@ -28,7 +28,6 @@ export const ProjectsProvider = ({ children }) => {
     const { networkParams } = wallet.networks[contractNetwork];
 
     const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network?.id === contractNetwork);
-    console.log(wallet.network);
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const router = useRouter();
@@ -85,7 +84,7 @@ export const ProjectsProvider = ({ children }) => {
 
     const getContract = () => {
         if (!wallet.ethersSigner) return getReadOnlyContract();
-        if (wallet.network != contractNetwork) return getReadOnlyContract();
+        if (wallet.network?.id != contractNetwork) return getReadOnlyContract();
         console.log('getContract');
         return new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
     };
