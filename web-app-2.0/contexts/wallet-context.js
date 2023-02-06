@@ -7,7 +7,7 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import { AppContext } from './app-context';
 import { Backdrop, Button, Paper, Stack, Typography } from '@mui/material';
-import { getCookie } from 'cookies-next';
+import { deleteCookie, getCookie, hasCookie } from 'cookies-next';
 import { useModal } from 'connectkit';
 import { useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 
@@ -249,7 +249,7 @@ export function WalletProvider({ children }) {
 
         if (cache) {
             if (!address) {
-                if (cache.blockchain === 'ethereum') {
+                if (cache.blockchain === 'evm') {
                     connectEthereum();
                 } else if (cache.blockchain === 'cardano') {
                     connectCardano();
@@ -297,6 +297,8 @@ export function WalletProvider({ children }) {
     };
 
     const signInEthereum = async (address, signer) => {
+        if (hasCookie('auth-token')) return;
+
         if (!address) throw 'No address found';
         if (!ethersSigner) throw 'No signer found';
 
@@ -318,8 +320,6 @@ export function WalletProvider({ children }) {
 
         if (response.ok) {
             const result = await response.json();
-
-            console.log('signed in with ethereum', result);
         }
     };
 
@@ -329,34 +329,13 @@ export function WalletProvider({ children }) {
     const { data: evmSigner } = useSigner();
     const connectEthereum = async () => {
         setConnectKitOpen(true);
-
-        // const provider = new ethers.providers.Web3Provider(instance, 'any');
-        // const signer = provider.getSigner();
-
-        // let walletType = null;
-        // if (instance.isMetaMask) walletType = 'metamask';
-        // if (instance.isWalletConnect) walletType = 'walletconnect';
-        // if (instance.isCoinbaseWallet) walletType = 'coinbase';
-
-        // let userAddress = null;
-        // switch (walletType) {
-        //     case 'metamask':
-        //     case 'coinbase':
-        //         // @ts-ignore
-        //         userAddress = ethers.utils.getAddress(instance.selectedAddress);
-        //         break;
-        //     case 'walletconnect':
-        //         // @ts-ignore
-        //         userAddress = ethers.utils.getAddress(instance.accounts[0]);
-        //         break;
-        // }
     };
 
     useEffect(() => {
         if (evmIsConnected && !evmIsConnecting) {
             setChain(`Ethereum`);
             setNetwork(evmChain);
-            // setWalletType(walletType);
+            setWalletType('connectkit');
             setEthersProvider(evmProvider);
             setEthersSigner(evmSigner);
             setAddress(evmAddress);
@@ -375,7 +354,7 @@ export function WalletProvider({ children }) {
         }
 
         if (!evmIsConnected && !evmIsConnecting) {
-            clearState();
+            disconnectEthereum();
         }
     }, [evmAddress, evmChain, evmIsConnected, evmIsConnecting, evmProvider, evmSigner]);
 
@@ -386,6 +365,7 @@ export function WalletProvider({ children }) {
     };
 
     const clearState = () => {
+        deleteCookie('auth-token');
         setChain(null);
         setAddress(null);
         setNetwork(null);
