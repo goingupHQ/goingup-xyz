@@ -36,11 +36,10 @@
     "moment": "^2.29.4",
     "mongodb": "^4.8.1",
     "next": "^13.1.6",
-    "nextjs-cors": "^2.1.1",
+    "nextjs-cors": "^2.1.2",
     "notistack": "^2.0.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-html-email": "^3.0.0",
     "sib-api-v3-sdk": "^8.4.0",
     "sleep-promise": "^9.1.0",
     "templates": "^1.2.9",
@@ -55,5 +54,8 @@
   "devDependencies": {
     "eslint": "8.19.0",
     "eslint-config-next": "12.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
