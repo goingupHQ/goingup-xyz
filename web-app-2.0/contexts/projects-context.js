@@ -7,6 +7,7 @@ import { useSnackbar } from 'notistack';
 import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
 import { UtilityTokensContext } from './utility-tokens-context';
+import { useSwitchNetwork } from 'wagmi';
 
 export const ProjectsContext = createContext();
 
@@ -26,33 +27,23 @@ export const ProjectsProvider = ({ children }) => {
 
     const { networkParams } = wallet.networks[contractNetwork];
 
-    const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network == contractNetwork);
+    const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network?.id === contractNetwork);
+    console.log(wallet.network);
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const router = useRouter();
 
+    const { switchNetwork: evmSwitchNetwork } = useSwitchNetwork();
     async function switchToCorrectNetwork() {
-        if (wallet.walletType === 'walletconnect') {
-            throw new Error('WalletConnect does not support switching networks. Please add and switch to the network manually.');
-        } else {
-            try {
-                await ethereum.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: networkParams.chainId }],
-                });
-            } catch (switchError) {
-                if (switchError.code === 4902) {
-                    await ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [networkParams],
-                    });
-                }
-            }
+        if (wallet.walletType === 'connectkit') {
+            // evm
+            console.log(evmSwitchNetwork);
+            await evmSwitchNetwork(contractNetwork);
         }
     }
 
     useEffect(() => {
-        setIsCorrectNetwork(wallet.network == contractNetwork);
+        setIsCorrectNetwork(wallet.network?.id === contractNetwork);
     }, [wallet]);
 
     // check for project invites
