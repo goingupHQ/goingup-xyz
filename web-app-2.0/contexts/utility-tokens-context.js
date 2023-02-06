@@ -3,6 +3,8 @@ import { ethers } from 'ethers';
 import artifact from '../artifacts/GoingUpUtilityTokens.json';
 import { useSnackbar } from 'notistack';
 import { WalletContext } from './wallet-context';
+import { Button } from '@mui/material';
+import { useSwitchNetwork } from 'wagmi';
 
 export const UtilityTokensContext = createContext();
 
@@ -33,24 +35,49 @@ const testnet = {
 export const UtilityTokensProvider = ({ children }) => {
     const [utilityTokens, setUtilityTokens] = useState([]);
 
-    const { enqueueSnackbar } = useSnackbar();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const wallet = useContext(WalletContext);
 
+    const { switchNetwork } = useSwitchNetwork();
     const sendUtilityToken = async (to, tokenId, amount, message) => {
-        if (wallet.network != 137 && wallet.network != 80001) {
-            enqueueSnackbar(`Please switch your wallet network to Polygon 💫`, {
-                variant: 'error',
+        if (wallet.network?.id != 137 && wallet.network?.id != 80001) {
+            enqueueSnackbar(`You are not on Polygon mainnet. Switch?`, {
+                variant: 'warning',
+                action: (key) => (
+                    <>
+                        <Button variant="contained" color="primary" sx={{ mr: 1 }} onClick={async () => {
+                            closeSnackbar(key);
+                            if (switchNetwork) {
+                                await switchNetworkAsync(137);
+                                enqueueSnackbar(`Switched to Polygon mainnet. Please try again.`, {
+                                    variant: 'success',
+                                });
+                            } else {
+                                enqueueSnackbar(`Switching networks is not supported on your wallet.`, {
+                                    variant: 'error',
+                                });
+                            }
+                        }}>
+                            Yes
+                        </Button>
+                        <Button variant="contained" color="secondary" onClick={() => closeSnackbar(key)}>
+                            No
+                        </Button>
+                    </>
+                )
             });
             return null;
         }
 
-        const contractAddress = wallet.network == 137 ? mainnet.address : testnet.address;
+        const contractAddress = wallet.network?.id == 137 ? mainnet.address : testnet.address;
         console.log('utility-tokens-context.js: sendUtilityToken() contractAddress:', contractAddress);
         const abi = artifact.abi;
-        const provider = wallet.network == 137 ? mainnet.provider : testnet.provider;
+        const provider = wallet.network?.id == 137 ? mainnet.provider : testnet.provider;
 
         const signer = wallet.ethersSigner;
         const contract = new ethers.Contract(contractAddress, abi, signer);
+        console.log('signer:', signer);
+        console.log('contract:', contract);
         const settings = await contract.tokenSettings(tokenId);
         console.log('settings:', settings);
         const tx = await contract.mint(to, tokenId, amount, Boolean(message), message, {
