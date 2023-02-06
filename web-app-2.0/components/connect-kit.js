@@ -5,7 +5,8 @@ import { ConnectKitProvider, ConnectKitButton, getDefaultClient } from 'connectk
 import { useTheme } from '@mui/material';
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_KEY;
-const chains = [mainnet, polygon, goerli, polygonMumbai];
+// const chains = [mainnet, polygon, goerli, polygonMumbai];
+const chains = [polygon, polygonMumbai];
 const client = createClient(
     getDefaultClient({
         appName: 'GoingUP',
