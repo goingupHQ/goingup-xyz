@@ -27,6 +27,14 @@ export default function ConnectKit(props) {
                 '--ck-primary-button-hover-background': primaryColor,
                 '--ck-primary-button-hover-color': theme.palette.primary.contrastText,
                 '--ck-primary-button-border-radius': borderRadius,
+                '--ck-primary-button-hover-border-radius': borderRadius,
+                '--ck-primary-button-active-border-radius': borderRadius,
+                '--ck-secondary-button-border-radius': borderRadius,
+                '--ck-secondary-button-hover-border-radius': borderRadius,
+                '--ck-secondary-button-active-border-radius': borderRadius,
+                '--ck-tertiary-button-border-radius': borderRadius,
+                '--ck-tertiary-button-hover-border-radius': borderRadius,
+                '--ck-tertiary-button-active-border-radius': borderRadius,
             }} mode={theme.palette.mode}>
                 {props.children}
             </ConnectKitProvider>
