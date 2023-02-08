@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     const nameRegex = new RegExp(`${query}`, 'i');
     const accounts = await db
         .collection('accounts')
-        .find({ name: nameRegex, chain: 'Ethereum', mock: { $exists: false } })
+        .find({ name: nameRegex, mock: { $exists: false } })
         .limit(12)
         .toArray();
 

@@ -7,6 +7,7 @@ import { useSnackbar } from 'notistack';
 import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
 import { UtilityTokensContext } from './utility-tokens-context';
+import { useSwitchNetwork } from 'wagmi';
 
 export const ProjectsContext = createContext();
 
@@ -17,40 +18,31 @@ export const ProjectsProvider = ({ children }) => {
     // polygon mumbai testnet
     // const contractAddress = '0x89e41C41Fa8Aa0AE4aF87609D3Cb0F466dB343ab';
     // const contractNetwork = 80001;
+    // const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_TESTNET;
 
     // polygon mainnet
     const contractAddress = '0x9C28e833aE76A1e123c2799034cA6865A1113CA5';
     const contractNetwork = 137;
+    const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_MAINNET;
 
     const { networkParams } = wallet.networks[contractNetwork];
 
-    const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network == contractNetwork);
+    const [isCorrectNetwork, setIsCorrectNetwork] = useState(wallet.network?.id === contractNetwork);
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const router = useRouter();
 
+    const { switchNetwork: evmSwitchNetwork } = useSwitchNetwork();
     async function switchToCorrectNetwork() {
-        if (wallet.walletType === 'walletconnect') {
-            throw new Error('WalletConnect does not support adding networks. Please add the network manually.');
-        } else {
-            try {
-                await ethereum.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: networkParams.chainId }],
-                });
-            } catch (switchError) {
-                if (switchError.code === 4902) {
-                    await ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [networkParams],
-                    });
-                }
-            }
+        if (wallet.walletType === 'connectkit') {
+            // evm
+            console.log(evmSwitchNetwork);
+            await evmSwitchNetwork(contractNetwork);
         }
     }
 
     useEffect(() => {
-        setIsCorrectNetwork(wallet.network == contractNetwork);
+        setIsCorrectNetwork(wallet.network?.id === contractNetwork);
     }, [wallet]);
 
     // check for project invites
@@ -91,7 +83,29 @@ export const ProjectsProvider = ({ children }) => {
     }, [wallet.address, isCorrectNetwork]);
 
     const getContract = () => {
+        if (!wallet.ethersSigner) return getReadOnlyContract();
+        if (wallet.network?.id != contractNetwork) return getReadOnlyContract();
+        console.log('getContract');
         return new ethers.Contract(contractAddress, artifact.abi, wallet.ethersSigner);
+    };
+
+    const getReadOnlyContract = () => {
+        const readOnlyProvider = new ethers.providers.JsonRpcProvider(`https://polygon-rpc.com`);
+        return new ethers.Contract(contractAddress, artifact.abi, readOnlyProvider);
+    }
+
+    const getProjectsCount = async () => {
+        const contract = getReadOnlyContract();
+        let count = 0;
+        let currentProjectId = 1;
+        while (true) {
+            const project = await contract.projects(currentProjectId);
+            if (project.id.toNumber() === 0) break;
+            count++;
+            currentProjectId++;
+        };
+
+        return count;
     };
 
     const getProjects = async () => {
@@ -268,7 +282,7 @@ export const ProjectsProvider = ({ children }) => {
         const pendingInvites = await contract.getPendingInvites(projectId);
         const members = await contract.getProjectMembers(projectId);
 
-        const fee = ethers.BigNumber.from(0);
+        let fee = ethers.BigNumber.from(0);
         if (pendingInvites.length + members.length + 1 >= freeMembers) fee = await contract.addMemberPrice();
 
         const tx = await contract.inviteMember(projectId, member, role, goal, JSON.stringify(rewards), { value: fee });
@@ -351,6 +365,7 @@ export const ProjectsProvider = ({ children }) => {
         setProjectLogo,
         getProjectLogo,
         manuallyAddMember,
+        getProjectsCount
     };
     return <ProjectsContext.Provider value={value}>{children}</ProjectsContext.Provider>;
 };

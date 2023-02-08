@@ -9,7 +9,7 @@ const ConnectUsingEmail = (props, ref) => {
     const [open, setOpen] = useState(false);
     const wallet = useContext(WalletContext);
 
-    const { enqueueSnackbar } = useSnackbar();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const [step, setStep] = useState(0);
     const [email, setEmail] = useState('');
@@ -26,17 +26,16 @@ const ConnectUsingEmail = (props, ref) => {
     }));
 
     const handleClose = (event, reason) => {
-        if (reason && reason == "backdropClick")
-            return;
+        if (reason && reason == 'backdropClick') return;
         setOpen(false);
-    }
+    };
 
     const changeStep = async (step) => {
         setStep(-1);
         sleep(500).then(() => {
             setStep(step);
         });
-    }
+    };
 
     const sendLoginCode = async () => {
         if (!email) {
@@ -75,9 +74,49 @@ const ConnectUsingEmail = (props, ref) => {
         }
     };
 
+    const [loggingIn, setLoggingIn] = useState(false);
+    const [code, setCode] = useState('');
+
+    // validate login code
+    const login = async () => {
+        closeSnackbar();
+
+        try {
+            if (!code) {
+                throw 'Please enter the login code';
+            }
+
+            setLoggingIn(true);
+
+            const response = await fetch('/api/accounts/email/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ code }),
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                if (error.message) throw error.message;
+            }
+
+            if (response.ok) {
+                enqueueSnackbar('Login successful', { variant: 'success' });
+                console.log(await response.json());
+            }
+        } catch (e) {
+            console.error(e);
+            if (typeof e === 'string') enqueueSnackbar(e, { variant: 'error' });
+            else enqueueSnackbar('Error logging in', { variant: 'error' });
+        } finally {
+            setLoggingIn(false);
+        }
+    };
+
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="md">
-            <DialogContent sx={{ paddingY: 4, minHeight: 230 }} >
+            <DialogContent sx={{ paddingY: 4, minHeight: 230 }}>
                 <Stack direction="column" spacing={3}>
                     <Typography variant="h2" align="center">
                         Connect to the app using your GoingUP Wallet
@@ -98,32 +137,56 @@ const ConnectUsingEmail = (props, ref) => {
                                 onChange={(e) => setEmail(e.target.value)}
                             />
 
-                            <LoadingButton
-                                variant="contained"
-                                color="primary"
-                                fullWidth
-                                onClick={sendLoginCode}
-                                loading={sendingEmail}
-                            >
-                                Send Login Code
-                            </LoadingButton>
+                            <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
+                                <LoadingButton
+                                    variant="contained"
+                                    color="primary"
+                                    fullWidth
+                                    onClick={sendLoginCode}
+                                    loading={sendingEmail}
+                                >
+                                    Send Login Code
+                                </LoadingButton>
+
+                                <Button variant="outlined" color="secondary" fullWidth onClick={() => setOpen(false)}>
+                                    Cancel
+                                </Button>
+                            </Stack>
                         </Stack>
                     </Fade>
 
                     <Fade in={step === 1} mountOnEnter unmountOnExit>
-                        <Stack direction="column" spacing={2}>
+                        <Stack direction="column" spacing={3}>
                             <Typography variant="body1" align="center">
-                                We have sent a login code to your <b>{email}</b>. Please enter it below to login.
+                                We have sent a login code to your <b>{email}</b>
                             </Typography>
 
-                            <TextField label="Login Code" placeholder="123456" variant="outlined" fullWidth />
+                            <Stack direction="column" spacing={0}>
+                                <TextField
+                                    label="Login Code"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={code}
+                                    onChange={(e) => setCode(e.target.value)}
+                                />
 
-                            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                                <Button variant="contained" color="primary" fullWidth>
+                                <Typography variant="subtitle2" color="gray" align="center">
+                                    No email? Please check your spam folder
+                                </Typography>
+                            </Stack>
+
+                            <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
+                                <LoadingButton
+                                    variant="contained"
+                                    color="primary"
+                                    fullWidth
+                                    loading={loggingIn}
+                                    onClick={() => login()}
+                                >
                                     Login and Connect
-                                </Button>
+                                </LoadingButton>
 
-                                <Button variant="outlined" color="primary" fullWidth onClick={() => changeStep(0)}>
+                                <Button variant="outlined" color="secondary" fullWidth onClick={() => changeStep(0)}>
                                     Go back
                                 </Button>
                             </Stack>

@@ -3,7 +3,8 @@ import artifact from '../../../artifacts/GoingUpUtilityTokens.json';
 
 export const contractAddress = '0x10D7B3aFA213D93a922a062fb91E8EcbD4A703d2';
 export const abi = artifact.abi;
-export const provider = new ethers.providers.AlchemyProvider(137, process.env.ALCHEMY_POLYGON_MAINNET);
+// export const provider = new ethers.providers.AlchemyProvider(137, process.env.ALCHEMY_POLYGON_MAINNET);
+export const provider = new ethers.providers.JsonRpcProvider(`https://polygon-rpc.com`);
 export const contract = new ethers.Contract(contractAddress, abi, provider);
 
 const getToken = async (tokenId) => {
@@ -29,7 +30,7 @@ export default async function handler(req, res) {
         {
             categoryId: 2,
             categoryName: 'Human Council DAO Tokens',
-            tokenIds: [5],
+            tokenIds: [5, 7],
             tokenSettings: []
         }
     ];

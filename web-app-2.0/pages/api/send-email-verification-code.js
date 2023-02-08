@@ -6,7 +6,7 @@ import crypto from 'crypto';
 export default async function handler(req, res) {
     const { address, name, email, signature } = req.query;
 
-    const isSignatureValid = validateSignature(address, 'send-verification-email-code', signature);
+    const isSignatureValid = validateSignature(address, 'send-verification-email-code', signature, req, res);
 
     if (isSignatureValid) {
         const db = await getDb();

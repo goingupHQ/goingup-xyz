@@ -1,9 +1,11 @@
 import { Button, Stack, Typography } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import React from 'react';
 import { ProjectsContext } from '../../../contexts/projects-context';
 
 export default function WrongNetwork(props) {
     const projectsContext = React.useContext(ProjectsContext);
+    const { enqueueSnackbar } = useSnackbar();
     return (
         <Stack justifyContent="center" alignItems="center" direction="column" spacing={4}>
             <Typography variant="h2">
@@ -16,7 +18,22 @@ export default function WrongNetwork(props) {
                 style={{ width: '100%', maxWidth: '500px' }}
             />
 
-            <Button variant="contained" color="primary" size="large" onClick={projectsContext.switchToCorrectNetwork}>
+            <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={() => {
+                    try {
+                        projectsContext.switchToCorrectNetwork();
+                    } catch (e) {
+                        if (typeof e === 'string') {
+                            enqueueSnackbar(e, { variant: 'error' });
+                        } else {
+                            console.error(e);
+                        }
+                    }
+                }}
+            >
                 Switch to {projectsContext.networkParams.chainName}
             </Button>
         </Stack>

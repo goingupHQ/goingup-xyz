@@ -116,7 +116,7 @@ const SendAppreciationToken = (props, ref) => {
             case 2:
             case 3:
             case 4:
-                return `/images/appreciation-token-t${tokenId}-display.png`;
+                return `/images/appreciation-token-t${tokenId}-display.jpg`;
             case 5:
                 return `/images/human-council-token.jpg`
         }

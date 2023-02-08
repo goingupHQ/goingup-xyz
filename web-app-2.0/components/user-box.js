@@ -25,7 +25,7 @@ import ProfileIcon from './icons/ProfileIcon';
 
 const UserBoxButton = styled(Button)(
     ({ theme }) => `
-    padding: ${theme.spacing(0, 1)};
+    padding: 2;
     background-color: ${theme.palette.background.userBox};
     height: 40px;
     width: 188px;

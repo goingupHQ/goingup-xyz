@@ -12,7 +12,7 @@ import {
 import { AppContext } from '../../../contexts/app-context';
 
 const fieldStyle = {
-    m: 1
+    m: 0
 };
 
 function PersonalInfo(props) {
@@ -26,7 +26,7 @@ function PersonalInfo(props) {
     } = props.state;
 
     return (
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)'} }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)'}, gap: 2 }}>
             <TextField
                 label="Your Name"
                 placeholder="You can give a nickname, prefered name or alias"

@@ -1,0 +1,17 @@
+{
+    "name": "Gitcoin G14 & G15 Donors Appreciation Token",
+    "description": "Thank you for supporting GoingUP.xyz and for your G14 & G15 grant contributions on Gitcoin",
+    "image": "ipfs://bafybeickbpweypsjeetn6sornxjrybjd2smpjyng52ealhqaqglu7ngoge/gitcoin-donor-art.png",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "Created On",
+            "value": 1668042880
+        },
+        {
+            "display_type": "boost_number",
+            "trait_type": "Reputation Score Boost",
+            "value": 1
+        }
+    ]
+}
