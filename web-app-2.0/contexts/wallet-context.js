@@ -335,11 +335,7 @@ export function WalletProvider({ children }) {
         setChain(null);
     };
 
-    const connectEthereum = async () => {
-        web3Modal = new Web3Modal(web3ModalOptions);
-        const instance = await web3Modal.connect();
-        instance.on('accountsChanged', (accounts) => {
-            setAddress(ethers.utils.getAddress(accounts[0]));
+    
     const signInEthereum = async (address, signer) => {
         if (hasCookie('auth-token')) return;
 
