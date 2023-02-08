@@ -122,8 +122,8 @@ export default function AppreciationTokenCard(props) {
             >
                 <Box
                     component="img"
-                    src={`/images/appreciation-token-t${tier}-display.png`}
-                    sx={{ width: '120px', height: '120px' }}
+                    src={`/images/appreciation-token-t${tier}-display.jpg`}
+                    sx={{ width: '120px', height: '120px', borderRadius: '8px' }}
                     alt={`appreciation-token-t${tier}`}
                 />
 
@@ -149,7 +149,7 @@ export default function AppreciationTokenCard(props) {
                                     <Typography variant="body1">{shownMessage.data}</Typography>
                                     {shownMessage.fromName && (
                                         <ProfileLink address={shownMessage.from || ''} />)}
-                                    {!shownMessage.fromName && 
+                                    {!shownMessage.fromName &&
                                     '- '}
                                 </Box>
                             </Fade>

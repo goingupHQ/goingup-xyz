@@ -7,8 +7,9 @@ export default async function handler(req, res) {
 
     const contract = new ethers.Contract(contractAddress, artifact.abi, provider);
     const filter = contract.filters.InviteMember(null, null, account);
-    filter.fromBlock = 0;
+    filter.fromBlock = '0x1c548c0';
     filter.toBlock = 'latest';
+    filter.address = contractAddress;
     const logs = await provider.getLogs(filter);
     // const projectIds = logs.map(log => parseInt(log.data, 16));
 

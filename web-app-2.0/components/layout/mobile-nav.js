@@ -90,7 +90,7 @@ export default function MobileNav(props) {
                 </Button>
             </Link>
 
-            <Button
+            {/* <Button
                 sx={router.pathname === '/messages' ? activeButtonStyle : inactiveButtonStyle}
                 startIcon={<MessageIcon color={ router.pathname === '/messages' ? activeColor: inactiveColor } />}
             >
@@ -102,7 +102,7 @@ export default function MobileNav(props) {
                 startIcon={<SettingsIcon color={ router.pathname === '/settings' ? activeColor: inactiveColor } />}
             >
                 Settings
-            </Button>
+            </Button> */}
             <Button
                 sx={inactiveButtonStyle}
                 startIcon={

@@ -3,7 +3,7 @@ import { Box, TextField, Select, InputLabel, FormControl, MenuItem, Checkbox, Li
 import { AppContext } from '../../../contexts/app-context';
 
 const fieldStyle = {
-    m: 1
+    m: 0
 }
 
 function ProjectGoals(props) {
@@ -16,7 +16,7 @@ function ProjectGoals(props) {
     } = props.state;
 
     return (
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)' } }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'autofill', md: 'repeat(2, 1fr)'}, gap: 2 }}>
             <FormControl sx={fieldStyle} required>
                 <InputLabel id="project-goals-label">What is your primary goal?</InputLabel>
                 <Select

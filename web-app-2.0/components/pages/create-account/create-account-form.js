@@ -194,6 +194,7 @@ export default function CreateAccountForm() {
                         ? 'vertical'
                         : 'horizontal'
                 }
+                sx={{ mb: 3 }}
             >
                 {steps.map((label, index) => {
                     const stepProps = {};

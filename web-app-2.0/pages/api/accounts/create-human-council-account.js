@@ -49,6 +49,7 @@ export default async function handler(req, res) {
     account.reputationScore = 60;
     account.address = wallet.address;
     account.walletKey = encryptedPrivateKey;
+    account.chain = 'Ethereum';
 
     // upsert account to human-council-accounts collection
     const accounts = db.collection('accounts');

@@ -3,7 +3,7 @@ import { validateSignature } from './_validate-signature';
 
 export default async function handler(req, res) {
     const { address, follows, signature } = req.query;
-    const isSignatureValid = validateSignature(address, 'follow', signature);
+    const isSignatureValid = validateSignature(address, 'follow', signature, req, res);
 
     if (isSignatureValid) {
         const db = await getDb();
