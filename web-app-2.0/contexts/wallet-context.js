@@ -328,11 +328,13 @@ export function WalletProvider({ children }) {
     const evmProvider = useProvider();
     const { data: evmSigner } = useSigner();
     const connectEthereum = async () => {
+        disconnectEthereum();
         setConnectKitOpen(true);
     };
 
     useEffect(() => {
         if (evmIsConnected && !evmIsConnecting) {
+            clearState();
             setChain(`Ethereum`);
             setNetwork(evmChain);
             setWalletType('connectkit');
@@ -366,6 +368,7 @@ export function WalletProvider({ children }) {
 
     const clearState = () => {
         deleteCookie('auth-token');
+        localStorage.removeItem('wallet-context-cache');
         setChain(null);
         setAddress(null);
         setNetwork(null);
