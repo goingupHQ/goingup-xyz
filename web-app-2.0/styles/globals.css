@@ -7,6 +7,10 @@ body {
   font-family: Questrial;
 }
 
+body {
+  overflow: initial !important;
+}
+
 .-cbwsdk-css-reset *, .SnackbarItem-wrappedRoot *, #walletconnect-wrapper * {
   font-family: Questrial !important;
 }
