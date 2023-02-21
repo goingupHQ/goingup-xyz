@@ -334,6 +334,7 @@ export function WalletProvider({ children }) {
 
     useEffect(() => {
         if (evmIsConnected && !evmIsConnecting) {
+            clearState();
             setChain(`Ethereum`);
             setNetwork(evmChain);
             setWalletType('connectkit');
