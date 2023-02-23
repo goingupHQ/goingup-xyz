@@ -13,11 +13,14 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import SunIcon from '../icons/SunIcon';
 import MoonIcon from '../icons/MoonIcon';
+import { WalletContext } from '../../contexts/wallet-context';
 
 export default function MobileNav(props) {
     const { closeNav } = props;
     const app = useContext(AppContext);
     const theme = useTheme();
+
+    const wallet = useContext(WalletContext);
 
     const activeColor = app.mode === 'dark' ? theme.palette.primary.main : theme.palette.secondary.main;
     const activeButtonStyle = { color: activeColor };
@@ -50,15 +53,17 @@ export default function MobileNav(props) {
                 </Button>
             </Link>
 
-            <Link href="/projects">
-                <Button
-                    onClick={closeNav}
-                    sx={router.pathname === '/projects' ? activeButtonStyle : inactiveButtonStyle}
-                    startIcon={<ProjectsIcon color={ router.pathname === '/projects' ? activeColor: inactiveColor } />}
-                >
-                    Projects
-                </Button>
-            </Link>
+            {wallet.address !== null && (
+                <Link href="/projects">
+                    <Button
+                        onClick={closeNav}
+                        sx={router.pathname === '/projects' ? activeButtonStyle : inactiveButtonStyle}
+                        startIcon={<ProjectsIcon color={ router.pathname === '/projects' ? activeColor: inactiveColor } />}
+                    >
+                        Projects
+                    </Button>
+                </Link>
+            )}
 
             <Link href="/organizations">
                     <Button

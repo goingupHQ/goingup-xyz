@@ -116,7 +116,6 @@ const EditProfile = (props, ref) => {
                             label="About you"
                             placeholder="Introduce yourself to the community"
                             variant="outlined"
-                            required
                             sx={fieldStyle}
                             value={about}
                             onChange={(e) => setAbout(e.target.value)}
