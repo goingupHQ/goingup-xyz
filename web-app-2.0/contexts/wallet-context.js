@@ -358,7 +358,7 @@ export function WalletProvider({ children }) {
         if (!evmIsConnected && !evmIsConnecting) {
             disconnectEthereum();
         }
-    }, [evmAddress, evmChain, evmIsConnected, evmIsConnecting, evmProvider, evmSigner]);
+    }, [evmAddress, evmIsConnected, evmIsConnecting]);
 
     const { disconnect: evmDisconnect } = useDisconnect();
     const disconnectEthereum = async () => {
