@@ -21,7 +21,7 @@ export default function Projects() {
             </Head>
 
             <Box>
-                <Grid container sx={{ mb: 3, mt: 1 }} rowSpacing={2}>
+                <Grid container sx={{ mb: 3 }} rowSpacing={2}>
                     <Grid item xs={12} md={6}>
                         <Typography variant="h1">Projects</Typography>
                     </Grid>

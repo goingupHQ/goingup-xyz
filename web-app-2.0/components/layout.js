@@ -24,6 +24,7 @@ export default function Layout({ children }) {
                 }}
             >
                 <DesktopNav />
+                <Box sx={{ mb: { xs: 1, md: 3 } }} />
                 {children}
             </Box>
         </>

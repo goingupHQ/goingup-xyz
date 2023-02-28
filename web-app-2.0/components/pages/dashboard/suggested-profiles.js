@@ -66,7 +66,7 @@ export default function SuggestedProfiles(props) {
     return (
         <>
             <Fade in={true} timeout={1000}>
-                <Box  marginTop={3}>
+                <Box>
                     <Stack
                         direction={{ xs: 'column', md: 'row' }}
                         alignItems="center"

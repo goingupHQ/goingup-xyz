@@ -374,7 +374,6 @@ export function WalletProvider({ children }) {
 
     useEffect(() => {
         if (evmIsConnected && !evmIsConnecting) {
-            clearState();
             setChain(`Ethereum`);
             setNetwork(evmChain);
             setWalletType('connectkit');
@@ -398,7 +397,7 @@ export function WalletProvider({ children }) {
         if (!evmIsConnected && !evmIsConnecting) {
             disconnectEthereum();
         }
-    }, [evmAddress, evmChain, evmIsConnected, evmIsConnecting, evmProvider, evmSigner]);
+    }, [evmAddress, evmIsConnected, evmIsConnecting, evmProvider, evmSigner, evmChain]);
 
     const { disconnect: evmDisconnect } = useDisconnect();
     const disconnectEthereum = async () => {
