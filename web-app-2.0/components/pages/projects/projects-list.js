@@ -63,21 +63,11 @@ export default function ProjectsList(props) {
                             <Typography variant='h2'>
                                 You have not created a project yet
                             </Typography>
-
                             <img
                                 src='/images/illustrations/empty-box.svg'
                                 alt='connection-lost'
                                 style={{ width: "100%", maxWidth: "500px" }}
                             />
-
-                            <Button
-                                variant='contained'
-                                color='primary'
-                                size='large'
-                                onClick={() => router.push("/projects/create")}
-                            >
-                                Create your first Project
-                            </Button>
                         </Stack>
                     )}
                     <Stack spacing={4}>
