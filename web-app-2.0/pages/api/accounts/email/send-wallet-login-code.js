@@ -1,5 +1,5 @@
 import { sendEmail } from '../../services/_sendinblue';
-import { renderEmailWalletLoginEmail } from '../../../../templates/email/render-mail';
+// import { renderEmailWalletLoginEmail } from '../../../../templates/email/render-mail';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
     const emailProps = { code };
 
-    const emailHtml = renderEmailWalletLoginEmail(emailProps);
-    sendEmail(null, email, 'Login to GoingUP', '', emailHtml);
+    // const emailHtml = renderEmailWalletLoginEmail(emailProps);
+    // sendEmail(null, email, 'Login to GoingUP', '', emailHtml);
     res.status(200).send('email-sent');
 }
