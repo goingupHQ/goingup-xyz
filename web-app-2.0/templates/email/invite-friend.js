@@ -1,5 +1,17 @@
 import React from 'react';
-import { A, Box, Email, Item, Image, Span } from 'react-html-email';
+import {
+    Mjml,
+    MjmlHead,
+    MjmlTitle,
+    MjmlPreview,
+    MjmlBody,
+    MjmlSection,
+    MjmlColumn,
+    MjmlButton,
+    MjmlImage,
+    MjmlText,
+    MjmlStyle
+} from 'mjml-react';
 
 const emailHeadCSS = `
   body {
@@ -40,57 +52,96 @@ const fluidItemStyle = {
     textDecoration: 'none',
 };
 
-const InviteFriend = (props) => {
+export const generate = (props) => {
     const { username, subject, confirmationUrl, personalMessage } = props;
 
     return (
-        <Box align="center" style={containerStyle}>
-            <Email align="center" headCSS={emailHeadCSS} title={subject}>
-                <Item style={{ height: 45 }} />
-                <Item>
-                    <Image
-                        height="auto"
-                        src="https://app.goingup.xyz/images/goingup-glyph.png"
-                        style={{ margin: '0 auto ' }}
-                        width={50}
-                    />
-                </Item>
-                <Item style={{ height: 30 }} />
-                <Item align="center">
-                    <Box style={backgroundStyle}>
-                        <Item style={{ height: 40 }} />
-                        <Item>
-                            <Span fontSize={22} fontWeight="bold">
-                                Join us at GoingUP
-                            </Span>
-                        </Item>
-                        <Item style={{ height: 25 }} />
-                        <Item style={{ color: '#000' }}>Hello,</Item>
-                        <Item style={{ height: 25 }} />
-                        <Item style={{ color: '#000' }}>
-                            Your friend {username} is inviting you to join our Web3 networking platform. We are looking
-                            forward to adding you to our growing network.
-                        </Item>
+        <Mjml>
+            <MjmlHead>
+                <MjmlTitle>Last Minute Offer</MjmlTitle>
+                <MjmlPreview>Last Minute Offer...</MjmlPreview>
+                {/* <MjmlStyle>{css}</MjmlStyle> */}
+                <MjmlStyle>{`
+          .blue-column {
+            background-color: blue;
+          }
+        `}</MjmlStyle>
+                <MjmlStyle inline>{`
+          .red-column {
+            background-color: red;
+          }
+        `}</MjmlStyle>
+            </MjmlHead>
+            <MjmlBody width={500}>
+                <MjmlSection fullWidth backgroundColor="#efefef">
+                    <MjmlColumn>
+                        <MjmlImage src="https://static.wixstatic.com/media/5cb24728abef45dabebe7edc1d97ddd2.jpg" />
+                    </MjmlColumn>
+                </MjmlSection>
+                <MjmlSection>
+                    <MjmlColumn>
+                        <MjmlButton padding="20px" backgroundColor="#346DB7" href="https://www.wix.com/">
+                            I like it!
+                        </MjmlButton>
+                    </MjmlColumn>
+                </MjmlSection>
+                <MjmlSection>
+                    <MjmlColumn cssClass="blue-column">
+                        <MjmlText>I am blue</MjmlText>
+                    </MjmlColumn>
+                    <MjmlColumn cssClass="red-column">
+                        <MjmlText>I am red</MjmlText>
+                    </MjmlColumn>
+                </MjmlSection>
+                <MjmlSection>
+                    <MjmlColumn>
+                        <MjmlText>
+                            <a href="/2">Open Second Template</a>
+                        </MjmlText>
+                    </MjmlColumn>
+                </MjmlSection>
+            </MjmlBody>
+        </Mjml>
+        // <Mjml>
+        //     <MjmlBody>
+        //         <MjmlSection textAlign="center" style={containerStyle}>
+        //             <MjmlColumn>
+        //                 <MjmlImage
+        //                     height="auto"
+        //                     src="https://app.goingup.xyz/images/goingup-glyph.png"
+        //                     style={{ margin: '0 auto ' }}
+        //                     width={50}
+        //                 />
 
-                        {personalMessage && (
-                            <>
-                                <Item style={{ height: 25 }} />
-                                <Item style={{ color: '#000' }}>Personal message: {personalMessage}</Item>
-                            </>
-                        )}
+        //                 <MjmlSection style={backgroundStyle}>
+        //                     <MjmlColumn>
+        //                         <MjmlTitle>Join us at GoingUP</MjmlTitle>
 
-                        <Item style={{ height: 50 }} />
-                        <Item className="button" style={fluidItemStyle}>
-                            <A href={confirmationUrl} style={linkStyle}>
-                                Join GoingUP
-                            </A>
-                        </Item>
-                        <Item style={{ height: 35 }} />
-                    </Box>
-                </Item>
-            </Email>
-        </Box>
+        //                         <MjmlText>
+        //                             Hello, <br />
+        //                             Your friend {username} is inviting you to join our Web3 networking platform. We are
+        //                             looking forward to adding you to our growing network.
+
+        //                             {personalMessage && (
+        //                                 <>
+        //                                     <br />
+        //                                     Personal message:
+        //                                     <br />
+        //                                     {personalMessage}
+        //                                 </>
+        //                             )}
+        //                         </MjmlText>
+
+        //                         <MjmlButton style={fluidItemStyle}>
+        //                             <a href={confirmationUrl} style={linkStyle}>
+        //                                 Join GoingUP
+        //                             </a>
+        //                         </MjmlButton>
+        //                     </MjmlColumn>
+        //                 </MjmlSection>
+        //             </MjmlColumn>
+        //         </MjmlSection>
+        //     </MjmlBody>
+        // </Mjml>
     );
 };
-
-export default InviteFriend;

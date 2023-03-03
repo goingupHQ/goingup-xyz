@@ -24,7 +24,8 @@ export const sendEmail = async (sendToName, sendToEmail, subject, textContent, h
             console.log('API called successfully. Returned data: ' + data);
         },
         function (error) {
-            console.error(error);
+            // console.error(error);
+            console.error('Error while calling API: ' + error.response.text);
         }
     );
 };
