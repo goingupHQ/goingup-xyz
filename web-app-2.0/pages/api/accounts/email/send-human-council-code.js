@@ -1,6 +1,6 @@
 import { getDb } from '../../_get-db-client';
 import { sendEmail } from '../../services/_sendinblue';
-// import { renderHumanCouncilLoginCodeEmail } from '../../../../templates/email/render-mail';
+import * as HumanCouncilLoginCode from '../../../../templates/email/human-council-login-code.js';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -26,8 +26,8 @@ export default async function handler(req, res) {
             // send the email
             const emailProps = { code };
 
-            // const emailHtml = renderHumanCouncilLoginCodeEmail(emailProps);
-            // sendEmail(null, email, 'Human Council x GoingUP Login Code', '', emailHtml);
+            const { html: emailHtml } = render(HumanCouncilLoginCode.generate(emailProps), { validationLevel: 'strict' });
+            sendEmail(null, email, 'Human Council x GoingUP Login Code', '', emailHtml);
             res.status(200).send('email-sent');
         })
         .catch((err) => {

@@ -1,7 +1,8 @@
 import { ethers } from 'ethers';
 import { getDb } from './_get-db-client';
 import { validateSignature } from './_validate-signature.js';
-// import { renderInviteFriendEmail } from '../../templates/email/render-mail';
+import * as InviteFriend from '../../templates/email/invite-friend.js';
+import { render } from 'mjml-react';
 import { sendEmail } from './services/_sendinblue';
 
 export default async function handler(req, res) {
@@ -22,26 +23,26 @@ export default async function handler(req, res) {
         account.chain = ethers.utils.isAddress(body.address) ? 'Ethereum' : 'Cardano';
         const result = await accounts.insertOne(account);
 
-        // if (email1 || email2 || email3 || email4) {
-        //     try {
-        //         const inviteProps = {
-        //             username: account.name,
-        //             subject: 'Join us at GoingUP',
-        //             confirmationUrl: `https://app.goingup.xyz/create-account?referrer=${account.address}`,
-        //             personalMessage: inviteMessage,
-        //         };
+        if (email1 || email2 || email3 || email4) {
+            try {
+                const inviteProps = {
+                    username: account.name,
+                    subject: 'Join us at GoingUP',
+                    confirmationUrl: `https://app.goingup.xyz/create-account?referrer=${account.address}`,
+                    personalMessage: inviteMessage,
+                };
 
-        //         if (inviteMessage) inviteProps.personalMessage = inviteMessage;
-        //         const inviteHtml = renderInviteFriendEmail(inviteProps);
+                if (inviteMessage) inviteProps.personalMessage = inviteMessage;
+                const { html: inviteHtml} = render(InviteFriend.generate(inviteProps), { validationLevel: 'strict' });
 
-        //         if (email1) sendEmail(null, email1, 'Join us at GoingUP', '', inviteHtml);
-        //         if (email2) sendEmail(null, email2, 'Join us at GoingUP', '', inviteHtml);
-        //         if (email3) sendEmail(null, email3, 'Join us at GoingUP', '', inviteHtml);
-        //         if (email4) sendEmail(null, email4, 'Join us at GoingUP', '', inviteHtml);
-        //     } catch (err) {
-        //         console.log(err);
-        //     }
-        // }
+                if (email1) sendEmail(null, email1, 'Join us at GoingUP', '', inviteHtml);
+                if (email2) sendEmail(null, email2, 'Join us at GoingUP', '', inviteHtml);
+                if (email3) sendEmail(null, email3, 'Join us at GoingUP', '', inviteHtml);
+                if (email4) sendEmail(null, email4, 'Join us at GoingUP', '', inviteHtml);
+            } catch (err) {
+                console.log(err);
+            }
+        }
 
         if (req.query.referrer) {
             try {
