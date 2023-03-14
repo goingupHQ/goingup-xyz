@@ -199,11 +199,10 @@ export default function OrganizationsList() {
                                         {organization.shortDescription}
                                     </Typography>
                                 </CardContent>
-                                <CardContent>
                                     <Stack
                                         direction='row'
                                         alignItems={'flex-end'}
-                                        spacing={2}>
+                                        spacing={1}>
                                         <Button
                                             variant='contained'
                                             color='primary'
@@ -225,7 +224,6 @@ export default function OrganizationsList() {
                                             </a>
                                         </Button>
                                     </Stack>
-                                </CardContent>
                             </Card>
                         </Grid>
                     ))}
