@@ -47,7 +47,7 @@ export default function OrganizationsList() {
                             lg={4}
                             xl={3}
                             key={organization.id}>
-                            <Card sx={{ p: 3, height: '100%' }}>
+                            <Card sx={{ p: 1, height: '100%' }}>
                                 <CardHeader
                                     avatar={
                                         <Badge
@@ -199,6 +199,7 @@ export default function OrganizationsList() {
                                         {organization.shortDescription}
                                     </Typography>
                                 </CardContent>
+                                <CardContent>
                                     <Stack
                                         direction='row'
                                         alignItems={'flex-end'}
@@ -224,6 +225,7 @@ export default function OrganizationsList() {
                                             </a>
                                         </Button>
                                     </Stack>
+                                </CardContent>
                             </Card>
                         </Grid>
                     ))}
