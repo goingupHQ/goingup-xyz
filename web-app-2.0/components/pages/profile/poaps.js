@@ -14,6 +14,7 @@ import {
     Stack,
     Button,
     Modal,
+    IconButton,
 } from "@mui/material";
 import ChevronRightIcon from "../../icons/ChevronRightIcon";
 import PoapCard from "./poap-card";
@@ -161,13 +162,22 @@ const Poaps = (props) => {
                                             },
                                         }}
                                     >
-                                        <Typography
-                                            marginBottom={3}
-                                            align='center'
-                                            variant='h1'
-                                        >
-                                            All POAPs
-                                        </Typography>
+                                        <Box display="flex" alignItems="center">
+                                            <Box flexGrow={1} ></Box>
+                                            <Box>
+                                                <IconButton onClick={() => setOpen(false)}>
+                                                    x
+                                                </IconButton>
+                                            </Box>
+                                        </Box>
+                                        <Stack direction='row' justifyContent='center'>
+                                            <Typography
+                                                marginBottom={3}
+                                                variant='h1'
+                                            >
+                                               All POAPs
+                                            </Typography>
+                                        </Stack>
                                         <Grid
                                             container
                                             columnSpacing={3}

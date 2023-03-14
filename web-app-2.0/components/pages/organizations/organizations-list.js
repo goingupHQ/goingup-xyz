@@ -47,7 +47,7 @@ export default function OrganizationsList() {
                             lg={4}
                             xl={3}
                             key={organization.id}>
-                            <Card sx={{ p: 3, height: '100%' }}>
+                            <Card sx={{ p: 1, height: '100%' }}>
                                 <CardHeader
                                     avatar={
                                         <Badge
@@ -203,7 +203,7 @@ export default function OrganizationsList() {
                                     <Stack
                                         direction='row'
                                         alignItems={'flex-end'}
-                                        spacing={2}>
+                                        spacing={1}>
                                         <Button
                                             variant='contained'
                                             color='primary'
