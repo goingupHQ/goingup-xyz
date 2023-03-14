@@ -281,7 +281,7 @@ export default function CreateAccountForm() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant='text' onClick={handleClose}>No</Button>
+                    <Button variant='contained' color='secondary' onClick={handleClose}>No</Button>
                     <LoadingButton variant='contained' onClick={createAccount} loading={creating} loadingIndicator='Creating...'>
                         Yes, create my GoingUP account
                     </LoadingButton>

@@ -58,7 +58,7 @@ export default function PoapCard(props) {
                     </Typography>
                     <Typography variant="h3">{moment(poap.event.start_date).format('LL')}</Typography>
 
-                    <Button
+                    {/* <Button
                         sx={{
                             color: app.mode === 'dark' ? '#FFFFFF' : '#22272F',
                         }}
@@ -66,7 +66,7 @@ export default function PoapCard(props) {
                         style={buttonStyle}
                     >
                         Creative
-                    </Button>
+                    </Button> */}
                 </Stack>
             </Stack>
         </>
