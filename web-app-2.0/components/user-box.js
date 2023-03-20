@@ -25,7 +25,7 @@ import ProfileIcon from './icons/ProfileIcon';
 
 const UserBoxButton = styled(Button)(
     ({ theme }) => `
-    padding: ${theme.spacing(0, 1)};
+    padding: 2;
     background-color: ${theme.palette.background.userBox};
     height: 40px;
     width: 168px;
@@ -82,23 +82,7 @@ export default function UserBox () {
 
     const handleOpen = () => {
         if (wallet.address === null) {
-            let cache;
-
-            try {
-                cache = JSON.parse(localStorage.getItem('wallet-context-cache'));
-            } catch (err) {}
-
-            if (cache) {
-                if (!wallet.address) {
-                    if (cache.blockchain === 'ethereum') {
-                        wallet.connectEthereum();
-                    } else if (cache.blockchain === 'cardano') {
-                        wallet.connectCardano();
-                    }
-                }
-            } else {
-                if (!wallet.address) chainSelectionRef.current.showModal();
-            }
+            wallet.connectEthereum();
         } else {
             setOpen(true);
         }

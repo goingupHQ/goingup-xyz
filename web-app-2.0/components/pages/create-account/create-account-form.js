@@ -194,6 +194,7 @@ export default function CreateAccountForm() {
                         ? 'vertical'
                         : 'horizontal'
                 }
+                sx={{ mb: 3 }}
             >
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -246,16 +247,19 @@ export default function CreateAccountForm() {
                             pt: 2
                         }}
                     >
-                        <Button
-                            color="inherit"
-                            disabled={activeStep === 0}
-                            onClick={handleBack}
-                            sx={{ mr: 1 }}
-                        >
-                            Back
-                        </Button>
+                        {activeStep !== 0 && (
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                disabled={activeStep === 0}
+                                onClick={handleBack}
+                                sx={{ mr: 1 }}
+                            >
+                                Back
+                            </Button>
+                        )}
                         <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleNext}>
+                        <Button onClick={handleNext} variant="contained">
                             {activeStep === steps.length - 1
                                 ? 'Finish'
                                 : 'Next'}
@@ -277,7 +281,7 @@ export default function CreateAccountForm() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant='text' onClick={handleClose}>No</Button>
+                    <Button variant='contained' color='secondary' onClick={handleClose}>No</Button>
                     <LoadingButton variant='contained' onClick={createAccount} loading={creating} loadingIndicator='Creating...'>
                         Yes, create my GoingUP account
                     </LoadingButton>

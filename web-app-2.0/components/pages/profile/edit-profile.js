@@ -52,6 +52,41 @@ const EditProfile = (props, ref) => {
         m: 1
     };
 
+    const deleteAccount = async () => {
+        setSaving(true)
+        try {
+            const { address, ethersSigner } = wallet;
+            const message = 'delete-account';
+            const signature = await wallet.signMessage(message);
+
+            const response = await fetch('/api/delete-account/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    address,
+                    signature,
+                    account: {
+                        isDeleted: true
+                    }
+                })
+            });
+
+            if (response.status === 200) {
+                enqueueSnackbar('Account deleted', { variant: 'success' });
+                setOpen(false);
+            } else if (response.status >= 400) {
+                enqueueSnackbar('Failed to delete account', { variant: 'error' });
+            }
+        } catch (err) {
+            enqueueSnackbar('Failed to delete account', { variant: 'error' });
+            console.log(err);
+        } finally {
+            setSaving(false);
+        }
+    }
+
     const saveChanges = async ()  => {
         setSaving(true)
 
@@ -116,7 +151,6 @@ const EditProfile = (props, ref) => {
                             label="About you"
                             placeholder="Introduce yourself to the community"
                             variant="outlined"
-                            required
                             sx={fieldStyle}
                             value={about}
                             onChange={(e) => setAbout(e.target.value)}
@@ -285,6 +319,13 @@ const EditProfile = (props, ref) => {
                     </Box>
                 </DialogContent>
                 <DialogActions>
+                    <Button
+                        color="error"
+                        variant="contained"
+                        onClick={deleteAccount}
+                    >
+                        Delete My Account
+                    </Button>
                     <Button
                         color="secondary"
                         variant="contained"

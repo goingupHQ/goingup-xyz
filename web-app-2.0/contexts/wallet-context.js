@@ -7,6 +7,9 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import { AppContext } from './app-context';
 import { Backdrop, Button, Paper, Stack, Typography } from '@mui/material';
+import { deleteCookie, getCookie, hasCookie } from 'cookies-next';
+import { useModal } from 'connectkit';
+import { useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 
 export const WalletContext = createContext({});
 
@@ -111,82 +114,88 @@ export function WalletProvider({ children }) {
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
+    const { setOpen: setConnectKitOpen } = useModal();
+
     useEffect(() => {
         if (address) {
-            if (Notification.permission === 'denied') {
-                if (localStorage.getItem('notifs-denied-forever') === 'true') return;
+            try {
+                if (Notification.permission === 'denied') {
+                    if (localStorage.getItem('notifs-denied-forever') === 'true') return;
 
-                enqueueSnackbar('Please enable notifications in your browser settings', {
-                    variant: 'warning',
-                    persist: true,
-                    action: (key) => (
-                        <Stack direction="row" spacing={1}>
-                            <Button variant="contained" color="primary" onClick={() => closeSnackbar(key)}>
-                                Later
-                            </Button>
+                    enqueueSnackbar('Please enable notifications in your browser settings', {
+                        variant: 'warning',
+                        persist: true,
+                        action: (key) => (
+                            <Stack direction="row" spacing={1}>
+                                <Button variant="contained" color="primary" onClick={() => closeSnackbar(key)}>
+                                    Later
+                                </Button>
 
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => {
-                                    closeSnackbar(key);
-                                    localStorage.setItem('notifs-denied-forever', true);
-                                    enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
-                                }}
-                            >
-                                Never
-                            </Button>
-                        </Stack>
-                    ),
-                });
-            }
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => {
+                                        closeSnackbar(key);
+                                        localStorage.setItem('notifs-denied-forever', true);
+                                        enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
+                                    }}
+                                >
+                                    Never
+                                </Button>
+                            </Stack>
+                        ),
+                    });
+                }
 
-            if (Notification.permission === 'granted') {
-                // check for existing subscription
-                if (localStorage.getItem('psn-subscription')) {
-                    const subscription = JSON.parse(localStorage.getItem('psn-subscription'));
-                    if (subscription) postPsnSubscription(subscription);
-                    else {
+                if (Notification.permission === 'granted') {
+                    // check for existing subscription
+                    if (localStorage.getItem('psn-subscription')) {
+                        const subscription = JSON.parse(localStorage.getItem('psn-subscription'));
+                        if (subscription) postPsnSubscription(subscription);
+                        else {
+                            app.subscribeUserToPush().then((subscription) => {
+                                postPsnSubscription(subscription);
+                            });
+                        }
+                    } else {
                         app.subscribeUserToPush().then((subscription) => {
                             postPsnSubscription(subscription);
                         });
                     }
-                } else {
-                    app.subscribeUserToPush().then((subscription) => {
-                        postPsnSubscription(subscription);
+                }
+
+                if (Notification.permission === 'default') {
+                    if (localStorage.getItem('notifs-denied-forever') === 'true') return;
+                    enqueueSnackbar('Do you want to receive notifications from GoingUP?', {
+                        variant: 'info',
+                        persist: true,
+                        action: (key) => (
+                            <Stack direction="row" spacing={1}>
+                                <Button variant="contained" color="primary" onClick={() => askNotifsConsent(key)}>
+                                    Yes
+                                </Button>
+
+                                <Button variant="contained" color="secondary" onClick={() => closeSnackbar(key)}>
+                                    No
+                                </Button>
+
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => {
+                                        closeSnackbar(key);
+                                        localStorage.setItem('notifs-denied-forever', true);
+                                        enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
+                                    }}
+                                >
+                                    Never
+                                </Button>
+                            </Stack>
+                        ),
                     });
                 }
-            }
-
-            if (Notification.permission === 'default') {
-                if (localStorage.getItem('notifs-denied-forever') === 'true') return;
-                enqueueSnackbar('Do you want to receive notifications from GoingUP?', {
-                    variant: 'info',
-                    persist: true,
-                    action: (key) => (
-                        <Stack direction="row" spacing={1}>
-                            <Button variant="contained" color="primary" onClick={() => askNotifsConsent(key)}>
-                                Yes
-                            </Button>
-
-                            <Button variant="contained" color="secondary" onClick={() => closeSnackbar(key)}>
-                                No
-                            </Button>
-
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => {
-                                    closeSnackbar(key);
-                                    localStorage.setItem('notifs-denied-forever', true);
-                                    enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
-                                }}
-                            >
-                                Never
-                            </Button>
-                        </Stack>
-                    ),
-                });
+            } catch (err) {
+                console.log(err);
             }
         }
     }, [address]);
@@ -240,7 +249,7 @@ export function WalletProvider({ children }) {
 
         if (cache) {
             if (!address) {
-                if (cache.blockchain === 'ethereum') {
+                if (cache.blockchain === 'evm') {
                     connectEthereum();
                 } else if (cache.blockchain === 'cardano') {
                     connectCardano();
@@ -277,6 +286,7 @@ export function WalletProvider({ children }) {
             if (
                 !result.hasAccount &&
                 router.pathname !== '/create-account' &&
+                router.pathname?.toLowerCase() !== '/gitcoin-donors/claim-appreciation-token' &&
                 router.pathname?.toLowerCase() !== '/profile/[address]'
             ) {
                 router.push('/create-account');
@@ -286,64 +296,78 @@ export function WalletProvider({ children }) {
         }
     };
 
-    const connectEthereum = async () => {
-        web3Modal = new Web3Modal(web3ModalOptions);
-        const instance = await web3Modal.connect();
-        instance.on('accountsChanged', (accounts) => {
-            setAddress(ethers.utils.getAddress(accounts[0]));
+    const signInEthereum = async (address, signer) => {
+        if (hasCookie('auth-token')) return;
+
+        if (!address) throw 'No address found';
+        if (!ethersSigner) throw 'No signer found';
+
+        // sign a message with wallet
+        const message = `I am signing this message to prove that I own the address ${address}. This message will be used to sign in to app.goingup.xyz and receive an authentication token cookie.`;
+
+        const signature = await ethersSigner.signMessage(message);
+
+        // send signature to server
+        const response = await fetch(`/api/accounts/${address}/sign-in`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                signature,
+            }),
         });
 
-        instance.on('chainChanged', (chainId) => {
-            const networkId = parseInt(chainId, 16);
-            setNetwork(networkId);
-        });
-
-        const provider = new ethers.providers.Web3Provider(instance, 'any');
-        const signer = provider.getSigner();
-
-        let walletType = null;
-        if (instance.isMetaMask) walletType = 'metamask';
-        if (instance.isWalletConnect) walletType = 'walletconnect';
-        if (instance.isCoinbaseWallet) walletType = 'coinbase';
-
-        let userAddress = null;
-        switch (walletType) {
-            case 'metamask':
-            case 'coinbase':
-                // @ts-ignore
-                userAddress = ethers.utils.getAddress(instance.selectedAddress);
-                break;
-            case 'walletconnect':
-                // @ts-ignore
-                userAddress = ethers.utils.getAddress(instance.accounts[0]);
-                break;
+        if (response.ok) {
+            const result = await response.json();
         }
-
-        setChain(`Ethereum`);
-        setNetwork(instance.networkVersion);
-        setWalletType(walletType);
-        setEthersProvider(provider);
-        setEthersSigner(signer);
-        setAddress(userAddress);
-
-        enqueueSnackbar('Wallet connected', { variant: 'success' });
-        checkForGoingUpAccount(userAddress);
-        localStorage.setItem(
-            'wallet-context-cache',
-            JSON.stringify({
-                blockchain: 'ethereum',
-                type: walletType,
-            })
-        );
     };
 
-    const disconnectEthereum = async () => {
-        web3Modal.clearCachedProvider();
+    const { address: evmAddress, isConnected: evmIsConnected, isConnecting: evmIsConnecting } = useAccount();
+    const { chain: evmChain } = useNetwork();
+    const evmProvider = useProvider();
+    const { data: evmSigner } = useSigner();
+    const connectEthereum = async () => {
+        disconnectEthereum();
+        setConnectKitOpen(true);
+    };
 
+    useEffect(() => {
+        if (evmIsConnected && !evmIsConnecting) {
+            setChain(`Ethereum`);
+            setNetwork(evmChain);
+            setWalletType('connectkit');
+            setEthersProvider(evmProvider);
+            setEthersSigner(evmSigner);
+            setAddress(evmAddress);
+
+            enqueueSnackbar('Wallet connected', { variant: 'success' });
+            checkForGoingUpAccount(evmAddress);
+            localStorage.setItem(
+                'wallet-context-cache',
+                JSON.stringify({
+                    blockchain: 'evm',
+                    // type: walletType,
+                })
+            );
+
+            signInEthereum(evmAddress, evmSigner);
+        }
+
+        if (!evmIsConnected && !evmIsConnecting) {
+            disconnectEthereum();
+        }
+    }, [evmAddress, evmIsConnected, evmIsConnecting, evmProvider, evmSigner, evmChain]);
+
+    const { disconnect: evmDisconnect } = useDisconnect();
+    const disconnectEthereum = async () => {
+        evmDisconnect();
         clearState();
     };
 
     const clearState = () => {
+        deleteCookie('auth-token');
+        localStorage.removeItem('wallet-context-cache');
         setChain(null);
         setAddress(null);
         setNetwork(null);
@@ -386,8 +410,13 @@ export function WalletProvider({ children }) {
 
     const signMessage = async (message) => {
         if (chain === 'Ethereum') {
-            const signature = await ethersSigner.signMessage(message);
-            return signature;
+            const authToken = getCookie('auth-token');
+            if (authToken) {
+                return authToken;
+            } else {
+                const signature = await ethersSigner.signMessage(message);
+                return signature;
+            }
         } else if (chain === 'Cardano') {
             //     // @ts-ignore
             //     const cardano = window.cardano;
@@ -405,21 +434,12 @@ export function WalletProvider({ children }) {
         }
     };
 
-    // const utilityToken = {
-    //     chainId: 5,
-    //     chainName: 'Goerli Testnet',
-    //     address: '0x75c390a5B9BE38caC9F9Ff1159805C750e6e6d23',
-    //     get provider() {
-    //         return new ethers.providers.AlchemyProvider(this.chainId, '8L_6aM0-crh5sm3t4BFg6Hjv90NIh0bw')
-    //     }
-    // }
-
     const utilityToken = {
         chainId: 137,
         chainName: 'Polygon Mainnet',
         address: '0x10D7B3aFA213D93a922a062fb91E8EcbD4A703d2',
         get provider() {
-            return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_KEY);
+            return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_MAINNET);
         },
     };
 

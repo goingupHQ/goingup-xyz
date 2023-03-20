@@ -4,8 +4,6 @@ import { WalletContext } from '../../contexts/wallet-context';
 import debounce from 'lodash.debounce';
 import { ethers } from 'ethers';
 import Identicon from '../common/Identicon';
-import { QrReader } from 'react-qr-reader';
-import QrCodeScannerOutlinedIcon from '@mui/icons-material/QrCodeScannerOutlined';
 
 function AddressInput(props, ref) {
     const { sx, label, value, onChange, setValue, size, autoFocus, fullWidth } = props;

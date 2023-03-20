@@ -1,16 +1,18 @@
 import { Button, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
+import { WalletContext } from '../../contexts/wallet-context';
 import CollaboratorsIcon from '../icons/CollaboratorsIcon';
 import DashboardIcon from '../icons/DashboardIcon';
 import ProfileIcon from '../icons/ProfileIcon';
 import ProjectsIcon from '../icons/ProjectsIcon';
 
 export default function DesktopNav(props) {
+    const wallet = useContext(WalletContext);
     const commonButtonStyle = {
         fontSize: '1rem',
-        padding: '10px 25px',
+        padding: '10px 10px',
     };
 
     const activeButtonStyle = {
@@ -38,7 +40,7 @@ export default function DesktopNav(props) {
             <Stack
                 direction="row"
                 spacing={3}
-                sx={{ display: { xs: 'none', md: 'initial', paddingBottom: '10px', paddingLeft: '14px' } }}
+                sx={{ display: { xs: 'none', md: 'initial', paddingBottom: '10px' } }}
             >
                 <Link href="/">
                     <Button
@@ -48,13 +50,23 @@ export default function DesktopNav(props) {
                         Dashboard
                     </Button>
                 </Link>
+                {wallet.address !== null && (
+                    <Link href="/projects">
+                        <Button
+                            sx={pathname.startsWith('/projects') ? activeButtonStyle : inactiveButtonStyle}
+                            startIcon={<ProjectsIcon />}
+                        >
+                            Projects
+                        </Button>
+                    </Link>
+                )}
 
-                <Link href="/projects">
+                <Link href="/organizations">
                     <Button
-                        sx={pathname.startsWith('/projects') ? activeButtonStyle : inactiveButtonStyle}
-                        startIcon={<ProjectsIcon />}
+                        sx={pathname.startsWith('/organizations') ? activeButtonStyle : inactiveButtonStyle}
+                        startIcon={<ProfileIcon />}
                     >
-                        Projects
+                        Organizations
                     </Button>
                 </Link>
 

@@ -8,7 +8,7 @@ export default async function handler(req, res) {
         return;
     }
     const body = req.body;
-    const isSignatureValid = validateSignature(body.address, 'update-account', body.signature);
+    const isSignatureValid = validateSignature(body.address, 'update-account', body.signature, req, res);
 
     if (isSignatureValid) {
         const db = await getDb();

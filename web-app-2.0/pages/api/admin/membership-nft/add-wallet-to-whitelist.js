@@ -16,7 +16,7 @@ export default async function handler(req, res) {
         return;
     }
 
-    const signatureValid = await validateSignature(adminAddress, `Adding ${walletAddress} to whitelist`, signature);
+    const signatureValid = await validateSignature(adminAddress, `Adding ${walletAddress} to whitelist`, signature, req, res);
 
     if (!signatureValid) {
         res.status(401).send({ message: 'Invalid signature' });

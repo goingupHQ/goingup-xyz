@@ -1,8 +1,17 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Link, Typography } from '@mui/material';
+import {
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardHeader,
+    Stack,
+    Typography,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { AppContext } from '../../../contexts/app-context';
 import { WalletContext } from '../../../contexts/wallet-context';
+import ProjectLogo from '../projects/project-logo';
 
 export default function ProjectSectionCard(props) {
     const { project } = props;
@@ -10,51 +19,82 @@ export default function ProjectSectionCard(props) {
     const router = useRouter();
     const wallet = React.useContext(WalletContext);
     const app = React.useContext(AppContext);
+    const tags = project.tags.toString().split(',').slice(0, 3);
+    const newTags = tags.map((tag) => {
+        return (
+            <Typography
+                key={tag}
+                color='#6E8094'
+                variant="outlined"
+                size="small"
+                sx={{ marginRight: '0.5rem' }}
+            >
+                {tag || 'Tags'}
+            </Typography>
+        );
+    });
 
     return (
         <>
             <Card
                 sx={{
-                    height: '100%',
-                    border: 'none',
-                    padding: { xs: 'initial', md: 3 },
-                    display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     backgroundColor: {
                         xs: app.mode === 'dark' ? '#111921' : '#F5F5F5',
                         md: app.mode === 'dark' ? '#19222C' : '#FFFFFF',
                     },
-                }}
-            >
+                }}>
                 <CardHeader
-                    title={project.name}
-                    sx={{ cursor: 'pointer' }}
-                    onClick={() => router.push(`/projects/page/${project.id}`)}
-                />
-                <CardContent>
-                    <Typography variant="body1">{project.description}</Typography>
-                </CardContent>
+                    title={
+                        <Stack direction='row' spacing={3}>
+                            <ProjectLogo
+                                projectId={project.id}
+                                height={98}
+                                width={98}
+                            />
+                            <Stack
+                                direction='column'
+                                alignItems='stretch'
+                                justifyContent='flex-start'>
+                                <Typography variant='body1' color='#6E8094'>
+                                    {newTags}
+                                </Typography>
+                                <Typography variant='h5'>
+                                    {project.name || 'Project Name'}
+                                </Typography>
+                                <CardActions sx={{ marginLeft: '-10px' }}>
+                                    <Button
+                                        variant='contained'
+                                        color='primary'
+                                        size='small'
+                                        onClick={() =>
+                                            router.push(
+                                                `/projects/page/${projectId}`
+                                            )
+                                        }>
+                                        Go to Project Page
+                                    </Button>
 
-                <CardActions sx={{ padding: 2 }}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => router.push(`/projects/page/${projectId}`)}
-                    >
-                        Go to Project Page
-                    </Button>
-
-                    {project.owner === wallet.address &&
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => router.push(`/projects/edit/${projectId}`)}
-                    >
-                        Edit
-                    </Button>
+                                    {project.owner === wallet.address && (
+                                        <Button
+                                            variant='contained'
+                                            color='secondary'
+                                            size='small'
+                                            onClick={() =>
+                                                router.push(
+                                                    `/projects/edit/${projectId}`
+                                                )
+                                            }>
+                                            Edit
+                                        </Button>
+                                    )}
+                                </CardActions>
+                            </Stack>
+                        </Stack>
                     }
-                </CardActions>
+                    sx={{ cursor: 'pointer' }}
+                />
             </Card>
         </>
     );

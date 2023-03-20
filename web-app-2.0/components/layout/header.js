@@ -1,5 +1,5 @@
 import { AppBar, Box, Button, Divider, Drawer, Fade, Grid, IconButton, Slide, Stack, Toolbar, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { AppContext } from '../../contexts/app-context';
 import CloseIcon from '../icons/CloseIcon';
@@ -19,11 +19,26 @@ import SunIcon from '../icons/SunIcon';
 
 export default function Header(props) {
     const app = useContext(AppContext);
-    const [drawerOpen, setDrawerOpen] = useState(false); // testing
+    const [drawerOpen, setDrawerOpen] = useState(false);
+
+    useEffect(() => {
+        window.addEventListener('click', (event) => {
+            // close the drawer if clicked outside
+            if (event.target.closest('.mobile-drawer') === null) {
+                setDrawerOpen(false);
+            };
+        });
+
+        return () => {
+            window.removeEventListener('click', () => {
+                setDrawerOpen(false);
+            });
+        };
+    }, []);
 
     return (
         <>
-            <AppBar sx={{ boxShadow: 6, paddingX: { lg: '85px' } }}>
+            <AppBar sx={{ boxShadow: 6, paddingX: { md: '45px' } }}>
                 <Toolbar sx={{ paddingY: 0 }}>
                     <Grid container spacing={1} alignItems="center" justifyContent="space-between">
                         <Grid item xs={5}>
@@ -45,12 +60,12 @@ export default function Header(props) {
                         <Grid item xs={7}>
                             <Stack direction="row" spacing={2} alignItems="center" justifyContent="flex-end">
                                 <Stack spacing={2} direction="row" sx={{ display: { xs: 'none', md: 'initial' } }}>
-                                    <IconButton>
+                                    {/* <IconButton>
                                         <MessageIcon />
                                     </IconButton>
                                     <IconButton>
                                         <SettingsIcon />
-                                    </IconButton>
+                                    </IconButton> */}
                                     <IconButton onClick={() => {
                                         if (app.mode === 'dark') {
                                             app.setLightMode();
@@ -63,8 +78,11 @@ export default function Header(props) {
                                     </IconButton>
                                 </Stack>
                                 <UserBox />
-                                <Box sx={{ display: { xs: 'initial', md: 'none' }, marginLeft: '0px !important' }}>
-                                    <IconButton onClick={() => setDrawerOpen(!drawerOpen)}>
+                                <Box sx={{ display: { xs: 'initial', md: 'none' }, marginLeft: '0px !important' }} className="mobile-drawer-toggle">
+                                    <IconButton onClick={(e) => {
+                                        e.stopPropagation();
+                                        setDrawerOpen(!drawerOpen);
+                                    }}>
                                         {drawerOpen ? <CloseIcon /> : <MenuIcon />}
                                     </IconButton>
                                 </Box>
@@ -78,9 +96,9 @@ export default function Header(props) {
                         marginTop: '12px'
                     }}
                 /> */}
-                <DesktopNav />
+                {/* <DesktopNav /> */}
                 <Fade direction="down" in={drawerOpen} mountOnEnter unmountOnExit>
-                    <Box sx={{ paddingBottom: '20px', paddingX: '32px', zIndex: 100 }}>
+                    <Box sx={{ paddingBottom: '20px', paddingX: '32px', zIndex: 100 }} className="mobile-drawer">
                         <MobileNav closeNav={() => { setDrawerOpen(false) }} />
                     </Box>
                 </Fade>

@@ -9,7 +9,7 @@ export default function ProfileLink(props) {
     const app = useContext(AppContext);
     return (
         <>
-            <Link href={`/profile/${profile.address}`}>
+            <Link href={`/profile/${profile.address}`} legacyBehavior>
                 <a style={{ textAlign: 'center' }} onClick={onClick}>
                     {profile.profilePhoto && (
                         <Avatar

@@ -43,8 +43,8 @@ const Profile = (props) => {
         <Card
             key={account.address}
             sx={{
-                marginRight: '10px',
-                marginBottom: '10px',
+                // marginRight: '10px',
+                // marginBottom: '10px',
                 padding: '24px',
             }}
         >
@@ -203,9 +203,9 @@ const Profile = (props) => {
                 >
                     {account.chain === 'Ethereum' && <>{truncateEthAddress(account.address)}</>}
                     {account.chain != 'Ethereum' &&
-                        `${account.address.substring(0, 6)}...${account.address.substring(
-                            account.address.length - 4,
-                            account.address.length
+                        `${account.address?.substring(0, 6)}...${account.address?.substring(
+                            account.address?.length - 4,
+                            account.address?.length
                         )}`}
                 </Typography>
             </Stack>

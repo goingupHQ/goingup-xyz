@@ -1,13 +1,9 @@
 import { WalletContext } from './wallet-context';
-import {
-    Dialog,
-    DialogContent,
-    Stack,
-    Typography,
-    useTheme
-} from '@mui/material';
-import { forwardRef, useContext, useImperativeHandle, useState, useEffect } from 'react';
+import { Box, Dialog, DialogContent, Stack, Typography, useTheme } from '@mui/material';
+import { forwardRef, createRef, useContext, useImperativeHandle, useState, useEffect } from 'react';
 import { AppContext } from './app-context';
+import ConnectUsingEmail from './connect-using-email';
+import { useSnackbar } from 'notistack';
 
 const WalletChainSelection = (props, ref) => {
     const [open, setOpen] = useState(false);
@@ -15,14 +11,18 @@ const WalletChainSelection = (props, ref) => {
     const wallet = useContext(WalletContext);
     const app = useContext(AppContext);
 
+    const { enqueueSnackbar } = useSnackbar();
+
+    const connectUsingEmailRef = createRef();
+
     useEffect(() => {
         if (wallet.address) setOpen(false);
-    }, [wallet.address])
+    }, [wallet.address]);
 
     useImperativeHandle(ref, () => ({
         showModal() {
             setOpen(true);
-        }
+        },
     }));
 
     const handleClose = () => {
@@ -30,11 +30,11 @@ const WalletChainSelection = (props, ref) => {
     };
 
     const fieldStyle = {
-        m: 1
+        m: 1,
     };
 
     const chainItemSx = {
-        padding: { xs: 2, md: '2rem 4rem' },
+        padding: { xs: 2, md: '1rem 2rem' },
         backgroundColor: theme.palette.primary.main,
         color: 'black',
         '&:hover': {
@@ -45,57 +45,82 @@ const WalletChainSelection = (props, ref) => {
     };
 
     return (
-        <Dialog open={open} onClose={handleClose} maxWidth="md">
-            <DialogContent sx={{ paddingY: 5 }}>
-                <Stack
-                    direction="column"
-                >
-                    <Stack
-                        direction="row"
-                        spacing={2}
-                        alignItems="center"
-                        justifyContent="center"
-                        sx={chainItemSx}
-                        onClick={() => {
-                            handleClose();
-                            wallet.setWeb3ModalTheme(app.mode)
-                            wallet.connectEthereum();
-                        }}
-                    >
-                        <img
-                            src="/images/ethereum-eth-logo.svg"
-                            width={32}
-                            height={32}
-                        />
+        <>
+            <Dialog open={open} onClose={handleClose} maxWidth="md">
+                <DialogContent sx={{ paddingY: 4 }}>
+                    <Stack direction="column" spacing={3}>
+                        <Typography variant="h2" align="center">
+                            Choose Wallet Type
+                        </Typography>
 
-                        <h2 style={{
-                            whiteSpace: 'nowrap',
-                            textOverflow: 'ellipsis',
-                            overflowX: 'hidden'
-                        }}>
-                            Connect on Ethereum
-                        </h2>
+                        <Stack
+                            direction="column"
+                            alignItems="center"
+                            justifyContent="center"
+                            sx={chainItemSx}
+                            onClick={() => {
+                                // handleClose();
+                                // connectUsingEmailRef.current.showModal();
+                                enqueueSnackbar('Not yet available but it is coming soon!', { variant: 'info' });
+                            }}
+                        >
+                            <h2
+                                style={{
+                                    whiteSpace: 'nowrap',
+                                    textOverflow: 'ellipsis',
+                                    overflowX: 'hidden',
+                                    margin: '0px',
+                                }}
+                            >
+                                GoingUP Wallet
+                            </h2>
+                            <sub style={{ textAlign: 'center' }}>Your own wallet, managed by us.</sub>
+                        </Stack>
+
+                        <Stack
+                            direction="column"
+                            alignItems="center"
+                            justifyContent="center"
+                            sx={chainItemSx}
+                            onClick={() => {
+                                handleClose();
+                                wallet.setWeb3ModalTheme(app.mode);
+                                wallet.connectEthereum();
+                            }}
+                        >
+                            <Box
+                                component="h2"
+                                sx={{
+                                    margin: '0px',
+                                    textAlign: 'center',
+                                }}
+                            >
+                                Ethereum or EVM-compatible Wallet
+                            </Box>
+                            <sub style={{ textAlign: 'center' }}>Metamask, Coinbase Wallet, WalletConnect, etc.</sub>
+                        </Stack>
+
+                        {/* <Stack
+                            direction="row"
+                            spacing={2}
+                            alignItems="center"
+                            sx={chainItemSx}
+                            onClick={() => {
+                                connectCardano();
+                            }}
+                        >
+                            <img
+                                src="/images/cardano-ada-logo.svg"
+                                width={64}
+                                height={64}
+                            />
+                            <h1>Connect using Cardano</h1>
+                        </Stack> */}
                     </Stack>
-
-                    {/* <Stack
-                        direction="row"
-                        spacing={2}
-                        alignItems="center"
-                        sx={chainItemSx}
-                        onClick={() => {
-                            connectCardano();
-                        }}
-                    >
-                        <img
-                            src="/images/cardano-ada-logo.svg"
-                            width={64}
-                            height={64}
-                        />
-                        <h1>Connect using Cardano</h1>
-                    </Stack> */}
-                </Stack>
-            </DialogContent>
-        </Dialog>
+                </DialogContent>
+            </Dialog>
+            <ConnectUsingEmail ref={connectUsingEmailRef} />
+        </>
     );
 };
 
