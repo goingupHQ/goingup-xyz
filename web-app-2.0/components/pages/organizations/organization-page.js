@@ -7,7 +7,7 @@ import {
     Badge,
     CircularProgress,
     CardContent,
-    Button,
+    IconButton,
 } from '@mui/material';
 import { AppContext } from '../../../contexts/app-context';
 import { useContext, useEffect, useState } from 'react';
@@ -15,7 +15,8 @@ import { useRouter } from 'next/router';
 import { OrganizationsContext } from '../../../contexts/organizations-context';
 import CheckIcon from '@mui/icons-material/Check';
 import { Stack } from '@mui/system';
-import ContactsAndIntegrations from '../profile/contacts-and-integrations';
+import TwitterIcon from '../../icons/TwitterIcon';
+import DiscordIcon from '../../icons/DiscordIcon';
 
 export default function OrganizationPage() {
     const app = useContext(AppContext);
@@ -23,6 +24,18 @@ export default function OrganizationPage() {
     const router = useRouter();
     const [account, setAccount] = useState(null);
     const { address } = router.query;
+
+    const twitterChipClicked = () => {
+        if (account.twitter) {
+            window.open(`${account.twitter}`, '_blank');
+        }
+    };
+
+    const discordChipClicked = async () => {
+        if (account.discord) {
+            window.open(`${account.discord}`, '_blank');
+        }
+    };
 
     useEffect(() => {
         // do some
@@ -173,7 +186,19 @@ export default function OrganizationPage() {
                                         <Typography variant='h6'>
                                             {account?.shortDescription}
                                         </Typography>
-                                        <ContactsAndIntegrations account={''} />
+                                        <Stack
+                                            spacing={-1}
+                                            marginRight={-1}
+                                            direction={'row'}>
+                                            <IconButton
+                                                onClick={twitterChipClicked}>
+                                                <TwitterIcon />
+                                            </IconButton>
+                                            <IconButton
+                                                onClick={discordChipClicked}>
+                                                <DiscordIcon />
+                                            </IconButton>
+                                        </Stack>
                                     </Stack>
                                 </Stack>
                             }
