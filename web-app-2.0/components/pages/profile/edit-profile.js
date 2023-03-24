@@ -29,6 +29,7 @@ const EditProfile = (props, ref) => {
     const [openTo, setOpenTo] = useState(account.openTo);
     const [projectGoals, setProjectGoals] = useState(account.projectGoals);
     const [idealCollab, setIdealCollab] = useState(account.idealCollab);
+    const [isDeleted, setIsDeleted] = useState(account.isDeleted);
 
     const [saving, setSaving] = useState(false);
 
@@ -68,16 +69,19 @@ const EditProfile = (props, ref) => {
                     address,
                     signature,
                     account: {
-                        isDeleted: true
-                    }
-                })
+                        isDeleted: true,
+                    },
+                }),
             });
 
             if (response.status === 200) {
                 enqueueSnackbar('Account deleted', { variant: 'success' });
                 setOpen(false);
+                setIsDeleted(true);
             } else if (response.status >= 400) {
-                enqueueSnackbar('Failed to delete account', { variant: 'error' });
+                enqueueSnackbar('Failed to delete account', {
+                    variant: 'error',
+                });
             }
         } catch (err) {
             enqueueSnackbar('Failed to delete account', { variant: 'error' });
@@ -85,7 +89,46 @@ const EditProfile = (props, ref) => {
         } finally {
             setSaving(false);
         }
-    }
+    };
+
+    const retrieveAccount = async () => {
+        setSaving(true);
+        try {
+            const { address, ethersSigner } = wallet;
+            const message = 'retrieve-account';
+            const signature = await wallet.signMessage(message);
+
+            const response = await fetch('/api/retrieve-account/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    address,
+                    signature,
+                    account: {
+                        isDeleted: false,
+                    },
+                }),
+            });
+
+            if (response.status === 200) {
+                enqueueSnackbar('Account retrieved', { variant: 'success' });
+                props.refresh();
+                setIsDeleted(null);
+                setOpen(false);
+            } else if (response.status >= 400) {
+                enqueueSnackbar('Failed to retrieve account', {
+                    variant: 'error',
+                });
+            }
+        } catch (err) {
+            enqueueSnackbar('Failed to retrieve account', { variant: 'error' });
+            console.log(err);
+        } finally {
+            setSaving(false);
+        }
+    };
 
     const saveChanges = async ()  => {
         setSaving(true)
@@ -319,13 +362,21 @@ const EditProfile = (props, ref) => {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button
-                        color="error"
-                        variant="contained"
-                        onClick={deleteAccount}
-                    >
-                        Delete My Account
-                    </Button>
+                    {isDeleted ? (
+                        <Button
+                            color='error'
+                            variant='contained'
+                            onClick={retrieveAccount}>
+                            Retrieve My Account
+                        </Button>
+                    ) : (
+                        <Button
+                            color='error'
+                            variant='contained'
+                            onClick={deleteAccount}>
+                            Delete My Account
+                        </Button>
+                    )}
                     <Button
                         color="secondary"
                         variant="contained"
