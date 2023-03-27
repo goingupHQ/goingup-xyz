@@ -10,6 +10,7 @@ import '../styles/globals.css';
 import { OrganizationsProvider } from '../contexts/organizations-context';
 import AppTheme from '../components/app-theme';
 import ConnectKit from '../components/connect-kit';
+import { trpc } from '../utils/trpc';
 
 function App({ Component, pageProps }) {
     return (
@@ -37,4 +38,4 @@ function App({ Component, pageProps }) {
     );
 }
 
-export default App;
+export default trpc.withTRPC(App);

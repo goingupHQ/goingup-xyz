@@ -1,9 +1,8 @@
-import { Backdrop, Button, Chip, CircularProgress, Fade, Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { Box, Backdrop, Button, Chip, CircularProgress, Fade, Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import React from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { ProjectsContext } from '../../../contexts/projects-context';
-import { Box } from '@mui/system';
 import Head from 'next/head';
 import moment from 'moment';
 import AccountNameAddress from '../../../components/common/account-name-address';
