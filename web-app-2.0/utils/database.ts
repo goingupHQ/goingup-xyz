@@ -1,10 +1,10 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
-const uri = process.env.MONGODB_URI;
-const options = { useNewUrlParser: true, useUnifiedTopology: true };
+const uri = process.env.MONGODB_URI!;
+const options = { serverApi: ServerApiVersion.v1 };
 
-let client;
-let clientPromise;
+let client: MongoClient;
+let clientPromise: Promise<MongoClient>;
 
 if (process.env.DEPLOYMENT === 'dev') {
     // In development mode, use a global variable so that the value

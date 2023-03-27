@@ -1,12 +1,11 @@
-import { ReactNode, useState, createContext, useEffect, useRef, useContext } from 'react';
+import { useState, createContext, useEffect, useRef, useContext } from 'react';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
-import Web3Modal from 'web3modal';
 import { useSnackbar } from 'notistack';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import { AppContext } from './app-context';
-import { Backdrop, Button, Paper, Stack, Typography } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { deleteCookie, getCookie, hasCookie } from 'cookies-next';
 import { useModal } from 'connectkit';
 import { useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
@@ -117,6 +116,8 @@ export function WalletProvider({ children }) {
   const { setOpen: setConnectKitOpen } = useModal();
 
   useEffect(() => {
+    if (router.isReady && router.pathname.startsWith('/claim-event-token')) return;
+
     if (address) {
       try {
         if (Notification.permission === 'denied') {
@@ -316,6 +317,7 @@ export function WalletProvider({ children }) {
   };
 
   const signInEthereum = async (address, signer) => {
+    if (router.isReady && router.pathname.startsWith('/claim-event-token')) return;
     if (hasCookie('auth-token')) return;
 
     if (!address) throw 'No address found';
