@@ -55,25 +55,12 @@ const ClaimEventToken: React.FC = () => {
         const mintTx = await mutation.mutateAsync({ tokenId, message, address: address || '', signature });
 
         if (mintTx) {
-          enqueueSnackbar('Token claimed successfully!', {
+          enqueueSnackbar('Token claim request submitted. Please complete the signup process.', {
             variant: 'success',
             autoHideDuration: 15000,
-            action: (key) => {
-              return (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    closeSnackbar(key);
-                    // open transaction in polygonscan
-                    window.open(`https://polygonscan.com/tx/${mintTx.hash}`, '_blank');
-                  }}
-                >
-                  View transaction
-                </Button>
-              );
-            },
           });
+
+          router.push('/create-account');
         }
       } catch (err) {
         // handle TRPCClientError
