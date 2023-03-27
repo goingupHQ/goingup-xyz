@@ -14,10 +14,6 @@ const ClaimEventToken: React.FC = () => {
 
   const tokenId = Number(tokenIdParam);
 
-  if (isNaN(tokenId)) {
-    return <Box></Box>;
-  }
-
   const { data, isLoading } = trpc.eventTokens.get.useQuery({ tokenId: tokenId });
   const { tokenSettings, metadata } = data || { tokenSettings: [], metadata: {} };
 
@@ -35,6 +31,10 @@ const ClaimEventToken: React.FC = () => {
       return;
     }
   }, []);
+
+  if (isNaN(tokenId)) {
+    return <Box></Box>;
+  }
 
   const claimWithWeb3Wallet = async () => {
     if (!isConnected) {
