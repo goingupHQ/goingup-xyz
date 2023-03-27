@@ -7,6 +7,7 @@ import { useSnackbar } from 'notistack';
 import { trpc } from '../../utils/trpc';
 import Head from 'next/head';
 import { useEffect } from 'react';
+import { TRPCClientError } from '@trpc/client';
 
 const ClaimEventToken: React.FC = () => {
   const router = useRouter();
@@ -48,24 +49,37 @@ const ClaimEventToken: React.FC = () => {
 
       const signature = await signer.signMessage(message);
 
-      const mintTx = await mutation.mutateAsync({ tokenId, message, address: address || '', signature });
+      try {
+        const mintTx = await mutation.mutateAsync({ tokenId, message, address: address || '', signature });
 
-      if (mintTx) {
-        enqueueSnackbar('Token claimed successfully!', { variant: 'success', autoHideDuration: 15000, action: (key) => {
-          return (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                closeSnackbar(key);
-                // open transaction in polygonscan
-                window.open(`https://polygonscan.com/tx/${mintTx.hash}`, '_blank');
-              }}
-            >
-              View transaction
-            </Button>
-          );
-        } });
+        if (mintTx) {
+          enqueueSnackbar('Token claimed successfully!', {
+            variant: 'success',
+            autoHideDuration: 15000,
+            action: (key) => {
+              return (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    closeSnackbar(key);
+                    // open transaction in polygonscan
+                    window.open(`https://polygonscan.com/tx/${mintTx.hash}`, '_blank');
+                  }}
+                >
+                  View transaction
+                </Button>
+              );
+            },
+          });
+        }
+      } catch (err) {
+        // handle TRPCClientError
+        if (err instanceof TRPCClientError) {
+          enqueueSnackbar(err.message, {
+            variant: 'error',
+          });
+        }
       }
     }
   };
