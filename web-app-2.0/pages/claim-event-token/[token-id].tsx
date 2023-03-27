@@ -16,6 +16,8 @@ const ClaimEventToken: React.FC = () => {
   const tokenId = Number(tokenIdParam);
 
   const { data, isLoading } = trpc.eventTokens.get.useQuery({ tokenId: tokenId });
+
+  // @ts-ignore - this is a hack to get around the fact that the query is not returning the correct type (please learn how to use typescript)
   const { tokenSettings, metadata } = data || { tokenSettings: [], metadata: {} };
 
   const { isConnected, address } = useAccount();
