@@ -57,8 +57,12 @@
     "web3modal": "^1.9.8"
   },
   "devDependencies": {
+    "@types/node": "^18.15.10",
+    "@types/react": "^18.0.29",
     "eslint": "8.19.0",
-    "eslint-config-next": "12.2.2"
+    "eslint-config-next": "12.2.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2"
   },
   "engines": {
     "node": ">=18.0.0"
