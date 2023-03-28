@@ -22,6 +22,7 @@ export default function OrganizationsList() {
     const org = useContext(OrganizationsContext);
     const router = useRouter();
     const [loading, setLoading] = useState(true);
+    const [isClaimed, setIsClaimed] = useState(true);
 
     useEffect(() => {
         setLoading(true);
@@ -189,7 +190,26 @@ export default function OrganizationsList() {
                                             />
                                             <Typography variant='h5'>
                                                 {organization.name}
-                                                <CheckIcon color='success' />
+                                                {isClaimed ? (
+                                                    <CheckIcon
+                                                        color='success'
+                                                        onClick={() =>
+                                                            setIsClaimed(false)
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <>
+                                                        <Button
+                                                            onClick={() => {
+                                                                setIsClaimed(
+                                                                    () =>
+                                                                        !isClaimed
+                                                                );
+                                                            }}>
+                                                            Claim This Org
+                                                        </Button>
+                                                    </>
+                                                )}
                                             </Typography>{' '}
                                         </Stack>
                                     }
@@ -221,7 +241,7 @@ export default function OrganizationsList() {
                                                 href={organization.website}
                                                 target='_blank'
                                                 rel='noopener noreferrer'>
-                                                    Organization Website
+                                                Organization Website
                                             </a>
                                         </Button>
                                     </Stack>
