@@ -6,32 +6,9 @@ import { Box, Typography, Button, Fade, Stack } from '@mui/material';
 import CreateAccountForm from '../components/pages/create-account/human-council-form';
 import WalletChainSelection from '../contexts/wallet-chain-selection';
 
-function HumanCouncil() {
+function EmailOnboarding() {
     const wallet = useContext(WalletContext);
     const chainSelectionRef = useRef(null);
-    const connect = () => {
-        if (wallet.address === null) {
-            let cache;
-
-            try {
-                cache = JSON.parse(localStorage.getItem('wallet-context-cache'));
-            } catch (err) {}
-
-            if (cache) {
-                if (!wallet.address) {
-                    if (cache.blockchain === 'ethereum') {
-                        wallet.connectEthereum();
-                    } else if (cache.blockchain === 'cardano') {
-                        wallet.connectCardano();
-                    }
-                }
-            } else {
-                if (!wallet.address) chainSelectionRef.current.showModal();
-            }
-        } else {
-            setOpen(true);
-        }
-    };
 
     return (
         <>
@@ -54,4 +31,4 @@ function HumanCouncil() {
     );
 }
 
-export default HumanCouncil;
+export default EmailOnboarding;
