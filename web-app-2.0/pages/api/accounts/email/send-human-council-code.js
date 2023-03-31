@@ -1,6 +1,7 @@
 import { getDb } from '../../_get-db-client';
 import { sendEmail } from '../../services/_sendinblue';
 import * as HumanCouncilLoginCode from '../../../../templates/email/human-council-login-code.js';
+import { render } from 'mjml-react';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
