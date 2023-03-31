@@ -1,0 +1,17 @@
+{
+    "name": "Token of Appreciation for Crypto Mondays Volunteers",
+    "description": "Thank you for you presence and efforts making this event happen.",
+    "image": "ipfs://bafybeid525nxnfbqlpbqeyf62yhl5vsa7gb5vbqszshn4kmhyjfwpji7x4/art.jpg",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "Created On",
+            "value": 1679954084
+        },
+        {
+            "display_type": "boost_number",
+            "trait_type": "Reputation Score Boost",
+            "value": 1
+        }
+    ]
+}
