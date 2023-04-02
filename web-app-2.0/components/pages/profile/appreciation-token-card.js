@@ -154,7 +154,7 @@ export default function AppreciationTokenCard(props) {
                                 </Box>
                             </Fade>
 
-                            <Button
+                            {/* <Button
                                 size="medium"
                                 sx={{
                                     color: app.mode === 'dark' ? '#FFFFFF' : '#22272F',
@@ -164,7 +164,7 @@ export default function AppreciationTokenCard(props) {
                                 }}
                             >
                                 See all messages
-                            </Button>
+                            </Button> */}
                         </>
                     )}
 
