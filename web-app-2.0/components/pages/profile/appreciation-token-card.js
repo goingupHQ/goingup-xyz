@@ -136,7 +136,8 @@ export default function AppreciationTokenCard(props) {
                 >
                     <Typography variant="body1" color="textPrimary">
                         <strong>
-                            {balance} T{tier} Token{balance !== 1 ? 's' : ''}
+                            {/* {balance}  */}
+                            T{tier} Token{balance !== 1 ? 's' : ''}
                         </strong>
                     </Typography>
                     {!loading && (
