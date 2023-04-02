@@ -32,6 +32,12 @@ export default async function handler(req, res) {
             categoryName: 'Human Council DAO Tokens',
             tokenIds: [5, 7],
             tokenSettings: []
+        },
+        {
+            categoryId: 4,
+            categoryName: 'CryptoMonday Tokens',
+            tokenIds: [8],
+            tokenSettings: []
         }
     ];
 

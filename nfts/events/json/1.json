@@ -1,0 +1,20 @@
+{
+    "name": "Crypto Mondays Attendee Badge",
+    "description": "Thank you for attending Crypto Mondays on the 26th March 2023",
+    "image": "ipfs://bafybeih6uj67ocmpt3w2vomw7vq44qa4yebt4o4pw6letzd55ylqpctfqy/photo_2023-03-27_15-22-53.jpg",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "Date",
+            "value": "1679913000"
+        },
+        {
+            "trait_type": "Location",
+            "value": "Free Agency, 16 W 22nd St, New York, NY"
+        },
+        {
+            "trait_type": "Event",
+            "value": "Crypto Mondays: Women in Web3 Bridging the Gap"
+        }
+    ]
+}

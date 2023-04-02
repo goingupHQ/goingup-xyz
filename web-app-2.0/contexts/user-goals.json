@@ -1,0 +1,17 @@
+[
+  { "id": 1, "text": "Launch an NFT project" },
+  { "id": 2, "text": "Collaborate in a creative project" },
+  { "id": 3, "text": "Find a job in a web3 company" },
+  { "id": 4, "text": "Work for a DAO" },
+  { "id": 5, "text": "Contribute to a community" },
+  { "id": 6, "text": "Invest in digital assets" },
+  { "id": 7, "text": "Develop a decentralized application" },
+  { "id": 8, "text": "Participate in a token sale" },
+  { "id": 9, "text": "Create and sell digital art" },
+  { "id": 10, "text": "Attend web3 conferences and events" },
+  { "id": 11, "text": "Learn about blockchain technology" },
+  { "id": 12, "text": "Join a crypto-focused accelerator" },
+  { "id": 13, "text": "Participate in hackathons" },
+  { "id": 14, "text": "Provide liquidity on decentralized exchanges" },
+  { "id": 15, "text": "Stake and earn rewards from DeFi platforms" }
+]
