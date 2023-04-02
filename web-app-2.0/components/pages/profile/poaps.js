@@ -90,6 +90,7 @@ const Poaps = (props) => {
 
     return (
         <>
+        {poaps.length > 0 && (
             <Fade in={true} timeout={1000}>
                 <Card
                     sx={{
@@ -240,6 +241,7 @@ const Poaps = (props) => {
                     </CardContentWrapper>
                 </Card>
             </Fade>
+            )}
         </>
     );
 };
