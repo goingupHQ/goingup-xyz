@@ -10,10 +10,11 @@ export const generate = ({ code }: WalletLoginEmailProps) => {
     <EmailLayoutTemplate subject="GoingUP Wallet Login Code">
       <MjmlText fontSize="14px">GoingUP Wallet Verification Code</MjmlText>
       <MjmlText fontSize="14px">
-        Hello, <br />
+        Hello,
+        <br />
         <br />
         Below is your verification code. Please copy your code and paste it into the app to complete the GoingUP
-        onboarding process.
+        wallet login process.
         <br />
         <br />
         {code}
