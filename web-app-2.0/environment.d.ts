@@ -33,6 +33,7 @@ declare global {
       SIB_KEY: string;
       TWITTER_TOKEN: string;
       VAPID_PRIVATE_KEY: string;
+      GEVENT_TOKENS_ADDR: string;
     }
   }
 }
