@@ -4,8 +4,8 @@ import { router, procedure } from '../trpc';
 import { z } from 'zod';
 import { validateSignature } from '@/utils/web3-signature';
 
-const provider = new ethers.providers.AlchemyProvider(137, process.env.ALCHEMY_POLYGON_MAINNET!);
-const goingUpEventTokens = GoingUpEventTokensV1__factory.connect(process.env.GEVENT_TOKENS_ADDR!, provider);
+const provider = new ethers.providers.AlchemyProvider(137, process.env.ALCHEMY_POLYGON_MAINNET);
+const goingUpEventTokens = GoingUpEventTokensV1__factory.connect(process.env.GEVENT_TOKENS_ADDR, provider);
 
 export const eventTokensRouter = router({
   get: procedure
