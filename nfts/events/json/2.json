@@ -1,0 +1,28 @@
+{
+    "name": "CryptoMondays: Web3 & AI with Irvin Cardenas",
+    "description": "Technology leader in AI, Robotics, Big Data, Blockchain Future, Tech R&D",
+    "image": "ipfs://bafybeidd2frm7mu7f62e2gpoji2yibislhmfcjyykjqhwjlx2lcxzy4j4i/cryptomondays-event-2023-04-03.jpg",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "Date",
+            "value": "1679913000"
+        },
+        {
+            "trait_type": "Location",
+            "value": "16 W 22nd St FL8, New York, NY"
+        },
+        {
+            "trait_type": "Event",
+            "value": "CryptoMondays: Web3 & AI with Irvin Cardenas"
+        },
+        {
+            "trait_type": "Description",
+            "value": "Technology leader in AI, Robotics, Big Data, Blockchain Future, Tech R&D"
+        },
+        {
+            "trait_type": "Partner",
+            "value": "CryptoMondays"
+        }
+    ]
+}
