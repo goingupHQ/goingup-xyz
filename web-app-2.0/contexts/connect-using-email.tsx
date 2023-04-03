@@ -47,6 +47,8 @@ const ConnectUsingEmail = (props, ref) => {
     mutateAsync: sendWalletLoginCode,
     isLoading: isSendingWalletLoginCode,
     isSuccess: walletLoginCodeSent,
+    isError: walletLoginCodeError,
+    error: walletLoginCodeErrorMessage,
   } = trpc.emails.sendWalletLoginCode.useMutation();
 
   const sendLoginCode = async () => {
@@ -64,11 +66,13 @@ const ConnectUsingEmail = (props, ref) => {
   };
 
   useEffect(() => {
-    if (walletLoginCodeSent) {
+    if (walletLoginCodeSent && !walletLoginCodeError) {
       changeStep(1);
       enqueueSnackbar('Login code sent to your email', { variant: 'success' });
     }
-  }, [walletLoginCodeSent]);
+
+
+  }, [walletLoginCodeSent, walletLoginCodeError]);
 
   const [loggingIn, setLoggingIn] = useState(false);
   const [code, setCode] = useState('');
