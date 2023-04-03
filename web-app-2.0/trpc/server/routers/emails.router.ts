@@ -35,8 +35,10 @@ export const emailsRouter = router({
       const insertResult = await db.collection<WalletLoginCode>('wallet-login-codes').insertOne(codeRecord);
 
       if (insertResult.insertedId) {
-        const { html } = render(EmailWalletLogin.generate({ code }), { validationLevel: 'strict' });
+        const { html } = render(EmailWalletLogin.generate({ code }), { validationLevel: 'soft' });
         await sendEmail(null, input.email, 'Your GoingUP Wallet Login Code', null, html);
       }
+
+      return { success: true }
     }),
 });
