@@ -235,7 +235,7 @@ const ConnectUsingEmail = (props, ref) => {
                 </LoadingButton>
 
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   color="secondary"
                   fullWidth
                   onClick={() => changeStep(0)}

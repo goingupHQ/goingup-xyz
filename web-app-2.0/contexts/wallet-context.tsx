@@ -1,16 +1,36 @@
 import { useState, createContext, useEffect, useRef, useContext } from 'react';
-import { ethers } from 'ethers';
+import { Signer, ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
-import WalletConnectProvider from '@walletconnect/web3-provider';
-import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import { AppContext } from './app-context';
 import { Button, Stack } from '@mui/material';
 import { deleteCookie, getCookie, hasCookie } from 'cookies-next';
 import { useModal } from 'connectkit';
 import { useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
+import { Provider } from '@ethersproject/providers';
+import { Chain } from 'wagmi';
 
-export const WalletContext = createContext({});
+type WalletContextValue = {
+  networks: typeof networks;
+  chain: string | null;
+  connectEthereum: () => void;
+  disconnectEthereum: () => void;
+  address: string | null;
+  network: Chain | null;
+  walletType: string | null;
+  ethersProvider: Provider | null;
+  ethersSigner: Signer | null;
+  walletTypes: typeof walletTypes;
+  connect: () => void;
+  disconnect: () => void;
+  signMessage: (message: string) => Promise<string | undefined>;
+  utilityToken: typeof utilityToken;
+  mainnetENSProvider: Provider;
+};
+
+
+export const WalletContext = createContext<WalletContextValue>({} as WalletContextValue);
+
 
 const walletTypes = {
   metamask: { display: 'MetaMask' },
@@ -64,52 +84,42 @@ const networks = {
       blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
     },
   },
-  'CARDANO-0': {
-    name: 'Cardano Testnet',
-  },
-  'CARDANO-1': {
-    name: 'Cardano Mainnet',
+};
+
+const utilityToken = {
+  chainId: 137,
+  chainName: 'Polygon Mainnet',
+  address: '0x10D7B3aFA213D93a922a062fb91E8EcbD4A703d2',
+  get provider() {
+    return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_MAINNET);
   },
 };
 
-let web3Modal;
-const providerOptions = {
-  walletconnect: {
-    package: WalletConnectProvider,
-    options: {
-      infuraId: '86d5aa67154b4d1283f804fe39fcb07c',
-    },
-  },
-  coinbasewallet: {
-    package: CoinbaseWalletSDK,
-    options: {
-      appName: 'GoingUP',
-      infuraId: '86d5aa67154b4d1283f804fe39fcb07c',
-      chainId: 1,
-    },
-    theme: 'light',
+const utilityTokenTestnet = {
+  chainId: 80001,
+  chainName: 'Polygon Mumbai Testnet',
+  address: '0x825D5014239a59d7587b9F53b3186a76BF58aF72',
+  get provider() {
+    return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_KEY);
   },
 };
 
-const web3ModalOptions = {
-  // network: 'mainnet',
-  cacheProvider: true,
-  providerOptions,
-  theme: 'light',
+type WalletProviderProps = {
+  children: React.ReactNode;
 };
 
-export function WalletProvider({ children }) {
+export const WalletProvider = ({ children }: WalletProviderProps) => {
   const router = useRouter();
   const wselRef = useRef(null);
 
   const app = useContext(AppContext);
 
-  const [address, setAddress] = useState(null);
-  const [network, setNetwork] = useState(null);
-  const [chain, setChain] = useState(null);
-  const [ethersProvider, setEthersProvider] = useState(null);
-  const [ethersSigner, setEthersSigner] = useState(null);
-  const [walletType, setWalletType] = useState(null);
+  const [address, setAddress] = useState<string | null>(null);
+  const [network, setNetwork] = useState<Chain | null>(null);
+  const [chain, setChain] = useState<string | null>(null);
+  const [ethersProvider, setEthersProvider] = useState<Provider | null>(null);
+  const [ethersSigner, setEthersSigner] = useState<Signer | null>(null);
+  const [walletType, setWalletType] = useState<string | null>(null);
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -144,7 +154,7 @@ export function WalletProvider({ children }) {
                   color="secondary"
                   onClick={() => {
                     closeSnackbar(key);
-                    localStorage.setItem('notifs-denied-forever', true);
+                    localStorage.setItem('notifs-denied-forever', 'true');
                     enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
                   }}
                 >
@@ -158,7 +168,7 @@ export function WalletProvider({ children }) {
         if (Notification.permission === 'granted') {
           // check for existing subscription
           if (localStorage.getItem('psn-subscription')) {
-            const subscription = JSON.parse(localStorage.getItem('psn-subscription'));
+            const subscription = JSON.parse(localStorage.getItem('psn-subscription')!);
             if (subscription) postPsnSubscription(subscription);
             else {
               app.subscribeUserToPush().then((subscription) => {
@@ -203,7 +213,7 @@ export function WalletProvider({ children }) {
                   color="secondary"
                   onClick={() => {
                     closeSnackbar(key);
-                    localStorage.setItem('notifs-denied-forever', true);
+                    localStorage.setItem('notifs-denied-forever', 'true');
                     enqueueSnackbar('Notifications disabled for this device', { variant: 'warning' });
                   }}
                 >
@@ -263,7 +273,7 @@ export function WalletProvider({ children }) {
     let cache;
 
     try {
-      cache = JSON.parse(localStorage.getItem('wallet-context-cache'));
+      cache = JSON.parse(localStorage.getItem('wallet-context-cache')!);
     } catch (err) {}
 
     if (cache) {
@@ -274,8 +284,6 @@ export function WalletProvider({ children }) {
           connectCardano();
         }
       }
-    } else {
-      if (!address) wselRef.current.showModal();
     }
   };
 
@@ -316,7 +324,7 @@ export function WalletProvider({ children }) {
     }
   };
 
-  const signInEthereum = async (address, signer) => {
+  const signInEthereum = async (address: string, signer: Signer) => {
     if (router.isReady && router.pathname.startsWith('/claim-event-token')) return;
     if (hasCookie('auth-token')) return;
 
@@ -356,11 +364,11 @@ export function WalletProvider({ children }) {
   useEffect(() => {
     if (evmIsConnected && !evmIsConnecting) {
       setChain(`Ethereum`);
-      setNetwork(evmChain);
+      setNetwork(evmChain!);
       setWalletType('connectkit');
       setEthersProvider(evmProvider);
-      setEthersSigner(evmSigner);
-      setAddress(evmAddress);
+      setEthersSigner(evmSigner!);
+      setAddress(evmAddress!);
 
       enqueueSnackbar('Wallet connected', { variant: 'success' });
       checkForGoingUpAccount(evmAddress);
@@ -372,7 +380,7 @@ export function WalletProvider({ children }) {
         })
       );
 
-      signInEthereum(evmAddress, evmSigner);
+      signInEthereum(evmAddress!, evmSigner!);
     }
 
     if (!evmIsConnected && !evmIsConnecting) {
@@ -429,56 +437,18 @@ export function WalletProvider({ children }) {
     clearState();
   };
 
-  const signMessage = async (message) => {
+  const signMessage = async (message): Promise<string> => {
     if (chain === 'Ethereum') {
       const authToken = getCookie('auth-token');
       if (authToken) {
-        return authToken;
+        return authToken as string;
       } else {
-        const signature = await ethersSigner.signMessage(message);
-        return signature;
+        const signature = await ethersSigner?.signMessage(message);
+        return signature as string;
       }
-    } else if (chain === 'Cardano') {
-      //     // @ts-ignore
-      //     const cardano = window.cardano;
-      //     await cardano.flint.enable();
-      //     // getting address from which we will sign message
-      //     const address = (await cardano.getUsedAddresses())[0];
-      //     // generating a token with 1 day of expiration time
-      //     const token = await Web3Token.sign(
-      //         (msg) =>
-      //             cardano.signData(address, Buffer.from(msg).toString('hex')),
-      //         '1d'
-      //     );
-      //     console.log(token);
-      //     return token;
+    } else {
+      return '';
     }
-  };
-
-  const utilityToken = {
-    chainId: 137,
-    chainName: 'Polygon Mainnet',
-    address: '0x10D7B3aFA213D93a922a062fb91E8EcbD4A703d2',
-    get provider() {
-      return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_MAINNET);
-    },
-  };
-
-  const utilityTokenTestnet = {
-    chainId: 80001,
-    chainName: 'Polygon Mumbai Testnet',
-    address: '0x825D5014239a59d7587b9F53b3186a76BF58aF72',
-    get provider() {
-      return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_KEY);
-    },
-  };
-
-  const setWeb3ModalTheme = (theme) => {
-    web3ModalOptions.theme = theme;
-    web3ModalOptions.providerOptions.coinbasewallet.darkMode = theme === 'dark';
-    web3ModalOptions.providerOptions.coinbasewallet.options.darkMode = theme === 'dark';
-    web3ModalOptions.providerOptions.coinbasewallet.theme = theme;
-    console.log(web3ModalOptions);
   };
 
   const mainnetENSProvider = ethers.getDefaultProvider('homestead');
@@ -495,13 +465,11 @@ export function WalletProvider({ children }) {
         walletType,
         ethersProvider,
         ethersSigner,
-        networks,
         walletTypes,
         connect,
         disconnect,
         signMessage,
         utilityToken,
-        setWeb3ModalTheme,
         mainnetENSProvider,
       }}
     >

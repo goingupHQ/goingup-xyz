@@ -6,21 +6,21 @@ import ConnectUsingEmail from './connect-using-email';
 import { useSnackbar } from 'notistack';
 import { useModal } from 'connectkit';
 
-interface WalletChainSelectionHandles {
+type ConnectUsingEmailHandles = {
   showModal: () => void;
-}
+};
 
-const WalletChainSelection = (props: {}, ref: Ref<WalletChainSelectionHandles>) => {
+const WalletChainSelection = (props: {}, ref: Ref<ConnectUsingEmailHandles>) => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const wallet = useContext(WalletContext);
   const app = useContext(AppContext);
 
-  const { open: ckModalOpen, setOpen: setCkModalOpen } = useModal();
+  const { setOpen: setCkModalOpen } = useModal();
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const connectUsingEmailRef = createRef<any>(); // Replace "any" with the proper type for "ConnectUsingEmail"
+  const connectUsingEmailRef = createRef<ConnectUsingEmailHandles>();
 
   useImperativeHandle(ref, () => ({
     showModal() {
@@ -73,7 +73,7 @@ const WalletChainSelection = (props: {}, ref: Ref<WalletChainSelectionHandles>) 
               sx={chainItemSx}
               onClick={() => {
                 handleClose();
-                connectUsingEmailRef.current.showModal();
+                connectUsingEmailRef.current?.showModal();
                 // enqueueSnackbar('Not yet available but it is coming soon!', { variant: 'info' });
               }}
             >
