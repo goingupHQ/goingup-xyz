@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"0f12d60867ba439491cbcd1c3dac5690","collectionName":"membership-nft-whitelist","type":"collection"}
