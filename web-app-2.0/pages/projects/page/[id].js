@@ -1,11 +1,10 @@
-import { Backdrop, Button, Chip, CircularProgress, Fade, Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
-import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { ProjectsContext } from '../../../contexts/projects-context';
 import { Box } from '@mui/system';
 import Head from 'next/head';
-import moment from 'moment';
+import NoSSR from 'react-no-ssr';
 import ProjectInformation from '../../../components/pages/projects/project-information';
 import { WalletContext } from '../../../contexts/wallet-context';
 import ProjectMembers from '../../../components/pages/projects/project-members';
@@ -42,11 +41,9 @@ export default function ProjectPage(props) {
     };
 
     React.useEffect(() => {
-        //
         if (router.isReady && wallet.address) {
             load();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, wallet.address]);
 
     return (
@@ -55,8 +52,8 @@ export default function ProjectPage(props) {
                 <title>{project === null ? 'GoingUP Project' : `${project?.name} `}</title>
             </Head>
 
-            {projectsContext.isCorrectNetwork &&
-            <>
+            {projectsContext.isCorrectNetwork && wallet.address &&
+            <NoSSR>
                 <Grid container sx={{ mb: 3 }} rowSpacing={2}>
                     <Grid item xs={12} md={6}>
                         <Typography variant="h1">{project === null ? 'Loading Project...' : project.name}</Typography>
@@ -77,7 +74,7 @@ export default function ProjectPage(props) {
                         <LoadingIllustration />
                     </Box>
                 }
-            </>
+            </NoSSR>
             }
 
             {!projectsContext.isCorrectNetwork && <WrongNetwork />}
