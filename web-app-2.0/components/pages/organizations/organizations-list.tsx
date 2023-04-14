@@ -16,6 +16,7 @@ import { AppContext } from '../../../contexts/app-context';
 import LoadingIllustration from '../../common/loading-illustration';
 import { trpc } from '@/utils/trpc';
 import Link from 'next/link';
+import ImageWithFallback from '@/components/common/image-with-fallback';
 
 export default function OrganizationsList() {
   const app = useContext(AppContext);
@@ -148,7 +149,7 @@ export default function OrganizationsList() {
                       spacing={6}
                       alignItems="center"
                     >
-                      <img
+                      <ImageWithFallback
                         src={organization.logo}
                         alt={organization.name}
                         width={80}
