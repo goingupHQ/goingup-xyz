@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { router, procedure } from '../trpc';
-import { createOrgCodes, getAll } from '@/utils/database/organization';
+import { createOrgCodes, get, getAll } from '@/utils/database/organization';
 import admins from '@/utils/admins.json';
 import { validateSignature } from '@/utils/web3-signature';
 import { TRPCError } from '@trpc/server';
@@ -10,6 +10,11 @@ export const organizationsRouter = router({
     const orgs = await getAll();
     return orgs;
   }),
+  get: procedure
+    .input(z.object({ code: z.string() }))
+    .query(async ({ input }) => {
+      return get(input.code);
+    }),
   createOrgCodes: procedure
     .input(
       z.object({
