@@ -16,17 +16,17 @@ export default function Organization() {
     const org = useContext(OrganizationsContext);
     const router = useRouter();
     const [account, setAccount] = useState(null);
-    const { address } = router.query;
+    const { code } = router.query;
 
     useEffect(() => {
         // do some
-        if (address) {
+        if (code) {
             setAccount(
-                org.orgs.find((org) => org._id === address)
+                org.orgs.find((org) => org.code === code)
             );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [address]);
+    }, [code]);
 
     return (
         <>
