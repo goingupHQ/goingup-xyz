@@ -136,7 +136,8 @@ export default function AppreciationTokenCard(props) {
                 >
                     <Typography variant="body1" color="textPrimary">
                         <strong>
-                            {balance} T{tier} Token{balance !== 1 ? 's' : ''}
+                            {/* {balance}  */}
+                            T{tier} Token{balance !== 1 ? 's' : ''}
                         </strong>
                     </Typography>
                     {!loading && (
@@ -154,7 +155,7 @@ export default function AppreciationTokenCard(props) {
                                 </Box>
                             </Fade>
 
-                            <Button
+                            {/* <Button
                                 size="medium"
                                 sx={{
                                     color: app.mode === 'dark' ? '#FFFFFF' : '#22272F',
@@ -164,7 +165,7 @@ export default function AppreciationTokenCard(props) {
                                 }}
                             >
                                 See all messages
-                            </Button>
+                            </Button> */}
                         </>
                     )}
 

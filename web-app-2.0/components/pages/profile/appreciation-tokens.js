@@ -107,7 +107,7 @@ const AppreciationTokens = (props) => {
                                     <Typography variant='mobileh1'>
                                         Appreciation Tokens
                                     </Typography>
-                                    <Button
+                                    {/* <Button
                                         color={
                                             app.mode === "dark"
                                                 ? "primary"
@@ -124,7 +124,7 @@ const AppreciationTokens = (props) => {
                                         }
                                     >
                                         View All{" "}
-                                    </Button>
+                                    </Button> */}
                                 </Stack>
                                 <Stack
                                     direction='row'
