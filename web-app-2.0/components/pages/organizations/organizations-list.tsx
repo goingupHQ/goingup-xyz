@@ -149,11 +149,11 @@ export default function OrganizationsList() {
                       spacing={6}
                       alignItems="center"
                     >
-                      <ImageWithFallback
+                      <Box
+                        component={ImageWithFallback}
                         src={organization.logo}
                         alt={organization.name}
-                        width={80}
-                        height={80}
+                        sx={{ width: 80, height: 80, borderRadius: '50%' }}
                       />
                       {/* <Typography variant="h5">
                         {organization.name}
