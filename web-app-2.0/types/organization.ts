@@ -10,4 +10,5 @@ export type Organization = {
   discord?: string;
   description?: string;
   logo: string;
+  owners?: string[];
 };
