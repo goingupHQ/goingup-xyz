@@ -52,13 +52,14 @@ const subscribeUserToPush = async () => {
 };
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const [mode, setMode] = useState('dark');
+  const [mode, setMode] = useState('light');
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   useEffect(() => {
     const cache = localStorage.getItem('color-mode');
     if (!cache) {
-      localStorage.setItem('color-mode', prefersDarkMode ? 'dark' : 'light');
-      setMode('dark');
+      // localStorage.setItem('color-mode', prefersDarkMode ? 'dark' : 'light');
+      localStorage.setItem('color-mode', 'light');
+      setMode('light');
     } else {
       setMode(cache);
     }
