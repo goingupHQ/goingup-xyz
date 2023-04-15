@@ -15,7 +15,7 @@ export default function Organization() {
     data: organization,
     isFetching,
     isFetched,
-  } = trpc.organization.get.useQuery({ code }, { enabled: Boolean(code) });
+  } = trpc.organizations.get.useQuery({ code }, { enabled: Boolean(code) });
 
   return (
     <>
