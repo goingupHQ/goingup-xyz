@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import { Box, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
-import OrganizationPage from '../../components/pages/organizations/organization-header';
-import JobsOpening from '../../components/pages/organizations/jobs-opening';
-import OrganizationProjects from '../../components/pages/organizations/organization-projects';
-import OrganizationTokens from '../../components/pages/organizations/organization-tokens';
+import OrganizationPage from '../../../components/pages/organizations/organization-header';
+import JobsOpening from '../../../components/pages/organizations/jobs-opening';
+import OrganizationProjects from '../../../components/pages/organizations/organization-projects';
+import OrganizationTokens from '../../../components/pages/organizations/organization-tokens';
 import { trpc } from '@/utils/trpc';
 import LoadingIllustration from '@/components/common/loading-illustration';
 
