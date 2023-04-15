@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack';
 import { useAccount, useSigner } from 'wagmi';
 
 const Organizations = () => {
-  const { mutateAsync: createOrganizationCodes, isLoading } = trpc.organization.createOrgCodes.useMutation();
+  const { mutateAsync: createOrganizationCodes, isLoading } = trpc.organizations.createOrgCodes.useMutation();
   const { data: signer } = useSigner();
   const { address } = useAccount();
   const { enqueueSnackbar } = useSnackbar();
