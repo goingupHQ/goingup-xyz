@@ -20,7 +20,7 @@ import ImageWithFallback from '@/components/common/image-with-fallback';
 
 export default function OrganizationsList() {
   const app = useContext(AppContext);
-  const { data: organizations, isLoading } = trpc.organization.getAll.useQuery();
+  const { data: organizations, isLoading } = trpc.organizations.getAll.useQuery();
 
   return (
     <>
