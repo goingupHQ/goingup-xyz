@@ -54,7 +54,7 @@ export default function OrganizationPartnerships(props) {
                                 <Grid>
                                     {data.slice(0, 3).map((account, index) => (
                                         <Grid key={account.address} my={1}>
-                                            <Profile account={account} />
+                                            <Profile address={account.address} />
                                         </Grid>
                                     ))}
                                 </Grid>
