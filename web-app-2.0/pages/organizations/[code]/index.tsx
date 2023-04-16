@@ -7,6 +7,8 @@ import OrganizationProjects from '../../../components/pages/organizations/organi
 import OrganizationTokens from '../../../components/pages/organizations/organization-tokens';
 import { trpc } from '@/utils/trpc';
 import LoadingIllustration from '@/components/common/loading-illustration';
+import { useAccount } from 'wagmi';
+import Navigation from '@/components/organizations/navigation';
 
 export default function Organization() {
   const router = useRouter();
@@ -16,6 +18,10 @@ export default function Organization() {
     isFetching,
     isFetched,
   } = trpc.organizations.get.useQuery({ code }, { enabled: Boolean(code) });
+
+  const { address } = useAccount();
+
+  const isOwner = organization?.owners?.includes(address || '');
 
   return (
     <>
@@ -29,6 +35,9 @@ export default function Organization() {
               href="/favicon.ico"
             />
           </Head>
+
+          {isOwner && <Navigation org={organization} />}
+
           <Box>
             <OrganizationPage organization={organization} />
             <OrganizationProjects account={organization} />
