@@ -43,7 +43,7 @@ export default function GuestCollaborators(props) {
                         <Grid>
                             {data.slice(0, 6).map((account, index) => (
                                 <Grid margin={2} key={account.address}>
-                                    <Profile address={account.address} />
+                                    <Profile addressOrAccount={account} />
                                 </Grid>
                             ))}
                         </Grid>

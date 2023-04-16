@@ -100,7 +100,7 @@ export default function SuggestedProfiles(props) {
                         <Grid container spacing={4}>
                             {data.map((account, index) => (
                                 <Grid item xs={12} md={6} lg={4} key={account.address}>
-                                    <Profile address={account.address} />
+                                    <Profile addressOrAccount={account} />
                                 </Grid>
                             ))}
                         </Grid>

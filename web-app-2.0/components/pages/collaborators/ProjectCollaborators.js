@@ -45,7 +45,7 @@ export default function ProjectCollaborators(props) {
                         <Grid>
                             {data.map((account, index) => (
                                 <Grid margin={2} key={account.address}>
-                                    <Profile address={account.address} />
+                                    <Profile addressOrAccount={account} />
                                 </Grid>
                             ))}
                         </Grid>

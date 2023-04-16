@@ -58,7 +58,7 @@ export default function OrganizationMembers(props) {
                                 <Grid>
                                     {data.map((account, index) => (
                                         <Grid key={account.address} my={1}>
-                                            <Profile address={account.address} />
+                                            <Profile addressOrAccount={account} />
                                         </Grid>
                                     ))}
                                 </Grid>
