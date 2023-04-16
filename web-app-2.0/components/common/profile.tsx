@@ -253,11 +253,7 @@ const Profile = ({ addressOrAccount }: ProfileProps) => {
                   paddingBottom: '3px',
                   mx: 'auto',
                   ml: 'none',
-                  paddingX: {
-                    xs: '50px',
-                    md: '20',
-                    lg: '10px',
-                  },
+                  paddingX: '20px',
                 }}
               >
                 <Typography>{ensName}</Typography>
