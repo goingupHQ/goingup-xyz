@@ -11,4 +11,5 @@ export type Organization = {
   description?: string;
   logo: string;
   owners?: string[];
+  rewardTokens?: number[];
 };
