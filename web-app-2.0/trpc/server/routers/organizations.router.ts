@@ -17,7 +17,15 @@ export const organizationsRouter = router({
     return get(input.code);
   }),
   createRewardToken: procedure
-    .input(z.object({ code: z.string(), address: z.string(), message: z.string(), signature: z.string() }))
+    .input(
+      z.object({
+        code: z.string(),
+        address: z.string(),
+        message: z.string(),
+        signature: z.string(),
+        tokenImageUrl: z.string(),
+      })
+    )
     .mutation(async ({ input }) => {
       await checkOrgOwner(input);
 
@@ -30,8 +38,6 @@ export const organizationsRouter = router({
       );
 
       const tokenId = await getNextTokenId();
-
-
     }),
   createOrgCodes: procedure
     .input(
@@ -55,7 +61,7 @@ export const organizationsRouter = router({
     }),
 });
 
-async function checkOrgOwner(input: { code: string; message: string; address: string; signature: string; }) {
+async function checkOrgOwner(input: { code: string; message: string; address: string; signature: string }) {
   const isSignatureValid = await validateSignature(input.address, input.message, input.signature);
   if (!isSignatureValid) {
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid signature' });
@@ -65,4 +71,3 @@ async function checkOrgOwner(input: { code: string; message: string; address: st
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not org owner' });
   }
 }
-
