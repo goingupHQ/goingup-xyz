@@ -26,14 +26,6 @@ const OrgPageHeader = ({ org }: OrgPageHeaderProps) => {
             />
             <Typography variant="h4">{org?.name}</Typography>
           </Stack>
-
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="h5">Organization Owners</Typography>
-            <Typography>
-              Please email us at <a href="mailto:app@goingup.xyz">app@goingup.xyz</a> if you want to make changes to
-              your organization&apos;s ownership.
-            </Typography>
-          </Box>
         </>
       )}
     </>

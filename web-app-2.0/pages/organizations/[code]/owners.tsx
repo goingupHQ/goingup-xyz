@@ -1,5 +1,5 @@
 import { trpc } from '@/utils/trpc';
-import { Backdrop, CircularProgress, Grid } from '@mui/material';
+import { Backdrop, Box, CircularProgress, Grid, Typography } from '@mui/material';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Profile from '@/components/common/profile';
@@ -17,6 +17,14 @@ export default function Owners() {
       </Head>
 
       <OrgPageHeader org={organization} />
+
+      <Box sx={{ mt: 2 }}>
+        <Typography variant="h5">Organization Owners</Typography>
+        <Typography>
+          Please email us at <a href="mailto:app@goingup.xyz">app@goingup.xyz</a> if you want to make changes to your
+          organization&apos;s ownership.
+        </Typography>
+      </Box>
 
       <Grid
         container
