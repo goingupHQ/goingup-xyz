@@ -11,6 +11,10 @@ export const useNavItems = (org?: Organization | null) => {
     {
       text: `Owners`,
       to: `/organizations/${org.code}/owners`
+    },
+    {
+      text: `Reward Tokens`,
+      to: `/organizations/${org.code}/reward-tokens`
     }
   ]
 };
