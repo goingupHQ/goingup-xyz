@@ -1,6 +1,6 @@
 import path from 'path';
 import * as dotenv from 'dotenv';
-dotenv.config({ path: path.resolve(__dirname, '../.env')});
+dotenv.config({ path: path.resolve(__dirname, '.env')});
 
 import { ethers } from 'ethers';
 
@@ -14,6 +14,9 @@ import {
   GoingUpUtilityTokens,
   GoingUpUtilityTokens__factory,
 } from './typechain';
+
+import { Account } from './types/account';
+import { PushNotificationSubscription } from './types/psn';
 
 // prevent process from exiting when an unhandled exception occurs
 process.on('uncaughtException', function (err) {
@@ -263,7 +266,7 @@ const verifyReward = async (txhash: string) => {
 
             if (reward == null) return;
 
-            const signer = new ethers.Wallet(process.env.BACKEND_WALLET_PK, provider);
+            const signer = new ethers.Wallet(process.env.BACKEND_WALLET_PK!, provider);
             const projectsContractAsSigner = projectsContract.connect(signer);
 
             const memberData = await projectsContractAsSigner.projectMemberStorage(

@@ -1,8 +1,8 @@
 // This script is used to cache extra data like messages on the GoingUP utility token smart contract
 // Contract on block explorer: https://polygonscan.com/address/0x10d7b3afa213d93a922a062fb91e8ecbd4a703d2
 import { ethers } from 'ethers';
-import { getDb } from './get-db-client.js';
-import { GoingUpUtilityTokens__factory } from './typechain/index.js';
+import { getDb } from './get-db-client';
+import { GoingUpUtilityTokens__factory } from './typechain/index';
 
 export default async function cacheUtilityTokenData() {
     const polygonProvider = new ethers.providers.AlchemyProvider(137, process.env.ALCHEMY_POLYGON_KEY);

@@ -1,4 +1,4 @@
-type Account = {
+export type Account = {
   name: string;
   occupation?: number;
   openTo?: number[];

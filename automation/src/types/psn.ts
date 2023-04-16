@@ -1,4 +1,4 @@
-interface PushNotificationSubscription {
+export interface PushNotificationSubscription {
   endpoint: string;
   address: string;
   expirationTime?: Date;
