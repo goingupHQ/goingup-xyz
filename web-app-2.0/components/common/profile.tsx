@@ -15,22 +15,29 @@ import truncateEthAddress from 'truncate-eth-address';
 import { useRouter } from 'next/router';
 import { AppContext } from '../../contexts/app-context';
 import { trpc } from '@/utils/trpc';
+import Link from 'next/link';
 
 type ProfileProps = {
-  address: string;
+  addressOrAccount: string | Account;
 };
 
-const Profile = ({ address }: ProfileProps) => {
+const Profile = ({ addressOrAccount }: ProfileProps) => {
   const app = useContext(AppContext);
   const router = useRouter();
 
   const {
-    data: account,
-    isFetching: isAccountFetching,
-    isFetched: isAccountFetched,
-  } = trpc.accounts.get.useQuery({ address });
+    data: accountTrpc,
+    isFetching: isAccountFetchingTrpc,
+    isFetched: isAccountFetchedTrpc,
+  } = trpc.accounts.get.useQuery(
+    { address: addressOrAccount as string },
+    { enabled: typeof addressOrAccount === 'string' }
+  );
 
-  console.log(account);
+  const account = typeof addressOrAccount === 'string' ? accountTrpc : addressOrAccount;
+  const address = typeof addressOrAccount === 'string' ? addressOrAccount : account?.address;
+  const isAccountFetching = typeof addressOrAccount === 'string' ? isAccountFetchingTrpc : false;
+  const isAccountFetched = typeof addressOrAccount === 'string' ? isAccountFetchedTrpc : true;
 
   const [ensName, setEnsName] = useState('');
 
@@ -271,17 +278,16 @@ const Profile = ({ address }: ProfileProps) => {
                 )}`}
             </Typography>
           </Stack>
-          <Button
-            variant="contained"
-            sx={{
-              width: '100%',
-            }}
-            onClick={() => {
-              router.push(`/profile/${account?.address}`);
-            }}
-          >
-            <Typography>View Profile</Typography>
-          </Button>
+          <Link href={`/profile/${account?.address}`}>
+            <Button
+              variant="contained"
+              sx={{
+                width: '100%',
+              }}
+            >
+              View Profile
+            </Button>
+          </Link>
         </Card>
       )}
     </>
