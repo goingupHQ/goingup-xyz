@@ -1,3 +1,4 @@
+import CreateRewardToken from '@/components/organizations/create-reward-token';
 import OrgPageHeader from '@/components/organizations/org-page-header';
 import { Organization } from '@/types/organization';
 import { trpc } from '@/utils/trpc';
@@ -32,9 +33,9 @@ const RewardTokens = ({ org }: RewardTokensProps) => {
       {Boolean(org?.rewardTokens) === false || org?.rewardTokens?.length === 0 ?
         (
           <>
-            <Box component="img" src="/images/illustrations/empty-box.svg" sx={{ width: 300, height: 300, mt: 2 }} />
-            <Typography variant="h6" sx={{ mt: 2 }}>No reward tokens found</Typography>
-            <Button variant="contained" sx={{ mt: 2 }}>Create a reward token</Button>
+            <Box component="img" src="/images/illustrations/empty-box.svg" sx={{ width: 300, height: 300, my: 2 }} />
+            <Typography variant="h6" sx={{ my: 2 }}>No reward tokens found</Typography>
+            <CreateRewardToken org={org} />
           </>
         ) :
         (

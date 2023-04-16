@@ -16,6 +16,7 @@ import { useRouter } from 'next/router';
 import { AppContext } from '../../contexts/app-context';
 import { trpc } from '@/utils/trpc';
 import Link from 'next/link';
+import { Account } from '@/types/account';
 
 type ProfileProps = {
   addressOrAccount: string | Account;
