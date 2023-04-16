@@ -34,6 +34,7 @@ declare global {
       TWITTER_TOKEN: string;
       VAPID_PRIVATE_KEY: string;
       GEVENT_TOKENS_ADDR: string;
+      NEXT_PUBLIC_NFT_STORAGE_KEY: string;
     }
   }
 }
