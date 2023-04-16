@@ -43,6 +43,7 @@
     "mongodb": "^4.8.1",
     "next": "^13.2.4",
     "nextjs-cors": "^2.1.2",
+    "nft.storage": "^7.0.3",
     "notistack": "^2.0.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
