@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { router, procedure } from '../trpc';
 import { getAccount } from '@/utils/database/account';
+import { router, procedure } from '../trpc';
 
 export const accountsRouter = router({
   get: procedure
