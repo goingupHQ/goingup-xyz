@@ -38,6 +38,7 @@ export default function Owners() {
             md={6}
             lg={4}
             xl={3}
+            key={owner}
           >
             <Profile
               key={owner}
