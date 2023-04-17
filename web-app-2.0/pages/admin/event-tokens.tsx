@@ -130,7 +130,7 @@ const EventTokens = () => {
 
             <TextField
               label="Price"
-              value={tokenSettingsUpdate?.price.toBigInt().toString() ?? ''}
+              value={tokenSettingsUpdate?.price?.toBigInt().toString() ?? ''}
               onChange={(e) => setTokenSettingsUpdate({
                 ...tokenSettingsUpdate!,
                 price: BigNumber.from(e.target.value),
@@ -139,7 +139,7 @@ const EventTokens = () => {
 
             <TextField
               label="Cannot Mint After"
-              value={tokenSettingsUpdate?.cantMintAfter.toBigInt().toString() ?? ''}
+              value={tokenSettingsUpdate?.cantMintAfter?.toBigInt().toString() ?? ''}
               onChange={(e) => setTokenSettingsUpdate({
                 ...tokenSettingsUpdate!,
                 cantMintAfter: BigNumber.from(e.target.value),
@@ -148,7 +148,7 @@ const EventTokens = () => {
 
             <TextField
               label="Max Supply"
-              value={tokenSettingsUpdate?.maxSupply.toBigInt().toString() ?? ''}
+              value={tokenSettingsUpdate?.maxSupply?.toBigInt().toString() ?? ''}
               onChange={(e) => setTokenSettingsUpdate({
                 ...tokenSettingsUpdate!,
                 maxSupply: BigNumber.from(e.target.value),
@@ -157,7 +157,7 @@ const EventTokens = () => {
 
             <TextField
               label="Max Per Address"
-              value={tokenSettingsUpdate?.maxPerAddress.toBigInt().toString() ?? ''}
+              value={tokenSettingsUpdate?.maxPerAddress?.toBigInt().toString() ?? ''}
               onChange={(e) => setTokenSettingsUpdate({
                 ...tokenSettingsUpdate!,
                 maxPerAddress: BigNumber.from(e.target.value),

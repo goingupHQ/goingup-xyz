@@ -16,3 +16,12 @@ ipfs://bafybeiadnxppeofmqkdw5xhczwzoos6psbsqn66fpbxdblqv7iyttu6wae/3.json
 1682020800
 1000
 1
+
+4
+CryptoMondays: Discussing Decentralized Governance and the potential for DAO principles and tools
+ipfs://bafybeicplh67awdmjnmsiqzmuh5kopunkzy7uo72avrjm6yrkx4l5rhe5q/4.json
+0x68D99e952cF3D4faAa6411C1953979F54552A8F7
+0
+1682029800
+1000
+1
