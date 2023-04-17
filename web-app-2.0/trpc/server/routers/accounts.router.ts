@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { getAccount } from '../../../utils/database/account';
 import { router, procedure } from '../trpc';
+import { getAccount } from '@/utils/database/account';
 
 export const accountsRouter = router({
   get: procedure.input(z.object({ address: z.string() })).query(async ({ input }) => {

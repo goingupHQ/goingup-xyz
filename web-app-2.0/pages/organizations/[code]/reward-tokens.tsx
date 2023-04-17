@@ -6,11 +6,7 @@ import { Box, Button, Typography } from '@mui/material';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-type RewardTokensProps = {
-  org: Organization;
-};
-
-const RewardTokens = ({ org }: RewardTokensProps) => {
+const RewardTokens = () => {
   const router = useRouter();
   const code = router.query.code as string;
   const { data: organization, isLoading } = trpc.organizations.get.useQuery({ code }, { enabled: Boolean(code) });
@@ -25,22 +21,28 @@ const RewardTokens = ({ org }: RewardTokensProps) => {
 
       <Box sx={{ mt: 2 }}>
         <Typography variant="h5">Reward Tokens</Typography>
-        <Typography>
-          Manage your organizations reward tokens
-        </Typography>
+        <Typography>Manage your organizations reward tokens</Typography>
       </Box>
 
-      {Boolean(org?.rewardTokens) === false || org?.rewardTokens?.length === 0 ?
-        (
-          <>
-            <Box component="img" src="/images/illustrations/empty-box.svg" sx={{ width: 300, height: 300, my: 2 }} />
-            <Typography variant="h6" sx={{ my: 2 }}>No reward tokens found</Typography>
-            <CreateRewardToken org={org} />
-          </>
-        ) :
-        (
-          <></>)
-        }
+      {Boolean(organization?.rewardTokens) === false || organization?.rewardTokens?.length === 0 ? (
+        <>
+          <Box
+            component="img"
+            src="/images/illustrations/empty-box.svg"
+            sx={{ width: 300, height: 300, my: 2 }}
+          />
+          <Typography
+            variant="h6"
+            sx={{ my: 2 }}
+          >
+            No reward tokens found
+          </Typography>
+        </>
+      ) : (
+        <></>
+      )}
+
+      {organization !== undefined && organization !== null && <CreateRewardToken org={organization} />}
     </>
   );
 };
