@@ -25,3 +25,9 @@ export const createOrgCodes = async () => {
     await db.collection('orgs').updateOne({ _id: org._id }, { $set: { code } });
   }
 };
+
+export const addRewardToken = async (code: string, tokenId: number) => {
+  const db = await getDb();
+  const col = db.collection<Organization>('orgs');
+  await col.updateOne({ code }, { $push: { rewardTokens: tokenId } });
+};

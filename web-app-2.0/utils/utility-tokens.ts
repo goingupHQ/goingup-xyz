@@ -51,7 +51,7 @@ export const getNextTokenId = async (): Promise<number> => {
   return nextTokenId;
 };
 
-const lockTokenId = async (tokenId: number) => {
+export const lockTokenId = async (tokenId: number) => {
   const db = await getDb();
 
   const col = db.collection<UtilityTokenConfig>('utility-token-config');
@@ -70,7 +70,26 @@ const lockTokenId = async (tokenId: number) => {
   );
 };
 
-const getLockedTokenIds = async (): Promise<number[]> => {
+export const unlockTokenId = async (tokenId: number) => {
+  const db = await getDb();
+
+  const col = db.collection<UtilityTokenConfig>('utility-token-config');
+  await col.updateOne(
+    {
+      configId: 'default',
+    },
+    {
+      $pull: {
+        lockedTokenIds: tokenId,
+      },
+    },
+    {
+      upsert: true,
+    }
+  );
+};
+
+export const getLockedTokenIds = async (): Promise<number[]> => {
   const db = await getDb();
 
   const col = db.collection<UtilityTokenConfig>('utility-token-config');

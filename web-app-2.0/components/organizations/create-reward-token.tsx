@@ -2,8 +2,10 @@ import { Organization } from '@/types/organization';
 import { Avatar, Box, Button, Dialog, DialogContent, DialogTitle, Stack, TextField, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import React from 'react';
-import { useAccount, useSigner } from 'wagmi';
+import { useAccount, useNetwork, useSigner } from 'wagmi';
 import { NFTStorage } from 'nft.storage';
+import { LoadingButton } from '@mui/lab';
+import { trpc } from '@/utils/trpc';
 
 type CreateRewardTokenProps = {
   org: Organization;
@@ -11,7 +13,7 @@ type CreateRewardTokenProps = {
 
 const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
   const { isConnected } = useAccount();
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [tokenImageFile, setTokenImageFile] = React.useState<File | null>(null);
@@ -23,7 +25,10 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
     setModalOpen(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = (event, reason?) => {
+    if (reason === 'backdropClick') {
+      return;
+    }
     setModalOpen(false);
   };
 
@@ -47,6 +52,7 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
   const [tokenAttributes, setTokenAttributes] = React.useState<TokenAttribute[]>([]);
 
   const { data: signer } = useSigner();
+  const { chain } = useNetwork();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -61,6 +67,15 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
       reader.readAsDataURL(file);
     }
   };
+
+  const {
+    mutateAsync: createRewardToken,
+    isLoading: isCreatingRewardToken,
+    isSuccess: rewardTokenCreated,
+    isError: rewardTokenCreateFailed,
+  } = trpc.organizations.createRewardToken.useMutation();
+
+  const context = trpc.useContext();
 
   const [isCreating, setIsCreating] = React.useState(false);
   const handleCreateRewardTokenClick = async () => {
@@ -87,9 +102,14 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
     setIsCreating(true);
 
     try {
-      const signature = await signer?.signMessage(
-        `I am signing this message as owner of ${org.name} to create a reward token called ${tokenName}`
-      );
+      const message = `I am signing this message as owner of ${org.name} to create a reward token called ${tokenName}`;
+      const signature = await signer?.signMessage(message);
+      const address = await signer?.getAddress();
+
+      if (!address) {
+        enqueueSnackbar('Failed to get wallet address', { variant: 'error' });
+        return;
+      }
 
       if (!signature) {
         enqueueSnackbar('Failed to sign message', { variant: 'error' });
@@ -99,14 +119,55 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
       if (tokenImageFile) {
         const client = new NFTStorage({ token: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY });
 
-        const response = await client.store({
+        const metadata = await client.store({
           name: tokenName,
           description: tokenDescription,
           attributes: tokenAttributes,
           image: tokenImageFile,
         });
 
-        console.log(response);
+        const { code } = org;
+        const response = await createRewardToken({
+          code,
+          message,
+          address,
+          signature,
+          tokenName,
+          tokenDescription,
+          tokenMetadataURI: metadata.url,
+        });
+
+        if (response.tx) {
+          const tx = await signer?.provider?.getTransaction(response.tx.hash);
+          const key = enqueueSnackbar('Waiting for confirmation...', {
+            variant: 'info',
+            persist: true,
+            action: (key) => {
+              return (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    window.open(`${chain?.blockExplorers?.default.url}/tx/${response.tx.hash}`, '_blank');
+                  }}
+                >
+                  View on Etherscan
+                </Button>
+              );
+            },
+          });
+
+          setModalOpen(false);
+          setPreviewImg(null);
+          setTokenImageFile(null);
+          setTokenName('');
+          setTokenDescription('');
+          setTokenAttributes([]);
+
+          await tx?.wait(2);
+          closeSnackbar(key);
+          await context.organizations.invalidate();
+        }
       }
     } catch (e) {
       enqueueSnackbar('Failed to create reward token', { variant: 'error' });
@@ -136,6 +197,7 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
             direction="column"
             spacing={2}
           >
+            <Typography variant="h5">Create a reward token</Typography>
             <input
               type="file"
               ref={fileInputRef}
@@ -143,28 +205,30 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
               onChange={handleFileChange}
               hidden
             />
+            <Stack
+              direction="row"
+              spacing={2}
+            >
+              <Box>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {tokenImageFile ? 'Change Token Image' : 'Select Token Image'}
+                </Button>
+              </Box>
 
-            <Typography variant="h5">Create a reward token</Typography>
+              {/* <Typography>{tokenImageFile ? tokenImageFile.name : 'No image selected'}</Typography> */}
 
-            <Box>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                {tokenImageFile ? 'Change Token Image' : 'Select Token Image'}
-              </Button>
-            </Box>
-
-            <Typography>{tokenImageFile ? tokenImageFile.name : 'No image selected'}</Typography>
-
-            {previewImg && (
-              <Box
-                component="img"
-                src={previewImg}
-                sx={{ width: 100, height: 100, my: 2, borderRadius: 1 }}
-              />
-            )}
+              {previewImg && (
+                <Box
+                  component="img"
+                  src={previewImg}
+                  sx={{ width: 100, height: 100, my: 2, borderRadius: 1 }}
+                />
+              )}
+            </Stack>
 
             <TextField
               label="Token Name"
@@ -176,7 +240,7 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
               label="Token Description"
               value={tokenDescription}
               multiline
-              rows={4}
+              rows={3}
               onChange={(e) => setTokenDescription(e.target.value)}
             />
 
@@ -241,14 +305,28 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
               </Button>
             </Box>
 
-            <Button
-              size="large"
-              variant="contained"
-              color="primary"
-              onClick={handleCreateRewardTokenClick}
+            <Stack
+              direction="row"
+              spacing={2}
             >
-              Create Reward Token
-            </Button>
+              <LoadingButton
+                size="large"
+                variant="contained"
+                color="primary"
+                loading={isCreating || isCreatingRewardToken}
+                onClick={handleCreateRewardTokenClick}
+              >
+                Create Reward Token
+              </LoadingButton>
+
+              <Button
+                variant="text"
+                color="secondary"
+                onClick={handleCloseModal}
+              >
+                Cancel
+              </Button>
+            </Stack>
           </Stack>
         </DialogContent>
       </Dialog>

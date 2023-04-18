@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { router, procedure } from '../trpc';
-import { createOrgCodes, get, getAll, isOwner } from '@/utils/database/organization';
+import { addRewardToken, createOrgCodes, get, getAll, isOwner } from '@/utils/database/organization';
 import admins from '@/utils/admins.json';
 import { validateSignature } from '@/utils/web3-signature';
 import { TRPCError } from '@trpc/server';
@@ -8,7 +8,7 @@ import { ethers } from 'ethers';
 import toHex from 'to-hex';
 import { hexToDec } from 'hex2dec';
 import { GoingUpUtilityTokens__factory } from '@/typechain';
-import { getNextTokenId } from '@/utils/utility-tokens';
+import { getNextTokenId, lockTokenId, unlockTokenId } from '@/utils/utility-tokens';
 import { parseUnits } from 'ethers/lib/utils.js';
 
 export const organizationsRouter = router({
@@ -46,19 +46,36 @@ export const organizationsRouter = router({
 
       const { code, tokenName, tokenDescription, tokenMetadataURI } = input;
       const catHex = toHex(code, { prefix: true });
-      const catDec = Number(hexToDec(catHex));
+      const catDec = BigInt(hexToDec(catHex) || 0);
+
+      const gasStationResponse = await fetch('https://gasstation-mainnet.matic.network/v2');
+      const gasStationData = await gasStationResponse.json() as MaticResponseV2;
+
       const tx = await utilityTokensContract.setTokenSettings(
         tokenId,
         tokenName,
         tokenMetadataURI,
         catDec,
         0,
-        parseUnits('0.0125', 18)
+        parseUnits('0.0125', 'ether'),
+        {
+          maxFeePerGas: parseUnits(Math.ceil(gasStationData.fast.maxFee).toString(), 'gwei'),
+          maxPriorityFeePerGas: parseUnits(Math.ceil(gasStationData.fast.maxPriorityFee).toString(), 'gwei'),
+        }
       );
 
-      const receipt = await tx.wait();
+      await lockTokenId(tokenId);
 
-      // save tokenid to organization record
+      tx.wait()
+        .then((receipt) => {
+          if (receipt.status === 1) {
+            addRewardToken(code, tokenId);
+          } else {
+            unlockTokenId(tokenId);
+          }
+        });
+
+      return { tx, tokenId };
     }),
   createOrgCodes: procedure
     .input(

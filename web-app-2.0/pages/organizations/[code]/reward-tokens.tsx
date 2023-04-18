@@ -1,8 +1,9 @@
 import CreateRewardToken from '@/components/organizations/create-reward-token';
 import OrgPageHeader from '@/components/organizations/org-page-header';
+import RewardTokenCard from '@/components/organizations/reward-token-card';
 import { Organization } from '@/types/organization';
 import { trpc } from '@/utils/trpc';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
@@ -39,7 +40,15 @@ const RewardTokens = () => {
           </Typography>
         </>
       ) : (
-        <></>
+        <>
+          <Grid container spacing={2} sx={{ mt: 2 }}>
+            {organization?.rewardTokens?.map((rewardToken) => (
+              <Grid item xs={12} md={6} lg={4} xl={3} key={rewardToken}>
+                <RewardTokenCard rewardTokenId={rewardToken} />
+              </Grid>
+            ))}
+          </Grid>
+        </>
       )}
 
       {organization !== undefined && organization !== null && <CreateRewardToken org={organization} />}
