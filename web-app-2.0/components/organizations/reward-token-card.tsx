@@ -68,7 +68,8 @@ const RewardTokenCard = ({ rewardTokenId }: RewardTokenCardProps) => {
         p: 2,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
         height: '100%',
         gap: 2,
       }}
