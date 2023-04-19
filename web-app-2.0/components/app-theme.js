@@ -167,7 +167,7 @@ export default function AppTheme(props) {
           },
         },
         shape: {
-          borderRadius: 8,
+          borderRadius: 5,
         },
         components: {
           MuiButtonBase: {

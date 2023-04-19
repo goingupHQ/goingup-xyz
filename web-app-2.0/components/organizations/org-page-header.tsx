@@ -22,7 +22,7 @@ const OrgPageHeader = ({ org }: OrgPageHeaderProps) => {
             <Box
               component="img"
               src={org?.logo}
-              sx={{ width: 60, height: 60, borderRadius: "2px" }}
+              sx={{ width: 60, height: 60, borderRadius: '5px' }}
             />
             <Typography variant="h4">{org?.name}</Typography>
           </Stack>

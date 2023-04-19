@@ -25,6 +25,8 @@ const RewardTokens = () => {
         <Typography>Manage your organizations reward tokens</Typography>
       </Box>
 
+      {organization !== undefined && organization !== null && <CreateRewardToken org={organization} />}
+
       {Boolean(organization?.rewardTokens) === false || organization?.rewardTokens?.length === 0 ? (
         <>
           <Box
@@ -50,8 +52,6 @@ const RewardTokens = () => {
           </Grid>
         </>
       )}
-
-      {organization !== undefined && organization !== null && <CreateRewardToken org={organization} />}
     </>
   );
 };

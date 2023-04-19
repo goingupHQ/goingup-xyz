@@ -183,7 +183,7 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
         sx={{ my: 2 }}
         onClick={handleCreateClick}
       >
-        Create a reward token
+        Create a new reward token
       </Button>
 
       <Dialog

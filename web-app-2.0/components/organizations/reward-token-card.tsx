@@ -62,7 +62,7 @@ const RewardTokenCard = ({ rewardTokenId }: RewardTokenCardProps) => {
     >
       {metadata !== null && (
         <>
-          <Box component="img" src={metadata?.image} sx={{ width: 100, height: 100, my: 2, borderRadius: 1 }} />
+          <Box component="img" src={metadata?.image} sx={{ width: 100, height: 100, my: 2, borderRadius: '5px' }} />
           <Typography variant="h6">{metadata?.name}</Typography>
           <Typography variant="body1">{metadata?.description}</Typography>
         </>
