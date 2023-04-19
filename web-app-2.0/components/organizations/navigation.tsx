@@ -33,7 +33,6 @@ const Navigation = ({ org }: NavigationProps) => {
             >
               <Button
                 variant="text"
-                color="inherit"
                 sx={{ textTransform: 'none' }}
               >
                 {item.text}

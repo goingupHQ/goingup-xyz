@@ -52,20 +52,20 @@ const subscribeUserToPush = async () => {
 };
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const [mode, setMode] = useState('light');
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  useEffect(() => {
-    const cache = localStorage.getItem('color-mode');
-    if (!cache) {
-      // localStorage.setItem('color-mode', prefersDarkMode ? 'dark' : 'light');
-      localStorage.setItem('color-mode', 'light');
-      setMode('light');
-    } else {
-      setMode(cache);
-    }
+  const [mode, setMode] = useState('dark');
+  // const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  // useEffect(() => {
+  //   const cache = localStorage.getItem('color-mode');
+  //   if (!cache) {
+  //     // localStorage.setItem('color-mode', prefersDarkMode ? 'dark' : 'light');
+  //     localStorage.setItem('color-mode', 'dark');
+  //     setMode('dark');
+  //   } else {
+  //     setMode(cache);
+  //   }
 
-    registerServiceWorker();
-  }, [mode]);
+  //   registerServiceWorker();
+  // }, [mode]);
 
   const setDarkMode = () => {
     localStorage.setItem('color-mode', 'dark');
