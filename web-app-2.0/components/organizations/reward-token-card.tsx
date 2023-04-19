@@ -1,5 +1,5 @@
 import { GoingUpUtilityTokens__factory } from '@/typechain';
-import { Box, Paper, Typography } from '@mui/material';
+import { Box, Paper, Skeleton, Typography } from '@mui/material';
 import { ethers } from 'ethers';
 import React from 'react';
 
@@ -20,30 +20,43 @@ const RewardTokenCard = ({ rewardTokenId }: RewardTokenCardProps) => {
   );
 
   React.useEffect(() => {
+    setIsFetchingMetadata(true);
     utilityContract.tokenSettings(rewardTokenId).then((settings) => {
       setTokenSettings(settings);
-    });
+    }).catch((err) => {
+      console.log(err);
+      setIsFetchingMetadata(false);
+    })
+
   }, [rewardTokenId]);
 
+  const [isFetchingMetadata, setIsFetchingMetadata] = React.useState(false);
   const [metadata, setMetadata] = React.useState<GenericNftMetadata | null>(null);
 
   React.useEffect(() => {
     const fetchMetadata = async () => {
-      if (tokenSettings === null) return;
+      setIsFetchingMetadata(true);
 
-      const metadataURIParts = tokenSettings.metadataURI.replace('ipfs://', '').split('/');
-      metadataURIParts[0] += '.ipfs.nftstorage.link';
-      const metadataURI = `https://${metadataURIParts.join('/')}`;
+      try {
+        if (tokenSettings === null) return;
 
-      const response = await fetch(metadataURI);
-      const data = await response.json() as GenericNftMetadata;
+        const metadataURIParts = tokenSettings.metadataURI.replace('ipfs://', '').split('/');
+        metadataURIParts[0] += '.ipfs.nftstorage.link';
+        const metadataURI = `https://${metadataURIParts.join('/')}`;
 
-      const imageURIParts = data.image.replace('ipfs://', '').split('/');
-      imageURIParts[0] += '.ipfs.nftstorage.link';
-      data.image = `https://${imageURIParts.join('/')}`;
-      console.log(data);
+        const response = await fetch(metadataURI);
+        const data = (await response.json()) as GenericNftMetadata;
 
-      setMetadata(data);
+        const imageURIParts = data.image.replace('ipfs://', '').split('/');
+        imageURIParts[0] += '.ipfs.nftstorage.link';
+        data.image = `https://${imageURIParts.join('/')}`;
+        console.log(data);
+
+        setMetadata(data);
+      } catch (err) {
+      } finally {
+        setIsFetchingMetadata(false);
+      }
     };
 
     fetchMetadata();
@@ -60,9 +73,24 @@ const RewardTokenCard = ({ rewardTokenId }: RewardTokenCardProps) => {
         gap: 2,
       }}
     >
-      {metadata !== null && (
+      {isFetchingMetadata && (
         <>
-          <Box component="img" src={metadata?.image} sx={{ width: 100, height: 100, my: 2, borderRadius: '5px' }} />
+          <Skeleton variant="rounded" width={100} height={100} />
+          <Skeleton variant="text" width="50%" />
+          <Skeleton variant="text" width="100%" />
+          <Skeleton variant="text" width="100%" />
+          <Skeleton variant="text" width="100%" />
+          <Skeleton variant="text" width="100%" />
+        </>
+      )}
+
+      {!isFetchingMetadata && metadata !== null && (
+        <>
+          <Box
+            component="img"
+            src={metadata?.image}
+            sx={{ width: 100, height: 100, my: 2, borderRadius: '5px' }}
+          />
           <Typography variant="h6">{metadata?.name}</Typography>
           <Typography variant="body1">{metadata?.description}</Typography>
         </>
