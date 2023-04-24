@@ -22,7 +22,8 @@ function PersonalInfo(props) {
     const {
         name, setName,
         occupation, setOccupation,
-        openTo, setOpenTo
+        openTo, setOpenTo,
+        about, setAbout
     } = props.state;
 
     return (
@@ -35,6 +36,14 @@ function PersonalInfo(props) {
                 sx={fieldStyle}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+            />
+            <TextField
+                label="About you"
+                placeholder="Introduce yourself to the community"
+                variant="outlined"
+                sx={fieldStyle}
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
             />
 
             <FormControl sx={fieldStyle} required>
