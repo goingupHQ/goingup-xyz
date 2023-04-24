@@ -33,6 +33,7 @@ const ClaimEventToken: React.FC = () => {
       setOpen(true);
       return;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isNaN(tokenId)) {

@@ -58,6 +58,7 @@ export default function ProjectsSection(props) {
 
     useEffect(() => {
         if (account.address && router.isReady) load();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [account.address, router.isReady]);
 
     useEffect(() => {
