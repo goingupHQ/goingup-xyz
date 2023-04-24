@@ -3,7 +3,7 @@ import { render } from 'mjml-react';
 import * as InviteFriend from '../../../templates/email/invite-friend.js';
 import * as HumanCouncilLoginCode from '../../../templates/email/human-council-login-code.js';
 
-export default async (req, res) => {
+export default async function handler(req, res) {
     const emailProps = {
         username: 'test',
         subject: 'test',
