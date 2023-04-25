@@ -25,3 +25,12 @@ ipfs://bafybeicplh67awdmjnmsiqzmuh5kopunkzy7uo72avrjm6yrkx4l5rhe5q/4.json
 1682029800
 1000
 1
+
+5
+CryptoMondays: April 24, 2023 Event
+https://bafybeibkweuuu2l4c2smcu6i4vqmlkfm2ii5qkw2n46h7u424626pijwaq.ipfs.nftstorage.link/5.json
+0x68D99e952cF3D4faAa6411C1953979F54552A8F7
+0
+1682807400
+1000
+1
