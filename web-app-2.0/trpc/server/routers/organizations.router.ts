@@ -28,6 +28,7 @@ export const organizationsRouter = router({
         signature: z.string(),
         tokenName: z.string(),
         tokenDescription: z.string(),
+        tokenTier: z.number(),
         tokenMetadataURI: z.string(),
       })
     )
@@ -44,19 +45,19 @@ export const organizationsRouter = router({
 
       const tokenId = await getNextTokenId();
 
-      const { code, tokenName, tokenDescription, tokenMetadataURI } = input;
+      const { code, tokenName, tokenTier, tokenMetadataURI } = input;
       const catHex = toHex(code, { prefix: true });
       const catDec = BigInt(hexToDec(catHex) || 0);
 
       const gasStationResponse = await fetch('https://gasstation-mainnet.matic.network/v2');
-      const gasStationData = await gasStationResponse.json() as MaticResponseV2;
+      const gasStationData = (await gasStationResponse.json()) as MaticResponseV2;
 
       const tx = await utilityTokensContract.setTokenSettings(
         tokenId,
         tokenName,
         tokenMetadataURI,
         catDec,
-        0,
+        tokenTier,
         parseUnits('0.0125', 'ether'),
         {
           maxFeePerGas: parseUnits(Math.ceil(gasStationData.fast.maxFee).toString(), 'gwei'),
@@ -66,14 +67,13 @@ export const organizationsRouter = router({
 
       await lockTokenId(tokenId);
 
-      tx.wait()
-        .then((receipt) => {
-          if (receipt.status === 1) {
-            addRewardToken(code, tokenId);
-          } else {
-            unlockTokenId(tokenId);
-          }
-        });
+      tx.wait().then((receipt) => {
+        if (receipt.status === 1) {
+          addRewardToken(code, tokenId);
+        } else {
+          unlockTokenId(tokenId);
+        }
+      });
 
       return { tx, tokenId };
     }),

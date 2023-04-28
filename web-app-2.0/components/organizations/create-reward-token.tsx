@@ -41,8 +41,9 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
     setModalOpen(true);
   };
 
-  const [tokenName, setTokenName] = React.useState('');
-  const [tokenDescription, setTokenDescription] = React.useState('');
+  const [tokenName, setTokenName] = React.useState<string>('');
+  const [tokenDescription, setTokenDescription] = React.useState<string>('');
+  const [tokenTier, setTokenTier] = React.useState<number>(1);
 
   type TokenAttribute = {
     trait_type: string;
@@ -134,6 +135,7 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
           signature,
           tokenName,
           tokenDescription,
+          tokenTier,
           tokenMetadataURI: metadata.url,
         });
 
@@ -219,13 +221,11 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
                 </Button>
               </Box>
 
-              {/* <Typography>{tokenImageFile ? tokenImageFile.name : 'No image selected'}</Typography> */}
-
               {previewImg && (
                 <Box
                   component="img"
                   src={previewImg}
-                  sx={{ width: 100, height: 100, my: 2, borderRadius: 1 }}
+                  sx={{ width: 75, height: 75, my: 2, borderRadius: 1 }}
                 />
               )}
             </Stack>
@@ -240,8 +240,18 @@ const CreateRewardToken = ({ org }: CreateRewardTokenProps) => {
               label="Token Description"
               value={tokenDescription}
               multiline
-              rows={3}
+              rows={2}
               onChange={(e) => setTokenDescription(e.target.value)}
+            />
+
+            <TextField
+              label="Token Tier"
+              value={tokenTier}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                if (isNaN(value)) setTokenTier(0);
+                else setTokenTier(value);
+              }}
             />
 
             {tokenAttributes.length === 0 ? (
