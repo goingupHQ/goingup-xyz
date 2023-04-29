@@ -13,3 +13,16 @@ export type Organization = {
   owners?: string[];
   rewardTokens?: number[];
 };
+
+export type OrganizationGroup = {
+  code: string;
+  name: string;
+  description: string;
+  members: OrganizationGroupMember[];
+};
+
+export type OrganizationGroupMember = {
+  address: string;
+  name: string;
+  remarks: string;
+};
