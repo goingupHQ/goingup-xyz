@@ -83,6 +83,7 @@ const CreateGroup = () => {
     if (isGroupNotCreated) {
       enqueueSnackbar('Failed to create group', { variant: 'error' });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isGroupCreated, isGroupNotCreated]);
 
   return (
