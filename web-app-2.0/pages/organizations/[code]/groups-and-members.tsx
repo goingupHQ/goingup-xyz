@@ -1,3 +1,5 @@
+import CreateGroup from '@/components/organizations/create-group';
+import GroupsList from '@/components/organizations/groups-list';
 import OrgPageHeader from '@/components/organizations/org-page-header';
 import { trpc } from '@/utils/trpc';
 import { Box, Typography } from '@mui/material';
@@ -24,6 +26,13 @@ const RewardsAndMembers = () => {
         <Typography>Manage your organization&apos;s groups &amp; members and distribute reward tokens</Typography>
       </Box>
 
+      <Box sx={{ mt: 2 }}>
+        <CreateGroup />
+      </Box>
+
+      <Box sx={{ mt: 2 }}>
+        <GroupsList groupCode={code} />
+      </Box>
     </>
   );
 };

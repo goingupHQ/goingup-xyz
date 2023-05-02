@@ -16,6 +16,7 @@ export type Organization = {
 
 export type OrganizationGroup = {
   code: string;
+  orgCode: string;
   name: string;
   description: string;
   members: OrganizationGroupMember[];

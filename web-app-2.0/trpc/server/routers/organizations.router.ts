@@ -1,6 +1,14 @@
 import { z } from 'zod';
 import { router, procedure } from '../trpc';
-import { addRewardToken, createOrgCodes, get, getAll, isOwner } from '@/utils/database/organization';
+import {
+  addRewardToken,
+  createOrgCodes,
+  get,
+  getAll,
+  getGroups,
+  isOwner,
+  saveGroup,
+} from '@/utils/database/organization';
 import admins from '@/utils/admins.json';
 import { validateSignature } from '@/utils/web3-signature';
 import { TRPCError } from '@trpc/server';
@@ -97,6 +105,27 @@ export const organizationsRouter = router({
 
       await createOrgCodes();
     }),
+  syncGroup: procedure
+    .input(
+      z.object({
+        group: z.object({
+          code: z.string(),
+          name: z.string(),
+          description: z.string(),
+        }),
+        code: z.string(),
+        signature: z.string(),
+        message: z.string(),
+        address: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await checkOrgOwner(input);
+      await saveGroup(input.group.code, input.code, input.group.name, input.group.description);
+    }),
+  getGroups: procedure.input(z.object({ code: z.string() })).query(async ({ input }) => {
+    return getGroups(input.code);
+  }),
 });
 
 async function checkOrgOwner(input: { code: string; message: string; address: string; signature: string }) {
