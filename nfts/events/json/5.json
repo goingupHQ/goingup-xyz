@@ -1,0 +1,28 @@
+{
+    "name": "CryptoMondays: April 24, 2023 Event",
+    "description": "Attendee Badge for CryptoMondays: April 24, 2023 Event",
+    "image": "ipfs://bafybeicfwa4thkykxbuz4zapso2jzatr5voxainregsf24uww6be77pajq/5.jpg",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "Date",
+            "value": "1682375400"
+        },
+        {
+            "trait_type": "Location",
+            "value": "Republic, 10th Floor, 149 5th Avenue, New York, NY"
+        },
+        {
+            "trait_type": "Event",
+            "value": "CryptoMondays: April 24, 2023 Event"
+        },
+        {
+            "trait_type": "Description",
+            "value": "Attendee Badge for CryptoMondays: April 24, 2023 Event"
+        },
+        {
+            "trait_type": "Partner",
+            "value": "CryptoMondays"
+        }
+    ]
+}

@@ -25,7 +25,7 @@ const Navigation = ({ org }: NavigationProps) => {
     <Box sx={{ my: 2 }}>
       {isMdAndUp ? (
         <>
-          <Typography sx={{ display: 'inline' }}>Organizations Menu: </Typography>
+          {/* <Typography sx={{ display: 'inline' }}>Organizations Menu: </Typography> */}
           {navItems.map((item, index) => (
             <Link
               href={item.to}
@@ -46,7 +46,7 @@ const Navigation = ({ org }: NavigationProps) => {
             variant="contained"
             onClick={handleMobileClick}
           >
-            Organizations Menu
+            Organization Menu
           </Button>
           <Menu
             anchorEl={anchorEl}

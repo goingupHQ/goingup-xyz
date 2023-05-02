@@ -1,14 +1,14 @@
 import { getDb } from '../database';
-import { Organization } from '../../types/organization';
+import { Organization, OrganizationGroup } from '../../types/organization';
 
 export const getAll = async () => {
   const db = await getDb();
-  return (await db.collection<Organization>('orgs').find().toArray());
+  return await db.collection<Organization>('orgs').find().toArray();
 };
 
 export const get = async (code: string) => {
   const db = await getDb();
-  return (await db.collection<Organization>('orgs').findOne({ code }));
+  return await db.collection<Organization>('orgs').findOne({ code });
 };
 
 export const isOwner = async (code: string, address: string) => {
@@ -30,4 +30,27 @@ export const addRewardToken = async (code: string, tokenId: number) => {
   const db = await getDb();
   const col = db.collection<Organization>('orgs');
   await col.updateOne({ code }, { $push: { rewardTokens: tokenId } });
+};
+
+export const saveGroup = async (code: string, orgCode:string, name: string, description: string) => {
+  const db = await getDb();
+  const col = db.collection<OrganizationGroup>('org-groups');
+  await col.updateOne(
+    { code },
+    {
+      $set: {
+        code,
+        orgCode,
+        name,
+        description,
+      },
+    },
+    { upsert: true }
+  );
+};
+
+export const getGroups = async (orgCode: string) => {
+  const db = await getDb();
+  const col = db.collection<OrganizationGroup>('org-groups');
+  return await col.find({ orgCode }).toArray();
 };

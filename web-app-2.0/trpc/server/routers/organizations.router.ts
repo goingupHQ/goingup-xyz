@@ -1,6 +1,14 @@
 import { z } from 'zod';
 import { router, procedure } from '../trpc';
-import { addRewardToken, createOrgCodes, get, getAll, isOwner } from '@/utils/database/organization';
+import {
+  addRewardToken,
+  createOrgCodes,
+  get,
+  getAll,
+  getGroups,
+  isOwner,
+  saveGroup,
+} from '@/utils/database/organization';
 import admins from '@/utils/admins.json';
 import { validateSignature } from '@/utils/web3-signature';
 import { TRPCError } from '@trpc/server';
@@ -28,6 +36,7 @@ export const organizationsRouter = router({
         signature: z.string(),
         tokenName: z.string(),
         tokenDescription: z.string(),
+        tokenTier: z.number(),
         tokenMetadataURI: z.string(),
       })
     )
@@ -44,19 +53,19 @@ export const organizationsRouter = router({
 
       const tokenId = await getNextTokenId();
 
-      const { code, tokenName, tokenDescription, tokenMetadataURI } = input;
+      const { code, tokenName, tokenTier, tokenMetadataURI } = input;
       const catHex = toHex(code, { prefix: true });
       const catDec = BigInt(hexToDec(catHex) || 0);
 
       const gasStationResponse = await fetch('https://gasstation-mainnet.matic.network/v2');
-      const gasStationData = await gasStationResponse.json() as MaticResponseV2;
+      const gasStationData = (await gasStationResponse.json()) as MaticResponseV2;
 
       const tx = await utilityTokensContract.setTokenSettings(
         tokenId,
         tokenName,
         tokenMetadataURI,
         catDec,
-        0,
+        tokenTier,
         parseUnits('0.0125', 'ether'),
         {
           maxFeePerGas: parseUnits(Math.ceil(gasStationData.fast.maxFee).toString(), 'gwei'),
@@ -66,14 +75,13 @@ export const organizationsRouter = router({
 
       await lockTokenId(tokenId);
 
-      tx.wait()
-        .then((receipt) => {
-          if (receipt.status === 1) {
-            addRewardToken(code, tokenId);
-          } else {
-            unlockTokenId(tokenId);
-          }
-        });
+      tx.wait().then((receipt) => {
+        if (receipt.status === 1) {
+          addRewardToken(code, tokenId);
+        } else {
+          unlockTokenId(tokenId);
+        }
+      });
 
       return { tx, tokenId };
     }),
@@ -97,6 +105,27 @@ export const organizationsRouter = router({
 
       await createOrgCodes();
     }),
+  syncGroup: procedure
+    .input(
+      z.object({
+        group: z.object({
+          code: z.string(),
+          name: z.string(),
+          description: z.string(),
+        }),
+        code: z.string(),
+        signature: z.string(),
+        message: z.string(),
+        address: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await checkOrgOwner(input);
+      await saveGroup(input.group.code, input.code, input.group.name, input.group.description);
+    }),
+  getGroups: procedure.input(z.object({ code: z.string() })).query(async ({ input }) => {
+    return getGroups(input.code);
+  }),
 });
 
 async function checkOrgOwner(input: { code: string; message: string; address: string; signature: string }) {
