@@ -1,0 +1,28 @@
+{
+    "name": "CryptoMondays: Power Women In Tech",
+    "description": "Attendee Badge for CryptoMondays: Power Women In Tech Event",
+    "image": "ipfs://bafybeigxq6mpjf35e74r2hjbptdgahubmme44ct4eit5uxoa5jv5cstime/6.jpg",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "Date",
+            "value": "1682937000"
+        },
+        {
+            "trait_type": "Location",
+            "value": "Republic"
+        },
+        {
+            "trait_type": "Event",
+            "value": "CryptoMondays: Power Women In Tech"
+        },
+        {
+            "trait_type": "Description",
+            "value": "Attendee Badge for CryptoMondays: Power Women In Tech Event"
+        },
+        {
+            "trait_type": "Partner",
+            "value": "CryptoMondays"
+        }
+    ]
+}
