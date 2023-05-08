@@ -48,8 +48,9 @@ const RewardTokenCard = ({ rewardTokenId }: RewardTokenCardProps) => {
         const data = (await response.json()) as GenericNftMetadata;
 
         const imageURIParts = data.image.replace('ipfs://', '').split('/');
-        imageURIParts[0] += '.ipfs.nftstorage.link';
-        data.image = `https://${imageURIParts.join('/')}`;
+        data.image = `https://cloudflare-ipfs.com/ipfs/${imageURIParts.join('/')}`;
+        // imageURIParts[0] += '.ipfs.nftstorage.link';
+        // data.image = `https://${imageURIParts.join('/')}`;
         console.log(data);
 
         setMetadata(data);
