@@ -33,7 +33,7 @@ const GroupCard = ({ group }: GroupCardProps) => {
         value={addressInputValue}
         setValue={setAddressInputValue}
         onChange={(value) => console.log(value)}
-        sx={{ mt: 3 }}
+        sx={{ mt: 3, width: 'auto', minWidth: { xs: '100%', md: '400px' } }}
       />
     </Paper>
   );
