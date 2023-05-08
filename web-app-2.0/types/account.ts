@@ -131,3 +131,8 @@ type TwitterUser = {
   profile_image_url: string;
 }
 
+export type AddressOrAccountSearchResult = {
+  address: string;
+  name?: string;
+  profilePhoto?: string;
+};
