@@ -1,25 +1,57 @@
-import { trpc } from "@/utils/trpc";
-import { Backdrop, Grid } from "@mui/material";
-import LoadingIllustration from "../common/loading-illustration";
+import { trpc } from '@/utils/trpc';
+import { Backdrop, Box, Grid, Paper, Tab, Tabs } from '@mui/material';
+import LoadingIllustration from '../common/loading-illustration';
+import GroupCard from './group-card';
+import { useEffect, useState } from 'react';
+import { OrganizationGroup } from '@/types/organization';
 
 type GroupsListProps = {
   groupCode: string;
-}
+};
 
 const GroupsList = ({ groupCode }: GroupsListProps) => {
-  const { data: groups, isLoading: isGroupsLoading } = trpc.organizations.getGroups.useQuery({ code: groupCode }, { enabled: Boolean(groupCode) });
+  const { data: groups, isLoading: isGroupsLoading } = trpc.organizations.getGroups.useQuery(
+    { code: groupCode },
+    { enabled: Boolean(groupCode) }
+  );
+
+  const [selectedTab, setSelectedTab] = useState<string | null>(null);
+  const [selectedGroup, setSelectedGroup] = useState<OrganizationGroup | null>(null);
+
+  const selectedTabChangeHandler = (event: React.SyntheticEvent, newValue: string) => {
+    setSelectedTab(newValue);
+  };
+
+  useEffect(() => {
+    if (selectedTab && groups) {
+      const selectedGroup = groups.find((group) => group.code === selectedTab);
+      setSelectedGroup(selectedGroup || null);
+    }
+  }, [selectedTab]);
+
+  useEffect(() => {
+    if (groups) {
+      setSelectedTab(groups[0].code);
+    }
+  }, [groups]);
 
   return (
     <>
       {isGroupsLoading && <LoadingIllustration />}
 
       {!isGroupsLoading && groups && (
-        <Grid container columnSpacing={2} rowSpacing={2}>
-          {groups.map((group) => (
-            <Grid item xs={12} md={6} lg={4} key={group.code}>
-            </Grid>
-          ))}
-        </Grid>
+        <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+          <Tabs
+            value={selectedTab}
+            onChange={selectedTabChangeHandler}
+            centered
+          >
+            {groups.map((group) => (
+              <Tab label={group.name} value={group.code} />
+            ))}
+          </Tabs>
+          {selectedGroup && <GroupCard group={selectedGroup} />}
+        </Box>
       )}
     </>
   );

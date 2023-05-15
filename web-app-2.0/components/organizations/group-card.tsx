@@ -1,16 +1,24 @@
-import { OrganizationGroup } from "@/types/organization";
-import { Paper, Typography } from "@mui/material";
+import { OrganizationGroup, OrganizationGroupMember } from '@/types/organization';
+import { Paper, Typography } from '@mui/material';
+import AddressInput from '../common/address-input';
+import { useEffect, useState } from 'react';
 
 type GroupCardProps = {
   group: OrganizationGroup;
-}
+};
 
 const GroupCard = ({ group }: GroupCardProps) => {
+  const [addressInputValue, setAddressInputValue] = useState<string>('');
+
+  useEffect(() => {
+    if (!addressInputValue) return;
+  }, [addressInputValue]);
+
   return (
     <Paper
-      variant="outlined"
+      variant="elevation"
       sx={{
-        p: 2,
+        p: 3,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
@@ -20,6 +28,13 @@ const GroupCard = ({ group }: GroupCardProps) => {
       <Typography>{group.name}</Typography>
       <Typography>{group.description}</Typography>
 
+      <AddressInput
+        label="Search for users to add to this group"
+        value={addressInputValue}
+        setValue={setAddressInputValue}
+        onChange={(value) => console.log(value)}
+        sx={{ mt: 3, width: 'auto', minWidth: { xs: '100%', md: '400px' } }}
+      />
     </Paper>
   );
 };

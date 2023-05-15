@@ -8,6 +8,7 @@ import { useSigner } from 'wagmi';
 
 const CreateGroup = () => {
   const router = useRouter();
+  const context = trpc.useContext();
   const { enqueueSnackbar } = useSnackbar();
   const code = router.query.code as string;
   const [modalOpen, setModalOpen] = useState(false);
@@ -64,6 +65,8 @@ const CreateGroup = () => {
         message,
         address,
       });
+
+      context.organizations.getGroups.invalidate({ code });
       enqueueSnackbar('Group created successfully', { variant: 'success' });
       setModalOpen(false);
     } catch (error) {
