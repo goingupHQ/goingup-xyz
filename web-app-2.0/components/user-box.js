@@ -82,8 +82,8 @@ export default function UserBox () {
 
     const handleOpen = () => {
         if (wallet.address === null) {
-            wallet.connectEthereum();
-            // chainSelectionRef.current.showModal();
+            // wallet.connectEthereum();
+            chainSelectionRef.current.showModal();
         } else {
             setOpen(true);
         }
