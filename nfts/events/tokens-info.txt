@@ -43,3 +43,12 @@ ipfs://bafybeibc5xiaskqpzway5hplk3dkgdlnmvaev7ovkpmpr4pdppt4uvpy2i/6.json
 1683282600
 1000
 1
+
+7
+CryptoMondays: Alternative Data for Alternative Investments
+ipfs://bafybeiaxf4gstcp3piebn6u27knmsama2ttqvouqoss4h6mdi5mne7iydq/7.json
+0x68D99e952cF3D4faAa6411C1953979F54552A8F7
+0
+1684578600
+1000
+1
