@@ -24,7 +24,7 @@ export const kmsRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       if (process.env.VERCEL_ENV !== "development") throw new TRPCError({ code: "FORBIDDEN", message: "Forbidden" });
-      const { cipherText, keyName } = input;
+      const { cipherText } = input;
       const decrypted = await decrypt(cipherText);
       return decrypted;
     })
