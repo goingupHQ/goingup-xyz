@@ -4,6 +4,7 @@ import { authRouter } from './auth';
 import { emailsRouter } from './emails.router';
 import { eventPartnersRouter } from './event-partners.router';
 import { eventTokensRouter } from './event-tokens.router';
+import { kmsRouter } from './kms';
 import { organizationsRouter } from './organizations.router';
 
 export const appRouter = router({
@@ -12,7 +13,8 @@ export const appRouter = router({
   emails: emailsRouter,
   organizations: organizationsRouter,
   accounts: accountsRouter,
-  auth: authRouter
+  auth: authRouter,
+  kms: kmsRouter,
 });
 
 // export type definition of API

@@ -13,30 +13,41 @@ const client = new KeyManagementServiceClient({
   }
 });
 
-const keyName = client.cryptoKeyPath(projectId, locationId, keyRingId, keyId);
-
 export const encrypt = async (text: string) => {
+  const keyName = client.cryptoKeyPath(projectId, locationId, keyRingId, keyId);
   const plaintext = Buffer.from(text);
   const plaintextCrc32c = crc32.calculate(plaintext);
 
   const [result] = await client.encrypt({
     name: keyName,
     plaintext,
+    plaintextCrc32c: {
+      value: plaintextCrc32c,
+    },
   });
 
-  const ciphertextBuffer = result?.ciphertext as Buffer;
-  const ciphertext = ciphertextBuffer.toString('base64');
-  return ciphertext;
+  const cipherText = result.ciphertext;
+  if (!result.verifiedPlaintextCrc32c) throw new Error('Encryption failed, request corrupted in-transit');
+
+  const cipherTextCrc32c = crc32.calculate(cipherText as Buffer);
+  const responseCrc32c = Number(result.ciphertextCrc32c?.value);
+  if (cipherTextCrc32c !== responseCrc32c) throw new Error('Encryption failed, response corrupted in-transit');
+
+  return { result, cipherText: (result.ciphertext as Buffer).toString('base64') };
 }
 
 export const decrypt = async (ciphertext: string) => {
+  const keyName2 = client.cryptoKeyPath(projectId, locationId, keyRingId, keyId);
   const ciphertextBuffer = Buffer.from(ciphertext);
 
   const [result] = await client.decrypt({
-    name: keyName,
+    name: keyName2,
     ciphertext: ciphertext
   });
 
-  const plaintext = result?.plaintext as Buffer;
-  return plaintext.toString();
+  const plaintextCrc32c = crc32.calculate(result.plaintext as Buffer);
+  const responseCrc32c = Number(result.plaintextCrc32c?.value);
+  if (plaintextCrc32c !== responseCrc32c) throw new Error('Decryption failed, response corrupted in-transit');
+
+  return { result, plainText: (result.plaintext as Buffer).toString('utf8') };
 }

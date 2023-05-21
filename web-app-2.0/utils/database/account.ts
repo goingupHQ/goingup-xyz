@@ -19,7 +19,7 @@ export const getCustodialAccountByEmail = async (email: string): Promise<Account
   return account;
 };
 
-export const createCustodialAccount = async (email: string, address: string, encryptedPrivateKey): Promise<void> => {
+export const createCustodialAccount = async (email: string, address: string, encryptedPrivateKey: string): Promise<void> => {
   if (await getCustodialAccountByEmail(email)) {
     throw new Error('Account already exists');
   }

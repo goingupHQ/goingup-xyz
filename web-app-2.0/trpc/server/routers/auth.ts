@@ -39,14 +39,9 @@ export const authRouter = router({
 
         // encrypt wallet private key with google cloud kms
         const encryptedPrivateKey = await encrypt(wallet.privateKey);
-        console.log('privateKey', wallet.privateKey);
-        console.log('encryptedPrivateKey', encryptedPrivateKey);
-
-        const decryptedPrivateKey = await decrypt(encryptedPrivateKey);
-        console.log('decryptedPrivateKey', decryptedPrivateKey);
 
         // save account to database
-        await createCustodialAccount(email, wallet.address, encryptedPrivateKey);
+        await createCustodialAccount(email, wallet.address, encryptedPrivateKey.cipherText);
         existing = await getCustodialAccountByEmail(email);
       }
 
