@@ -1,21 +1,21 @@
-type UtilityTokenSupply = {
+export type UtilityTokenSupply = {
   tokenId: number;
   supply: number;
 }
 
-type UtilityTokenConfig = {
+export type UtilityTokenConfig = {
   configId: string;
   lockedTokenIds: number[];
 }
 
-type GenericNftMetadata = {
+export type GenericNftMetadata = {
   name: string;
   description: string;
   image: string;
   attributes: GenericNftAttribute[];
 }
 
-type GenericNftAttribute = {
+export type GenericNftAttribute = {
   trait_type: string;
   value: string;
 }

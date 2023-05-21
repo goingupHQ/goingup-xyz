@@ -1,4 +1,4 @@
-type MaticResponseV2 = {
+export type MaticResponseV2 = {
   safeLow: {
     maxPriorityFee: number;
     maxFee: number;
