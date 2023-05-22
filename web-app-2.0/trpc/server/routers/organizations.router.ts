@@ -18,6 +18,7 @@ import { hexToDec } from 'hex2dec';
 import { GoingUpUtilityTokens__factory } from '@/typechain';
 import { getNextTokenId, lockTokenId, unlockTokenId } from '@/utils/utility-tokens';
 import { parseUnits } from 'ethers/lib/utils.js';
+import { MaticResponseV2 } from '@/types/gas-stations';
 
 export const organizationsRouter = router({
   getAll: procedure.query(async () => {
