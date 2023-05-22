@@ -78,7 +78,7 @@ const KmsPage = () => {
 
               <LoadingButton
                 variant="contained"
-                onClick={() => decrypt({ cipherText, keyName: encryptionResult?.result?.name! })}
+                onClick={() => decrypt({ cipherText })}
                 loading={isDecrypting}
               >
                 Decrypt
