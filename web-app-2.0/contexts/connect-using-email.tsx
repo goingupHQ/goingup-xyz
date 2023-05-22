@@ -76,6 +76,7 @@ const ConnectUsingEmail = (props, ref) => {
 
   const [code, setCode] = useState<string>('');
   const {
+    data: custodialAccount,
     mutateAsync: verifyEmailCode,
     isLoading: isVerifyingEmailCode,
     isSuccess: emailCodeVerified,
@@ -85,7 +86,13 @@ const ConnectUsingEmail = (props, ref) => {
   useEffect(() => {
     if (emailCodeVerified) {
       enqueueSnackbar('Login successful', { variant: 'success' });
+      console.log(custodialAccount);
       setOpen(false);
+
+      // reset state
+      setStep(0);
+      setEmail('');
+      setCode('');
     }
 
     if (emailCodeNotVerified) {
