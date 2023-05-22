@@ -67,5 +67,12 @@ export const authRouter = router({
       res.setHeader('Set-Cookie', [
         `access_token=${accessToken}; HttpOnly; Secure; SameSite=Strict; Expires=${expires.toUTCString()}; Max-Age=${maxAge}`,
       ]);
+
+      const account = await getCustodialAccountByEmail(email);
+      if (!account) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to get custodial account' });
+      }
+      account.encryptedPrivateKey = 'redacted'; // don't return the encrypted private key
+      return account;
     }),
 });
