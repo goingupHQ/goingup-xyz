@@ -197,6 +197,7 @@ const EditProfile = (props, ref) => {
                             sx={fieldStyle}
                             value={about}
                             onChange={(e) => setAbout(e.target.value)}
+                            multiline
                         />
 
                         <FormControl sx={fieldStyle} required>
