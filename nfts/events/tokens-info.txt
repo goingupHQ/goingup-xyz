@@ -52,3 +52,12 @@ ipfs://bafybeiaxf4gstcp3piebn6u27knmsama2ttqvouqoss4h6mdi5mne7iydq/7.json
 1684578600
 1000
 1
+
+8
+3rd Annual Pizza Party
+ipfs://bafybeiezltxotkur6a7vb5uc4y5gwproxb4ppgfbhs2nidszrmt6lyb54u/8.json
+0x68D99e952cF3D4faAa6411C1953979F54552A8F7
+0
+1685313000
+1000
+1
