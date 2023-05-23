@@ -8,6 +8,12 @@ import { decrypt, encrypt } from '@/utils/kms';
 import crypto from 'crypto';
 
 export const authRouter = router({
+  // getAccountByAccessToken: procedure
+  //   .input(z.object({ accessToken: z.string() }))
+  //   .query(async ({ input, ctx }) => {
+  //     const { accessToken } = input;
+
+  //   }),
   verifyEmailCode: procedure
     .input(
       z.object({

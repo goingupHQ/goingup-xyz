@@ -7,9 +7,14 @@ import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
  */
 export async function createContext(opts: CreateNextContextOptions) {
   const { req, res } = opts;
+
+  // get access_token cookie
+  const accessToken = req.cookies.access_token;
+
   return {
     req,
-    res
+    res,
+    accessToken,
   };
 }
 

@@ -93,6 +93,8 @@ const ConnectUsingEmail = (props, ref) => {
       setStep(0);
       setEmail('');
       setCode('');
+
+      wallet.connectCustodial(custodialAccount);
     }
 
     if (emailCodeNotVerified) {

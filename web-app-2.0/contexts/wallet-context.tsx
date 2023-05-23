@@ -9,12 +9,15 @@ import { useModal } from 'connectkit';
 import { useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 import { Provider } from '@ethersproject/providers';
 import { Chain } from 'wagmi';
+import { Account } from '@/types/account';
 
 type WalletContextValue = {
   networks: typeof networks;
   chain: string | null;
   connectEthereum: () => void;
   disconnectEthereum: () => void;
+  connectCustodial: (Account) => void;
+  disconnectCustodial: () => void;
   address: string | null;
   network: Chain | null;
   walletType: string | null;
@@ -116,7 +119,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
 
   const [address, setAddress] = useState<string | null>(null);
   const [network, setNetwork] = useState<Chain | null>(null);
-  const [chain, setChain] = useState<string | null>(null);
+  const [chain, setChain] = useState<'Ethereum' | 'Custodial' | null>(null);
   const [ethersProvider, setEthersProvider] = useState<Provider | null>(null);
   const [ethersSigner, setEthersSigner] = useState<Signer | null>(null);
   const [walletType, setWalletType] = useState<string | null>(null);
@@ -280,8 +283,8 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
       if (!address) {
         if (cache.blockchain === 'evm') {
           connectEthereum();
-        } else if (cache.blockchain === 'cardano') {
-          connectCardano();
+        } else if (cache.blockchain === 'custodial') {
+          connectCustodial(cache.custodialAccount);
         }
       }
     }
@@ -290,8 +293,8 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   const disconnect = async () => {
     if (chain === 'Ethereum') {
       disconnectEthereum();
-    } else if (chain === 'Cardano') {
-      disconnectCardano();
+    } else if (chain === 'Custodial') {
+      disconnectCustodial();
     }
 
     localStorage.removeItem('wallet-context-cache');
@@ -384,6 +387,10 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     }
 
     if (!evmIsConnected && !evmIsConnecting) {
+      if (localStorage.getItem('wallet-context-cache')) {
+        const cache = JSON.parse(localStorage.getItem('wallet-context-cache')!);
+        if (Boolean(cache)) return;
+      }
       disconnectEthereum();
     }
   }, [evmAddress, evmIsConnected, evmIsConnecting, evmProvider, evmSigner, evmChain]);
@@ -391,6 +398,27 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   const { disconnect: evmDisconnect } = useDisconnect();
   const disconnectEthereum = async () => {
     evmDisconnect();
+    clearState();
+  };
+
+  const connectCustodial = async (account: Account) => {
+    setChain(`Custodial`);
+    setNetwork(null);
+    setWalletType('custodial');
+    setEthersProvider(null);
+    setEthersSigner(null);
+    setAddress(account.address || null);
+
+    localStorage.setItem(
+      'wallet-context-cache',
+      JSON.stringify({
+        blockchain: 'custodial',
+        custodialAccount: account,
+      })
+    );
+  };
+
+  const disconnectCustodial = async () => {
     clearState();
   };
 
@@ -460,6 +488,8 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
         chain,
         connectEthereum,
         disconnectEthereum,
+        connectCustodial,
+        disconnectCustodial,
         address,
         network,
         walletType,
