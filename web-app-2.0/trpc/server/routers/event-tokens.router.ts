@@ -27,6 +27,7 @@ export const eventTokensRouter = router({
 
       // fetch metadata
       const metadata = await fetch(metadataURI).then((res) => res.json());
+      console.log(metadata);
       const imageURI = metadata.image;
       // convert ipfs uri to gateway
       if (imageURI?.startsWith('ipfs://')) {
@@ -34,7 +35,7 @@ export const eventTokensRouter = router({
         const filename = imageURI.split('ipfs://')[1].split('/')[1];
         metadata.image = `https://${ipfsHash}.ipfs.nftstorage.link/${filename}`;
       }
-
+      console.log(tokenSettings, metadata);
       return { tokenSettings, metadata };
     }),
   claimToken: procedure

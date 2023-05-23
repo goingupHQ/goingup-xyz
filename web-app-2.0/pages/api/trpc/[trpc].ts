@@ -5,5 +5,10 @@ import { appRouter } from '@/trpc/server/routers/_app';
 // @see https://trpc.io/docs/api-handler
 export default trpcNext.createNextApiHandler({
   router: appRouter,
-  createContext: () => ({}),
+  createContext: ({ req, res }: trpcNext.CreateNextContextOptions) => {
+    return {
+      req,
+      res,
+    };
+  }
 });

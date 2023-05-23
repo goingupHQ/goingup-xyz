@@ -23,6 +23,9 @@ export type Account = {
   about?: string;
   projectImage?: string;
   isDeleted?: boolean | string;
+  isCustodial?: boolean;
+  encryptedPrivateKey?: string;
+  createdAt?: Date;
 }
 
 type MintedUtilityToken = {

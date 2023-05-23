@@ -1,4 +1,5 @@
 import { GoingUpUtilityTokens__factory } from '@/typechain';
+import { GenericNftMetadata } from '@/types/utility-token';
 import { Box, Paper, Skeleton, Typography } from '@mui/material';
 import { ethers } from 'ethers';
 import React from 'react';

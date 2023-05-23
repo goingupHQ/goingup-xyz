@@ -47,7 +47,7 @@ const GroupsList = ({ groupCode }: GroupsListProps) => {
             centered
           >
             {groups.map((group) => (
-              <Tab label={group.name} value={group.code} />
+              <Tab key={group.code} label={group.name} value={group.code} />
             ))}
           </Tabs>
           {selectedGroup && <GroupCard group={selectedGroup} />}

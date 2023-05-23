@@ -1,0 +1,29 @@
+{
+    "name": "3rd Annual Pizza Party",
+    "description": "Attendee Badge for CryptoMondays: 3rd Annual Pizza Party",
+    "image": "ipfs://bafybeigawso7e2ra6vcrutgw4g76mguiykunwhmsteb5i3rkienjxbvale/8.jpg",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "Date",
+            "value": "1684794600"
+        },
+        {
+            "trait_type": "Location",
+            "value": "Settlers.Build 750 Manhattan Ave, New York"
+        },
+        {
+            "trait_type": "Event",
+            "value": "3rd Annual Pizza Party"
+        },
+        {
+            "trait_type": "Description",
+            "value": "Attendee Badge for CryptoMondays: 3rd Annual Pizza Party"
+        },
+        {
+            "trait_type": "Partner",
+            "value": "CryptoMondays"
+        }
+    ]
+}
+d

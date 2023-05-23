@@ -1,6 +1,7 @@
 import { GoingUpUtilityTokens__factory } from '@/typechain';
 import { getDb } from './database';
 import { Signer, ethers } from 'ethers';
+import { UtilityTokenConfig, UtilityTokenSupply } from '@/types/utility-token';
 
 export const getUtilityTokenContract = (providerOrSigner?: ethers.providers.Provider | Signer) => {
   if (!providerOrSigner) {
