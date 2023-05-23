@@ -208,6 +208,7 @@ const EditProfile = (props, ref) => {
                                 label="Occupation"
                                 value={occupation}
                                 onChange={(e) => setOccupation(e.target.value)}
+                                MenuProps={{ style: {marginTop: 80}} }
                             >
                                 {occupations.map((o) => {
                                     return (
@@ -249,6 +250,7 @@ const EditProfile = (props, ref) => {
                                         )
                                         .join(', ')
                                 }
+                                MenuProps={{ style: {marginTop: 80}} }
                             >
                                 {availability.map((a) => {
                                     return (
@@ -295,6 +297,7 @@ const EditProfile = (props, ref) => {
                                         )
                                         .join(', ')
                                 }
+                                MenuProps={{ style: {marginTop: 80}} }
                             >
                                 {userGoals.map((ug) => {
                                     return (
@@ -343,6 +346,7 @@ const EditProfile = (props, ref) => {
                                         )
                                         .join(', ')
                                 }
+                                MenuProps={{ style: {marginTop: 80}} }
                             >
                                 {occupations.map((o) => {
                                     return (
