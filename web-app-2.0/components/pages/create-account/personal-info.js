@@ -37,14 +37,6 @@ function PersonalInfo(props) {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
             />
-            <TextField
-                label="About you"
-                placeholder="Introduce yourself to the community"
-                variant="outlined"
-                sx={fieldStyle}
-                value={about}
-                onChange={(e) => setAbout(e.target.value)}
-            />
 
             <FormControl sx={fieldStyle} required>
                 <InputLabel id="occupation-select-label">Occupation</InputLabel>
@@ -94,6 +86,16 @@ function PersonalInfo(props) {
                     })}
                 </Select>
             </FormControl>
+
+            <TextField
+                label="About you"
+                placeholder="Introduce yourself to the community"
+                variant="outlined"
+                sx={fieldStyle}
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
+                multiline
+            />
         </Box>
     );
 }
