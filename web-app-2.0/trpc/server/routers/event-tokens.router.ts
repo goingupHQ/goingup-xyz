@@ -24,9 +24,12 @@ export const eventTokensRouter = router({
         const ipfsHash = metadataURI.split('ipfs://')[1].split('/')[0];
         metadataURI = `https://${ipfsHash}.ipfs.nftstorage.link/${input.tokenId}.json`;
       }
-
+      console.log('metadataURI', metadataURI);
       // fetch metadata
-      const metadata = await fetch(metadataURI).then((res) => res.json());
+      const metadata = await fetch(metadataURI).then((res) => res.json())
+        .catch((err) => {
+          console.log('error fetching metadata', err);
+        });
       console.log(metadata);
       const imageURI = metadata.image;
       // convert ipfs uri to gateway
