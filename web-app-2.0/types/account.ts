@@ -26,6 +26,7 @@ export type Account = {
   isCustodial?: boolean;
   encryptedPrivateKey?: string;
   createdAt?: Date;
+  custodialOnboarded?: boolean;
 }
 
 type MintedUtilityToken = {
