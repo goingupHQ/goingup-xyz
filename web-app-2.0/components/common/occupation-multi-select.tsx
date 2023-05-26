@@ -25,6 +25,7 @@ const OccupationMultiSelect = ({ value, setValue, label }: OccupationMultiSelect
       setInputValue(newInputValue);
     }}
     options={occupations}
+    disableCloseOnSelect
     getOptionLabel={(option: Occupation) => option.text}
       renderInput={(params) => (
         <TextField

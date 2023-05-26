@@ -26,6 +26,7 @@ const UserGoalSelect = ({ value, setValue, label }: UserGoalSelectProps) => {
       }}
       options={userGoals}
       getOptionLabel={(option: UserGoal) => option.text}
+      disableCloseOnSelect
       renderInput={(params) => (
         <TextField
           {...params}

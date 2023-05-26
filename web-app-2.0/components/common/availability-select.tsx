@@ -26,6 +26,7 @@ const AvailabilitySelect = ({ value, setValue, label }: AvailabilitySelectProps)
       }}
       options={availability}
       getOptionLabel={(option: Availability) => option.text}
+      disableCloseOnSelect
       renderInput={(params) => (
         <TextField
           {...params}
