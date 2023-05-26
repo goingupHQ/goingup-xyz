@@ -7,10 +7,25 @@ import userGoals from './user-goals.json';
 
 const maxReputationScore = 140;
 
+export type Occupation = {
+  id: number;
+  text: string;
+};
+
+export type Availability = {
+  id: number;
+  text: string;
+};
+
+export type UserGoal = {
+  id: number;
+  text: string;
+};
+
 type AppContextData = {
-  availability: typeof availability;
-  occupations: typeof occupations;
-  userGoals: typeof userGoals;
+  availability: Availability[];
+  occupations: Occupation[];
+  userGoals: UserGoal[];
   setDarkMode: () => void;
   setLightMode: () => void;
   maxReputationScore: number;

@@ -1,11 +1,12 @@
 import { procedure, router } from '../trpc';
-import { accountsRouter } from './accounts.router';
+import { accountsRouter } from './accounts-router';
 import { authRouter } from './auth';
-import { emailsRouter } from './emails.router';
-import { eventPartnersRouter } from './event-partners.router';
-import { eventTokensRouter } from './event-tokens.router';
+import { emailsRouter } from './emails-router';
+import { eventPartnersRouter } from './event-partners-router';
+import { eventTokensRouter } from './event-tokens-router';
 import { kmsRouter } from './kms';
-import { organizationsRouter } from './organizations.router';
+import { organizationsRouter } from './organizations-router';
+import { profilesRouter } from './profiles-router';
 
 export const appRouter = router({
   eventPartners: eventPartnersRouter,
@@ -15,6 +16,7 @@ export const appRouter = router({
   accounts: accountsRouter,
   auth: authRouter,
   kms: kmsRouter,
+  profiles: profilesRouter,
 });
 
 // export type definition of API

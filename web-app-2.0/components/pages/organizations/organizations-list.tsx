@@ -10,8 +10,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../../../contexts/app-context';
 import LoadingIllustration from '../../common/loading-illustration';
 import { trpc } from '@/utils/trpc';
@@ -36,7 +35,6 @@ export default function OrganizationsList() {
           {organizations?.map((organization) => (
             <Grid
               item
-              spacing={1}
               xs={12}
               md={6}
               lg={4}

@@ -46,8 +46,8 @@
   { "id": 45, "text": "Pilot" },
   { "id": 46, "text": "Fitness Instructor" },
   { "id": 47, "text": "Environmental Scientist" },
-  { "id": 48, "text": "Architect" },
+  { "id": 48, "text": "Data Scientist" },
   { "id": 49, "text": "Landscape Designer" },
-  { "id": 50, "text": "Event Planner" },
+  { "id": 50, "text": "Software Tester" },
   { "id": 999, "text": "Other" }
 ]

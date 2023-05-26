@@ -12,7 +12,6 @@ export const authRouter = router({
   //   .input(z.object({ accessToken: z.string() }))
   //   .query(async ({ input, ctx }) => {
   //     const { accessToken } = input;
-
   //   }),
   verifyEmailCode: procedure
     .input(
