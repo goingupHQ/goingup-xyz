@@ -6,8 +6,10 @@ import { useSnackbar } from 'notistack';
 import sleep from '@react-corekit/sleep';
 import isEmail from 'validator/lib/isEmail';
 import { trpc } from '@/utils/trpc';
+import { useRouter } from 'next/router';
 
 const ConnectUsingEmail = (props, ref) => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const wallet = useContext(WalletContext);
 
@@ -15,11 +17,6 @@ const ConnectUsingEmail = (props, ref) => {
 
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState('');
-  const [sendingEmail, setSendingEmail] = useState(false);
-
-  // useEffect(() => {
-  //     if (wallet.address) setOpen(false);
-  // }, [wallet.address]);
 
   useImperativeHandle(ref, () => ({
     showModal() {
@@ -86,7 +83,6 @@ const ConnectUsingEmail = (props, ref) => {
   useEffect(() => {
     if (emailCodeVerified) {
       enqueueSnackbar('Login successful', { variant: 'success' });
-      console.log(custodialAccount);
       setOpen(false);
 
       // reset state
@@ -94,7 +90,11 @@ const ConnectUsingEmail = (props, ref) => {
       setEmail('');
       setCode('');
 
-      wallet.connectCustodial(custodialAccount);
+      wallet.connectCustodial(custodialAccount); console.log('custodialAccount', custodialAccount);
+
+      if (!custodialAccount.custodialOnboarded) {
+        router.push('/custodial-onboarding');
+      }
     }
 
     if (emailCodeNotVerified) {
@@ -153,6 +153,7 @@ const ConnectUsingEmail = (props, ref) => {
                 placeholder="mark@goingup.xyz"
                 variant="outlined"
                 fullWidth
+                autoFocus
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -208,6 +209,7 @@ const ConnectUsingEmail = (props, ref) => {
                   label="Login Code"
                   variant="outlined"
                   fullWidth
+                  autoFocus
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                 />
