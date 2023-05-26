@@ -90,12 +90,12 @@ export const searchForProfiles = async (nameQuery: string): Promise<Account[]> =
   const accounts = await db
     .collection<Account>('accounts')
     .find({
+      mock: { $exists: false },
+      profilePhoto: { $exists: true },
       $text: {
         $search: nameQuery,
         $caseSensitive: false,
       },
-      mock: { $exists: false },
-      profilePhoto: { $exists: true },
     })
     .limit(12)
     .toArray();

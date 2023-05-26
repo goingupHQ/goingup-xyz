@@ -10,9 +10,7 @@ export default function SuggestedProfiles() {
     data: potentialCollabs,
     isLoading: gettingPotentialCollabs,
     refetch: refetchPotentialCollabs,
-  } = trpc.profiles.getPotentialCollaborators.useQuery(
-    { count: 12, onlyProfilesWithPhotos: true },
-  );
+  } = trpc.profiles.getPotentialCollaborators.useQuery({ count: 12, onlyProfilesWithPhotos: true });
 
   const {
     mutateAsync: searchProfiles,
@@ -31,9 +29,8 @@ export default function SuggestedProfiles() {
           refetchPotentialCollabs();
           return;
         }
-
-        await searchProfiles({ nameQuery: value })
         setShowProfileSearch(true);
+        searchProfiles({ nameQuery: value });
       }, 500),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []

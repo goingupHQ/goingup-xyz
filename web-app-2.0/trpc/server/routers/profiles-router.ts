@@ -35,6 +35,7 @@ export const profilesRouter = router({
       })
     )
     .mutation(async ({ input }) => {
+      console.log('profilesRouter.searchForProfiles');
       const { nameQuery } = input;
       const profiles = await searchForProfiles(nameQuery);
       return profiles;
