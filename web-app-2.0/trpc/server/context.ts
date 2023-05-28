@@ -1,5 +1,6 @@
 import type { inferAsyncReturnType } from '@trpc/server';
 import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
+import cookie from 'cookie';
 
 /**
  * Creates context for an incoming request
@@ -8,13 +9,9 @@ import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
 export async function createContext(opts: CreateNextContextOptions) {
   const { req, res } = opts;
 
-  // get access_token cookie
-  const accessToken = req.cookies.access_token;
-
   return {
     req,
     res,
-    accessToken,
   };
 }
 

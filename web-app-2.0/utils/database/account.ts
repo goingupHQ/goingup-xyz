@@ -84,8 +84,6 @@ export const getPotentialCollaborators = async (
 };
 
 export const searchForProfiles = async (nameQuery: string): Promise<Account[]> => {
-  console.log('searchForProfiles', nameQuery);
-  const start = performance.now();
   const db = await getDb();
   const accounts = await db
     .collection<Account>('accounts')
@@ -99,8 +97,12 @@ export const searchForProfiles = async (nameQuery: string): Promise<Account[]> =
     })
     .limit(12)
     .toArray();
-
-  const end = performance.now();
-  console.log(`searchForProfiles took ${end - start} milliseconds`);
   return accounts;
+};
+
+export const updateAccount = async (address: string, account: Partial<Account>) => {
+  const db = await getDb();
+  await db.collection<Account>('accounts').updateOne({ address }, { $set: account });
+  const updatedAccount = await db.collection<Account>('accounts').findOne({ address });
+  return updatedAccount;
 };

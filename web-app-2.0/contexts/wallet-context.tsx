@@ -386,13 +386,13 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
       signInEthereum(evmAddress!, evmSigner!);
     }
 
-    if (!evmIsConnected && !evmIsConnecting) {
-      if (localStorage.getItem('wallet-context-cache')) {
-        const cache = JSON.parse(localStorage.getItem('wallet-context-cache')!);
-        if (Boolean(cache)) return;
-      }
-      disconnectEthereum();
-    }
+    // if (!evmIsConnected && !evmIsConnecting) {
+    //   if (localStorage.getItem('wallet-context-cache')) {
+    //     const cache = JSON.parse(localStorage.getItem('wallet-context-cache')!);
+    //     if (Boolean(cache)) return;
+    //   }
+    //   disconnectEthereum();
+    // }
   }, [evmAddress, evmIsConnected, evmIsConnecting, evmProvider, evmSigner, evmChain]);
 
   const { disconnect: evmDisconnect } = useDisconnect();

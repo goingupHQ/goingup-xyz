@@ -3,16 +3,42 @@ import OccupationMultiSelect from '@/components/common/occupation-multi-select';
 import OccupationSelect from '@/components/common/occupation-select';
 import UserGoalSelect from '@/components/common/user-goal-select';
 import { Availability, Occupation, UserGoal } from '@/contexts/app-context';
+import { trpc } from '@/utils/trpc';
+import { LoadingButton } from '@mui/lab';
 import { Box, Fade, Stack, TextField, Typography } from '@mui/material';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
+import { useEffect, useState } from 'react';
 
 const CustodialOnboarding = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  const nextRouter = useRouter();
+
   const [name, setName] = useState<string>('');
   const [occupation, setOccupation] = useState<Occupation | null>(null);
   const [openTo, setOpenTo] = useState<Availability[]>([]);
   const [idealCollabs, setIdealCollabs] = useState<Occupation[]>([]);
   const [userGoals, setUserGoals] = useState<UserGoal[]>([]);
+
+  const {
+    data: account,
+    mutateAsync: completeOnboarding,
+    isLoading: completingOnboarding,
+    isSuccess: onboardingCompleted,
+    isError: onboardingFailed,
+  } = trpc.accounts.completeCustodialOnboarding.useMutation();
+
+  useEffect(() => {
+    if (onboardingCompleted) {
+      enqueueSnackbar('Your GoingUP account setup is complete!', { variant: 'success' });
+      nextRouter.push(`/profile/${account?.address}`);
+    }
+
+    if (onboardingFailed) {
+      enqueueSnackbar('Something went wrong. Please try again.', { variant: 'error' });
+    }
+  }, [onboardingCompleted, onboardingFailed]);
 
   return (
     <>
@@ -77,6 +103,23 @@ const CustodialOnboarding = () => {
               setValue={setUserGoals}
             />
 
+            <LoadingButton
+              variant="contained"
+              color="primary"
+              sx={{ alignSelf: 'flex-start' }}
+              loading={completingOnboarding}
+              onClick={() =>
+                completeOnboarding({
+                  name,
+                  occupation: occupation!.id,
+                  openTo: openTo.map((availability) => availability.id),
+                  idealCollab: idealCollabs.map((occupation) => occupation.id),
+                  projectGoals: userGoals.map((goal) => goal.id),
+                })
+              }
+            >
+              Complete my GoingUP profile
+            </LoadingButton>
           </Stack>
         </Box>
       </Fade>

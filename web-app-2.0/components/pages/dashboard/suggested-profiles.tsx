@@ -10,7 +10,7 @@ export default function SuggestedProfiles() {
     data: potentialCollabs,
     isLoading: gettingPotentialCollabs,
     refetch: refetchPotentialCollabs,
-  } = trpc.profiles.getPotentialCollaborators.useQuery({ count: 12, onlyProfilesWithPhotos: true });
+  } = trpc.profiles.getPotentialCollaborators.useQuery({ count: 12, onlyProfilesWithPhotos: false });
 
   const {
     mutateAsync: searchProfiles,
