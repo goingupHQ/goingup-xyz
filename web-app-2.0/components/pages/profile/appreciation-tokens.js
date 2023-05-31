@@ -71,6 +71,7 @@ const AppreciationTokens = (props) => {
             }
         };
         load();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address]);
 
     const { account } = props;

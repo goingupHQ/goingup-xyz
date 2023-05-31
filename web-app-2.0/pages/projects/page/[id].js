@@ -44,6 +44,7 @@ export default function ProjectPage(props) {
         if (router.isReady && wallet.address) {
             load();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, wallet.address]);
 
     return (

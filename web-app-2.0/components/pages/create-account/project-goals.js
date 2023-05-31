@@ -32,6 +32,7 @@ function ProjectGoals(props) {
                         setProjectGoals(typeof value === 'string' ? value.split(',') : value);
                     }}
                     renderValue={(selected) => selected.map(i => userGoals.find(ug => ug.id === i).text).join(', ')}
+                    MenuProps={{ style: {marginTop: 80}} }
                 >
                     {userGoals.map(ug => {return (
                         <MenuItem key={ug.id} value={ug.id}>
@@ -57,6 +58,7 @@ function ProjectGoals(props) {
                         setIdealCollab(typeof value === 'string' ? value.split(',') : value);
                     }}
                     renderValue={(selected) => selected.map(i => occupations.find(ug => ug.id === i).text).join(', ')}
+                    MenuProps={{ style: {marginTop: 80}} }
                 >
                     {occupations.map(o => {return (
                         <MenuItem key={o.id} value={o.id}>

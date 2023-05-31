@@ -190,14 +190,6 @@ const EditProfile = (props, ref) => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
-                        <TextField
-                            label="About you"
-                            placeholder="Introduce yourself to the community"
-                            variant="outlined"
-                            sx={fieldStyle}
-                            value={about}
-                            onChange={(e) => setAbout(e.target.value)}
-                        />
 
                         <FormControl sx={fieldStyle} required>
                             <InputLabel id="occupation-select-label">
@@ -208,6 +200,7 @@ const EditProfile = (props, ref) => {
                                 label="Occupation"
                                 value={occupation}
                                 onChange={(e) => setOccupation(e.target.value)}
+                                MenuProps={{ style: {marginTop: 80}} }
                             >
                                 {occupations.map((o) => {
                                     return (
@@ -249,6 +242,7 @@ const EditProfile = (props, ref) => {
                                         )
                                         .join(', ')
                                 }
+                                MenuProps={{ style: {marginTop: 80}} }
                             >
                                 {availability.map((a) => {
                                     return (
@@ -295,6 +289,7 @@ const EditProfile = (props, ref) => {
                                         )
                                         .join(', ')
                                 }
+                                MenuProps={{ style: {marginTop: 80}} }
                             >
                                 {userGoals.map((ug) => {
                                     return (
@@ -313,6 +308,15 @@ const EditProfile = (props, ref) => {
                             </Select>
                         </FormControl>
 
+                        <TextField
+                            label="About you"
+                            placeholder="Introduce yourself to the community"
+                            variant="outlined"
+                            sx={fieldStyle}
+                            value={about}
+                            onChange={(e) => setAbout(e.target.value)}
+                            multiline
+                        />
                         <FormControl sx={fieldStyle} required>
                             <InputLabel id="ideal-collaborator-label">
                                 Ideal collaborator/s
@@ -343,6 +347,7 @@ const EditProfile = (props, ref) => {
                                         )
                                         .join(', ')
                                 }
+                                MenuProps={{ style: {marginTop: 80}} }
                             >
                                 {occupations.map((o) => {
                                     return (

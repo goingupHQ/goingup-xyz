@@ -3,7 +3,7 @@ import { ProjectsContext } from "../../../contexts/projects-context";
 import { WalletContext } from "../../../contexts/wallet-context";
 import { AppContext } from "../../../contexts/app-context";
 import { useSnackbar } from "notistack";
-import ProjectCard from "../projects/project-card";
+import NextLink from 'next/link';
 import {
     Box,
     Button,
@@ -58,6 +58,7 @@ export default function ProjectsSection(props) {
 
     useEffect(() => {
         if (account.address && router.isReady) load();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [account.address, router.isReady]);
 
     useEffect(() => {
@@ -125,6 +126,19 @@ export default function ProjectsSection(props) {
                                         <Typography variant='h2'>
                                             {account.name} have not created a project yet
                                         </Typography>
+
+                                        <NextLink
+                                            href="/projects/create"
+                                            passHref
+                                            >
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                size="large"
+                                            >
+                                                Create A Project
+                                            </Button>
+                                        </NextLink>
 
                                         <img
                                             src='/images/illustrations/empty-box.svg'
