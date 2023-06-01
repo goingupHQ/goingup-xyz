@@ -39,7 +39,7 @@ export const accountsRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       const { name, occupation, openTo, idealCollab, projectGoals } = input;
-      const accessToken = ctx.req.cookies.access_token; console.log('accessToken', accessToken);
+      const { accessToken } = ctx.session;
       const address = await getAddressByAccessToken(accessToken!); console.log('address', address);
       if (!address) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'No address found for access token' });
 

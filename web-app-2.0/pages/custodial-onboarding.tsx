@@ -56,7 +56,7 @@ const CustodialOnboarding = () => {
             variant="subtitle1"
             sx={{ marginBottom: 4 }}
           >
-            You're almost there! Please fill out the form below to complete your account setup.
+            {`You're almost there! Please fill out the form below to complete your account setup.`}
           </Typography>
 
           <Stack

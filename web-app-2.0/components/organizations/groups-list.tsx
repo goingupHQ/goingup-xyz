@@ -27,7 +27,7 @@ const GroupsList = ({ groupCode }: GroupsListProps) => {
       const selectedGroup = groups.find((group) => group.code === selectedTab);
       setSelectedGroup(selectedGroup || null);
     }
-  }, [selectedTab]);
+  }, [selectedTab, groups]);
 
   useEffect(() => {
     if (groups) {

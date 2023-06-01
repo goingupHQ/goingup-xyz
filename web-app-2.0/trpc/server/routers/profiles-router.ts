@@ -13,7 +13,7 @@ export const profilesRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      const { accessToken } = ctx;
+      const { accessToken } = ctx.session;
       let userAddress: string | null = null;
       if (accessToken) {
         userAddress = await getAddressByAccessToken(accessToken);
