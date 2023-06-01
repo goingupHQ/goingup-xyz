@@ -32,14 +32,14 @@ export default async function handler(req, res) {
 
     // store token in db
     const db = await getDb();
-    await db.collection('auth-tokens').insertOne({
+    await db.collection('access-tokens').insertOne({
         token,
         address,
         createdAt: new Date(),
     });
 
     // set auth token cookie
-    setCookie('auth-token', token, {
+    setCookie('access_token', token, {
         req,
         res,
         maxAge: 60 * 60 * 24 * 365, // 1 year

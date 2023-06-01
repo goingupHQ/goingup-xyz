@@ -329,7 +329,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
 
   const signInEthereum = async (address: string, signer: Signer) => {
     if (router.isReady && router.pathname.startsWith('/claim-event-token')) return;
-    if (hasCookie('auth-token')) return;
+    if (hasCookie('access_token')) return;
 
     if (!address) throw 'No address found';
     if (!ethersSigner) throw 'No signer found';
@@ -423,8 +423,9 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   };
 
   const clearState = () => {
-    deleteCookie('auth-token');
-    localStorage.removeItem('wallet-context-cache');
+    deleteCookie('access_token');
+    // localStorage.removeItem('wallet-context-cache');
+    localStorage.clear();
     setChain(null);
     setAddress(null);
     setNetwork(null);
@@ -467,7 +468,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
 
   const signMessage = async (message): Promise<string> => {
     if (chain === 'Ethereum') {
-      const authToken = getCookie('auth-token');
+      const authToken = getCookie('access_token');
       if (authToken) {
         return authToken as string;
       } else {

@@ -19,11 +19,11 @@ export const saveAuthToken = async (token: string, address: string) => {
     address,
     createdAt: new Date(),
   };
-  await db.collection<AuthToken>('auth-tokens').insertOne(record);
+  await db.collection<AuthToken>('access-tokens').insertOne(record);
 };
 
 export const getAddressByAccessToken = async (accessToken: string): Promise<string | null> => {
   const db = await getDb();
-  const record = await db.collection<AuthToken>('auth-tokens').findOne({ token: accessToken });
+  const record = await db.collection<AuthToken>('access-tokens').findOne({ token: accessToken });
   return record?.address ?? null;
 };

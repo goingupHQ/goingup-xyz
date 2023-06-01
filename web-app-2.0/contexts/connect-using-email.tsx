@@ -94,6 +94,8 @@ const ConnectUsingEmail = (props, ref) => {
 
       if (!custodialAccount.custodialOnboarded) {
         router.push('/custodial-onboarding');
+      } else {
+        router.push(`/profile/${custodialAccount.address}`);
       }
     }
 
