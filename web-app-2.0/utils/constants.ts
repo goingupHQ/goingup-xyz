@@ -1,0 +1,1 @@
+export const membershipNftContractAddress = '0x9337051505436D20FDCf7E2CE5a733b49d1042bc';

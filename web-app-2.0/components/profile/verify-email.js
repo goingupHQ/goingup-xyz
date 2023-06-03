@@ -1,21 +1,12 @@
-import { AppContext } from '../../../contexts/app-context';
-import { WalletContext } from '../../../contexts/wallet-context';
+import { WalletContext } from '../../contexts/wallet-context';
 import { LoadingButton } from '@mui/lab';
 import {
-    Box,
     Button,
-    Checkbox,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
-    FormControl,
     Grid,
-    InputLabel,
-    ListItemText,
-    MenuItem,
-    Select,
     TextField,
     Typography
 } from '@mui/material';
@@ -33,7 +24,6 @@ const VerifyEmail = (props, ref) => {
     const [verifying, setVerifying] = useState(false);
 
     const wallet = useContext(WalletContext);
-    const router = useRouter();
 
     const { enqueueSnackbar } = useSnackbar();
 

@@ -1,7 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
 import moment from 'moment';
 import React, { useContext } from 'react';
-import { AppContext } from '../../../contexts/app-context';
+import { AppContext } from '../../contexts/app-context';
 
 export default function PoapCard(props) {
     const app = useContext(AppContext);

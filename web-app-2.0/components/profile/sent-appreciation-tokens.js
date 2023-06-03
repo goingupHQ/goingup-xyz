@@ -1,13 +1,13 @@
 import { Box, Button, Fade, Stack, Typography } from '@mui/material';
 import { ethers } from 'ethers';
 import React, { useContext, useEffect, useState } from 'react';
-import { AppContext } from '../../../contexts/app-context';
-import { WalletContext } from '../../../contexts/wallet-context';
+import { AppContext } from '../../contexts/app-context';
+import { WalletContext } from '../../contexts/wallet-context';
 import sleep from 'sleep-promise';
-import artifact from '../../../../artifacts/GoingUpUtilityToken.json';
+import artifact from '../../../artifacts/GoingUpUtilityToken.json';
 import truncateEthAddress from 'truncate-eth-address';
 import { useRouter } from 'next/router';
-import ProfileLink from '../../common/profile-link';
+import ProfileLink from '../common/profile-link';
 
 export default function AppreciationTokenCard(props) {
     const { tier, balance } = props;
@@ -18,15 +18,16 @@ export default function AppreciationTokenCard(props) {
     const [messages, setMessages] = useState([]);
     const [showMessage, setShowMessage] = useState(true);
     const [shownMessage, setShownMessage] = useState({});
+    const [sent, setSent] = useState('');
+    const [sentTo, setSentTo] = useState('');
     const router = useRouter();
 
     useEffect(() => {
         //
         const load = async () => {
-            if (router.isReady) {
                 setLoading(true);
                 try {
-                    const result = await getMessages(tier, router.query.address);
+                    const result = await getMessages(tier);
                     setMessages(result);
                 } catch (err) {
                     console.log(err);
@@ -34,11 +35,11 @@ export default function AppreciationTokenCard(props) {
                     setLoading(false);
                 }
             }
-        };
-
+            if (router.isReady) {
         load();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [router.isReady]);
 
     let intervalId;
     useEffect(() => {
@@ -56,28 +57,35 @@ export default function AppreciationTokenCard(props) {
     const provider = wallet.utilityToken.provider;
     const contract = new ethers.Contract(contractAddress, artifact.abi, provider);
 
-    const getMessages = async (tokenID, address) => {
+    const getMessages = async (tokenID, to) => {
         const _interface = new ethers.utils.Interface(artifact.abi);
-        const filter = contract.filters.WriteMintData(tokenID, address);
+        const filter = contract.filters.WriteMintData(tokenID, to);
         filter.fromBlock = 0;
         filter.toBlock = 'latest';
         const writeMintLogs = await await contract.provider.getLogs(filter);
         const messagesResult = writeMintLogs.map((log) => {
             const parsedLog = _interface.parseLog(log);
             const message = { ...parsedLog.args };
+            const sender = message[2];
+            const senderMessage = message[3];
+            setSent(senderMessage);
+            const senderAddress = sender === router.query.address;
+            setSentTo(senderAddress);
+            if(senderAddress) {
             return message;
+            }
         });
 
         // for (const m of messages) m.block = await contract.provider.getBlock(m.blockNumber);
-
-        for (const m of messagesResult) {
-            const fromName = await getSenderAccountName(m.from);
+        const filterMessageResult = messagesResult.filter((m) => Boolean(m));
+        for (const m of filterMessageResult) {
+            const fromName = await getSenderAccountName(m.to);
             if (fromName) {
                 m.fromName = fromName;
             }
         }
 
-        return messagesResult;
+        return filterMessageResult;
     };
 
     const getSenderAccountName = async (address) => {
@@ -122,8 +130,8 @@ export default function AppreciationTokenCard(props) {
             >
                 <Box
                     component="img"
-                    src={`/images/appreciation-token-t${tier}-display.jpg`}
-                    sx={{ width: '120px', height: '120px', borderRadius: '8px' }}
+                    src={`/images/appreciation-token-t${tier}-display.png`}
+                    sx={{ width: '120px', height: '120px' }}
                     alt={`appreciation-token-t${tier}`}
                 />
 
@@ -135,23 +143,19 @@ export default function AppreciationTokenCard(props) {
                     sx={{ paddingX: '15px' }}
                 >
                     <Typography variant="body1" color="textPrimary">
-                        <strong>
-                            {/* {balance}  */}
-                            T{tier} Token{balance !== 1 ? 's' : ''}
+                        <strong> T{tier} Token{balance !== 1 ? 's' : ''}
                         </strong>
                     </Typography>
                     {!loading && (
                         <>
                             <Fade in={showMessage}>
-                                <Box>
-                                    {shownMessage.fromName && (
-                                        <ProfileLink address={shownMessage.to} />)}
-                                    {!shownMessage.fromName && <>{truncateEthAddress(shownMessage?.from || '')}</>}
-                                    <Typography variant="body1">{shownMessage.data}</Typography>
-                                    {shownMessage.fromName && (
-                                        <ProfileLink address={shownMessage.from || ''} />)}
-                                    {!shownMessage.fromName &&
-                                    '- '}
+                                <Box>{shownMessage.fromName && (
+                                    <ProfileLink address={shownMessage.to} />)}
+                                {!shownMessage.fromName && <>{truncateEthAddress(shownMessage?.from || '')}</>}
+                                <Typography variant="body1">{shownMessage.data}</Typography>
+                                {shownMessage.fromName && (
+                                    <ProfileLink address={shownMessage.from || ''} />)}
+                                {!shownMessage.fromName && '- '}
                                 </Box>
                             </Fade>
 

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../../contexts/app-context";
-import { WalletContext } from "../../../contexts/wallet-context";
+import { AppContext } from "../../contexts/app-context";
+import { WalletContext } from "../../contexts/wallet-context";
 import {
     Grid,
     Card,
@@ -15,12 +15,9 @@ import {
     Box,
 } from "@mui/material";
 import { ethers } from "ethers";
-import artifact from "../../../../artifacts/GoingUpUtilityToken.json";
-import ChevronRightIcon from "../../icons/ChevronRightIcon";
+import artifact from "../../../artifacts/GoingUpUtilityToken.json";
 import AppreciationTokenCard from "./appreciation-token-card";
 import SentAppreciationTokenCard from "./sent-appreciation-tokens";
-
-const CardContentWrapper = styled(CardContent)(() => ``);
 
 const AppreciationTokens = (props) => {
     const [loading, setLoading] = useState(true);

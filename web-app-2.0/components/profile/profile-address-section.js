@@ -1,11 +1,11 @@
 import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { AppContext } from '../../../contexts/app-context';
+import { AppContext } from '../../contexts/app-context';
 import ContactsAndIntegrations from './contacts-and-integrations';
 import truncateEthAddress from 'truncate-eth-address';
-import { WalletContext } from '../../../contexts/wallet-context';
+import { WalletContext } from '../../contexts/wallet-context';
 import EditProfile from './edit-profile';
-import SendAppreciationToken from '../../common/SendAppreciationToken';
+import SendAppreciationToken from '../common/SendAppreciationToken';
 import { useSnackbar } from 'notistack';
 
 const ProfileAddressSection = (props) => {

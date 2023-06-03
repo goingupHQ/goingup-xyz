@@ -1,5 +1,5 @@
-import { AppContext } from '../../../contexts/app-context';
-import { WalletContext } from '../../../contexts/wallet-context';
+import { AppContext } from '../../contexts/app-context';
+import { WalletContext } from '../../contexts/wallet-context';
 import { LoadingButton } from '@mui/lab';
 import {
     Box,
@@ -21,7 +21,7 @@ import { useSnackbar } from 'notistack';
 import { forwardRef, useContext, useImperativeHandle, useState } from 'react';
 
 const EditProfile = (props, ref) => {
-    const { account } = props; 
+    const { account } = props;
     const [open, setOpen] = useState(false);
     const [name, setName] = useState(account.name);
     const [about, setAbout] = useState(account.about);

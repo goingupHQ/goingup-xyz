@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../../contexts/app-context";
-import { WalletContext } from "../../../contexts/wallet-context";
+import { AppContext } from "../../contexts/app-context";
+import { WalletContext } from "../../contexts/wallet-context";
 import {
     Grid,
     Card,
@@ -16,7 +16,7 @@ import {
     Modal,
     IconButton,
 } from "@mui/material";
-import ChevronRightIcon from "../../icons/ChevronRightIcon";
+import ChevronRightIcon from "../icons/ChevronRightIcon";
 import PoapCard from "./poap-card";
 
 const CardContentWrapper = styled(CardContent)(

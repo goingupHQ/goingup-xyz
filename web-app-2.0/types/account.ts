@@ -140,3 +140,8 @@ export type AddressOrAccountSearchResult = {
   name?: string;
   profilePhoto?: string;
 };
+
+export type Follows = {
+  address: string;
+  follows: string;
+};

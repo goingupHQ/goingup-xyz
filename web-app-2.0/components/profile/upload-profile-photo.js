@@ -1,7 +1,7 @@
 import { CircularProgress, IconButton } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useContext, useRef, useState } from "react";
-import { WalletContext } from "../../../contexts/wallet-context";
+import { WalletContext } from "../../contexts/wallet-context";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { v4 as uuid } from 'uuid';
 

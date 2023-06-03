@@ -4,7 +4,7 @@ export type EmailLoginCode = {
   expiresAt: Date;
 };
 
-export type AuthToken = {
+export type AccessToken = {
   token: string;
   address: string;
   createdAt: Date;

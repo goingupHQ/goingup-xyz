@@ -6,6 +6,8 @@ import { createCustodialAccount, getCustodialAccountByEmail } from '@/utils/data
 import { ethers } from 'ethers';
 import { decrypt, encrypt } from '@/utils/kms';
 import crypto from 'crypto';
+import { getDb } from '@/utils/database';
+import { AccessToken } from '@/types/auth';
 
 export const authRouter = router({
   // getAccountByAccessToken: procedure
@@ -80,4 +82,16 @@ export const authRouter = router({
       account.encryptedPrivateKey = 'redacted'; // don't return the encrypted private key
       return account;
     }),
+
 });
+
+export const getAccountByAccessToken = async (accessToken: string) => {
+  const db = await getDb();
+  const tokenRecord = await db.collection<AccessToken>('access-tokens').findOne({ accessToken });
+  if (!tokenRecord) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid access token' });
+
+  const account = await db.collection('accounts').findOne({ address: tokenRecord.address });
+  if (!account) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to get account' });
+
+  return account;
+};

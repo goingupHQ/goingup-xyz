@@ -1,4 +1,4 @@
-import { AuthToken, EmailLoginCode } from '@/types/auth';
+import { AccessToken, EmailLoginCode } from '@/types/auth';
 import { getDb } from '../database';
 
 export const getEmailLoginCodeRecord = async (email: string, code: string) => {
@@ -19,11 +19,11 @@ export const saveAuthToken = async (token: string, address: string) => {
     address,
     createdAt: new Date(),
   };
-  await db.collection<AuthToken>('access-tokens').insertOne(record);
+  await db.collection<AccessToken>('access-tokens').insertOne(record);
 };
 
 export const getAddressByAccessToken = async (accessToken: string): Promise<string | null> => {
   const db = await getDb();
-  const record = await db.collection<AuthToken>('access-tokens').findOne({ token: accessToken });
+  const record = await db.collection<AccessToken>('access-tokens').findOne({ token: accessToken });
   return record?.address ?? null;
 };

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ProjectsContext } from "../../../contexts/projects-context";
-import { WalletContext } from "../../../contexts/wallet-context";
-import { AppContext } from "../../../contexts/app-context";
+import { ProjectsContext } from "../../contexts/projects-context";
+import { WalletContext } from "../../contexts/wallet-context";
+import { AppContext } from "../../contexts/app-context";
 import { useSnackbar } from "notistack";
 import NextLink from 'next/link';
 import {
