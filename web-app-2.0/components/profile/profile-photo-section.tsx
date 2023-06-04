@@ -20,12 +20,18 @@ const ProfilePhotoSection = ({ account, refresh }: ProfilePhotoSectionProps) => 
     { enabled: Boolean(account.address) }
   );
 
-  const { data: followStats,
-    isLoading: gettingFollowStats,
-  } = trpc.accounts.getFollowStats.useQuery({ address: account.address! }, { enabled: Boolean(account.address) });
+  const { data: followStats, isLoading: gettingFollowStats } = trpc.accounts.getFollowStats.useQuery(
+    { address: account.address! },
+    { enabled: Boolean(account.address) }
+  );
 
   const followersListRef = useRef<FollowersListRef>(null);
   const followingListRef = useRef<FollowingListRef>(null);
+
+  const idealCollabsText = account.idealCollab?.map((collab) => {
+    const occupation = app.occupations.find((occupation) => occupation.id === collab);
+    return occupation?.text;
+  }).join(', ');
 
   return (
     <>
@@ -107,7 +113,7 @@ const ProfilePhotoSection = ({ account, refresh }: ProfilePhotoSectionProps) => 
                     justifyContent: 'center',
                   }}
                 >
-                  <Typography color={'#3AB795'}>
+                  <Typography component="span" color={'#3AB795'}>
                     {' '}
                     {Math.round(100 * (account.reputationScore / app.maxReputationScore))}%
                   </Typography>
@@ -131,6 +137,7 @@ const ProfilePhotoSection = ({ account, refresh }: ProfilePhotoSectionProps) => 
             {checkHolder && <CircularProgress size={'14px'} />}
             {!checkHolder && isHolder && (
               <Typography
+                component="span"
                 sx={{
                   backgroundColor: app.mode === 'dark' ? '#192530' : '#CFCFCF',
                   borderRadius: '8px',
@@ -142,29 +149,26 @@ const ProfilePhotoSection = ({ account, refresh }: ProfilePhotoSectionProps) => 
               </Typography>
             )}
             <Typography
+              component="span"
               marginTop={'10px'}
               variant="h1"
             >
               {account.name}
             </Typography>
             <Box>
-              <Typography>{app.occupations.find((o) => o.id == account.occupation)?.text || 'None'}</Typography>
+              <Typography component="span">{app.occupations.find((o) => o.id == account.occupation)?.text || 'None'}</Typography>
             </Box>
             <Box>
-              <Typography color="#6E8094">
+              <Typography color="#6E8094" component="span">
                 Looking for:{' '}
                 {account.idealCollab && (
-                  <>
-                    {account.idealCollab.map((item) => (
-                      <Typography
-                        marginLeft={1}
-                        color={app.mode === 'dark' ? '#FFFFFF' : '#22272F'}
-                        key={item}
-                      >
-                        {app.occupations.find((o) => o.id == item)?.text}
-                      </Typography>
-                    ))}
-                  </>
+                  <Typography
+                    marginLeft={1}
+                    color={app.mode === 'dark' ? '#FFFFFF' : '#22272F'}
+                    component="span"
+                  >
+                    {idealCollabsText}
+                  </Typography>
                 )}
               </Typography>
               <Stack
@@ -173,13 +177,13 @@ const ProfilePhotoSection = ({ account, refresh }: ProfilePhotoSectionProps) => 
                 }}
               >
                 {gettingFollowStats && (
-                  <Typography>
+                  <Typography component="span">
                     Getting follow stats <CircularProgress size="14px" />
                   </Typography>
                 )}
                 {!gettingFollowStats && (
                   <>
-                    <Typography>
+                    <Typography component="span">
                       <span
                         style={{
                           cursor: 'pointer',

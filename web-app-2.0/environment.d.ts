@@ -22,8 +22,6 @@ declare global {
       MONGODB_URI: string;
       NEXT_PUBLIC_ALCHEMY_ETHEREUM_MAINNET: string;
       NEXT_PUBLIC_ALCHEMY_POLYGON_MAINNET: string;
-      NEXT_PUBLIC_ALPOLY_MAIN: string;
-      NEXT_PUBLIC_ALPOLY_TEST: string;
       NEXT_PUBLIC_BASE_URL: string;
       NEXT_PUBLIC_DISCORD_CLIENT_ID: string;
       NEXT_PUBLIC_GITHUB_CLIENT_ID: string;

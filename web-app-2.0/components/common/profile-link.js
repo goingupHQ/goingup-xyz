@@ -23,7 +23,7 @@ export default function ProfileLink(props) {
                 const result = await res.json();
                 setName(result.name);
                 setProfilePhoto(result.profilePhoto);
-                setEnsName(await wallet.mainnetENSProvider.lookupAddress(address));
+                // setEnsName(await wallet.mainnetENSProvider.lookupAddress(address));
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

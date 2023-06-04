@@ -9,7 +9,7 @@ type RewardTokenCardProps = {
 };
 
 const RewardTokenCard = ({ rewardTokenId }: RewardTokenCardProps) => {
-  const polygonProvider = new ethers.providers.AlchemyProvider(137, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_KEY);
+  const polygonProvider = new ethers.providers.InfuraProvider(137, process.env.NEXT_PUBLIC_INFURA_KEY);
   const utilityContract = GoingUpUtilityTokens__factory.connect(
     process.env.NEXT_PUBLIC_GOINGUP_UTILITY_TOKEN,
     polygonProvider
