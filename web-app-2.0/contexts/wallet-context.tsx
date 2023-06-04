@@ -104,7 +104,7 @@ const utilityTokenTestnet = {
   chainName: 'Polygon Mumbai Testnet',
   address: '0x825D5014239a59d7587b9F53b3186a76BF58aF72',
   get provider() {
-    return ethers.getDefaultProvider(this.chainId);
+    return new ethers.providers.InfuraProvider(this.chainId, process.env.NEXT_PUBLIC_INFURA_KEY);
   },
 };
 
@@ -481,7 +481,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     }
   };
 
-  const mainnetENSProvider = ethers.getDefaultProvider('homestead');
+  const mainnetENSProvider = new ethers.providers.InfuraProvider(1, process.env.NEXT_PUBLIC_INFURA_KEY);
 
   return (
     <WalletContext.Provider

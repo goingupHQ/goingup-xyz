@@ -39,7 +39,6 @@ export default function AppreciationTokenCard({ tier, balance }: AppreciationTok
       if (router.isReady) {
         setLoading(true);
         try {
-          console.log('getMessages', tier, router.query.address);
           const result = await getMessages(tier, router.query.address as string);
           setMessages(result);
         } catch (err) {
