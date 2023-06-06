@@ -16,7 +16,7 @@ import { TRPCError } from '@trpc/server';
 type WalletContextValue = {
   networks: typeof networks;
   chain: string | null;
-  connectEthereum: () => void;
+  connectEthereum: (hasCache: boolean) => void;
   disconnectEthereum: () => void;
   connectCustodial: (Account) => void;
   disconnectCustodial: () => void;
@@ -285,7 +285,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     if (cache) {
       if (!address) {
         if (cache.blockchain === 'evm') {
-          connectEthereum();
+          connectEthereum(true);
         } else if (cache.blockchain === 'custodial') {
           connectCustodial(cache.custodialAccount);
         }
@@ -337,7 +337,9 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
 
   const signInEthereum = async (address: string, signer: Signer) => {
     if (router.isReady && router.pathname.startsWith('/claim-event-token')) return;
-    // if (hasCookie('access_token')) return;
+
+    console.log('hasCookie(access_token)', hasCookie('access_token'));
+    if (hasCookie('access_token')) return;
 
     if (!address) throw 'No address found';
     if (!signer) throw 'No signer found';
@@ -366,9 +368,11 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   const { chain: evmChain } = useNetwork();
   const evmProvider = useProvider();
   const { data: evmSigner } = useSigner();
-  const connectEthereum = async () => {
+  const connectEthereum = async (hasCache: boolean) => {
     await disconnectEthereum();
-    setConnectKitOpen(true);
+    if (!hasCache) {
+      setConnectKitOpen(true);
+    }
   };
 
   useEffect(() => {
@@ -392,8 +396,6 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     }
 
     if (evmAddress && evmSigner) {
-      console.log('signing in');
-
       signInEthereum(evmAddress, evmSigner);
     }
 

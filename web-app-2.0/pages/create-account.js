@@ -20,7 +20,7 @@ function CreateAccount() {
       if (cache) {
         if (!wallet.address) {
           if (cache.blockchain === 'ethereum') {
-            wallet.connectEthereum();
+            wallet.connectEthereum(false);
           } else if (cache.blockchain === 'cardano') {
             wallet.connectCardano();
           }
