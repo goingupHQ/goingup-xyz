@@ -1,6 +1,11 @@
 import { z } from 'zod';
 import { procedure, router } from '../trpc';
-import { deleteEmailLoginCodeRecord, getEmailLoginCodeRecord, saveAuthToken } from '@/utils/database/auth';
+import {
+  deleteEmailLoginCodeRecord,
+  getAddressByAccessToken,
+  getEmailLoginCodeRecord,
+  saveAuthToken,
+} from '@/utils/database/auth';
 import { TRPCError } from '@trpc/server';
 import { createCustodialAccount, getCustodialAccountByEmail } from '@/utils/database/account';
 import { ethers } from 'ethers';
@@ -108,7 +113,42 @@ export const authRouter = router({
       account.encryptedPrivateKey = 'redacted'; // don't return the encrypted private key
       return account;
     }),
+  checkAccessTokenValidity: procedure
+    .input(
+      z.object({
+        address: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { req } = ctx;
+      const { address } = input;
 
+      if (!req.cookies.access_token) return false;
+
+      const accessTokenAddress = await getAddressByAccessToken(req.cookies.access_token);
+      if (!accessTokenAddress) return false;
+
+      return address === accessTokenAddress;
+    }),
+  signOut: procedure.mutation(async ({ ctx }) => {
+    const { req, res } = ctx;
+    if (!req.cookies.access_token) return false;
+
+    const accessToken = req.cookies.access_token;
+    const expires = new Date(0);
+    const maxAge = expires.getTime() - Date.now();
+
+    // delete access token from database
+    const db = await getDb();
+    await db.collection('access-tokens').deleteOne({ accessToken });
+
+    // set access token as secure cookie
+    res.setHeader('Set-Cookie', [
+      `access_token=; HttpOnly; Secure; SameSite=Strict; Expires=${expires.toUTCString()}; Max-Age=${maxAge}`,
+    ]);
+
+    return true;
+  }),
 });
 
 export const getAccountByAccessToken = async (accessToken: string) => {
