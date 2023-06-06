@@ -140,7 +140,7 @@ export const authRouter = router({
 
     // delete access token from database
     const db = await getDb();
-    await db.collection('access-tokens').deleteOne({ accessToken });
+    await db.collection<AccessToken>('access-tokens').deleteOne({ accessToken });
 
     // set access token as secure cookie
     res.setHeader('Set-Cookie', [
