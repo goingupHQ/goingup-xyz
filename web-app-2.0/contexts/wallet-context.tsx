@@ -10,6 +10,8 @@ import { useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'w
 import { Provider } from '@ethersproject/providers';
 import { Chain } from 'wagmi';
 import { Account } from '@/types/account';
+import { trpc } from '@/utils/trpc';
+import { TRPCError } from '@trpc/server';
 
 type WalletContextValue = {
   networks: typeof networks;
@@ -328,31 +330,35 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     }
   };
 
+  const {
+    mutateAsync: signInWithSignature,
+    isLoading: isSigningIn,
+  } = trpc.auth.signInWithSignature.useMutation();
+
   const signInEthereum = async (address: string, signer: Signer) => {
     if (router.isReady && router.pathname.startsWith('/claim-event-token')) return;
-    if (hasCookie('access_token')) return;
+    // if (hasCookie('access_token')) return;
 
     if (!address) throw 'No address found';
-    if (!ethersSigner) throw 'No signer found';
+    if (!signer) throw 'No signer found';
 
     // sign a message with wallet
     const message = `I am signing this message to prove that I own the address ${address}. This message will be used to sign in to app.goingup.xyz and receive an authentication token cookie.`;
 
-    const signature = await ethersSigner.signMessage(message);
+    const signature = await signer.signMessage(message);
 
     // send signature to server
-    const response = await fetch(`/api/accounts/${address}/sign-in`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    try {
+      await signInWithSignature({
+        address,
         signature,
-      }),
-    });
-
-    if (response.ok) {
-      const result = await response.json();
+      });
+    } catch (err) {
+      if (err instanceof TRPCError) {
+        enqueueSnackbar(err.message, { variant: 'error' });
+      } else {
+        enqueueSnackbar('Something went wrong', { variant: 'error' });
+      }
     }
   };
 
@@ -361,7 +367,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   const evmProvider = useProvider();
   const { data: evmSigner } = useSigner();
   const connectEthereum = async () => {
-    disconnectEthereum();
+    await disconnectEthereum();
     setConnectKitOpen(true);
   };
 
@@ -383,8 +389,12 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
           // type: walletType,
         })
       );
+    }
 
-      signInEthereum(evmAddress!, evmSigner!);
+    if (evmAddress && evmSigner) {
+      console.log('signing in');
+
+      signInEthereum(evmAddress, evmSigner);
     }
 
     // if (!evmIsConnected && !evmIsConnecting) {
