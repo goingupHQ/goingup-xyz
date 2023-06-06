@@ -8,13 +8,39 @@ import { decrypt, encrypt } from '@/utils/kms';
 import crypto from 'crypto';
 import { getDb } from '@/utils/database';
 import { AccessToken } from '@/types/auth';
+import { validateSignature } from '@/utils/web3-signature';
 
 export const authRouter = router({
-  // getAccountByAccessToken: procedure
-  //   .input(z.object({ accessToken: z.string() }))
-  //   .query(async ({ input, ctx }) => {
-  //     const { accessToken } = input;
-  //   }),
+  signInWithSignature: procedure
+    .input(
+      z.object({
+        signature: z.string(),
+        address: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { signature, address } = input;
+      const message = `I am signing this message to prove that I own the address ${address}. This message will be used to sign in to app.goingup.xyz and receive an authentication token cookie.`;
+
+      const validSignature = validateSignature(address, message, signature);
+      if (!validSignature) throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid signature' });
+
+      // set access token and cookie
+      const accessToken = crypto.randomBytes(64).toString('hex');
+
+      // expires 100 days from now
+      const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 100);
+      const maxAge = expires.getTime() - Date.now();
+
+      // save access token to database
+      await saveAuthToken(accessToken, address);
+
+      const { res } = ctx;
+      // set access token as secure cookie
+      res.setHeader('Set-Cookie', [
+        `access_token=${accessToken}; HttpOnly; Secure; SameSite=Strict; Expires=${expires.toUTCString()}; Max-Age=${maxAge}`,
+      ]);
+    }),
   verifyEmailCode: procedure
     .input(
       z.object({
