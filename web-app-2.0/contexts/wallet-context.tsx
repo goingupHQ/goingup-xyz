@@ -33,9 +33,7 @@ type WalletContextValue = {
   mainnetENSProvider: Provider;
 };
 
-
 export const WalletContext = createContext<WalletContextValue>({} as WalletContextValue);
-
 
 const walletTypes = {
   metamask: { display: 'MetaMask' },
@@ -330,16 +328,14 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     }
   };
 
-  const {
-    mutateAsync: signInWithSignature,
-    isLoading: isSigningIn,
-  } = trpc.auth.signInWithSignature.useMutation();
-
+  const { mutateAsync: signInWithSignature, isLoading: isSigningIn } = trpc.auth.signInWithSignature.useMutation();
+  const { mutateAsync: checkAccessTokenValidity, isLoading: isCheckingAccessTokenValidity } =
+    trpc.auth.checkAccessTokenValidity.useMutation();
   const signInEthereum = async (address: string, signer: Signer) => {
     if (router.isReady && router.pathname.startsWith('/claim-event-token')) return;
 
-    console.log('hasCookie(access_token)', hasCookie('access_token'));
-    if (hasCookie('access_token')) return;
+    const isAccessTokenValid = await checkAccessTokenValidity({ address });
+    if (isAccessTokenValid) return;
 
     if (!address) throw 'No address found';
     if (!signer) throw 'No signer found';
@@ -372,6 +368,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     await disconnectEthereum();
     if (!hasCache) {
       setConnectKitOpen(true);
+    } else {
     }
   };
 
@@ -393,10 +390,10 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
           // type: walletType,
         })
       );
-    }
 
-    if (evmAddress && evmSigner) {
-      signInEthereum(evmAddress, evmSigner);
+      if (evmAddress && evmSigner) {
+        signInEthereum(evmAddress, evmSigner);
+      }
     }
 
     // if (!evmIsConnected && !evmIsConnecting) {
@@ -435,14 +432,20 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     clearState();
   };
 
+  const {
+    mutateAsync: signOut,
+    isLoading: isSigningOut
+  } = trpc.auth.signOut.useMutation();
+
   const clearState = () => {
-    deleteCookie('access_token');
-    // localStorage.removeItem('wallet-context-cache');
-    localStorage.clear();
-    setChain(null);
-    setAddress(null);
-    setNetwork(null);
-    setEthersProvider(null);
+    signOut().then(() => {
+      deleteCookie('access_token');
+      localStorage.removeItem('wallet-context-cache');
+      setChain(null);
+      setAddress(null);
+      setNetwork(null);
+      setEthersProvider(null);
+    });
   };
 
   const connectCardano = async () => {
@@ -520,4 +523,4 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
       {children}
     </WalletContext.Provider>
   );
-}
+};
