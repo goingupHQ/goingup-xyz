@@ -366,10 +366,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   const { data: evmSigner } = useSigner();
   const connectEthereum = async (hasCache: boolean) => {
     await disconnectEthereum();
-    if (!hasCache) {
-      setConnectKitOpen(true);
-    } else {
-    }
+    setConnectKitOpen(true);
   };
 
   useEffect(() => {
@@ -412,6 +409,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   };
 
   const connectCustodial = async (account: Account) => {
+    console.log('custodial account', account);
     setChain(`Custodial`);
     setNetwork(null);
     setWalletType('custodial');
