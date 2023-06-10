@@ -10,7 +10,7 @@ export async function createContext(opts: CreateNextContextOptions) {
 
   const session = {
     accessToken: req.cookies.access_token,
-  }; console.log('session', session);
+  };
 
   return {
     req,

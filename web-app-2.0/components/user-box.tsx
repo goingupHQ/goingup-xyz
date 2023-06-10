@@ -52,7 +52,7 @@ export default function UserBox() {
 
   const wallet = useContext(WalletContext);
   const { address } = wallet;
-  const { data: balanceData } = useBalance({ address: ethers.utils.getAddress(address!) });
+  const { data: balanceData } = useBalance({ address: (address as `0x${string}`) || ethers.constants.AddressZero });
   const balance = Number(balanceData?.formatted);
 
 

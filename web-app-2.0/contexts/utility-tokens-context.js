@@ -78,22 +78,23 @@ export const UtilityTokensProvider = ({ children }) => {
       return null;
     }
 
-    const contractAddress = wallet.network?.id == 137 ? mainnet.address : testnet.address;
-    console.log('utility-tokens-context.js: sendUtilityToken() contractAddress:', contractAddress);
-    const abi = artifact.abi;
-    const provider = wallet.network?.id == 137 ? mainnet.provider : testnet.provider;
+    if (wallet.blockchain === 'evm') {
+      const contractAddress = wallet.network?.id == 137 ? mainnet.address : testnet.address;
+      const abi = artifact.abi;
+      const signer = wallet.ethersSigner;
+      const contract = new ethers.Contract(contractAddress, abi, signer);
+      console.log('signer:', signer);
+      console.log('contract:', contract);
+      const settings = await contract.tokenSettings(tokenId);
+      console.log('settings:', settings);
+      const tx = await contract.mint(to, tokenId, amount, Boolean(message), message, {
+        value: settings.price.mul(amount),
+      });
 
-    const signer = wallet.ethersSigner;
-    const contract = new ethers.Contract(contractAddress, abi, signer);
-    console.log('signer:', signer);
-    console.log('contract:', contract);
-    const settings = await contract.tokenSettings(tokenId);
-    console.log('settings:', settings);
-    const tx = await contract.mint(to, tokenId, amount, Boolean(message), message, {
-      value: settings.price.mul(amount),
-    });
+      return tx;
+    } else if (wallet.blockchain === 'custodial') {
 
-    return tx;
+    }
   };
 
   useEffect(() => {

@@ -14,6 +14,7 @@ import crypto from 'crypto';
 import { getDb } from '@/utils/database';
 import { AccessToken } from '@/types/auth';
 import { validateSignature } from '@/utils/web3-signature';
+import { Account } from '@/types/account';
 
 export const authRouter = router({
   signInWithSignature: procedure
@@ -151,12 +152,12 @@ export const authRouter = router({
   }),
 });
 
-export const getAccountByAccessToken = async (accessToken: string) => {
+export const getAccountByAccessToken = async (token: string) => {
   const db = await getDb();
-  const tokenRecord = await db.collection<AccessToken>('access-tokens').findOne({ accessToken });
+  const tokenRecord = await db.collection<AccessToken>('access-tokens').findOne({ token });
   if (!tokenRecord) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid access token' });
 
-  const account = await db.collection('accounts').findOne({ address: tokenRecord.address });
+  const account = await db.collection<Account>('accounts').findOne({ address: tokenRecord.address });
   if (!account) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to get account' });
 
   return account;
