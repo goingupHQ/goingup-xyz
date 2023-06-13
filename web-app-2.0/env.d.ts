@@ -7,7 +7,6 @@ namespace NodeJS {
     GOINGUP_SALES_PK: string;
     GOINGUP_BACKEND_PK: string;
     ETHERSCAN_API_KEY: string;
-    NEXT_PUBLIC_ALCHEMY_POLYGON_KEY: string;
     NEXT_PUBLIC_GOINGUP_UTILITY_TOKEN: string;
     GCS_PRIVATE_KEY: string;
     GCS_CLIENT_EMAIL: string;
@@ -18,7 +17,6 @@ namespace NodeJS {
     GC_KMS_KEY_ID: string;
     ALCHEMY_ETHEREUM_MAINNET: string;
     ALCHEMY_POLYGON_MAINNET: string;
-    ALCHEMY_KEY: string;
     DISCORD_CLIENT_SECRET: string;
     LINKEDIN_CLIENT_SECRET: string;
     GITHUB_CLIENT_SECRET: string;
