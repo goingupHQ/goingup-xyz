@@ -64,9 +64,7 @@ export const getPotentialCollaborators = async (
 ): Promise<Account[]> => {
   const db = await getDb();
   const query: Filter<Account> = { mock: { $exists: false } };
-  if (onlyProfilesWithPhotos) {
-    query.profilePhoto = { $exists: true };
-  }
+  if (onlyProfilesWithPhotos) query.profilePhoto = { $exists: true };
   if (userAccount) {
     query.address = { $ne: userAccount.address };
 
@@ -79,6 +77,20 @@ export const getPotentialCollaborators = async (
     .collection<Account>('accounts')
     .aggregate<Account>([{ $match: query }, { $sample: { size: Math.min(count, 40) } }])
     .toArray();
+
+    if (queryResults.length < count) {
+      const additionalQuery: Filter<Account> = { mock: { $exists: false } };
+      if (onlyProfilesWithPhotos) additionalQuery.profilePhoto = { $exists: true };
+      if (userAccount) {
+        additionalQuery.address = { $ne: userAccount.address };
+      }
+
+      const additionalQueryResults = await db
+        .collection<Account>('accounts')
+        .aggregate<Account>([{ $match: additionalQuery }, { $sample: { size: Math.min((count - queryResults.length), 40) } }])
+        .toArray();
+      queryResults.push(...additionalQueryResults);
+    }
 
   return queryResults;
 };

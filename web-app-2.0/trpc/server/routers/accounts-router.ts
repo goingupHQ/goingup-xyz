@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { router, procedure } from '../trpc';
 import { findAccount, getAccount, updateAccount } from '@/utils/database/account';
 import { ethers } from 'ethers';
-import { Account, AddressOrAccountSearchResult, Follows } from '@/types/account';
+import { Account, AddressOrAccountSearchResult, Follows, FollowsResult } from '@/types/account';
 import { getAddressByAccessToken } from '@/utils/database/auth';
 import { TRPCError } from '@trpc/server';
 import { membershipNftContractAddress } from '@/utils/constants';
@@ -41,7 +41,7 @@ export const accountsRouter = router({
 
     const following = await db
       .collection<Follows>('follows')
-      .aggregate<Partial<Account>>([
+      .aggregate<FollowsResult>([
         { $match: { address } },
         {
           $lookup: {
@@ -62,7 +62,7 @@ export const accountsRouter = router({
 
     const followers = await db
       .collection<Follows>('follows')
-      .aggregate<Partial<Account>>([
+      .aggregate<FollowsResult>([
         { $match: { follows: address } },
         {
           $lookup: {
@@ -80,7 +80,7 @@ export const accountsRouter = router({
   verifyTwitter: procedure
     .input(
       z.object({
-        tweetId: z.number()
+        tweetId: z.number(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -159,7 +159,6 @@ export const accountsRouter = router({
       const { name, occupation, openTo, idealCollab, projectGoals } = input;
       const { accessToken } = ctx.session;
       const address = await getAddressByAccessToken(accessToken!);
-      console.log('address', address);
       if (!address) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'No address found for access token' });
 
       const updatedAccount = await updateAccount(address, {
@@ -172,4 +171,54 @@ export const accountsRouter = router({
       });
       return updatedAccount;
     }),
+  update: procedure
+    .input(
+      z.object({
+        name: z.string().optional(),
+        about: z.string().optional(),
+        occupation: z.number().optional(),
+        openTo: z.array(z.number()).optional(),
+        projectGoals: z.array(z.number()).optional(),
+        idealCollab: z.array(z.number()).optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { accessToken } = ctx.session;
+      if (!accessToken) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
+      const address = await getAddressByAccessToken(accessToken);
+      if (!address) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
+
+      const db = await getDb();
+      const accounts = db.collection<Account>('accounts');
+
+      const { name, about, openTo, projectGoals, idealCollab } = input;
+      const $set: Partial<Account> = {
+        name,
+        about,
+        openTo,
+        projectGoals,
+        idealCollab,
+      };
+      await accounts.updateOne({ address }, { $set }, { upsert: true, ignoreUndefined: true });
+    }),
+  delete: procedure.mutation(async ({ ctx }) => {
+    const { accessToken } = ctx.session;
+    if (!accessToken) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
+    const address = await getAddressByAccessToken(accessToken);
+    if (!address) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
+
+    const db = await getDb();
+    const accounts = db.collection<Account>('accounts');
+    await accounts.updateOne({ address }, { $set: { isDeleted: true } });
+  }),
+  recover: procedure.mutation(async ({ ctx }) => {
+    const { accessToken } = ctx.session;
+    if (!accessToken) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
+    const address = await getAddressByAccessToken(accessToken);
+    if (!address) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
+
+    const db = await getDb();
+    const accounts = db.collection<Account>('accounts');
+    await accounts.updateOne({ address }, { $set: { isDeleted: false } });
+  }),
 });

@@ -56,12 +56,10 @@ const FollowersList = ({ account }: FollowersListProps, ref: React.Ref<Followers
                   item
                   xs={6}
                   md={4}
-                  lg={3}
                   key={item.address}
                 >
                   <ProfileLink
-                    profile={item.address}
-                    hideReputationScore
+                    address={item.address}
                     onClick={close}
                   />
                 </Grid>
