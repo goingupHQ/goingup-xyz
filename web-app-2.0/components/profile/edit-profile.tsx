@@ -4,11 +4,12 @@ import { Account } from '@/types/account';
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, TextField } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { forwardRef, useContext, useImperativeHandle, useState } from 'react';
+import { forwardRef, useContext, useEffect, useImperativeHandle, useState } from 'react';
 import AvailabilitySelect from '../common/availability-select';
 import OccupationSelect from '../common/occupation-select';
 import UserGoalSelect from '../common/user-goal-select';
 import OccupationMultiSelect from '../common/occupation-multi-select';
+import { trpc } from '@/utils/trpc';
 
 type EditProfileProps = {
   account: Account;
@@ -59,82 +60,49 @@ const EditProfile = ({ account, refresh }: EditProfileProps, ref: React.Ref<Edit
     m: 1,
   };
 
-  const deleteAccount = async () => {
-    setSaving(true);
-    try {
-      const { address, ethersSigner } = wallet;
-      const message = 'delete-account';
-      const signature = await wallet.signMessage(message);
+  const {
+    mutateAsync: deleteAccount,
+    isLoading: deleting,
+    isSuccess: deleteSuccess,
+    isError: deleteFail,
+  } = trpc.accounts.delete.useMutation();
 
-      const response = await fetch('/api/delete-account/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          address,
-          signature,
-          account: {
-            isDeleted: true,
-          },
-        }),
-      });
-
-      if (response.status === 200) {
-        enqueueSnackbar('Account deleted', { variant: 'success' });
-        setOpen(false);
-        setIsDeleted(true);
-      } else if (response.status >= 400) {
-        enqueueSnackbar('Failed to delete account', {
-          variant: 'error',
-        });
-      }
-    } catch (err) {
-      enqueueSnackbar('Failed to delete account', { variant: 'error' });
-      console.log(err);
-    } finally {
-      setSaving(false);
+  useEffect(() => {
+    if (deleteSuccess) {
+      enqueueSnackbar('Account deleted', { variant: 'success' });
+      if (refresh) refresh();
+      setOpen(false);
+      setIsDeleted(true);
     }
-  };
 
-  const retrieveAccount = async () => {
-    setSaving(true);
-    try {
-      const { address, ethersSigner } = wallet;
-      const message = 'retrieve-account';
-      const signature = await wallet.signMessage(message);
-
-      const response = await fetch('/api/retrieve-account/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          address,
-          signature,
-          account: {
-            isDeleted: false,
-          },
-        }),
+    if (deleteFail) {
+      enqueueSnackbar('Failed to delete account', {
+        variant: 'error',
       });
-
-      if (response.status === 200) {
-        enqueueSnackbar('Account retrieved', { variant: 'success' });
-        if (refresh) refresh();
-        setIsDeleted(undefined);
-        setOpen(false);
-      } else if (response.status >= 400) {
-        enqueueSnackbar('Failed to retrieve account', {
-          variant: 'error',
-        });
-      }
-    } catch (err) {
-      enqueueSnackbar('Failed to retrieve account', { variant: 'error' });
-      console.log(err);
-    } finally {
-      setSaving(false);
     }
-  };
+  }, [deleteSuccess, deleteFail]);
+
+  const {
+    mutateAsync: recoverAccount,
+    isLoading: recovering,
+    isSuccess: recoverSuccess,
+    isError: recoverFail,
+  } = trpc.accounts.recover.useMutation();
+
+  useEffect(() => {
+    if (recoverSuccess) {
+      enqueueSnackbar('Account recovered', { variant: 'success' });
+      if (refresh) refresh();
+      setIsDeleted(false);
+      setOpen(false);
+    }
+
+    if (recoverFail) {
+      enqueueSnackbar('Failed to recover account', {
+        variant: 'error',
+      });
+    }
+  }, [recoverSuccess, recoverFail]);
 
   const saveChanges = async () => {
     setSaving(true);
@@ -262,21 +230,23 @@ const EditProfile = ({ account, refresh }: EditProfileProps, ref: React.Ref<Edit
         </DialogContent>
         <DialogActions>
           {isDeleted ? (
-            <Button
-              color="error"
-              variant="contained"
-              onClick={retrieveAccount}
+            <LoadingButton
+              color="secondary"
+              variant="outlined"
+              loading={recovering}
+              onClick={() => recoverAccount()}
             >
-              Retrieve My Account
-            </Button>
+              Recover My Account
+            </LoadingButton>
           ) : (
-            <Button
-              color="error"
-              variant="contained"
-              onClick={deleteAccount}
+            <LoadingButton
+              color="secondary"
+              variant="outlined"
+              loading={deleting}
+              onClick={() => deleteAccount()}
             >
               Delete My Account
-            </Button>
+            </LoadingButton>
           )}
           <Button
             color="secondary"
