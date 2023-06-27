@@ -181,4 +181,14 @@ export const accountsRouter = router({
     const accounts = db.collection<Account>('accounts');
     await accounts.updateOne({ address }, { $set: { isDeleted: true } });
   }),
+  recover: procedure.mutation(async ({ ctx }) => {
+    const { accessToken } = ctx.session;
+    if (!accessToken) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
+    const address = await getAddressByAccessToken(accessToken);
+    if (!address) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
+
+    const db = await getDb();
+    const accounts = db.collection<Account>('accounts');
+    await accounts.updateOne({ address }, { $set: { isDeleted: false } });
+  }),
 });
