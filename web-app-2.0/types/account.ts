@@ -145,3 +145,9 @@ export type Follows = {
   address: string;
   follows: string;
 };
+
+export type FollowsResult = {
+  address: string;
+  follows: string;
+  profile: Partial<Account>;
+};

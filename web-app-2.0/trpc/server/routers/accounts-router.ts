@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { router, procedure } from '../trpc';
 import { findAccount, getAccount, updateAccount } from '@/utils/database/account';
 import { ethers } from 'ethers';
-import { Account, AddressOrAccountSearchResult, Follows } from '@/types/account';
+import { Account, AddressOrAccountSearchResult, Follows, FollowsResult } from '@/types/account';
 import { getAddressByAccessToken } from '@/utils/database/auth';
 import { TRPCError } from '@trpc/server';
 import { membershipNftContractAddress } from '@/utils/constants';
@@ -41,7 +41,7 @@ export const accountsRouter = router({
 
     const following = await db
       .collection<Follows>('follows')
-      .aggregate<Partial<Account>>([
+      .aggregate<FollowsResult>([
         { $match: { address } },
         {
           $lookup: {
@@ -62,7 +62,7 @@ export const accountsRouter = router({
 
     const followers = await db
       .collection<Follows>('follows')
-      .aggregate<Partial<Account>>([
+      .aggregate<FollowsResult>([
         { $match: { follows: address } },
         {
           $lookup: {

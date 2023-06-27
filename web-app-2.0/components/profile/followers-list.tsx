@@ -60,8 +60,7 @@ const FollowersList = ({ account }: FollowersListProps, ref: React.Ref<Followers
                   key={item.address}
                 >
                   <ProfileLink
-                    profile={item.address}
-                    hideReputationScore
+                    address={item.address}
                     onClick={close}
                   />
                 </Grid>

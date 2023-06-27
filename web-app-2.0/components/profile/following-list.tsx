@@ -19,6 +19,7 @@ const FollowingList = ({ account }: FollowingListProps, ref: React.Ref<Following
     { address: account.address! },
     { enabled: open }
   );
+  console.log('following', list);
 
   useImperativeHandle(ref, () => ({
     showModal() {
@@ -60,8 +61,7 @@ const FollowingList = ({ account }: FollowingListProps, ref: React.Ref<Following
                   key={item.address}
                 >
                   <ProfileLink
-                    profile={item.address}
-                    hideReputationScore
+                    address={item.follows}
                     onClick={close}
                   />
                 </Grid>
