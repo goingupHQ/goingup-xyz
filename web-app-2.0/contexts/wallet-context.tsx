@@ -365,7 +365,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   const evmProvider = useProvider();
   const { data: evmSigner } = useSigner();
   const connectEthereum = async (hasCache: boolean) => {
-    await disconnectEthereum();
+    // await disconnectEthereum();
     setConnectKitOpen(true);
   };
 
