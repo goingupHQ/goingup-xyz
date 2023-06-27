@@ -80,7 +80,7 @@ export const accountsRouter = router({
   verifyTwitter: procedure
     .input(
       z.object({
-        tweetId: z.number()
+        tweetId: z.number(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -159,7 +159,6 @@ export const accountsRouter = router({
       const { name, occupation, openTo, idealCollab, projectGoals } = input;
       const { accessToken } = ctx.session;
       const address = await getAddressByAccessToken(accessToken!);
-      console.log('address', address);
       if (!address) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'No address found for access token' });
 
       const updatedAccount = await updateAccount(address, {
@@ -172,4 +171,14 @@ export const accountsRouter = router({
       });
       return updatedAccount;
     }),
+  delete: procedure.mutation(async ({ ctx }) => {
+    const { accessToken } = ctx.session;
+    if (!accessToken) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
+    const address = await getAddressByAccessToken(accessToken);
+    if (!address) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
+
+    const db = await getDb();
+    const accounts = db.collection<Account>('accounts');
+    await accounts.updateOne({ address }, { $set: { isDeleted: true } });
+  }),
 });
