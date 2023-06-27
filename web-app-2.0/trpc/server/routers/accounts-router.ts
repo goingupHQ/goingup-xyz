@@ -171,6 +171,36 @@ export const accountsRouter = router({
       });
       return updatedAccount;
     }),
+  update: procedure
+    .input(
+      z.object({
+        name: z.string().optional(),
+        about: z.string().optional(),
+        occupation: z.number().optional(),
+        openTo: z.array(z.number()).optional(),
+        projectGoals: z.array(z.number()).optional(),
+        idealCollab: z.array(z.number()).optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { accessToken } = ctx.session;
+      if (!accessToken) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
+      const address = await getAddressByAccessToken(accessToken);
+      if (!address) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
+
+      const db = await getDb();
+      const accounts = db.collection<Account>('accounts');
+
+      const { name, about, openTo, projectGoals, idealCollab } = input;
+      const $set: Partial<Account> = {
+        name,
+        about,
+        openTo,
+        projectGoals,
+        idealCollab,
+      };
+      await accounts.updateOne({ address }, { $set }, { upsert: true, ignoreUndefined: true });
+    }),
   delete: procedure.mutation(async ({ ctx }) => {
     const { accessToken } = ctx.session;
     if (!accessToken) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not logged in' });
