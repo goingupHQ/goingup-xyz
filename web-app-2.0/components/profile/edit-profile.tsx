@@ -104,47 +104,26 @@ const EditProfile = ({ account, refresh }: EditProfileProps, ref: React.Ref<Edit
     }
   }, [recoverSuccess, recoverFail]);
 
-  const saveChanges = async () => {
-    setSaving(true);
+  const {
+    mutateAsync: updateAccount,
+    isLoading: updating,
+    isSuccess: updateSuccess,
+    isError: updateFail,
+  } = trpc.accounts.update.useMutation();
 
-    try {
-      const { address, ethersSigner } = wallet;
-      const message = 'update-account';
-      const signature = await wallet.signMessage(message);
-
-      const response = await fetch('/api/update-account/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          address,
-          signature,
-          account: {
-            name,
-            about,
-            occupation: occupation?.id || null,
-            openTo: openTo.map((o) => o.id),
-            projectGoals: projectGoals.map((p) => p.id),
-            idealCollab: idealCollab.map((i) => i.id),
-          },
-        }),
-      });
-
-      if (response.status === 200) {
-        enqueueSnackbar('Profile changes saved', { variant: 'success' });
-        if (refresh) refresh();
-        setOpen(false);
-      } else if (response.status >= 400) {
-        enqueueSnackbar('Failed to save profile changes', { variant: 'error' });
-      }
-    } catch (err) {
-      enqueueSnackbar('Failed to save profile changes', { variant: 'error' });
-      console.log(err);
-    } finally {
-      setSaving(false);
+  useEffect(() => {
+    if (updateSuccess) {
+      enqueueSnackbar('Account updated', { variant: 'success' });
+      if (refresh) refresh();
+      setOpen(false);
     }
-  };
+
+    if (updateFail) {
+      enqueueSnackbar('Failed to update account', {
+        variant: 'error',
+      });
+    }
+  }, [updateSuccess, updateFail]);
 
   return (
     <div>
@@ -256,11 +235,17 @@ const EditProfile = ({ account, refresh }: EditProfileProps, ref: React.Ref<Edit
             Cancel
           </Button>
           <LoadingButton
-            loading={saving}
+            loading={updating}
             loadingIndicator="Saving..."
             color="primary"
             variant="contained"
-            onClick={saveChanges}
+            onClick={async () => updateAccount({
+              name,
+              about,
+              occupation: occupation?.id,
+              openTo: openTo.map((o) => o.id),
+              projectGoals: projectGoals.map((p) => p.id),
+            })}
           >
             Save Changes
           </LoadingButton>
