@@ -33,7 +33,7 @@ export default function SuggestedProfiles() {
         }
         setShowProfileSearch(true);
         searchProfiles({ nameQuery: value });
-      }, 500),
+      }, 1000),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
