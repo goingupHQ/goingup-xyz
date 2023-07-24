@@ -44,6 +44,7 @@ export default function Metrics(props) {
 
     useEffect(() => {
         loadMetrics();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

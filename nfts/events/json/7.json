@@ -1,0 +1,28 @@
+{
+    "name": "CryptoMondays: Alternative Data for Alternative Investments",
+    "description": "Attendee Badge for CryptoMondays: Alternative Data for Alternative Investments",
+    "image": "ipfs://bafybeic3l4wfnu5dgpvpsxdcfgshry3gsw4faketwfesxcwevmveju2ikq/7.png",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "Date",
+            "value": "1684146600"
+        },
+        {
+            "trait_type": "Location",
+            "value": "Sean's 42 W 48Th St, New York, NY 10036"
+        },
+        {
+            "trait_type": "Event",
+            "value": "ryptoMondays: Alternative Data for Alternative Investments"
+        },
+        {
+            "trait_type": "Description",
+            "value": "Attendee Badge for CryptoMondays: Alternative Data for Alternative Investments"
+        },
+        {
+            "trait_type": "Partner",
+            "value": "CryptoMondays"
+        }
+    ]
+}

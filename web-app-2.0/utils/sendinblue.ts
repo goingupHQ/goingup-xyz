@@ -27,14 +27,6 @@ export const sendEmail = async (
   if (textContent) email.textContent = textContent;
   if (htmlContent) email.htmlContent = htmlContent;
 
-  apiInstance.sendTransacEmail(email).then(
-    function (data) {
-      console.log('Wallet login code email sent to ' + sendToEmail);
-      console.log(data);
-    },
-    function (error) {
-      // console.error(error);
-      console.error('Error while calling API: ' + error.response.text);
-    }
-  );
+  const result = await apiInstance.sendTransacEmail(email);
+  console.log('sendEmail result', result);
 };

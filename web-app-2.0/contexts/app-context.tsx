@@ -7,10 +7,25 @@ import userGoals from './user-goals.json';
 
 const maxReputationScore = 140;
 
+export type Occupation = {
+  id: number;
+  text: string;
+};
+
+export type Availability = {
+  id: number;
+  text: string;
+};
+
+export type UserGoal = {
+  id: number;
+  text: string;
+};
+
 type AppContextData = {
-  availability: typeof availability;
-  occupations: typeof occupations;
-  userGoals: typeof userGoals;
+  availability: Availability[];
+  occupations: Occupation[];
+  userGoals: UserGoal[];
   setDarkMode: () => void;
   setLightMode: () => void;
   maxReputationScore: number;
@@ -53,18 +68,19 @@ const subscribeUserToPush = async () => {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   const [mode, setMode] = useState('dark');
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  useEffect(() => {
-    const cache = localStorage.getItem('color-mode');
-    if (!cache) {
-      localStorage.setItem('color-mode', prefersDarkMode ? 'dark' : 'light');
-      setMode('dark');
-    } else {
-      setMode(cache);
-    }
+  // const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  // useEffect(() => {
+  //   const cache = localStorage.getItem('color-mode');
+  //   if (!cache) {
+  //     // localStorage.setItem('color-mode', prefersDarkMode ? 'dark' : 'light');
+  //     localStorage.setItem('color-mode', 'dark');
+  //     setMode('dark');
+  //   } else {
+  //     setMode(cache);
+  //   }
 
-    registerServiceWorker();
-  }, [mode]);
+  //   registerServiceWorker();
+  // }, [mode]);
 
   const setDarkMode = () => {
     localStorage.setItem('color-mode', 'dark');

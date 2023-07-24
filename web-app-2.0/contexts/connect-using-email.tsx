@@ -6,12 +6,10 @@ import { useSnackbar } from 'notistack';
 import sleep from '@react-corekit/sleep';
 import isEmail from 'validator/lib/isEmail';
 import { trpc } from '@/utils/trpc';
-
-interface ConnectUsingEmailHandles {
-  showModal: () => void;
-}
+import { useRouter } from 'next/router';
 
 const ConnectUsingEmail = (props, ref) => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const wallet = useContext(WalletContext);
 
@@ -19,11 +17,6 @@ const ConnectUsingEmail = (props, ref) => {
 
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState('');
-  const [sendingEmail, setSendingEmail] = useState(false);
-
-  // useEffect(() => {
-  //     if (wallet.address) setOpen(false);
-  // }, [wallet.address]);
 
   useImperativeHandle(ref, () => ({
     showModal() {
@@ -48,7 +41,7 @@ const ConnectUsingEmail = (props, ref) => {
     isLoading: isSendingWalletLoginCode,
     isSuccess: walletLoginCodeSent,
     isError: walletLoginCodeError,
-    error: walletLoginCodeErrorMessage,
+    error: walletLoginCodeErrorObject,
   } = trpc.emails.sendWalletLoginCode.useMutation();
 
   const sendLoginCode = async () => {
@@ -66,52 +59,61 @@ const ConnectUsingEmail = (props, ref) => {
   };
 
   useEffect(() => {
-    if (walletLoginCodeSent && !walletLoginCodeError) {
+    if (walletLoginCodeSent) {
       changeStep(1);
       enqueueSnackbar('Login code sent to your email', { variant: 'success' });
     }
 
-
+    if (walletLoginCodeError) {
+      if (walletLoginCodeErrorObject?.message)
+        enqueueSnackbar(walletLoginCodeErrorObject.message, { variant: 'error' });
+      else enqueueSnackbar('Error sending login code', { variant: 'error' });
+    }
   }, [walletLoginCodeSent, walletLoginCodeError]);
 
-  const [loggingIn, setLoggingIn] = useState(false);
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState<string>('');
+  const {
+    data: custodialAccount,
+    mutateAsync: verifyEmailCode,
+    isLoading: isVerifyingEmailCode,
+    isSuccess: emailCodeVerified,
+    isError: emailCodeNotVerified,
+  } = trpc.auth.verifyEmailCode.useMutation();
+
+  useEffect(() => {
+    if (emailCodeVerified) {
+      enqueueSnackbar('Login successful', { variant: 'success' });
+      setOpen(false);
+
+      // reset state
+      setStep(0);
+      setEmail('');
+      setCode('');
+
+      wallet.connectCustodial(custodialAccount); console.log('custodialAccount', custodialAccount);
+
+      if (!custodialAccount.custodialOnboarded) {
+        router.push('/custodial-onboarding');
+      } else {
+        router.push(`/profile/${custodialAccount.address}`);
+      }
+    }
+
+    if (emailCodeNotVerified) {
+      enqueueSnackbar('Invalid login code', { variant: 'error' });
+    }
+  }, [emailCodeVerified, emailCodeNotVerified]);
 
   // validate login code
   const login = async () => {
     closeSnackbar();
 
-    try {
-      if (!code) {
-        throw 'Please enter the login code';
-      }
-
-      setLoggingIn(true);
-
-      const response = await fetch('/api/accounts/email/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        if (error.message) throw error.message;
-      }
-
-      if (response.ok) {
-        enqueueSnackbar('Login successful', { variant: 'success' });
-        console.log(await response.json());
-      }
-    } catch (e) {
-      console.error(e);
-      if (typeof e === 'string') enqueueSnackbar(e, { variant: 'error' });
-      else enqueueSnackbar('Error logging in', { variant: 'error' });
-    } finally {
-      setLoggingIn(false);
+    if (!code) {
+      enqueueSnackbar('Please enter your login code', { variant: 'error' });
+      return;
     }
+
+    await verifyEmailCode({ email, code });
   };
 
   return (
@@ -153,6 +155,7 @@ const ConnectUsingEmail = (props, ref) => {
                 placeholder="mark@goingup.xyz"
                 variant="outlined"
                 fullWidth
+                autoFocus
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -172,9 +175,10 @@ const ConnectUsingEmail = (props, ref) => {
                 </LoadingButton>
 
                 <Button
-                  variant="outlined"
-                  color="secondary"
+                  variant="text"
+                  // color="secondary"
                   fullWidth
+                  disabled={isSendingWalletLoginCode}
                   onClick={() => setOpen(false)}
                 >
                   Cancel
@@ -207,6 +211,7 @@ const ConnectUsingEmail = (props, ref) => {
                   label="Login Code"
                   variant="outlined"
                   fullWidth
+                  autoFocus
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                 />
@@ -228,15 +233,16 @@ const ConnectUsingEmail = (props, ref) => {
                   variant="contained"
                   color="primary"
                   fullWidth
-                  loading={loggingIn}
+                  loading={isVerifyingEmailCode}
                   onClick={() => login()}
                 >
                   Login and Connect
                 </LoadingButton>
 
                 <Button
-                  variant="contained"
-                  color="secondary"
+                  variant="text"
+                  disabled={isVerifyingEmailCode}
+                  // color="secondary"
                   fullWidth
                   onClick={() => changeStep(0)}
                 >

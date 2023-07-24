@@ -9,12 +9,17 @@ import { useModal } from 'connectkit';
 import { useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 import { Provider } from '@ethersproject/providers';
 import { Chain } from 'wagmi';
+import { Account } from '@/types/account';
+import { trpc } from '@/utils/trpc';
+import { TRPCError } from '@trpc/server';
 
 type WalletContextValue = {
   networks: typeof networks;
   chain: string | null;
-  connectEthereum: () => void;
+  connectEthereum: (hasCache: boolean) => void;
   disconnectEthereum: () => void;
+  connectCustodial: (Account) => void;
+  disconnectCustodial: () => void;
   address: string | null;
   network: Chain | null;
   walletType: string | null;
@@ -28,9 +33,7 @@ type WalletContextValue = {
   mainnetENSProvider: Provider;
 };
 
-
 export const WalletContext = createContext<WalletContextValue>({} as WalletContextValue);
-
 
 const walletTypes = {
   metamask: { display: 'MetaMask' },
@@ -91,7 +94,8 @@ const utilityToken = {
   chainName: 'Polygon Mainnet',
   address: '0x10D7B3aFA213D93a922a062fb91E8EcbD4A703d2',
   get provider() {
-    return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_MAINNET);
+    // let's use infura for front end keys
+    return new ethers.providers.InfuraProvider(this.chainId, process.env.NEXT_PUBLIC_INFURA_KEY);
   },
 };
 
@@ -100,7 +104,7 @@ const utilityTokenTestnet = {
   chainName: 'Polygon Mumbai Testnet',
   address: '0x825D5014239a59d7587b9F53b3186a76BF58aF72',
   get provider() {
-    return new ethers.providers.AlchemyProvider(this.chainId, process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_KEY);
+    return new ethers.providers.InfuraProvider(this.chainId, process.env.NEXT_PUBLIC_INFURA_KEY);
   },
 };
 
@@ -116,7 +120,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
 
   const [address, setAddress] = useState<string | null>(null);
   const [network, setNetwork] = useState<Chain | null>(null);
-  const [chain, setChain] = useState<string | null>(null);
+  const [chain, setChain] = useState<'Ethereum' | 'Custodial' | null>(null);
   const [ethersProvider, setEthersProvider] = useState<Provider | null>(null);
   const [ethersSigner, setEthersSigner] = useState<Signer | null>(null);
   const [walletType, setWalletType] = useState<string | null>(null);
@@ -279,9 +283,9 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     if (cache) {
       if (!address) {
         if (cache.blockchain === 'evm') {
-          connectEthereum();
-        } else if (cache.blockchain === 'cardano') {
-          connectCardano();
+          connectEthereum(true);
+        } else if (cache.blockchain === 'custodial') {
+          connectCustodial(cache.custodialAccount);
         }
       }
     }
@@ -290,8 +294,8 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   const disconnect = async () => {
     if (chain === 'Ethereum') {
       disconnectEthereum();
-    } else if (chain === 'Cardano') {
-      disconnectCardano();
+    } else if (chain === 'Custodial') {
+      disconnectCustodial();
     }
 
     localStorage.removeItem('wallet-context-cache');
@@ -324,31 +328,35 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     }
   };
 
+  const { mutateAsync: signInWithSignature, isLoading: isSigningIn } = trpc.auth.signInWithSignature.useMutation();
+  const { mutateAsync: checkAccessTokenValidity, isLoading: isCheckingAccessTokenValidity } =
+    trpc.auth.checkAccessTokenValidity.useMutation();
   const signInEthereum = async (address: string, signer: Signer) => {
     if (router.isReady && router.pathname.startsWith('/claim-event-token')) return;
-    if (hasCookie('auth-token')) return;
+
+    const isAccessTokenValid = await checkAccessTokenValidity({ address });
+    if (isAccessTokenValid) return;
 
     if (!address) throw 'No address found';
-    if (!ethersSigner) throw 'No signer found';
+    if (!signer) throw 'No signer found';
 
     // sign a message with wallet
     const message = `I am signing this message to prove that I own the address ${address}. This message will be used to sign in to app.goingup.xyz and receive an authentication token cookie.`;
 
-    const signature = await ethersSigner.signMessage(message);
+    const signature = await signer.signMessage(message);
 
     // send signature to server
-    const response = await fetch(`/api/accounts/${address}/sign-in`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    try {
+      await signInWithSignature({
+        address,
         signature,
-      }),
-    });
-
-    if (response.ok) {
-      const result = await response.json();
+      });
+    } catch (err) {
+      if (err instanceof TRPCError) {
+        enqueueSnackbar(err.message, { variant: 'error' });
+      } else {
+        enqueueSnackbar('Something went wrong', { variant: 'error' });
+      }
     }
   };
 
@@ -356,8 +364,8 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   const { chain: evmChain } = useNetwork();
   const evmProvider = useProvider();
   const { data: evmSigner } = useSigner();
-  const connectEthereum = async () => {
-    disconnectEthereum();
+  const connectEthereum = async (hasCache: boolean) => {
+    // await disconnectEthereum();
     setConnectKitOpen(true);
   };
 
@@ -380,12 +388,18 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
         })
       );
 
-      signInEthereum(evmAddress!, evmSigner!);
+      if (evmAddress && evmSigner) {
+        signInEthereum(evmAddress, evmSigner);
+      }
     }
 
-    if (!evmIsConnected && !evmIsConnecting) {
-      disconnectEthereum();
-    }
+    // if (!evmIsConnected && !evmIsConnecting) {
+    //   if (localStorage.getItem('wallet-context-cache')) {
+    //     const cache = JSON.parse(localStorage.getItem('wallet-context-cache')!);
+    //     if (Boolean(cache)) return;
+    //   }
+    //   disconnectEthereum();
+    // }
   }, [evmAddress, evmIsConnected, evmIsConnecting, evmProvider, evmSigner, evmChain]);
 
   const { disconnect: evmDisconnect } = useDisconnect();
@@ -394,13 +408,42 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     clearState();
   };
 
-  const clearState = () => {
-    deleteCookie('auth-token');
-    localStorage.removeItem('wallet-context-cache');
-    setChain(null);
-    setAddress(null);
+  const connectCustodial = async (account: Account) => {
+    console.log('custodial account', account);
+    setChain(`Custodial`);
     setNetwork(null);
+    setWalletType('custodial');
     setEthersProvider(null);
+    setEthersSigner(null);
+    setAddress(account.address || null);
+
+    localStorage.setItem(
+      'wallet-context-cache',
+      JSON.stringify({
+        blockchain: 'custodial',
+        custodialAccount: account,
+      })
+    );
+  };
+
+  const disconnectCustodial = async () => {
+    clearState();
+  };
+
+  const {
+    mutateAsync: signOut,
+    isLoading: isSigningOut
+  } = trpc.auth.signOut.useMutation();
+
+  const clearState = () => {
+    signOut().then(() => {
+      deleteCookie('access_token');
+      localStorage.removeItem('wallet-context-cache');
+      setChain(null);
+      setAddress(null);
+      setNetwork(null);
+      setEthersProvider(null);
+    });
   };
 
   const connectCardano = async () => {
@@ -439,7 +482,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
 
   const signMessage = async (message): Promise<string> => {
     if (chain === 'Ethereum') {
-      const authToken = getCookie('auth-token');
+      const authToken = getCookie('access_token');
       if (authToken) {
         return authToken as string;
       } else {
@@ -451,7 +494,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
     }
   };
 
-  const mainnetENSProvider = ethers.getDefaultProvider('homestead');
+  const mainnetENSProvider = new ethers.providers.InfuraProvider(1, process.env.NEXT_PUBLIC_INFURA_KEY);
 
   return (
     <WalletContext.Provider
@@ -460,6 +503,8 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
         chain,
         connectEthereum,
         disconnectEthereum,
+        connectCustodial,
+        disconnectCustodial,
         address,
         network,
         walletType,
@@ -476,4 +521,4 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
       {children}
     </WalletContext.Provider>
   );
-}
+};

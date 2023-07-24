@@ -8,39 +8,23 @@ import OrganizationsList from '../../components/pages/organizations/organization
 import LoadingIllustration from '../../components/common/loading-illustration';
 
 export default function Organizations() {
-    const app = useContext(AppContext);
-    const org = useContext(OrganizationsContext);
-    const router = useRouter();
-    const [count, setCount] = useState(0);
-    const [loading, setLoading] = useState(false);
+  return (
+    <>
+      <Head>
+        <title>GoingUP: Organizations</title>
+        <link
+          rel="icon"
+          href="/favicon.ico"
+        />
+      </Head>
 
-    useEffect(() => {
-        setLoading(true);
-        fetch('/api/get-orgs-count')
-            .then((res) => res.json())
-            .then((data) => {
-                setCount(data.orgsCount);
-            });
-            setLoading(false);
-    }, []);
-
-    return (
-        <>
-            <Head>
-                <title>GoingUP: Organizations</title>
-                <link rel='icon' href='/favicon.ico' />
-            </Head>
-
-            <Typography variant='h1' marginY={3}>
-                Organizations: showing {count} results
-            </Typography>
-            {loading ? (
-                <Box sx={{ mt: '100px' }}>
-                    <LoadingIllustration />
-                </Box>
-            ) : (
-                <OrganizationsList />
-            )}
-        </>
-    );
+      <Typography
+        variant="h1"
+        marginY={3}
+      >
+        Organizations
+      </Typography>
+      <OrganizationsList />
+    </>
+  );
 }

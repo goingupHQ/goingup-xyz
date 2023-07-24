@@ -66,7 +66,7 @@ export default function Header(props) {
                                     <IconButton>
                                         <SettingsIcon />
                                     </IconButton> */}
-                                    <IconButton onClick={() => {
+                                    {/* <IconButton onClick={() => {
                                         if (app.mode === 'dark') {
                                             app.setLightMode();
                                         } else {
@@ -75,7 +75,7 @@ export default function Header(props) {
                                     }}>
                                         {app.mode === 'light' && <SunIcon />}
                                         {app.mode === 'dark' && <MoonIcon />}
-                                    </IconButton>
+                                    </IconButton> */}
                                 </Stack>
                                 <UserBox />
                                 <Box sx={{ display: { xs: 'initial', md: 'none' }, marginLeft: '0px !important' }} className="mobile-drawer-toggle">

@@ -22,7 +22,8 @@ function PersonalInfo(props) {
     const {
         name, setName,
         occupation, setOccupation,
-        openTo, setOpenTo
+        openTo, setOpenTo,
+        about, setAbout
     } = props.state;
 
     return (
@@ -44,6 +45,7 @@ function PersonalInfo(props) {
                     label="Occupation"
                     value={occupation}
                     onChange={e => setOccupation(e.target.value)}
+                    MenuProps={{ style: {marginTop: 80}} }
                 >
                     {occupations.map((o) => {
                         return (
@@ -72,6 +74,7 @@ function PersonalInfo(props) {
                         setOpenTo(typeof value === 'string' ? value.split(',') : value);
                     }}
                     renderValue={(selected) => selected.map(i => availability.find(a => a.id === i).text).join(', ')}
+                    MenuProps={{ style: {marginTop: 80}} }
                 >
                     {availability.map((a) => {
                         return (
@@ -83,6 +86,16 @@ function PersonalInfo(props) {
                     })}
                 </Select>
             </FormControl>
+
+            <TextField
+                label="About you"
+                placeholder="Introduce yourself to the community"
+                variant="outlined"
+                sx={fieldStyle}
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
+                multiline
+            />
         </Box>
     );
 }

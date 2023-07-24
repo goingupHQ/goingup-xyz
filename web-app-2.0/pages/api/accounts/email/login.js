@@ -1,7 +1,7 @@
 import { getDb } from '../../_get-db-client';
 import crypto from 'crypto';
 
-export default async (req, res) => {
+export default async function handler(req, res) {
     const { code } = req.body;
 
     if (!code) {

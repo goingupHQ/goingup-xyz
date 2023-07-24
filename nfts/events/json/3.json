@@ -1,0 +1,28 @@
+{
+    "name": "CryptoMondays: The Future of NFTs",
+    "description": "Attendee Badge for CryptoMondays: The Future of NFTs held on April 10th, 2023",
+    "image": "ipfs://bafybeig2sf2znytuxlqa3girdjwrhqdtlqzilqkveohcji5z24kdusury4/cryptomondays-event-2023-04-10.jpg",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "Date",
+            "value": "1681122600"
+        },
+        {
+            "trait_type": "Location",
+            "value": "Free Agency, 16 W 22nd St 8th Floor, New York, NY"
+        },
+        {
+            "trait_type": "Event",
+            "value": "CryptoMondays: The Future of NFTs"
+        },
+        {
+            "trait_type": "Description",
+            "value": "Attendee Badge for CryptoMondays: The Future of NFTs held on April 10th, 2023"
+        },
+        {
+            "trait_type": "Partner",
+            "value": "CryptoMondays"
+        }
+    ]
+}

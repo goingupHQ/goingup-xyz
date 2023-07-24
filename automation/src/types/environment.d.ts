@@ -1,5 +1,3 @@
-export {};
-
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
@@ -15,6 +13,15 @@ declare global {
       DEPLOYMENT: 'dev' | 'production';
       BACKEND_WALLET_ADDRESS: string;
       BACKEND_WALLET_PK: string;
+      SMTP_HOST: string;
+      SMTP_PORT: string;
+      SMTP_USER: string;
+      SMTP_PASSWORD: string;
+      MINT_EMAIL_HOST: string;
+      MINT_EMAIL_PORT: number;
+      MINT_EMAIL_ADDR: string;
+      MINT_EMAIL_PASS: string;
     }
   }
 }
+export {};

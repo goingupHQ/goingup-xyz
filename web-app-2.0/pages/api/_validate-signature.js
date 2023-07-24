@@ -13,11 +13,11 @@ export const validateSignature = async (address, message, signature, req, res) =
 
     let isSignedIn = false;
     try {
-        const authToken = getCookie('auth-token', { req, res });
+        const authToken = getCookie('access_token', { req, res });
 
         if (authToken) {
             const db = await getDb();
-            const token = await db.collection('auth-tokens').findOne({ token: authToken });
+            const token = await db.collection('access-tokens').findOne({ token: authToken });
             if (token) {
                 isSignedIn = token.address === address;
             }

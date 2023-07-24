@@ -108,7 +108,7 @@ export default function MobileNav(props) {
             >
                 Settings
             </Button> */}
-            <Button
+            {/* <Button
                 sx={inactiveButtonStyle}
                 startIcon={
                     <>
@@ -130,7 +130,7 @@ export default function MobileNav(props) {
             >
                 {app.mode === 'light' && 'Switch to Dark Mode'}
                 {app.mode === 'dark' && 'Switch to Light Mode'}
-            </Button>
+            </Button> */}
         </Stack>
     );
 }

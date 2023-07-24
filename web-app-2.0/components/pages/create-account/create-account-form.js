@@ -39,6 +39,7 @@ export default function CreateAccountForm() {
     };
 
     const [name, setName] = useState('');
+    const [about, setAbout] = useState('');
     const [occupation, setOccupation] = useState(null);
     const [openTo, setOpenTo] = useState([]);
     const [projectGoals, setProjectGoals] = useState([]);
@@ -53,6 +54,8 @@ export default function CreateAccountForm() {
     const state = {
         name,
         setName,
+        about,
+        setAbout,
         occupation,
         setOccupation,
         openTo,
@@ -162,7 +165,7 @@ export default function CreateAccountForm() {
                     address,
                     signature,
                     account: {
-                        name, occupation, openTo, projectGoals, idealCollab
+                        name, about, occupation, openTo, projectGoals, idealCollab
                     },
                     email1, email2, email3, email4, inviteMessage
                 })

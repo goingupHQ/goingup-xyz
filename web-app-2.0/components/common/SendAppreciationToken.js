@@ -4,7 +4,6 @@ import { LoadingButton } from '@mui/lab';
 import {
   Button,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
@@ -12,16 +11,15 @@ import {
   Grid,
   InputLabel,
   MenuItem,
-  Typography,
   TextField,
   Stack,
 } from '@mui/material';
-import { forwardRef, useContext, useImperativeHandle, useState, useEffect } from 'react';
-import { ethers } from 'ethers';
+import { forwardRef, useContext, useImperativeHandle, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import artifact from '../../../artifacts/GoingUpUtilityToken.json';
 import AccountNameAddress from './account-name-address';
 import { UtilityTokensContext } from '../../contexts/utility-tokens-context';
+import { trpc } from '../../utils/trpc';
+import { TRPCError } from '@trpc/server';
 
 const SendAppreciationToken = (props, ref) => {
   const { sendToName, sendToAddress, onSent } = props;
@@ -57,54 +55,63 @@ const SendAppreciationToken = (props, ref) => {
     setOpen(false);
   };
 
-  const fieldStyle = {
-    m: 1,
-  };
+  const { mutateAsync: sendTokenFromCustodialWallet } = trpc.utilityTokens.sendTokenFromCustodialWallet.useMutation();
 
   const send = async () => {
     setSending(true);
     try {
-      if (wallet.chain === 'Ethereum') {
-        const tx = await utilityTokensContext.sendUtilityToken(sendToAddress, tier, amount, message);
-
-        if (tx) {
-          if (projectId && member?.address) {
-            fetch(`/api/projects/rewards/${tx.hash}`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                projectId,
-                member: member.address,
-                memberRecordId: member.id,
-                tokenId: tier,
-                amount,
-                type: 'goingup-appreciation-token',
-              }),
-            });
-          }
-
-          if (onSent && typeof onSent === 'function') {
-            onSent();
-          }
-
-          enqueueSnackbar(`The appreciation token mint transaction has been submitted to the blockchain 👍`, {
-            variant: 'success',
-          });
-
-          close();
-        }
+      let tx;
+      if (wallet.walletType === 'evm') {
+        tx = await utilityTokensContext.sendUtilityToken(sendToAddress, tier, amount, message);
+      } else if (wallet.walletType === 'custodial') {
+        tx = await sendTokenFromCustodialWallet({
+          chainId: 137,
+          to: sendToAddress,
+          tokenId: tier,
+          amount,
+          message,
+        });
       }
 
-      if (wallet.chain === 'Cardano') {
-        enqueueSnackbar('Sorry, appreciation tokens are not yet available for Cardano', { variant: 'error' });
+      if (tx) {
+        if (projectId && member?.address) {
+          fetch(`/api/projects/rewards/${tx.hash}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              projectId,
+              member: member.address,
+              memberRecordId: member.id,
+              tokenId: tier,
+              amount,
+              type: 'goingup-appreciation-token',
+            }),
+          });
+        }
+
+        if (onSent && typeof onSent === 'function') {
+          onSent();
+        }
+
+        enqueueSnackbar(`The appreciation token mint transaction has been submitted to the blockchain 👍`, {
+          variant: 'success',
+        });
+
+        close();
       }
     } catch (err) {
-      console.log(err);
-      enqueueSnackbar('Sorry something went wrong 😥', {
-        variant: 'error',
-      });
+      if (err instanceof TRPCError) {
+        enqueueSnackbar(err.message, {
+          variant: 'error',
+        });
+      } else {
+        console.error(err);
+        enqueueSnackbar('Sorry something went wrong 😥', {
+          variant: 'error',
+        });
+      }
     } finally {
       setSending(false);
     }
@@ -161,10 +168,10 @@ const SendAppreciationToken = (props, ref) => {
               sx={{ paddingTop: { sm: 'initial', md: '25px !important' } }}
             >
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Token Tier</InputLabel>
+                <InputLabel id="token-tier-label">Token Tier</InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
+                  labelId="token-tier-label"
+                  id="token-tier-select"
                   value={tier}
                   label="Token Tier"
                   onChange={(e) => {

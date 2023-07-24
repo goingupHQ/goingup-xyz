@@ -28,7 +28,7 @@ export default function MembershipNFT(props) {
 
                     {wallet.address === null && (
                         <Stack fullWidth justifyContent="center" alignItems="center" direction="column">
-                            <img src="/images/illustrations/connection-lost.svg" layout="fill" alt='connection-lost' style={{ width: '100%', maxWidth: '500px'}} />
+                            <img src="/images/illustrations/connection-lost.svg" alt='connection-lost' style={{ width: '100%', maxWidth: '500px'}} />
                             <Typography variant="h2" sx={{ marginTop: 5 }}>Please connect your wallet as it is required to access the admin page</Typography>
                         </Stack>
                     )}

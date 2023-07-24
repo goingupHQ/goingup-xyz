@@ -10,16 +10,14 @@ type ConnectUsingEmailHandles = {
   showModal: () => void;
 };
 
-const WalletChainSelection = (props: {}, ref: Ref<ConnectUsingEmailHandles>) => {
+export type WalletChainSelectionHandles = {
+  showModal: () => void;
+};
+
+const WalletChainSelection = (props: {}, ref: Ref<WalletChainSelectionHandles>) => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
-  const wallet = useContext(WalletContext);
-  const app = useContext(AppContext);
-
   const { setOpen: setCkModalOpen } = useModal();
-
-  const { enqueueSnackbar } = useSnackbar();
-
   const connectUsingEmailRef = createRef<ConnectUsingEmailHandles>();
 
   useImperativeHandle(ref, () => ({
