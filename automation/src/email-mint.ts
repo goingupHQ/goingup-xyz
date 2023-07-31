@@ -68,6 +68,12 @@ const getEmails = () => {
                 for (const recipient of recipients) {
                   if (recipient.address === mintEmailAddress) continue;
 
+                  // generate random 8 character base64 string
+                  const confirmationId = Buffer.from(
+                    Math.random().toString(36).substring(2, 10),
+                    'utf-8',
+                  ).toString('base64');
+
                   const emailMintRequest: EmailMintRequest = {
                     mintFrom: {
                       address: parsed.from?.value[0].address!,
@@ -84,6 +90,7 @@ const getEmails = () => {
                       text: parsed.text || '',
                       html: parsed.html || '',
                     },
+                    confirmationId,
                   };
                   emailMintRequests.push(emailMintRequest);
                 }
@@ -127,4 +134,4 @@ const getEmails = () => {
   }
 };
 
-getEmails();
+

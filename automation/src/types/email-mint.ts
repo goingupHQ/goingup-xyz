@@ -14,4 +14,5 @@ export type EmailMintRequest = {
     text: string;
     html: string;
   };
+  confirmationId: string;
 };
