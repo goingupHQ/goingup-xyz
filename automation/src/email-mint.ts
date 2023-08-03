@@ -4,6 +4,8 @@ import Imap from 'imap';
 import { AddressObject, EmailAddress, simpleParser } from 'mailparser';
 import { EmailMintRequest } from './types/email-mint';
 import { getDb } from './get-db-client';
+import { createEmailMintConfirmation } from './email-builder';
+import { sendEmail, sendEmailViaMinter } from './send-email';
 
 const mintEmailAddress = process.env.MINT_EMAIL_ADDR!;
 
@@ -15,7 +17,7 @@ const imapConfig: Imap.Config = {
   tls: true,
 };
 
-const getEmails = () => {
+const getAndProcessNewEmails = () => {
   try {
     const imap = new Imap(imapConfig);
     imap.once('ready', () => {
@@ -25,8 +27,6 @@ const getEmails = () => {
           f.on('message', (msg) => {
             msg.on('body', (stream) => {
               simpleParser(stream, async (err, parsed) => {
-                console.log(parsed);
-
                 const recipients: EmailAddress[] = [];
 
                 if (parsed.to !== undefined) {
@@ -65,14 +65,15 @@ const getEmails = () => {
                 }
 
                 const emailMintRequests: EmailMintRequest[] = [];
+                // generate random 8 character base64 string
+                // it should be lowercase and alphanumeric
+                const confirmationId = Buffer.from(`${Math.random().toString(36).substring(2, 14)}`)
+                  .toString('base64')
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]/g, '');
+
                 for (const recipient of recipients) {
                   if (recipient.address === mintEmailAddress) continue;
-
-                  // generate random 8 character base64 string
-                  const confirmationId = Buffer.from(
-                    Math.random().toString(36).substring(2, 10),
-                    'utf-8',
-                  ).toString('base64');
 
                   const emailMintRequest: EmailMintRequest = {
                     mintFrom: {
@@ -100,6 +101,18 @@ const getEmails = () => {
                 await emailMintRequestsCollection.insertMany(emailMintRequests);
 
                 console.log(`Inserted ${emailMintRequests.length} email mint requests into the database`);
+
+                const emailHtml = createEmailMintConfirmation(
+                  `https://app.goingup.xyz/email-mint/confirm/${confirmationId}`
+                );
+
+                await sendEmailViaMinter(
+                  mintEmailAddress,
+                  emailMintRequests[0].mintFrom.address,
+                  'Email Mint Confirmation',
+                  '',
+                  emailHtml
+                );
               });
             });
             msg.once('attributes', (attrs) => {
@@ -134,4 +147,4 @@ const getEmails = () => {
   }
 };
 
-
+getAndProcessNewEmails();

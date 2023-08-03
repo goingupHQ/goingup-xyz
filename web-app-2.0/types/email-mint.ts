@@ -16,8 +16,3 @@ export type EmailMintRequest = {
   };
   confirmationId: string;
 };
-
-export type EmailMintAllowList = {
-  email: string;
-  allowed: boolean;
-};
