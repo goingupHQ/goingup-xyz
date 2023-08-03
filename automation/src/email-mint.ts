@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import Imap from 'imap';
 import { AddressObject, EmailAddress, simpleParser } from 'mailparser';
-import { EmailMintRequest } from './types/email-mint';
+import { AllowedEmailMinter, EmailMintRequest } from './types/email-mint';
 import { getDb } from './get-db-client';
 import { createEmailMintConfirmation } from './email-builder';
 import { sendEmail, sendEmailViaMinter } from './send-email';
@@ -27,6 +27,23 @@ const getAndProcessNewEmails = () => {
           f.on('message', (msg) => {
             msg.on('body', (stream) => {
               simpleParser(stream, async (err, parsed) => {
+                const sender = parsed.from?.value[0].address;
+                if (!sender) {
+                  console.error('Email does not have sender');
+                  return;
+                }
+
+                // check if sender is on email mint allow list
+                const db = await getDb();
+                const collection = db.collection<AllowedEmailMinter>('email-mint-allow-list');
+                const allowedEmailMinter = await collection.findOne({ email: sender });
+                if (!allowedEmailMinter || !allowedEmailMinter.allowed) {
+                  console.error(`Email sender ${sender} is not on allow list`);
+                  return;
+                } else {
+                  console.log(`Email sender ${sender} is on allow list`);
+                }
+
                 const recipients: EmailAddress[] = [];
 
                 if (parsed.to !== undefined) {
@@ -96,7 +113,6 @@ const getAndProcessNewEmails = () => {
                   emailMintRequests.push(emailMintRequest);
                 }
 
-                const db = await getDb();
                 const emailMintRequestsCollection = db.collection<EmailMintRequest>('email-mint-requests');
                 await emailMintRequestsCollection.insertMany(emailMintRequests);
 
