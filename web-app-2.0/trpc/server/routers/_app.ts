@@ -1,6 +1,7 @@
 import { procedure, router } from '../trpc';
 import { accountsRouter } from './accounts-router';
 import { authRouter } from './auth';
+import { emailMintRouter } from './email-mint-router';
 import { emailsRouter } from './emails-router';
 import { eventPartnersRouter } from './event-partners-router';
 import { eventTokensRouter } from './event-tokens-router';
@@ -18,7 +19,8 @@ export const appRouter = router({
   auth: authRouter,
   kms: kmsRouter,
   profiles: profilesRouter,
-  utilityTokens: utilityTokensRouter
+  utilityTokens: utilityTokensRouter,
+  emailMint: emailMintRouter,
 });
 
 // export type definition of API
