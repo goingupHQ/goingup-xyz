@@ -21,3 +21,12 @@ export type AllowedEmailMinter = {
   email: string;
   allowed: boolean;
 };
+
+export type TokenRecipient = {
+  doSend: boolean;
+  mintToAddress: string;
+  mintToName: string;
+  mintToEmail: string;
+  mintQuantity: number;
+  mintTokenId: number;
+};
