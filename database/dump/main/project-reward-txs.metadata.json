@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"2e0df3bca8724138bd9e1f547ec7b963","collectionName":"project-reward-txs","type":"collection"}

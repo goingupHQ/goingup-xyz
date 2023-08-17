@@ -1,0 +1,1 @@
+{"options":{"viewOn":"accounts","pipeline":[{"$project":{"_id":false,"name":true,"occupation":true,"openTo":true,"projectGoals":true,"address":true,"reputationScore":true,"profilePhoto":true}}]},"indexes":[],"collectionName":"profile-0","type":"view"}

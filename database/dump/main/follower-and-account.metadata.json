@@ -1,0 +1,1 @@
+{"options":{"pipeline":[{"$lookup":{"foreignField":"address","as":"account","from":"accounts","localField":"follows"}}],"viewOn":"follows"},"indexes":[],"collectionName":"follower-and-account","type":"view"}

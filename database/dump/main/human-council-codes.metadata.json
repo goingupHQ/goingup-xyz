@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"802f628bac5045ff91ef23e3dfca07b3","collectionName":"human-council-codes","type":"collection"}

@@ -18,7 +18,8 @@ declare global {
       SMTP_USER: string;
       SMTP_PASSWORD: string;
       MINT_EMAIL_HOST: string;
-      MINT_EMAIL_PORT: number;
+      MINT_EMAIL_PORT: string;
+      MINT_EMAIL_SPRT: string;
       MINT_EMAIL_ADDR: string;
       MINT_EMAIL_PASS: string;
     }

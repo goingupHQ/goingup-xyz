@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"c55bae6f1b95459b81067c6ca3335cf3","collectionName":"utility-mint-data","type":"collection"}

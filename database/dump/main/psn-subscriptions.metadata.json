@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"2bea5723fc5a4b0ca0975f5b5d9e2e74","collectionName":"psn-subscriptions","type":"collection"}
