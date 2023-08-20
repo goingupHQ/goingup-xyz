@@ -15,6 +15,8 @@ import {
   GoingUpUtilityTokens__factory,
 } from './typechain';
 
+import { stopMailListener, startMailListener } from './email-mint-listener';
+
 import { Account } from './types/account';
 import { PushNotificationSubscription } from './types/psn';
 
@@ -24,11 +26,31 @@ process.on('uncaughtException', function (err) {
   console.log(`Process is still alive`);
 });
 
+process.on('unhandledRejection', function (err) {
+  console.log('Caught exception: ', err);
+  console.log(`Process is still alive`);
+});
+
+process.on('SIGINT', function () {
+  cleanup();
+});
+
+process.on('SIGTERM', function () {
+  cleanup();
+});
+
+const cleanup = () => {
+  console.log('Cleaning up');
+  stopMailListener();
+  process.exit();
+};
+
 let db: Db | null = null;
 let accounts: Collection<Account> | null = null;
 const main = async () => {
   db = await getDb();
   accounts = await db.collection<Account>('accounts');
+  startMailListener();
 };
 
 main();
