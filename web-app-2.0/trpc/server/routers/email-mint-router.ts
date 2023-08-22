@@ -5,6 +5,7 @@ import { EmailMintRequest } from '@/types/email-mint';
 import { createCustodialAccount, getAccountByEmail } from '@/utils/database/account';
 import { ethers } from 'ethers';
 import { encrypt } from '@/utils/kms';
+import { ObjectId } from 'mongodb';
 
 export const emailMintRouter = router({
   getMintRequests: procedure
@@ -40,15 +41,44 @@ export const emailMintRouter = router({
 
       return mintRequestsWithWallet;
     }),
-  discardMintRequest: procedure
-    .input(z.object({ confirmationId: z.string() }))
-    .mutation(async ({ input }) => {
-      const { confirmationId } = input;
+  discardMintRequest: procedure.input(z.object({ confirmationId: z.string() })).mutation(async ({ input }) => {
+    const { confirmationId } = input;
 
-      const db = await getDb();
-      const collection = db.collection<EmailMintRequest>('email-mint-requests');
-      await collection.deleteMany({ confirmationId });
-    }),
+    const db = await getDb();
+    const collection = db.collection<EmailMintRequest>('email-mint-requests');
+    await collection.deleteMany({ confirmationId });
+  }),
+  confirmMintRequests: procedure.input(
+    z.object({
+      mintRequests: z.array(
+        z.object({
+          id: z.string(),
+          qtyToMint: z.number(),
+          tokenIdToMint: z.number(),
+          finalMintMessage: z.string(),
+        })
+      ),
+    })
+  ).mutation(async ({ input }) => {
+    const { mintRequests } = input;
+
+    const db = await getDb();
+
+    const collection = db.collection<EmailMintRequest>('email-mint-requests');
+    for (const mintRequest of mintRequests) {
+      const result = await collection.updateOne(
+        { _id: ObjectId.createFromHexString(mintRequest.id) },
+        {
+          $set: {
+            confirmedBySenderOn: new Date(),
+            qtyToMint: mintRequest.qtyToMint,
+            tokenIdToMint: mintRequest.tokenIdToMint,
+            finalMintMessage: mintRequest.finalMintMessage,
+          },
+        }
+      );
+    }
+  }),
 });
 
 type MintRequestWithWallet = EmailMintRequest & { walletAddress: string };
