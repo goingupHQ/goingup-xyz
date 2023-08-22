@@ -21,7 +21,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import { set } from 'zod';
 
 const EmailMintConfirmPage = () => {
   const router = useRouter();
@@ -48,7 +47,7 @@ const EmailMintConfirmPage = () => {
         mintQuantity: 1,
         mintTokenId: 1,
         requestId: request._id,
-      };
+      } as TokenRecipient;
     });
     setRecipients(recipientsList);
     setMintMessage(requests[0].content.text);
