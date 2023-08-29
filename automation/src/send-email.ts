@@ -47,7 +47,7 @@ export const sendEmailViaMinter = async (
   htmlBody: string | null
 ) => {
   const transporter = nodemailer.createTransport({
-    host: process.env.MINT_EMAIL_HOST,
+    host: process.env.MINT_SMTP_HOST,
     port: Number(process.env.MINT_EMAIL_SPRT),
     secure: true,
     auth: {
