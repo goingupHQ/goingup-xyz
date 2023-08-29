@@ -73,6 +73,95 @@ export const createEmailMintConfirmation = (confirmationUrl: string) => {
   return buildEmailFromTemplate(content);
 };
 
+export const createAcceptTokenEmail = (fromName: string, fromEmail: string, message: string, acceptUrl: string) => {
+  const from = fromName ? `${fromName} <${fromEmail}>` : fromEmail;
+  const content = `
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+      <tbody><tr>
+      <td style="padding: 0px 0px 0px 0px;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+        <tbody><tr>
+          <td valign="top" class="pc-w520-padding-30-40-30-40 pc-w620-padding-35-50-35-50" style="padding: 40px 60px 40px 60px;border-radius: 0px;background-color: #ffffff;" bgcolor="#ffffff">
+          <table class="pc-txt-block-wrapper" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+            <tbody><tr>
+            <td style="padding: 0px 0px 10px 0px;" valign="top" align="center">
+              <table class="pc-txt-block" border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="margin-right: auto; margin-left: auto;">
+              <tbody><tr>
+                <td valign="top" class="pc-font-alt" style="mso-line-height: exactly;line-height: 46px;letter-spacing: -0.6px;font-family: 'Fira Sans', Helvetica, Arial, sans-serif;font-size: 36px;font-weight: 800;color: #151515;text-align: center;text-align-last: center;" align="center">
+                <div><span>You have received token(s)!</span>
+                </div>
+                </td>
+              </tr>
+              </tbody></table>
+            </td>
+            </tr>
+          </tbody></table>
+          <table class="pc-txt-block-wrapper" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+            <tbody><tr>
+            <td style="padding: 0px 0px 20px 0px;" valign="top" align="center">
+              <table class="pc-txt-block" border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="margin-right: auto; margin-left: auto;">
+              <tbody><tr>
+                <td valign="top" class="pc-font-alt" style="mso-line-height: exactly;line-height: 28px;letter-spacing: -0.2px;font-family: 'Fira Sans', Helvetica, Arial, sans-serif;font-size: 20px;font-weight: normal;color: #1b1b1b;text-align: center;text-align-last: center;" align="center">
+                <div><span>${from} has sent you token(s) of appreciation</span>
+                </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td valign="top" class="pc-font-alt" style="mso-line-height: exactly;line-height: 28px;letter-spacing: -0.2px;font-family: 'Fira Sans', Helvetica, Arial, sans-serif;font-size: 20px;font-weight: normal;color: #1b1b1b;text-align: center;text-align-last: center;" align="center">
+                <div><span>Message from token sender: ${message}</span>
+                </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td valign="top" class="pc-font-alt" style="mso-line-height: exactly;line-height: 28px;letter-spacing: -0.2px;font-family: 'Fira Sans', Helvetica, Arial, sans-serif;font-size: 20px;font-weight: normal;color: #1b1b1b;text-align: center;text-align-last: center;" align="center">
+                <div><span>Do you want to accept?</span>
+                </div>
+                </td>
+              </tr>
+
+              </tbody></table>
+            </td>
+            </tr>
+          </tbody></table>
+          <table class="pc-list-wrapper" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+            <tbody><tr>
+            <td valign="top" style="padding: 0px 0px 20px 0px;">
+              <table class="pc-list" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+              <tbody><tr>
+                <td valign="top" align="center">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" class="pc-hlist pc-w620-view-vertical">
+                  <tbody><tr>
+                  <th align="center" valign="top" style="font-weight: normal;">
+                    <!--[if mso]><a href="${acceptUrl}" target="_blank">
+              <v:roundrect href="" stroke="f" fillcolor="#1595e7" arcsize="8%" style="width: 177px;height: 52px;v-text-anchor: middle;" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word">
+                  <w:anchorlock></w:anchorlock>
+                  <center style="font-size: 16px;font-weight: 500;color: #ffffff;font-family: Arial, Helvetica, sans-serif;">Accept Tokens</center>
+              </v:roundrect>
+          </a><![endif]-->
+                    <!--[if !mso]><!-- --><a href="${acceptUrl}" style="border-radius: 8px;background-color: #1595e7;padding: 14px 18px 14px 18px;font-family: 'Fira Sans', Helvetica, Arial, sans-serif;font-weight: 500;font-size: 16px;line-height: 24px;letter-spacing: -0.2px;color: #ffffff;display: inline-block;text-align: center;text-decoration: none;white-space: nowrap;-webkit-text-size-adjust: none;" target="_blank"><span><span style="white-space: pre-wrap;">Accept Tokens</span></span></a>
+                    <!--<![endif]-->
+                  </th>
+                  </tr>
+                </tbody></table>
+                </td>
+              </tr>
+              </tbody></table>
+            </td>
+            </tr>
+          </tbody></table>
+          </td>
+        </tr>
+        </tbody></table>
+      </td>
+      </tr>
+    </tbody></table>
+  `;
+
+  return buildEmailFromTemplate(content);
+};
+
 const buildEmailFromTemplate = (content: string) => {
   return `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
