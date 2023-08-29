@@ -15,8 +15,11 @@ import {
   GoingUpUtilityTokens__factory,
 } from './typechain';
 
+import { stopMailListener, startMailListener } from './email-mint-listener';
+
 import { Account } from './types/account';
 import { PushNotificationSubscription } from './types/psn';
+import { processConfirmedEmailMints } from './email-mint';
 
 // prevent process from exiting when an unhandled exception occurs
 process.on('uncaughtException', function (err) {
@@ -24,11 +27,31 @@ process.on('uncaughtException', function (err) {
   console.log(`Process is still alive`);
 });
 
+process.on('unhandledRejection', function (err) {
+  console.log('Caught exception: ', err);
+  console.log(`Process is still alive`);
+});
+
+process.on('SIGINT', function () {
+  cleanup();
+});
+
+process.on('SIGTERM', function () {
+  cleanup();
+});
+
+const cleanup = () => {
+  console.log('Cleaning up');
+  stopMailListener();
+  process.exit();
+};
+
 let db: Db | null = null;
 let accounts: Collection<Account> | null = null;
 const main = async () => {
   db = await getDb();
   accounts = await db.collection<Account>('accounts');
+  startMailListener();
 };
 
 main();
@@ -310,6 +333,22 @@ setInterval(async () => {
   cacheUtilityTokenData();
 }, 1000 * 60 * 60 * 6);
 cacheUtilityTokenData();
+
+let processingConfirmedEmailMints = false;
+// process confirmed email mints every 15 seconds
+// send accept token email to token recipients
+setInterval(async () => {
+  if (processingConfirmedEmailMints) return;
+  processingConfirmedEmailMints = true;
+
+  try {
+    await processConfirmedEmailMints();
+  } catch (err) {
+    console.error(err);
+  } finally {
+    processingConfirmedEmailMints = false;
+  }
+}, 1000 * 15);
 
 console.info('Event Listener Started');
 setInterval(() => {}, 1 << 30);

@@ -1,4 +1,7 @@
+import { ObjectId } from 'mongodb';
+
 export type EmailMintRequest = {
+  _id?: string | ObjectId;
   mintFrom: {
     address: string;
     name: string;
@@ -15,6 +18,10 @@ export type EmailMintRequest = {
     html: string;
   };
   confirmationId: string;
+  confirmedBySenderOn?: Date;
+  finalMintMessage?: string;
+  qtyToMint?: number;
+  tokenIdToMint?: number;
 };
 
 export type AllowedEmailMinter = {
