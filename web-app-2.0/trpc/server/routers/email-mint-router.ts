@@ -79,6 +79,21 @@ export const emailMintRouter = router({
       );
     }
   }),
+  acceptReceivedToken: procedure.input(z.object({ requestId: z.string() })).mutation(async ({ input }) => {
+    const { requestId } = input;
+
+    const db = await getDb();
+
+    const collection = db.collection<EmailMintRequest>('email-mint-requests');
+    await collection.updateOne(
+      { _id: ObjectId.createFromHexString(requestId) },
+      {
+        $set: {
+          acceptedByRecipient: new Date(),
+        },
+      }
+    );
+  }),
 });
 
 type MintRequestWithWallet = EmailMintRequest & { walletAddress: string };
