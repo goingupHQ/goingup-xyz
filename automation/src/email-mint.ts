@@ -15,8 +15,11 @@ const imapConfig: Imap.Config = {
   port: Number(process.env.MINT_EMAIL_PORT!),
   host: process.env.MINT_EMAIL_HOST!,
   tls: true,
+  tlsOptions: {
+    rejectUnauthorized: false,
+  },
 };
-
+console.log(imapConfig);
 const getAndProcessNewEmails = () => {
   try {
     const imap = new Imap(imapConfig);

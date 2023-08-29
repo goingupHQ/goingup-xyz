@@ -6,11 +6,35 @@ import React from 'react';
 import { WalletContext } from '../../../contexts/wallet-context';
 import SectionHeader from '../../common/section-header';
 import SetProjectLogo from './set-project-logo';
+import { ProjectsContext } from '../../../contexts/projects-context';
 
 export default function ProjectInformation(props) {
-    const { id, project } = props;
+    const { id, project, projectId } = props;
+    const projectsContext = React.useContext(ProjectsContext);
 
     const wallet = React.useContext(WalletContext);
+
+    const [loading, setLoading] = React.useState(true);
+    const [members, setMembers] = React.useState([]);
+    const load = async () => {
+        setLoading(true);
+        try {
+            const result = await projectsContext.getProjectMembers(projectId);
+            setMembers(result);
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    React.useEffect(() => {
+        //
+        if (projectId) {
+            load();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [projectId]);
 
     return (
         <Paper sx={{ padding: 3 }}>
@@ -83,10 +107,11 @@ export default function ProjectInformation(props) {
                         {project?.ended?.toNumber() ? moment(project?.ended.toNumber() * 1000).format('LL') : 'None'}
                     </Typography>
                 </Grid>
-
-                <Grid item xs={12}>
-                    <SetProjectLogo projectId={id} />
-                </Grid>
+                {project?.owner === wallet.address && (
+                    <Grid item xs={12}>
+                        <SetProjectLogo projectId={id} />
+                    </Grid>
+                )}
             </Grid>
         </Paper>
     );
