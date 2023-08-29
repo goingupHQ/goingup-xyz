@@ -37,6 +37,7 @@ const EmailMintConfirmPage = () => {
   const [recipients, setRecipients] = useState<TokenRecipient[]>();
 
   useEffect(() => {
+    console.log(requests);
     if (!requests) return;
     const recipientsList: TokenRecipient[] = requests.map((request) => {
       return {
@@ -50,10 +51,9 @@ const EmailMintConfirmPage = () => {
       } as TokenRecipient;
     });
     setRecipients(recipientsList);
-    setMintMessage(requests[0].content.text);
+    const potentialContent = (requests?.[0]?.content?.text || requests?.[0]?.content?.html) || '';
+    setMintMessage(potentialContent);
   }, [requests]);
-
-  console.log(recipients);
 
   const [discardDialogOpen, setDiscardDialogOpen] = useState<boolean>(false);
 
