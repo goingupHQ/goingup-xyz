@@ -22,6 +22,8 @@ export type EmailMintRequest = {
   finalMintMessage?: string;
   qtyToMint?: number;
   tokenIdToMint?: number;
+  emailSentToRecipient?: Date;
+  acceptedByRecipient?: Date;
 };
 
 export type AllowedEmailMinter = {

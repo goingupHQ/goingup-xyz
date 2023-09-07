@@ -350,5 +350,20 @@ setInterval(async () => {
   }
 }, 1000 * 15);
 
+let mintingAcceptedEmailMints = false;
+// mint accepted email mints every 90 seconds
+setInterval(async () => {
+  if (mintingAcceptedEmailMints) return;
+  mintingAcceptedEmailMints = true;
+
+  try {
+    await processConfirmedEmailMints();
+  } catch (err) {
+    console.error(err);
+  } finally {
+    mintingAcceptedEmailMints = false;
+  }
+}, 1000 * 90);
+
 console.info('Event Listener Started');
 setInterval(() => {}, 1 << 30);
