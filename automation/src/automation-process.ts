@@ -19,7 +19,7 @@ import { stopMailListener, startMailListener } from './email-mint-listener';
 
 import { Account } from './types/account';
 import { PushNotificationSubscription } from './types/psn';
-import { processConfirmedEmailMints } from './email-mint';
+import { mintAcceptedEmails, processConfirmedEmailMints } from './email-mint';
 
 // prevent process from exiting when an unhandled exception occurs
 process.on('uncaughtException', function (err) {
@@ -357,7 +357,7 @@ setInterval(async () => {
   mintingAcceptedEmailMints = true;
 
   try {
-    await processConfirmedEmailMints();
+    await mintAcceptedEmails();
   } catch (err) {
     console.error(err);
   } finally {
