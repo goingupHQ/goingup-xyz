@@ -1,15 +1,15 @@
 import { KeyManagementServiceClient } from '@google-cloud/kms';
 import crc32 from 'fast-crc32c';
 
-const projectId = process.env.GCS_PROJECT_ID;
-const locationId = process.env.GC_KMS_LOCATION;
-const keyRingId = process.env.GC_KMS_KEYRING;
-const keyId = process.env.GC_KMS_KEY_ID;
+const projectId = process.env.GCS_PROJECT_ID!;
+const locationId = process.env.GC_KMS_LOCATION!;
+const keyRingId = process.env.GC_KMS_KEYRING!;
+const keyId = process.env.GC_KMS_KEY_ID!;
 
 const client = new KeyManagementServiceClient({
   credentials: {
-    client_email: process.env.GCS_CLIENT_EMAIL,
-    private_key: process.env.GCS_PRIVATE_KEY,
+    client_email: process.env.GCS_CLIENT_EMAIL!,
+    private_key: process.env.GCS_PRIVATE_KEY!,
   }
 });
 
