@@ -145,7 +145,7 @@ export const mintAcceptedEmails = async () => {
     if (!request.mintedTxHash) {
       const decryptionResult = await decrypt(senderAccount.encryptedPrivateKey);
       const privateKey = decryptionResult.plainText;
-      const signer = new ethers.Wallet(senderAccount.encryptedPrivateKey, polygonProvider);
+      const signer = new ethers.Wallet(privateKey, polygonProvider);
       const utilityContract = GoingUpUtilityTokens__factory.connect(contractAddress, signer);
 
       const signerBalance = await signer.getBalance();
