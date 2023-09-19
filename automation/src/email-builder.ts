@@ -162,6 +162,53 @@ export const createAcceptTokenEmail = (fromName: string, fromEmail: string, mess
   return buildEmailFromTemplate(content);
 };
 
+export const createEmailMintErrorEmail = (title: string, message: string) => {
+  const content = `
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+    <tr>
+    <td style="padding: 0px 0px 0px 0px;">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+      <tr>
+        <td valign="top" class="pc-w520-padding-30-40-30-40 pc-w620-padding-35-50-35-50" style="padding: 40px 60px 40px 60px;border-radius: 0px;background-color: #ffffff;" bgcolor="#ffffff">
+        <table class="pc-txt-block-wrapper" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+          <tr>
+          <td style="padding: 0px 0px 10px 0px;" valign="top" align="center">
+            <table class="pc-txt-block" border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="margin-right: auto; margin-left: auto;">
+            <tr>
+              <td valign="top" class="pc-font-alt" style="mso-line-height: exactly;line-height: 46px;letter-spacing: -0.6px;font-family: 'Fira Sans', Helvetica, Arial, sans-serif;font-size: 36px;font-weight: 800;color: #151515;text-align: center;text-align-last: center;" align="center">
+              <div><span>${title}</span>
+              </div>
+              </td>
+            </tr>
+            </table>
+          </td>
+          </tr>
+        </table>
+        <table class="pc-txt-block-wrapper" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+          <tr>
+          <td style="padding: 0px 0px 20px 0px;" valign="top" align="center">
+            <table class="pc-txt-block" border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="margin-right: auto; margin-left: auto;">
+            <tr>
+              <td valign="top" class="pc-font-alt" style="mso-line-height: exactly;line-height: 28px;letter-spacing: -0.2px;font-family: 'Fira Sans', Helvetica, Arial, sans-serif;font-size: 20px;font-weight: normal;color: #1b1b1b;text-align: center;text-align-last: center;" align="center">
+              <div><span>${message}</span>
+              </div>
+              </td>
+            </tr>
+            </table>
+          </td>
+          </tr>
+        </table>
+        </td>
+      </tr>
+      </table>
+    </td>
+    </tr>
+  </table>
+  `;
+
+  return buildEmailFromTemplate(content);
+};
+
 const buildEmailFromTemplate = (content: string) => {
   return `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

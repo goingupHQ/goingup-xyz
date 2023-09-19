@@ -22,6 +22,10 @@ export type EmailMintRequest = {
   finalMintMessage?: string;
   qtyToMint?: number;
   tokenIdToMint?: number;
+  emailSentToRecipient?: Date;
+  acceptedByRecipient?: Date;
+  mintedTxHash?: string;
+  mintTxResult?: number;
 };
 
 export type AllowedEmailMinter = {
