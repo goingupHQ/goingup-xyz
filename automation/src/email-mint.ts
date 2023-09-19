@@ -6,6 +6,7 @@ import { EmailMintRequest } from './types/email-mint';
 import { sendEmailViaMinter } from './send-email';
 import { GoingUpUtilityTokens__factory } from './typechain';
 import { Account } from './types/account';
+import { decrypt } from './kms';
 
 export const processConfirmedEmailMints = async () => {
   const db = await getDb();
@@ -142,6 +143,8 @@ export const mintAcceptedEmails = async () => {
     }
 
     if (!request.mintedTxHash) {
+      const decryptionResult = await decrypt(senderAccount.encryptedPrivateKey);
+      const privateKey = decryptionResult.plainText;
       const signer = new ethers.Wallet(senderAccount.encryptedPrivateKey, polygonProvider);
       const utilityContract = GoingUpUtilityTokens__factory.connect(contractAddress, signer);
 

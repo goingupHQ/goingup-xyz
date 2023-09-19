@@ -12,10 +12,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/kms": "^4.0.1",
+    "@types/fast-crc32c": "^2.0.0",
     "csv-parser": "^3.0.0",
     "csvtojson": "^2.0.10",
     "dotenv": "^16.3.1",
     "ethers": "5.7.2",
+    "fast-crc32c": "^2.0.0",
     "imap": "^0.8.19",
     "mail-listener-type": "^2.2.1",
     "mailparser": "^3.6.5",
