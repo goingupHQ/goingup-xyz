@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { webAppBaseUrl } from './constants';
-import { createAcceptTokenEmail } from './email-builder';
+import { createAcceptTokenEmail, createEmailMintErrorEmail } from './email-builder';
 import { getDb } from './get-db-client';
 import { EmailMintRequest } from './types/email-mint';
 import { sendEmailViaMinter } from './send-email';
@@ -73,9 +73,7 @@ export const mintAcceptedEmails = async () => {
 
   // mint the tokens
   const polygonProvider = new ethers.providers.AlchemyProvider(137, process.env.ALCHEMY_POLYGON_KEY);
-  const signer = new ethers.Wallet(process.env.BACKEND_WALLET_PK!, polygonProvider);
   const contractAddress = '0x10d7b3afa213d93a922a062fb91e8ecbd4a703d2';
-  const utilityContract = GoingUpUtilityTokens__factory.connect(contractAddress, signer);
 
   const gasStationURL = 'https://gasstation.polygon.technology/v2';
   const gasPriceDataResponse = await fetch(gasStationURL);
@@ -86,18 +84,42 @@ export const mintAcceptedEmails = async () => {
 
   const accounts = await db.collection<Account>('accounts');
   for (const request of acceptedRequests) {
-    const email = request.mintTo.address;
-    const account = await accounts.findOne({ email });
-    if (!account) {
-      console.log(`No account found for email ${email}`);
+    const recipientEmail = request.mintTo.address;
+    const recipientAccount = await accounts.findOne({ email: recipientEmail });
+    if (!recipientAccount) {
+      console.log(`No account found for email ${recipientEmail}`);
       emailMintRequests.deleteOne({ _id: request._id });
       console.log(`Deleted mint request ${request._id}`);
       continue;
     }
 
-    const walletAddress = account.address;
-    if (!walletAddress) {
-      console.log(`No wallet address found for email ${email}`);
+    const senderEmail = request.mintFrom.address;
+    const senderAccount = await accounts.findOne({ email: senderEmail });
+    if (!senderAccount) {
+      console.log(`No account found for email ${senderEmail}`);
+      emailMintRequests.deleteOne({ _id: request._id });
+      console.log(`Deleted mint request ${request._id}`);
+      continue;
+    }
+
+    if (!senderAccount.isCustodial || !senderAccount.encryptedPrivateKey || !senderAccount.address) {
+      console.log(`Account ${senderAccount.email} is not custodial`);
+      emailMintRequests.deleteOne({ _id: request._id });
+      console.log(`Deleted mint request ${request._id}`);
+      continue;
+    }
+
+    const recipientAddress = recipientAccount.address;
+    if (!recipientAddress) {
+      console.log(`No wallet address found for email ${recipientEmail}`);
+      emailMintRequests.deleteOne({ _id: request._id });
+      console.log(`Deleted mint request ${request._id}`);
+      continue;
+    }
+
+    const senderAddress = senderAccount.address;
+    if (!senderAddress) {
+      console.log(`No wallet address found for email ${senderEmail}`);
       emailMintRequests.deleteOne({ _id: request._id });
       console.log(`Deleted mint request ${request._id}`);
       continue;
@@ -120,10 +142,36 @@ export const mintAcceptedEmails = async () => {
     }
 
     if (!request.mintedTxHash) {
-      const mintTx = await utilityContract.manualMint(walletAddress, tokenId, qty, {
+      const signer = new ethers.Wallet(senderAccount.encryptedPrivateKey, polygonProvider);
+      const utilityContract = GoingUpUtilityTokens__factory.connect(contractAddress, signer);
+
+      const signerBalance = await signer.getBalance();
+
+      const tokenSettings = await utilityContract.tokenSettings(tokenId);
+      const totalAmount = tokenSettings.price.mul(qty);
+
+      if (signerBalance.lt(totalAmount)) {
+        console.log(`Signer ${signer.address} balance ${signerBalance} is less than total amount ${totalAmount}`);
+        emailMintRequests.deleteOne({ _id: request._id });
+        console.log(`Deleted mint request ${request._id}`);
+
+        // send error email
+        const errorHtml = createEmailMintErrorEmail(
+          `Your wallet ${senderAddress} does not have enough MATIC to mint`,
+          `Your wallet ${senderAddress} does not have enough MATIC to mint ${qty} of token ${tokenId}. You need at least ${totalAmount} MATIC to mint. This mint request has been deleted.`
+        )
+
+        continue;
+      }
+
+      const message = request.finalMintMessage || '';
+
+      const mintTx = await utilityContract.mint(recipientAddress, tokenId, qty, true, message, {
+        value: totalAmount,
         maxPriorityFeePerGas: ethers.utils.parseUnits(maxPriorityFeeGwei.toString(), 'gwei'),
         maxFeePerGas: ethers.utils.parseUnits(maxFeeGwei.toString(), 'gwei'),
-      });
+      })
+
       emailMintRequests.updateOne(
         {
           _id: request._id,
@@ -135,7 +183,7 @@ export const mintAcceptedEmails = async () => {
         }
       );
 
-      console.log(`Minted ${qty} of token ${tokenId} to ${walletAddress} for mint request ${request._id}`);
+      console.log(`Minted ${qty} of token ${tokenId} to ${recipientAddress} for mint request ${request._id}`);
       mintTx.wait().then((receipt) => {
         const result = receipt.status;
         emailMintRequests.updateOne(

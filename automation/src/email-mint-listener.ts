@@ -6,8 +6,10 @@ import { EmailContact, Mail } from './types/mail-listener';
 import { getDb } from './get-db-client';
 import { AllowedEmailMinter, EmailMintRequest } from './types/email-mint';
 import { AddressObject, EmailAddress } from 'mailparser';
-import { createEmailMintConfirmation } from './email-builder';
+import { createEmailMintConfirmation, createEmailMintErrorEmail } from './email-builder';
 import { sendEmailViaMinter } from './send-email';
+import { Account } from './types/account';
+import { ethers } from 'ethers';
 
 export const mailListener = new MailListener({
   username: process.env.MINT_EMAIL_ADDR!,
@@ -59,12 +61,13 @@ export const startMailListener = async () => {
   // });
 
   mailListener.on('mail', async (mail: Mail, seqno: number) => {
-    // fs.writeFileSync('mail.json', JSON.stringify(mail, null, 2));
     const sender = mail.from?.value[0].address;
     if (!sender) {
       console.error('Email does not have sender');
       return;
     }
+
+    const mintEmailAddress = process.env.MINT_EMAIL_ADDR!;
 
     // check if sender is on email mint allow list
     const db = await getDb();
@@ -72,9 +75,63 @@ export const startMailListener = async () => {
     const allowedEmailMinter = await collection.findOne({ email: sender });
     if (!allowedEmailMinter || !allowedEmailMinter.allowed) {
       console.error(`Email sender ${sender} is not on allow list`);
+
+      // send email error
+      const errorEmailHtml = createEmailMintErrorEmail(
+        'Not Allowed to Mint',
+        `Your email address ${sender} is not allowed to mint. Please contact <a href="mailto:app@goingup.xyz">GoingUP</a> to request access.`
+      );
+
+      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Confirmation', '', errorEmailHtml);
       return;
     } else {
       console.log(`Email sender ${sender} is on allow list`);
+    }
+
+    // check if sender is a custodial wallet
+    const accounts = await db.collection<Account>('accounts');
+    const senderAccount = await accounts.findOne({ email: sender });
+    if (!senderAccount) {
+      console.error(`Email sender ${sender} does not have a GoingUP account`);
+
+      // send email error
+      const errorEmailHtml = createEmailMintErrorEmail(
+        'No GoingUP Account',
+        `Your email address ${sender} does not have a GoingUP account. Please contact <a href="mailto:app@goingup.xyz">GoingUP</a> for assistance.`
+      );
+      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Confirmation', '', errorEmailHtml);
+      return;
+    }
+
+    if (!senderAccount.isCustodial || !senderAccount.encryptedPrivateKey || !senderAccount.address) {
+      console.error(`Email sender ${sender} does not have a custodial wallet`);
+
+      // send email error
+      const errorEmailHtml = createEmailMintErrorEmail(
+        'No Custodial GoingUP Wallet',
+        `Your email address ${sender} does not have a custodial GoingUP wallet. Please contact <a href="mailto:app@goingup.xyz">GoingUP</a> for assistance.`
+      );
+      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Confirmation', '', errorEmailHtml);
+      return;
+    }
+
+    // check if account wallet address has at least 2 MATIC
+    const provider = new ethers.providers.AlchemyProvider(137, process.env.ALCHEMY_POLYGON_KEY);
+    const senderWalletBalance = await provider.getBalance(senderAccount.address);
+    const senderWalletHasEnoughMatic = senderWalletBalance.gte(ethers.utils.parseEther('2'));
+
+    if (!senderWalletHasEnoughMatic) {
+      console.error(
+        `Email sender ${sender} with address ${senderAccount.address} only has ${senderWalletBalance} MATIC which is not enough to mint`
+      );
+
+      // send email error
+      const errorEmailHtml = createEmailMintErrorEmail(
+        'Not Enough MATIC',
+        `Your email address ${sender} with address ${senderAccount.address} only has ${senderWalletBalance} MATIC which is not enough to mint. You need at least 2 MATIC to mint.`
+      );
+      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Confirmation', '', errorEmailHtml);
+      return;
     }
 
     const recipients: EmailContact[] = [];
@@ -113,7 +170,6 @@ export const startMailListener = async () => {
       }
     }
 
-    const mintEmailAddress = process.env.MINT_EMAIL_ADDR!;
     const hasMintEmailAddress = recipients.some((recipient) => recipient.address === mintEmailAddress);
 
     if (!hasMintEmailAddress) {
