@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { getDb } from "../get-db-client";
 import { decrypt } from "../kms";
 import { Account } from "../types/account";
@@ -13,6 +14,10 @@ const main = async () => {
   console.log(`address: ${address}`);
   console.log(`privateKey: ${privateKey}`);
   console.log(`encryptedPrivateKey: ${encryptedPrivateKey}`);
+
+  const derivedWallet = new ethers.Wallet(privateKey);
+  const derivedAddress = derivedWallet.address;
+  console.log(`derivedAddress: ${derivedAddress}`);
 };
 
 main();
