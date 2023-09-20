@@ -82,7 +82,7 @@ export const startMailListener = async () => {
         `Your email address ${sender} is not allowed to mint. Please contact <a href="mailto:app@goingup.xyz">GoingUP</a> to request access.`
       );
 
-      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Confirmation', '', errorEmailHtml);
+      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Error', '', errorEmailHtml);
       return;
     } else {
       console.log(`Email sender ${sender} is on allow list`);
@@ -99,7 +99,7 @@ export const startMailListener = async () => {
         'No GoingUP Account',
         `Your email address ${sender} does not have a GoingUP account. Please contact <a href="mailto:app@goingup.xyz">GoingUP</a> for assistance.`
       );
-      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Confirmation', '', errorEmailHtml);
+      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Error', '', errorEmailHtml);
       return;
     }
 
@@ -111,7 +111,7 @@ export const startMailListener = async () => {
         'No Custodial GoingUP Wallet',
         `Your email address ${sender} does not have a custodial GoingUP wallet. Please contact <a href="mailto:app@goingup.xyz">GoingUP</a> for assistance.`
       );
-      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Confirmation', '', errorEmailHtml);
+      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Error', '', errorEmailHtml);
       return;
     }
 
@@ -130,7 +130,7 @@ export const startMailListener = async () => {
         'Not Enough MATIC',
         `Your email address ${sender} with address ${senderAccount.address} only has ${senderWalletBalance} MATIC which is not enough to mint. You need at least 2 MATIC to mint.`
       );
-      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Confirmation', '', errorEmailHtml);
+      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Error', '', errorEmailHtml);
       return;
     }
 

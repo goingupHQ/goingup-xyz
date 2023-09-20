@@ -22,6 +22,12 @@ declare global {
       MINT_EMAIL_SPRT: string;
       MINT_EMAIL_ADDR: string;
       MINT_EMAIL_PASS: string;
+      GC_KMS_LOCATION: string;
+      GC_KMS_KEYRING: string;
+      GC_KMS_KEY_ID: string;
+      GCS_PRIVATE_KEY: string;
+      GCS_CLIENT_EMAIL: string;
+      GCS_PROJECT_ID: string;
     }
   }
 }
