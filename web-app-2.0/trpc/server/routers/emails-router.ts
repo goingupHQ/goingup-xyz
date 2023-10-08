@@ -25,7 +25,10 @@ export const emailsRouter = router({
       }
 
       // generate a random 12 character mixed case alphanumeric code
-      const code = Math.random().toString(36).slice(2, 14).toUpperCase();
+      // const code = Math.random().toString(36).slice(2, 14).toUpperCase();
+
+      // generate a random 7 digit numeric code
+      const code = Math.floor(1000000 + Math.random() * 9000000).toString();
 
       // save code to database
       const codeRecord: EmailLoginCode = {
