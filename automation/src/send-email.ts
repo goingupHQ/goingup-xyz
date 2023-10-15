@@ -40,24 +40,23 @@ export const sendEmail = async (
 };
 
 export const sendEmailViaMinter = async (
-  fromEmail: string,
   toEmail: string,
   subject: string,
   textBody: string | null,
   htmlBody: string | null
 ) => {
   const transporter = nodemailer.createTransport({
-    host: process.env.MINT_SMTP_HOST,
-    port: Number(process.env.MINT_EMAIL_SPRT),
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
     secure: true,
     auth: {
-      user: process.env.MINT_EMAIL_ADDR,
-      pass: process.env.MINT_EMAIL_PASS,
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD,
     },
   });
 
   const mailOptions: SendMailOptions = {
-    from: fromEmail,
+    from: 'minter@goingup.xyz',
     to: toEmail,
     subject: subject,
   };

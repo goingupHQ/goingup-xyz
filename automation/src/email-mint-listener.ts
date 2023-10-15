@@ -101,7 +101,7 @@ export const startMailListener = async () => {
         'No Custodial GoingUP Wallet',
         `Your email address ${sender} does not have a custodial GoingUP wallet. Please contact <a href="mailto:app@goingup.xyz">GoingUP</a> for assistance.`
       );
-      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Error', '', errorEmailHtml);
+      await sendEmailViaMinter(sender, 'Email Mint Error', '', errorEmailHtml);
       return;
     }
 
@@ -120,7 +120,7 @@ export const startMailListener = async () => {
         'Not Enough MATIC',
         `Your email address ${sender} with address ${senderAccount.address} only has ${senderWalletBalance} MATIC which is not enough to mint. You need at least 2 MATIC to mint.`
       );
-      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Error', '', errorEmailHtml);
+      await sendEmailViaMinter(sender, 'Email Mint Error', '', errorEmailHtml);
       return;
     }
 
@@ -207,7 +207,6 @@ export const startMailListener = async () => {
     const emailHtml = createEmailMintConfirmation(`https://app.goingup.xyz/email-mint/confirm/${confirmationId}`);
 
     await sendEmailViaMinter(
-      mintEmailAddress,
       emailMintRequests[0].mintFrom.address,
       'Email Mint Confirmation',
       '',
