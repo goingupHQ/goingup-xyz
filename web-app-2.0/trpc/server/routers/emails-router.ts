@@ -2,11 +2,11 @@ import { getDb } from '@/utils/database';
 import { z } from 'zod';
 import { router, procedure } from '../trpc';
 import { render } from 'mjml-react';
-import { sendEmail } from '@/utils/sendinblue';
 import * as EmailWalletLogin from '../../../templates/email/email-wallet-login';
 import { getAccount, getAccountByEmail } from '@/utils/database/account';
 import { TRPCError } from '@trpc/server';
 import { EmailLoginCode } from '@/types/auth';
+import { sendEmail } from '@/utils/send-email';
 
 export const emailsRouter = router({
   sendWalletLoginCode: procedure
@@ -42,7 +42,7 @@ export const emailsRouter = router({
 
       if (insertResult.insertedId) {
         const { html } = render(EmailWalletLogin.generate({ code }), { validationLevel: 'soft' });
-        await sendEmail(null, input.email, 'Your GoingUP Wallet Login Code', null, html);
+        await sendEmail('login-code@goingup.xyz', input.email, 'GoingUP Login Code', null, html);
       }
 
       return { success: true }

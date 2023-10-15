@@ -35,5 +35,9 @@ namespace NodeJS {
     MINTER_PK: string;
     GEVENT_TOKENS_ADDR: string;
     NEXT_PUBLIC_NFT_STORAGE_KEY: string;
+    SMTP_HOST: string;
+    SMTP_PORT: string;
+    SMTP_USER: string;
+    SMTP_PASSWORD: string;
   }
 }
