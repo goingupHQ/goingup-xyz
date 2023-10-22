@@ -9,6 +9,8 @@ import { trpc } from '@/utils/trpc';
 import LoadingIllustration from '@/components/common/loading-illustration';
 import { useAccount } from 'wagmi';
 import Navigation from '@/components/organizations/navigation';
+import { useContext } from 'react';
+import { WalletContext } from '@/contexts/wallet-context';
 
 export default function Organization() {
   const router = useRouter();
@@ -19,8 +21,8 @@ export default function Organization() {
     isFetched,
   } = trpc.organizations.get.useQuery({ code }, { enabled: Boolean(code) });
 
-  const { address } = useAccount();
-
+  const wallet = useContext(WalletContext);
+  const address = wallet?.address;
   const isOwner = organization?.owners?.includes(address || '');
 
   return (
