@@ -44,7 +44,7 @@
     "mjml-react": "^2.0.8",
     "moment": "^2.29.4",
     "mongodb": "^4.8.1",
-    "next": "^13.4.19",
+    "next": "^13.5.6",
     "nextjs-cors": "^2.1.2",
     "nft.storage": "^7.0.3",
     "nodemailer": "^6.9.5",
