@@ -1,0 +1,24 @@
+{
+  "name": "GoingUP Holidays 2023 Appreciation Token",
+  "description": "A token of appreciation for the festive season of 2023, featuring a unique design and best wishes for the upcoming year.",
+  "image": "ipfs://bafybeibvxxc4jlloy7ik33aefgycgzacc5f4lfhgtqkq3nqxdmxopqsfcy/holidays-2023-appreciation-from-goingup.jpg",
+  "attributes": [
+    {
+      "trait_type": "Year",
+      "value": "2023"
+    },
+    {
+      "trait_type": "Occasion",
+      "value": "Holiday Season"
+    },
+    {
+      "trait_type": "Sentiment",
+      "value": "Appreciation"
+    },
+    {
+      "trait_type": "Exclusive Content",
+      "value": "Holiday Greetings"
+    }
+  ],
+  "date": "2023-12-21"
+}
