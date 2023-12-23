@@ -7,6 +7,7 @@ import sleep from '@react-corekit/sleep';
 import isEmail from 'validator/lib/isEmail';
 import { trpc } from '@/utils/trpc';
 import { useRouter } from 'next/router';
+import { TRPCClientError } from '@trpc/client';
 
 const ConnectUsingEmail = (props, ref) => {
   const router = useRouter();
@@ -55,7 +56,16 @@ const ConnectUsingEmail = (props, ref) => {
       return;
     }
 
-    await sendWalletLoginCode({ email });
+    try {
+      await sendWalletLoginCode({ email });
+
+    } catch (error) {
+      if (error instanceof TRPCClientError) {
+        enqueueSnackbar(error.message, { variant: 'error' });
+      } else {
+        enqueueSnackbar('Error sending login code', { variant: 'error' });
+      }
+    }
   };
 
   useEffect(() => {

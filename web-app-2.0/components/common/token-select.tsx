@@ -19,6 +19,7 @@ const TokenSelect = ({ tier, setTier }: TokenSelectProps) => {
         <MenuItem value={2}>Appreciation Token Tier 2</MenuItem>
         <MenuItem value={3}>Appreciation Token Tier 3</MenuItem>
         <MenuItem value={4}>Appreciation Token Tier 4</MenuItem>
+        <MenuItem value={12}>GoingUP Holidays 2023 Appreciation Token</MenuItem>
       </Select>
     </FormControl>
   );

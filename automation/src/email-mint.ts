@@ -35,7 +35,6 @@ export const processConfirmedEmailMints = async () => {
     const mintEmailAddress = process.env.MINT_EMAIL_ADDR!;
 
     sendEmailViaMinter(
-      mintEmailAddress,
       request.mintTo.address,
       `${fromName || 'Someone'} has sent you token(s)!`,
       '',

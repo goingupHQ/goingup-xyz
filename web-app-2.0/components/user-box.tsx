@@ -55,7 +55,6 @@ export default function UserBox() {
   const { data: balanceData } = useBalance({ address: (address as `0x${string}`) || ethers.constants.AddressZero });
   const balance = Number(balanceData?.formatted);
 
-
   const ref = useRef(null);
   const chainSelectionRef = createRef<WalletChainSelectionHandles>();
   const [isOpen, setOpen] = useState(false);
@@ -180,6 +179,26 @@ export default function UserBox() {
               <Typography variant="body1">Projects</Typography>
             </Stack>
           </ListItemButton>
+
+          <ListItemButton
+            onClick={() => {
+              // copy wallet address to clipboard
+              navigator.clipboard.writeText(address || '');
+              handleClose();
+            }}
+            sx={{
+              borderRadius: theme.shape.borderRadius,
+            }}
+          >
+            <Stack
+              direction="row"
+              spacing={1}
+            >
+              <WalletIcon color={theme.palette.text.primary} />
+              <Typography variant="body1">Copy Address</Typography>
+            </Stack>
+          </ListItemButton>
+
           <ListItemButton
             onClick={() => {
               handleClose();
@@ -193,8 +212,10 @@ export default function UserBox() {
               direction="row"
               spacing={1}
             >
-              <WalletIcon color={theme.palette.text.primary} />
-              <Typography variant="body1">{balance.toLocaleString()} {balanceData?.symbol || 'MATIC'}</Typography>
+              <WalletIcon color={theme.palette.text.primary} style={{ visibility: 'hidden' }} />
+              <Typography variant="body1">
+                {balance.toLocaleString()} {balanceData?.symbol || 'MATIC'}
+              </Typography>
             </Stack>
           </ListItemButton>
 

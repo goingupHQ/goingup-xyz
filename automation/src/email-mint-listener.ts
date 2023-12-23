@@ -10,6 +10,9 @@ import { createEmailMintConfirmation, createEmailMintErrorEmail } from './email-
 import { sendEmailViaMinter } from './send-email';
 import { Account } from './types/account';
 import { ethers } from 'ethers';
+import { create } from 'domain';
+import { encrypt } from './kms';
+import { createCustodialAccount } from './database/account';
 
 export const mailListener = new MailListener({
   username: process.env.MINT_EMAIL_ADDR!,
@@ -71,35 +74,22 @@ export const startMailListener = async () => {
 
     // check if sender is on email mint allow list
     const db = await getDb();
-    const collection = db.collection<AllowedEmailMinter>('email-mint-allow-list');
-    const allowedEmailMinter = await collection.findOne({ email: sender });
-    if (!allowedEmailMinter || !allowedEmailMinter.allowed) {
-      console.error(`Email sender ${sender} is not on allow list`);
-
-      // send email error
-      const errorEmailHtml = createEmailMintErrorEmail(
-        'Not Allowed to Mint',
-        `Your email address ${sender} is not allowed to mint. Please contact <a href="mailto:app@goingup.xyz">GoingUP</a> to request access.`
-      );
-
-      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Error', '', errorEmailHtml);
-      return;
-    } else {
-      console.log(`Email sender ${sender} is on allow list`);
-    }
 
     // check if sender is a custodial wallet
     const accounts = await db.collection<Account>('accounts');
-    const senderAccount = await accounts.findOne({ email: sender });
+    let senderAccount = await accounts.findOne({ email: sender });
     if (!senderAccount) {
-      console.error(`Email sender ${sender} does not have a GoingUP account`);
+      const wallet = ethers.Wallet.createRandom();
+      const encryptedPrivateKey = await encrypt(wallet.privateKey);
 
-      // send email error
-      const errorEmailHtml = createEmailMintErrorEmail(
-        'No GoingUP Account',
-        `Your email address ${sender} does not have a GoingUP account. Please contact <a href="mailto:app@goingup.xyz">GoingUP</a> for assistance.`
+      await createCustodialAccount(sender, wallet.address, encryptedPrivateKey.cipherText);
+    }
+
+    senderAccount = await accounts.findOne({ email: sender });
+    if (!senderAccount) {
+      console.error(
+        `Email sender ${sender} does not have an account and creating a custodial wallet might have failed`
       );
-      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Error', '', errorEmailHtml);
       return;
     }
 
@@ -111,7 +101,7 @@ export const startMailListener = async () => {
         'No Custodial GoingUP Wallet',
         `Your email address ${sender} does not have a custodial GoingUP wallet. Please contact <a href="mailto:app@goingup.xyz">GoingUP</a> for assistance.`
       );
-      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Error', '', errorEmailHtml);
+      await sendEmailViaMinter(sender, 'Email Mint Error', '', errorEmailHtml);
       return;
     }
 
@@ -130,7 +120,7 @@ export const startMailListener = async () => {
         'Not Enough MATIC',
         `Your email address ${sender} with address ${senderAccount.address} only has ${senderWalletBalance} MATIC which is not enough to mint. You need at least 2 MATIC to mint.`
       );
-      await sendEmailViaMinter(mintEmailAddress, sender, 'Email Mint Error', '', errorEmailHtml);
+      await sendEmailViaMinter(sender, 'Email Mint Error', '', errorEmailHtml);
       return;
     }
 
@@ -217,7 +207,6 @@ export const startMailListener = async () => {
     const emailHtml = createEmailMintConfirmation(`https://app.goingup.xyz/email-mint/confirm/${confirmationId}`);
 
     await sendEmailViaMinter(
-      mintEmailAddress,
       emailMintRequests[0].mintFrom.address,
       'Email Mint Confirmation',
       '',

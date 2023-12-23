@@ -17,8 +17,12 @@ export const useNavItems = (org?: Organization | null) => {
       to: `/organizations/${org.code}/reward-tokens`
     },
     {
-      text: `Groups & Members`,
-      to: `/organizations/${org.code}/groups-and-members`
-    },
+      text: 'QR Code Minting',
+      to: `/organizations/${org.code}/qr-code-minting`
+    }
+    // {
+    //   text: `Groups & Members`,
+    //   to: `/organizations/${org.code}/groups-and-members`
+    // },
   ]
 };
